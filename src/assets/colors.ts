@@ -1,0 +1,11 @@
+export const greenBg = '#bcd646'
+export const blueBg = '#00b9f1'
+export const purpleBg = '#8f3e97'
+export const orangeBg = '#faa633'
+export const redBg = '#ee2c3b'
+
+export const paleGreenBg = '#eff5d8'
+export const paleBlueBg = '#c6eafa'
+export const palePurpleBg = '#e7dbeb'
+export const paleOrangeBg = '#feecd7'
+export const paleRedBg = '#fdded4'
