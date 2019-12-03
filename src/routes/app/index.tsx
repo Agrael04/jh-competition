@@ -91,7 +91,7 @@ const CompetitionCard = ({ competition }: { competition: ICompetition }) => {
       <CardActions disableSpacing={true}>
         {
           competition.status === 'opened' && (
-            <Button color='primary'>
+            <Button className={classes.button}>
               Подать заявку
             </Button>
           )
@@ -111,6 +111,10 @@ const CompetitionCard = ({ competition }: { competition: ICompetition }) => {
               Правила
             </MenuItem>
           </Link>
+          {
+            competition.status !== 'finished' &&
+            competition.type === 'reCap' && <MenuItem onClick={closeMenu}>Добавить комбинацию</MenuItem>
+          }
           {
             competition.status !== 'finished' && <MenuItem onClick={closeMenu}>Расписание</MenuItem>
           }

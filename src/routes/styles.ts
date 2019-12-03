@@ -16,4 +16,15 @@ export default (theme: Theme) => ({
     fontWeight: 'bold',
     margin: 'auto',
   },
+  appBar: {
+    color: 'black',
+    background: 'white',
+  },
+  title: {
+    flexGrow: '1',
+    textAlign: 'left',
+  },
+  button: {
+    fontWeight: 'bold',
+  },
 })

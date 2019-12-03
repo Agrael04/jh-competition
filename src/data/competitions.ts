@@ -13,6 +13,24 @@ export const competitions: ICompetition[] = [
     date: '30.02.2020',
   },
   {
+    type: 'battle',
+    status: 'opened',
+    location: 'Харьковское Шосе',
+    date: '30.02.2020',
+  },
+  {
+    type: 'complication',
+    status: 'opened',
+    location: 'Харьковское Шосе',
+    date: '30.02.2020',
+  },
+  {
+    type: 'reCap',
+    status: 'opened',
+    location: 'Харьковское Шосе',
+    date: '30.02.2020',
+  },
+  {
     type: 'reCap',
     status: 'running',
     location: 'Харьковское Шосе',

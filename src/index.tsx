@@ -7,6 +7,8 @@ import './index.css'
 
 import Routes from './routes'
 
+console.log(process.env)
+
 ReactDOM.render((
   <BrowserRouter>
     <Routes />
