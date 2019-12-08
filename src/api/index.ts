@@ -11,33 +11,12 @@ const app = firebase.initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE))
 
 const auth = app.auth()
 
-firebase.auth().useDeviceLanguage()
+// auth.languageCode = 'fr'
 
-const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
-  'size': 'invisible',
-  'callback': () => {
-    console.log()
-  },
-})
+auth.useDeviceLanguage()
 
-let code = { confirm: console.log }
-
-auth.signInWithPhoneNumber('+380502745793', recaptchaVerifier)
-  .then(confirmationResult => {
-    code = confirmationResult
-  })
-  .then(() => {
-    return code.confirm('sad')
-  })
-  .catch(console.log)
+export { firebase, auth, app }
 
 if (auth !== null) {
   console.log(auth.currentUser)
 }
-// firebase.auth().createUserWithEmailAndPassword
-
-// firebase.auth().signInWithEmailAndPassword
-
-// firebase.auth().sendPasswordResetEmail
-
-// firebase.auth().email
