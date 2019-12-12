@@ -7,6 +7,7 @@ import 'firebase/analytics'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+console.log(process.env)
 const app = firebase.initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE))
 
 const auth = app.auth()
