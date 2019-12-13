@@ -16,6 +16,10 @@ export default function useFirebaseAuth(ref: any) {
 
   const signOut = () => auth.signOut()
 
+  const signInWithCredentials = (email: string, password: string) => {
+    auth.signInWithEmailAndPassword(email, password)
+  }
+
   const signInWithPhoneNumber = (phoneNumber: string) => {
     const appVerifier = recaptchaVerifier
     auth
@@ -34,11 +38,20 @@ export default function useFirebaseAuth(ref: any) {
 
   const resetConfirmation = () => setConfirmation(null)
 
+  const resetPassword = (email: string) => {
+    const redirect = process.env.PUBLIC_URL
+      ? { url: process.env.PUBLIC_URL }
+      : null
+    auth.sendPasswordResetEmail(email, redirect)
+  }
+
   return {
     signedIn,
     signInWithPhoneNumber,
+    signInWithCredentials,
     signOut,
     setRecaptchaVerifier,
+    resetPassword,
 
     sentMobileCode: !!confirmation,
     resetConfirmation,

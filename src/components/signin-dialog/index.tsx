@@ -2,6 +2,7 @@ import React from 'react'
 
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Dialog from '@material-ui/core/Dialog'
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
@@ -13,6 +14,8 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider'
 
 import PhoneIcon from '@material-ui/icons/Phone'
 import MailIcon from '@material-ui/icons/Mail'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import useStyles from '../../hooks/use-styles'
 import useFirebaseAuth from '../../hooks/use-firebase-auth'
@@ -31,14 +34,20 @@ export default function SinginDialog({ open, onClose }: IProps) {
   const {
     signedIn,
     signInWithPhoneNumber,
+    signInWithCredentials,
     setRecaptchaVerifier,
     sentMobileCode,
     confirmSignInWithMobilePhone,
     resetConfirmation,
+    resetPassword,
   } = useFirebaseAuth(recaptcha)
+  const [emailVerified, setEmailVerified] = React.useState(false)
+  const [showPassword, setShowPassword] = React.useState(false)
   const [values, setValues] = React.useState({
     phone: '',
     mobileCode: '',
+    email: '',
+    password: '',
   })
 
   if (signedIn) {
@@ -52,12 +61,37 @@ export default function SinginDialog({ open, onClose }: IProps) {
     })
   }
 
-  const phoneSignin = () => {
+  const handleShowPasswordClick = () => {
+    setShowPassword(!showPassword)
+  }
+
+  const verifyEmail = (e: any) => {
+    e.preventDefault()
+    setEmailVerified(true)
+  }
+
+  const credentialSignin = (e: any) => {
+    e.preventDefault()
+    signInWithCredentials(values.email, values.password)
+  }
+
+  const phoneSignin = (e: any) => {
+    e.preventDefault()
     signInWithPhoneNumber(`+38${values.phone}`)
   }
 
-  const confirmMobileCode = () => {
+  const confirmMobileCode = (e: any) => {
+    e.preventDefault()
     confirmSignInWithMobilePhone(values.mobileCode)
+  }
+
+  const resetEmail = () => {
+    setEmailVerified(false)
+  }
+
+  const recoverPassword = () => {
+    setEmailVerified(false)
+    resetPassword(values.email)
   }
 
   return (
@@ -80,6 +114,80 @@ export default function SinginDialog({ open, onClose }: IProps) {
               <Typography variant='body1'>
                 Вход с помощью електронной почты
               </Typography>
+              {
+                !emailVerified && (
+                  <form onSubmit={verifyEmail}>
+                    <TextField
+                      variant='filled'
+                      label='Электронная почта'
+                      fullWidth={true}
+                      margin='normal'
+                      name='email'
+                      onChange={handleChange}
+                      value={values.email}
+                    />
+                    <Grid justify='flex-end' item={true} direction='row' container={true}>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        type='submit'
+                      >
+                        Продолжить
+                      </Button>
+                    </Grid>
+                  </form>
+                )
+              }
+
+              {
+                emailVerified && (
+                  <form onSubmit={credentialSignin}>
+                    <Typography variant='body2'>
+                      Введите пароль для адреса:
+                      {' '}
+                      <Link onClick={resetEmail}>
+                        {values.email}
+                      </Link>
+                    </Typography>
+                    <TextField
+                      variant='filled'
+                      label='Пароль'
+                      fullWidth={true}
+                      margin='normal'
+                      name='password'
+                      onChange={handleChange}
+                      value={values.password}
+                      type={showPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              onClick={handleShowPasswordClick}
+                              onMouseDown={handleShowPasswordClick}
+                            >
+                              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <Grid justify='space-between' container={true} direction='row'>
+                      <Button
+                        onClick={recoverPassword}
+                      >
+                        Восстановить пароль
+                      </Button>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        type='submit'
+                      >
+                        Войти
+                      </Button>
+                    </Grid>
+                  </form>
+                )
+              }
             </CardContent>
           </Grid>
           <Grid item={true} component={Card} sm={true} className={classes.card}>
@@ -93,7 +201,7 @@ export default function SinginDialog({ open, onClose }: IProps) {
 
               {
                 !sentMobileCode && (
-                  <>
+                  <form onSubmit={phoneSignin}>
                     <TextField
                       variant='filled'
                       label='Мобильный телефон'
@@ -110,18 +218,18 @@ export default function SinginDialog({ open, onClose }: IProps) {
                       <Button
                         variant='contained'
                         color='primary'
-                        onClick={phoneSignin}
+                        type='submit'
                       >
                         Отправить код
                       </Button>
                     </Grid>
-                  </>
+                  </form>
                 )
               }
 
               {
                 sentMobileCode && (
-                  <>
+                  <form onSubmit={confirmMobileCode}>
                     <Typography variant='body2'>
                       Введите код отправленный на телефон
                       {' '}
@@ -148,12 +256,12 @@ export default function SinginDialog({ open, onClose }: IProps) {
                       <Button
                         variant='contained'
                         color='primary'
-                        onClick={confirmMobileCode}
+                        type='submit'
                       >
                         Продолжить
                       </Button>
                     </Grid>
-                  </>
+                  </form>
                 )
               }
             </CardContent>
