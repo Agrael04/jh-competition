@@ -34,8 +34,4 @@ export default (theme: Theme) => ({
       textDecoration: 'none',
     },
   },
-  button: {
-    color: 'black',
-    fontWeight: 'bold',
-  },
 })

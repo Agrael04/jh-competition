@@ -91,7 +91,7 @@ const CompetitionCard = ({ competition }: { competition: ICompetition }) => {
       <CardActions disableSpacing={true}>
         {
           competition.status === 'opened' && (
-            <Button className={classes.button}>
+            <Button>
               Подать заявку
             </Button>
           )

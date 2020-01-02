@@ -24,7 +24,4 @@ export default (theme: Theme) => ({
     flexGrow: '1',
     textAlign: 'left',
   },
-  button: {
-    fontWeight: 'bold',
-  },
 })

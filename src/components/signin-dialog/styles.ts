@@ -2,8 +2,6 @@ import { Theme } from '@material-ui/core/styles'
 
 import teal from '@material-ui/core/colors/teal'
 
-import { createMuiTheme } from '@material-ui/core/styles'
-
 export default (theme: Theme) => ({
   container: {
     width: theme.spacing(75),
@@ -24,12 +22,5 @@ export default (theme: Theme) => ({
   icon: {
     color: 'white',
     margin: 'auto',
-  },
-})
-
-export const theme = createMuiTheme({
-  palette: {
-    primary: teal,
-    secondary: teal,
   },
 })
