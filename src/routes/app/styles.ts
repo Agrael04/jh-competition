@@ -6,7 +6,7 @@ export default (theme: Theme) => ({
     minHeight: '100vh',
   },
   rootPaper: {
-    marginTop: '10vh',
+    marginTop: '24px',
     minHeight: '90vh',
     width: '100%',
   },

@@ -5,6 +5,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
+import Box from '@material-ui/core/Box'
+
+import { Link } from 'react-router-dom'
 
 import useStyles from '../../hooks/use-styles'
 import useFirebaseAuth from '../../hooks/use-firebase-auth'
@@ -33,6 +36,11 @@ export default function Layout({ children }: IProps) {
             <Typography variant='h6' className={classes.title}>
               Jumping Hall Competitions
             </Typography>
+            <Button color='inherit' className={classes.button}>
+              <Link to='/create-training'>
+                Добавить тренировку
+              </Link>
+            </Button>
             {
               !signedIn && (
                 <Button color='inherit' className={classes.button} onClick={openSigninDialog}>
@@ -59,7 +67,9 @@ export default function Layout({ children }: IProps) {
           />
         )
       }
-      {children}
+      <Box paddingTop={8}>
+        {children}
+      </Box>
     </div>
   )
 }
