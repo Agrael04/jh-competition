@@ -28,7 +28,7 @@ const translations = {
   'trainer': 'Тренер',
   'gym': 'Зал',
   'notes': 'Комментарi',
-  'trampoline': 'Батуты',
+  'trampolines': 'Батуты',
   'trainingType': 'Тип треннування',
   'trainingName': 'Назва',
   'moneyPrice': 'Разова цiна',
