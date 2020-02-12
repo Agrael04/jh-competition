@@ -104,10 +104,10 @@ export default function SinginDialog({ open, onClose }: IProps) {
         Вход в систему
       </Typography>
       <Grid container={true} justify='space-between'>
-        <Grid item={true} component={Card} sm={true} className={classes.card}>
-          <div className={classes.media}>
-            <MailIcon fontSize='large' className={classes.icon} />
-          </div>
+        <Grid item={true} component={Card} sm={true} className={classes.card} direction='column'>
+          <Grid container={true} justify='center' className={classes.media} direction='column' alignItems='center'>
+            <MailIcon fontSize='large' />
+          </Grid>
           <CardContent>
             <Typography variant='body1'>
               Вход с помощью електронной почты
@@ -188,10 +188,10 @@ export default function SinginDialog({ open, onClose }: IProps) {
             }
           </CardContent>
         </Grid>
-        <Grid item={true} component={Card} sm={true} className={classes.card}>
-          <div className={classes.media}>
-            <PhoneIcon fontSize='large' className={classes.icon} />
-          </div>
+        <Grid item={true} component={Card} sm={true} className={classes.card} direction='column'>
+          <Grid container={true} justify='center' className={classes.media} direction='column' alignItems='center'>
+            <PhoneIcon fontSize='large'/>
+          </Grid>
           <CardContent>
             <Typography variant='body1'>
               Вход с помощью мобильного телефона

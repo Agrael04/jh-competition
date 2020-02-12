@@ -12,15 +12,10 @@ export default (theme: Theme) => ({
   },
   card: {
     margin: theme.spacing(3),
-    flexDirection: 'column',
   },
   media: {
     height: theme.spacing(8),
-    display: 'flex',
     background: teal[400],
-  },
-  icon: {
     color: 'white',
-    margin: 'auto',
   },
 })
