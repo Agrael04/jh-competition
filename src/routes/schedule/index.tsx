@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
 import Paper from '@material-ui/core/Paper'
 
 import Table from '@material-ui/core/Table'
@@ -18,7 +17,6 @@ import DragableAvatar from './components/dragable-avatar'
 import DropableCell from './components/dropable-cell'
 
 const isTrainerAvailableAtTime = (trainer: number, time: string) => {
-  console.log(trainer, time, trainerSchedule)
   const scheduleRow = trainerSchedule.find(record => record.time === time)
   const tr = scheduleRow && scheduleRow.trainers.find(tr => tr === trainer)
 
@@ -123,55 +121,53 @@ const SchedulePage = ({ }) => {
   }
 
   return (
-    <Box paddingY={3}>
-      <Paper>
-        <Table aria-label='simple table'>
-          <TableHead>
-            <TableRow>
-              <TableCell>Time</TableCell>
-              <TableCell>Trainers</TableCell>
-              {
-                resources.map(r => (
-                  <TableCell key={r.id}>{r.name}</TableCell>
-                ))
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
+    <Paper>
+      <Table aria-label='simple table'>
+        <TableHead>
+          <TableRow>
+            <TableCell>Time</TableCell>
+            <TableCell>Trainers</TableCell>
             {
-              times.map(t => (
-                <TableRow key={t}>
-                  <TableCell scope='row'>
-                    {t}
-                  </TableCell>
-                  <TableCell scope='row'>
-                    <Grid container={true}>
-                      {
-                        (mappedTrainerSchedule.find(ts => ts.time === t) as any).trainers.map((tr: any) => (
-                          <DragableAvatar type={DND_CREATE_TRAINING} source={{ time: t, resource: null }} trainer={tr.id} src={tr.avatar} key={tr.id} />
-                        ))
-                      }
-                    </Grid>
-                  </TableCell>
-                  {
-                    resources.map(r => (
-                      <RecordCell
-                        createRecord={createScheduleRecord}
-                        moveRecord={moveScheduleRecord}
-                        mappedSchedule={mappedSchedule}
-                        resource={r.id}
-                        time={t}
-                        key={r.id}
-                      />
-                    ))
-                  }
-                </TableRow>
+              resources.map(r => (
+                <TableCell key={r.id}>{r.name}</TableCell>
               ))
             }
-          </TableBody>
-        </Table>
-      </Paper>
-    </Box>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {
+            times.map(t => (
+              <TableRow key={t}>
+                <TableCell scope='row'>
+                  {t}
+                </TableCell>
+                <TableCell scope='row'>
+                  <Grid container={true}>
+                    {
+                      (mappedTrainerSchedule.find(ts => ts.time === t) as any).trainers.map((tr: any) => (
+                        <DragableAvatar type={DND_CREATE_TRAINING} source={{ time: t, resource: null }} trainer={tr.id} src={tr.avatar} key={tr.id} />
+                      ))
+                    }
+                  </Grid>
+                </TableCell>
+                {
+                  resources.map(r => (
+                    <RecordCell
+                      createRecord={createScheduleRecord}
+                      moveRecord={moveScheduleRecord}
+                      mappedSchedule={mappedSchedule}
+                      resource={r.id}
+                      time={t}
+                      key={r.id}
+                    />
+                  ))
+                }
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
+    </Paper>
   )
 }
 

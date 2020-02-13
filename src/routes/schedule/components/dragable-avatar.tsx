@@ -4,6 +4,8 @@ import Avatar from '@material-ui/core/Avatar'
 
 import { useDrag } from 'react-dnd'
 
+const styles = { height: '64px', width: '64px' }
+
 const DragableAvatar = ({ type, source, trainer, ...rest }: any) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type, source, trainer },
@@ -12,7 +14,7 @@ const DragableAvatar = ({ type, source, trainer, ...rest }: any) => {
     }),
   })
 
-  return <Avatar {...rest} ref={drag} />
+  return <Avatar {...rest} ref={drag} style={styles} />
 }
 
 export default DragableAvatar
