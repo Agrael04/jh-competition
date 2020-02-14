@@ -23,18 +23,26 @@ const isTrainerAvailableAtTime = (trainer: number, time: string) => {
   return tr !== undefined
 }
 
-const RecordCell = ({ time, resource, mappedSchedule, createRecord, moveRecord }: any) => {
-  const record = mappedSchedule.find((record: any) => record.time === time && record.resource === resource)
+const mappedTrainerSchedule = trainerSchedule.map(ts => ({
+  time: ts.time,
+  trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
+}))
 
-  const onDrop = (type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
+const RecordCell = ({ time, resource, mappedSchedule, createRecord, moveRecord }: any) => {
+  const record = React.useMemo(
+    () => mappedSchedule.find((record: any) => record.time === time && record.resource === resource),
+    [mappedSchedule, time, resource]
+  )
+
+  const onDrop = React.useCallback((type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
     if (type === DND_CREATE_TRAINING) {
       createRecord({ time, resource }, source, trainer)
     } else if (type === DND_MOVE_TRAINING) {
       moveRecord({ time, resource }, source, trainer)
     }
-  }
+  }, [createRecord, moveRecord, time, resource])
 
-  const canDrop = (type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
+  const canDrop = React.useCallback((type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
     if (type === DND_CREATE_TRAINING) {
       if (record) {
         return false
@@ -60,10 +68,10 @@ const RecordCell = ({ time, resource, mappedSchedule, createRecord, moveRecord }
     }
 
     return true
-  }
+  }, [record, time])
 
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop}>
+    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record}>
       {
         record ? (
           <DragableAvatar
@@ -82,11 +90,6 @@ const RecordCell = ({ time, resource, mappedSchedule, createRecord, moveRecord }
 }
 
 const SchedulePage = ({ }) => {
-  const mappedTrainerSchedule = trainerSchedule.map(ts => ({
-    time: ts.time,
-    trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
-  }))
-
   const [schedule, setSchedule] = React.useState(initialSchedule)
 
   const mappedSchedule = schedule.map(record => ({
@@ -95,30 +98,36 @@ const SchedulePage = ({ }) => {
     trainer: trainers.find(tr => tr.id === record.trainer),
   }))
 
-  const createScheduleRecord = (target: any, source: any, trainer: any) => setSchedule(schedule => {
-    return [
-      ...schedule,
-      { time: target.time, resource: target.resource, trainer },
-    ]
-  })
+  const createScheduleRecord = React.useCallback(
+    (target: any, source: any, trainer: any) => setSchedule(schedule => {
+      return [
+        ...schedule,
+        { time: target.time, resource: target.resource, trainer },
+      ]
+    }),
+    [setSchedule]
+  )
 
-  const moveScheduleRecord = (target: any, source: any, trainer: any) => {
-    const targetIndex = schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
-    const sourceIndex = schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
+  const moveScheduleRecord = React.useCallback(
+    (target: any, source: any, trainer: any) => {
+      const targetIndex = schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
+      const sourceIndex = schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
 
-    if (targetIndex === -1) {
-      setSchedule([
-        ...schedule.filter((i, index) => index !== sourceIndex),
-        { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
-      ])
-    } else {
-      setSchedule([
-        ...schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
-        { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
-        { time: source.time, resource: source.resource, trainer: schedule[targetIndex].trainer },
-      ])
-    }
-  }
+      if (targetIndex === -1) {
+        setSchedule([
+          ...schedule.filter((i, index) => index !== sourceIndex),
+          { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
+        ])
+      } else {
+        setSchedule([
+          ...schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
+          { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
+          { time: source.time, resource: source.resource, trainer: schedule[targetIndex].trainer },
+        ])
+      }
+    },
+    [schedule, setSchedule]
+  )
 
   return (
     <Paper>
@@ -129,7 +138,7 @@ const SchedulePage = ({ }) => {
             <TableCell>Trainers</TableCell>
             {
               resources.map(r => (
-                <TableCell key={r.id}>{r.name}</TableCell>
+                <TableCell key={r.id} align='center'>{r.name}</TableCell>
               ))
             }
           </TableRow>
