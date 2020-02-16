@@ -15,6 +15,7 @@ export default makeStyles((theme: Theme) => {
       height: '100%',
       left: 0,
       top: 0,
+      borderRadius: 4,
     },
     greenOverlay: {
       background: lightGreen[500],

@@ -11,127 +11,31 @@ import TableRow from '@material-ui/core/TableRow'
 
 import { times, resources, trainers, trainerSchedule, schedule as initialSchedule } from './data'
 
-import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
+import { DND_CREATE_TRAINING } from './constants'
 
 import DragableAvatar from './components/dragable-avatar'
-import DropableCell from './components/dropable-cell'
 
-const isTrainerAvailableAtTime = (trainer: number, time: string) => {
-  const scheduleRow = trainerSchedule.find(record => record.time === time)
-  const tr = scheduleRow && scheduleRow.trainers.find(tr => tr === trainer)
+import RecordCell from './record-cell'
 
-  return tr !== undefined
-}
+import reducer from './reducer'
 
 const mappedTrainerSchedule = trainerSchedule.map(ts => ({
   time: ts.time,
   trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
 }))
 
-const RecordCell = ({ time, resource, mappedSchedule, createRecord, moveRecord }: any) => {
-  const record = React.useMemo(
-    () => mappedSchedule.find((record: any) => record.time === time && record.resource === resource),
-    [mappedSchedule, time, resource]
-  )
-
-  const onDrop = React.useCallback((type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
-    if (type === DND_CREATE_TRAINING) {
-      createRecord({ time, resource }, source, trainer)
-    } else if (type === DND_MOVE_TRAINING) {
-      moveRecord({ time, resource }, source, trainer)
-    }
-  }, [createRecord, moveRecord, time, resource])
-
-  const canDrop = React.useCallback((type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
-    if (type === DND_CREATE_TRAINING) {
-      if (record) {
-        return false
-      }
-
-      if (!isTrainerAvailableAtTime(trainer, time)) {
-        return false
-      }
-
-      return true
-    }
-
-    if (type === DND_MOVE_TRAINING) {
-      if (record && !isTrainerAvailableAtTime(record.trainer.id, source.time)) {
-        return false
-      }
-
-      if (!isTrainerAvailableAtTime(trainer, time)) {
-        return false
-      }
-
-      return true
-    }
-
-    return true
-  }, [record, time])
-
-  return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record}>
-      {
-        record ? (
-          <DragableAvatar
-            type={DND_MOVE_TRAINING}
-            source={{
-              time,
-              resource,
-            }}
-            trainer={record.trainer.id}
-            src={record.trainer.avatar}
-          />
-        ) : null
-      }
-    </DropableCell>
-  )
-}
-
 const SchedulePage = ({ }) => {
-  const [schedule, setSchedule] = React.useState(initialSchedule)
+  const [state, dispatch] = React.useReducer(reducer, { schedule: initialSchedule })
 
-  const mappedSchedule = schedule.map(record => ({
+  const mappedSchedule = state.schedule.map(record => ({
     time: record.time,
     resource: record.resource,
     trainer: trainers.find(tr => tr.id === record.trainer),
   }))
 
-  const createScheduleRecord = React.useCallback(
-    (target: any, source: any, trainer: any) => setSchedule(schedule => {
-      return [
-        ...schedule,
-        { time: target.time, resource: target.resource, trainer },
-      ]
-    }),
-    [setSchedule]
-  )
-
-  const moveScheduleRecord = React.useCallback(
-    (target: any, source: any, trainer: any) => {
-      const targetIndex = schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
-      const sourceIndex = schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
-
-      if (targetIndex === -1) {
-        setSchedule([
-          ...schedule.filter((i, index) => index !== sourceIndex),
-          { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
-        ])
-      } else {
-        setSchedule([
-          ...schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
-          { time: target.time, resource: target.resource, trainer: schedule[sourceIndex].trainer },
-          { time: source.time, resource: source.resource, trainer: schedule[targetIndex].trainer },
-        ])
-      }
-    },
-    [schedule, setSchedule]
-  )
-
   return (
     <Paper>
-      <Table aria-label='simple table'>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>Time</TableCell>
@@ -145,16 +49,23 @@ const SchedulePage = ({ }) => {
         </TableHead>
         <TableBody>
           {
-            times.map(t => (
-              <TableRow key={t}>
-                <TableCell scope='row'>
-                  {t}
+            times.map(time => (
+              <TableRow key={time}>
+                <TableCell>
+                  {time}
                 </TableCell>
-                <TableCell scope='row'>
+                <TableCell>
                   <Grid container={true}>
                     {
-                      (mappedTrainerSchedule.find(ts => ts.time === t) as any).trainers.map((tr: any) => (
-                        <DragableAvatar type={DND_CREATE_TRAINING} source={{ time: t, resource: null }} trainer={tr.id} src={tr.avatar} key={tr.id} />
+                      (mappedTrainerSchedule.find(ts => ts.time === time) as any).trainers.map((tr: any) => (
+                        <DragableAvatar
+                          type={DND_CREATE_TRAINING}
+                          source={{ time, resource: null }}
+                          trainer={tr.id}
+                          tooltipRows={[tr.name]}
+                          src={tr.avatar}
+                          key={tr.id}
+                        />
                       ))
                     }
                   </Grid>
@@ -162,11 +73,10 @@ const SchedulePage = ({ }) => {
                 {
                   resources.map(r => (
                     <RecordCell
-                      createRecord={createScheduleRecord}
-                      moveRecord={moveScheduleRecord}
+                      dispatch={dispatch}
                       mappedSchedule={mappedSchedule}
                       resource={r.id}
-                      time={t}
+                      time={time}
                       key={r.id}
                     />
                   ))

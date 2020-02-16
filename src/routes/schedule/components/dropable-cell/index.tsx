@@ -9,9 +9,9 @@ import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from '../../constants'
 
 import useStyles from './styles'
 
-const DropableCell = ({ children, onDrop, canDrop, isOccupied, ...rest }: any) => {
+const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, ...rest }: any) => {
   const classes = useStyles()
-  const [{ over, dropable }, drop] = useDrop({
+  const [{ over, dropable, item }, drop] = useDrop({
     accept: [DND_CREATE_TRAINING, DND_MOVE_TRAINING],
     drop: ({ type, source, trainer }: any) => {
       onDrop(type, source, trainer)
@@ -19,6 +19,7 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, ...rest }: any) =
     collect: monitor => ({
       over: !!monitor.isOver(),
       dropable: !!monitor.canDrop(),
+      item: monitor.getItem(),
     }),
     canDrop: ({ type, source, trainer }) => {
       return canDrop(type, source, trainer)
@@ -35,6 +36,12 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, ...rest }: any) =
       }
       {
         over && !dropable && <div className={clsx(classes.overlay, classes.redOverlay)} />
+      }
+      {
+        item && item.source &&
+        item.source.time === source.time &&
+        item.source.resource === source.resource &&
+        <div className={clsx(classes.overlay, classes.amberOverlay)} />
       }
       {children}
     </TableCell>
