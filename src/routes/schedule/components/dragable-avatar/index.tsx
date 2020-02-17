@@ -8,7 +8,7 @@ import { useDrag } from 'react-dnd'
 
 import MultilineTooltip from '../../../../components/multiline-tooltip'
 
-const DragableAvatar = ({ type, source, trainer, tooltipRows, ...rest }: any) => {
+const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick, ...rest }: any) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type, source, trainer },
     collect: monitor => ({
@@ -18,7 +18,7 @@ const DragableAvatar = ({ type, source, trainer, tooltipRows, ...rest }: any) =>
 
   return (
     <Tooltip title={<MultilineTooltip rows={tooltipRows} />}>
-      <Button ref={drag}>
+      <Button ref={drag} onDoubleClick={handleDoubleClick ? handleDoubleClick : undefined}>
         <Avatar {...rest} />
       </Button>
     </Tooltip>

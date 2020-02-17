@@ -9,15 +9,14 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import { times, resources, trainers, trainerSchedule, schedule as initialSchedule } from './data'
+import { times, resources, trainers, trainerSchedule } from './data'
 
 import { DND_CREATE_TRAINING } from './constants'
 
 import DragableAvatar from './components/dragable-avatar'
+import RecordTrainingDialog from './components/record-training-dialog'
 
 import RecordCell from './record-cell'
-
-import reducer from './reducer'
 
 const mappedTrainerSchedule = trainerSchedule.map(ts => ({
   time: ts.time,
@@ -25,14 +24,6 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 }))
 
 const SchedulePage = ({ }) => {
-  const [state, dispatch] = React.useReducer(reducer, { schedule: initialSchedule })
-
-  const mappedSchedule = state.schedule.map(record => ({
-    time: record.time,
-    resource: record.resource,
-    trainer: trainers.find(tr => tr.id === record.trainer),
-  }))
-
   return (
     <Paper>
       <Table>
@@ -73,8 +64,6 @@ const SchedulePage = ({ }) => {
                 {
                   resources.map(r => (
                     <RecordCell
-                      dispatch={dispatch}
-                      mappedSchedule={mappedSchedule}
                       resource={r.id}
                       time={time}
                       key={r.id}
@@ -86,6 +75,7 @@ const SchedulePage = ({ }) => {
           }
         </TableBody>
       </Table>
+      <RecordTrainingDialog />
     </Paper>
   )
 }

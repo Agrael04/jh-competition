@@ -57,10 +57,10 @@ export const trainerSchedule = [
 ]
 
 export const schedule = [
-  { time: '8:00', resource: 1, trainer: 2 },
-  { time: '8:00', resource: 2, trainer: 0 },
-  { time: '8:00', resource: 3, trainer: 2 },
-  { time: '8:00', resource: 4, trainer: 4 },
-  { time: '8:00', resource: 5, trainer: 5 },
-  { time: '8:00', resource: 6, trainer: 7 },
+  { time: '8:00', resource: 1, trainer: 2, gym: 1, date: new Date() },
+  { time: '8:00', resource: 2, trainer: 0, gym: 1, date: new Date() },
+  { time: '8:00', resource: 3, trainer: 2, gym: 1, date: new Date() },
+  { time: '8:00', resource: 4, trainer: 4, gym: 1, date: new Date() },
+  { time: '8:00', resource: 5, trainer: 5, gym: 1, date: new Date() },
+  { time: '8:00', resource: 6, trainer: 7, gym: 1, date: new Date() },
 ]

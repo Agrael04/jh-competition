@@ -37,7 +37,7 @@ export default function Layout({ children }: IProps) {
               Jumping Hall Competitions
             </Typography>
             <Button color='inherit' className={classes.button}>
-              <Link to='/create-training'>
+              <Link to='/schedule'>
                 Добавить тренировку
               </Link>
             </Button>

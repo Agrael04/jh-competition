@@ -11,7 +11,7 @@ export default createMuiTheme({
     },
   },
   palette: {
-    primary: lightGreen,
+    primary: teal,
     secondary: amber,
   },
 })
