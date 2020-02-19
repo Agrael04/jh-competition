@@ -1,7 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { IStoreState } from '../../store'
 
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
+import Badge from '@material-ui/core/Badge'
 
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -9,19 +12,12 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import { times, resources, trainers, trainerSchedule } from './data'
+import { times, resources } from './data'
 
-import { DND_CREATE_TRAINING } from './constants'
-
-import DragableAvatar from './components/dragable-avatar'
 import RecordTrainingDialog from './components/record-training-dialog'
 
+import TrainersCell from './trainers-cell'
 import RecordCell from './record-cell'
-
-const mappedTrainerSchedule = trainerSchedule.map(ts => ({
-  time: ts.time,
-  trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
-}))
 
 const SchedulePage = ({ }) => {
   return (
@@ -45,22 +41,7 @@ const SchedulePage = ({ }) => {
                 <TableCell>
                   {time}
                 </TableCell>
-                <TableCell>
-                  <Grid container={true}>
-                    {
-                      (mappedTrainerSchedule.find(ts => ts.time === time) as any).trainers.map((tr: any) => (
-                        <DragableAvatar
-                          type={DND_CREATE_TRAINING}
-                          source={{ time, resource: null }}
-                          trainer={tr.id}
-                          tooltipRows={[tr.name]}
-                          src={tr.avatar}
-                          key={tr.id}
-                        />
-                      ))
-                    }
-                  </Grid>
-                </TableCell>
+                <TrainersCell time={time} />
                 {
                   resources.map(r => (
                     <RecordCell

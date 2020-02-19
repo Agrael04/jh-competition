@@ -27,7 +27,7 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, ...rest }
   })
 
   return (
-    <TableCell ref={drop} {...rest} className={classes.box} align='center'>
+    <TableCell ref={drop} {...rest} className={classes.box} align='center' padding='none'>
       {
         over && dropable && !isOccupied && <div className={clsx(classes.overlay, classes.greenOverlay)} />
       }
