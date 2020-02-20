@@ -84,8 +84,8 @@ const trainees = [
   { name: 'Куроко Тетсуя', seasonPass: 'Абонимент 123', status: 'RESERVED', paymentMethod: 'SINGLE_PAYMENT', paid: true },
   { name: 'Кисе Риота', seasonPass: 'Абонимент 123', status: 'RESERVED', paymentMethod: 'DEBT', paid: false },
   { name: 'Кагами Таига', seasonPass: 'Абонимент 123', status: 'PENDING', paymentMethod: 'SEASON_PASS', paid: true },
-  { name: 'Мидорима Шинтаро', seasonPass: 'Абонимент 123', status: 'CONFIRMED', paymentMethod: 'SEASON_PASS', paid: true },
-  { name: 'Кийоши Тепей', seasonPass: 'Абонимент 123', status: 'CANCELED', paymentMethod: 'SINGLE_PAYMENT', paid: false },
+  // { name: 'Мидорима Шинтаро', seasonPass: 'Абонимент 123', status: 'CONFIRMED', paymentMethod: 'SEASON_PASS', paid: true },
+  // { name: 'Кийоши Тепей', seasonPass: 'Абонимент 123', status: 'CANCELED', paymentMethod: 'SINGLE_PAYMENT', paid: false },
 ]
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
@@ -112,7 +112,7 @@ export default function AddTrainingDialog() {
   }
 
   return (
-    <Dialog fullScreen={true} open={openedRecordDialog} onClose={close} TransitionComponent={Transition}>
+    <Dialog open={openedRecordDialog} onClose={close} TransitionComponent={Transition} maxWidth='lg' fullWidth={true}>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
@@ -259,30 +259,65 @@ export default function AddTrainingDialog() {
                 />
               </Grid>
             </Grid>
-            <Divider />
-            <Grid item={true} lg={12}>
-              <List>
-                {
-                  trainees.map(trainee => (
-                    <ListItem key={trainee.name}>
-                      <ListItemText
-                        primary={
-                          `${trainee.name} ${trainee.seasonPass ? ` / ${trainee.seasonPass}` : ''}`
-                        }
-                        secondary={
-                          `${translations[`status.${trainee.status}`]} ${trainee.paid ? ` / ${translations.paid}` : ''}`
-                        }
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton edge='end' aria-label='delete'>
-                          <MoreVertIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))
-                }
-              </List>
-            </Grid>
+            {
+              trainees.map(trainee => (
+                <Grid item={true} lg={12} key={trainee.name}>
+                  <Box m={1}>
+                    <Grid container={true} spacing={2}>
+                      <Grid item={true} lg={6} container={true} spacing={2}>
+                        <Grid item={true} lg={12}>
+                          <TextField
+                            label={'Name'}
+                            fullWidth={true}
+                            variant='outlined'
+                            defaultValue={trainee.name}
+                          />
+                        </Grid>
+                        <Grid item={true} lg={4}>
+                          <TextField
+                            label={'Abonement'}
+                            fullWidth={true}
+                            variant='outlined'
+                            defaultValue={trainee.seasonPass}
+                          />
+                        </Grid>
+                        <Grid item={true} lg={4}>
+                          <Select
+                            label={'Status'}
+                            fullWidth={true}
+                            variant='outlined'
+                            value={trainee.status}
+                          >
+                            {
+                              ['RESERVED', 'PENDING', 'CONFIRMED'].map(type => (
+                                <MenuItem value={type} key={type}>
+                                  {type}
+                                </MenuItem>
+                              ))
+                            }
+                          </Select>
+                        </Grid>
+                      </Grid>
+                      <Grid item={true} lg={5}>
+                        <TextField
+                          label={translations.notes}
+                          rows={5}
+                          fullWidth={true}
+                          variant='outlined'
+                          multiline={true}
+                          defaultValue='Sugester for name/season pass, add more/remove buttons implementation. Mb another field paid? hmm'
+                        />
+                      </Grid>
+                      <Grid container={true} justify='center' direction='column' item={true} lg={1}>
+                        <Button color='primary'>
+                          Remove
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Grid>
+              ))
+            }
           </Grid>
 
           <Grid item={true} container={true} justify='flex-end'>
