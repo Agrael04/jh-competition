@@ -2,14 +2,14 @@ import React from 'react'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import Tooltip from '@material-ui/core/Tooltip'
 import Box from '@material-ui/core/Box'
+import Badge from '@material-ui/core/Badge'
 
 import { useDrag } from 'react-dnd'
 
-import MultilineTooltip from '../../../../components/multiline-tooltip'
+import Tooltip from '../../../../components/multiline-tooltip'
 
-const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick, Badge, ...rest }: any) => {
+const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick, badgeContent, ...rest }: any) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type, source, trainer },
     collect: monitor => ({
@@ -17,19 +17,21 @@ const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick,
     }),
   })
 
-  const Component = (props: any) => Badge ? (
-    <Badge>
-      <Avatar {...props} />
-    </Badge>
-  ) : (
-    <Avatar {...props} />
-  )
-
   return (
-    <Tooltip title={<MultilineTooltip rows={tooltipRows} />}>
+    <Tooltip rows={tooltipRows}>
       <Box m={0.5}>
         <Button ref={drag} onDoubleClick={handleDoubleClick ? handleDoubleClick : undefined}>
-          <Component {...rest} />
+          <Badge
+            overlap='circle'
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            badgeContent={badgeContent}
+            color={'error'}
+          >
+            <Avatar {...rest} />
+          </Badge>
         </Button>
       </Box>
     </Tooltip>

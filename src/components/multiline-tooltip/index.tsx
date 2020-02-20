@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Tooltip from '@material-ui/core/Tooltip'
+
 const TooltipComponent = ({ rows }: { rows: string[] }) => {
   return (
     <>
@@ -15,4 +17,10 @@ const TooltipComponent = ({ rows }: { rows: string[] }) => {
   )
 }
 
-export default TooltipComponent
+const TooltipWrap = ({ rows, children }: any) => (
+  <Tooltip title={<TooltipComponent rows={rows} />}>
+    {children}
+  </Tooltip>
+)
+
+export default TooltipWrap

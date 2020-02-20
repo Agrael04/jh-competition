@@ -38,9 +38,8 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, ...rest }
         over && !dropable && <div className={clsx(classes.overlay, classes.redOverlay)} />
       }
       {
-        item && item.source &&
-        item.source.time === source.time &&
-        item.source.resource === source.resource &&
+        item?.source?.time === source.time &&
+        item?.source?.resource === source.resource &&
         <div className={clsx(classes.overlay, classes.amberOverlay)} />
       }
       {children}
