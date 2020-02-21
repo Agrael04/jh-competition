@@ -89,7 +89,7 @@ const TraineeRow = ({ trainee, index, remove }: any) => {
 
   return (
     <Grid item={true} lg={12}>
-      <Box marginX={1}>
+      <Box marginX={1} border={1} borderRadius={5} padding={1} borderColor='text.disabled'>
         <Grid container={true} spacing={2}>
           <Grid item={true} lg={3}>
             <TextField
