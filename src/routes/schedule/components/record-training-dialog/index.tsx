@@ -22,7 +22,7 @@ import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
-import MoreVertIcon from '@material-ui/icons/MoreVert'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import { DatePicker } from '@material-ui/pickers'
 
@@ -80,17 +80,70 @@ const gyms = [
   { id: 4, text: 'Парк дружбы народов' },
 ]
 
-const trainees = [
-  { name: 'Куроко Тетсуя', seasonPass: 'Абонимент 123', status: 'RESERVED', paymentMethod: 'SINGLE_PAYMENT', paid: true },
-  { name: 'Кисе Риота', seasonPass: 'Абонимент 123', status: 'RESERVED', paymentMethod: 'DEBT', paid: false },
-  { name: 'Кагами Таига', seasonPass: 'Абонимент 123', status: 'PENDING', paymentMethod: 'SEASON_PASS', paid: true },
-  // { name: 'Мидорима Шинтаро', seasonPass: 'Абонимент 123', status: 'CONFIRMED', paymentMethod: 'SEASON_PASS', paid: true },
-  // { name: 'Кийоши Тепей', seasonPass: 'Абонимент 123', status: 'CANCELED', paymentMethod: 'SINGLE_PAYMENT', paid: false },
-]
-
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
+
+const TraineeRow = ({ trainee, index, remove }: any) => {
+  const removeTrainee = () => remove(index)
+
+  return (
+    <Grid item={true} lg={12}>
+      <Box marginX={1}>
+        <Grid container={true} spacing={2}>
+          <Grid item={true} lg={3}>
+            <TextField
+              label={'Name'}
+              fullWidth={true}
+              variant='outlined'
+              defaultValue={trainee.name}
+            />
+          </Grid>
+          <Grid item={true} lg={2}>
+            <TextField
+              label={'Abonement'}
+              fullWidth={true}
+              variant='outlined'
+              defaultValue={trainee.seasonPass}
+            />
+          </Grid>
+          <Grid item={true} lg={2}>
+            <Select
+              label={'Status'}
+              fullWidth={true}
+              variant='outlined'
+              value={trainee.status}
+            >
+              {
+                ['RESERVED', 'PENDING', 'CONFIRMED'].map(type => (
+                  <MenuItem value={type} key={type}>
+                    {type}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          </Grid>
+          <Grid item={true} lg={4}>
+            <TextField
+              label={translations.notes}
+              // rows={5}
+              fullWidth={true}
+              variant='outlined'
+              // multiline={true}
+            />
+          </Grid>
+          <Grid item={true} lg={1} container={true} justify='flex-end'>
+            <Box marginY='auto'>
+              <IconButton onClick={removeTrainee}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
+  )
+}
 
 export default function AddTrainingDialog() {
   const state = useSelector((state: IStoreState) => state.schedule)
@@ -100,8 +153,26 @@ export default function AddTrainingDialog() {
 
   const { openedRecordDialog, recordDialogPayload } = state
 
+  const [trainees, setTrainees] = React.useState<any[]>([])
+
   const close = () => dispatch(actions.schedule.closeRecordDialog())
   const save = () => recordDialogPayload && dispatch(actions.schedule.createRecord(recordDialogPayload))
+
+  const addTrainee = React.useCallback(
+    () => {
+      if (trainees.length < 3) {
+        setTrainees(trainees => [...trainees, { name: '', seasonPass: '', status: '', paymentMethod: 'SEASON_PASS', paid: true }])
+      }
+    },
+    [setTrainees, trainees]
+  )
+
+  const removeTrainee = React.useCallback(
+    (index: number) => {
+      setTrainees(trainees => trainees.filter((t, i) => i !== index))
+    },
+    [setTrainees]
+  )
 
   const handleDateChange = React.useCallback(e => {
     setDate(e)
@@ -256,72 +327,28 @@ export default function AddTrainingDialog() {
                   fullWidth={true}
                   variant='outlined'
                   multiline={true}
+                  defaultValue='Sugester for name/season pass, add more/remove buttons implementation. Mb another field paid? hmm'
                 />
               </Grid>
             </Grid>
             {
-              trainees.map(trainee => (
-                <Grid item={true} lg={12} key={trainee.name}>
-                  <Box m={1}>
-                    <Grid container={true} spacing={2}>
-                      <Grid item={true} lg={6} container={true} spacing={2}>
-                        <Grid item={true} lg={12}>
-                          <TextField
-                            label={'Name'}
-                            fullWidth={true}
-                            variant='outlined'
-                            defaultValue={trainee.name}
-                          />
-                        </Grid>
-                        <Grid item={true} lg={4}>
-                          <TextField
-                            label={'Abonement'}
-                            fullWidth={true}
-                            variant='outlined'
-                            defaultValue={trainee.seasonPass}
-                          />
-                        </Grid>
-                        <Grid item={true} lg={4}>
-                          <Select
-                            label={'Status'}
-                            fullWidth={true}
-                            variant='outlined'
-                            value={trainee.status}
-                          >
-                            {
-                              ['RESERVED', 'PENDING', 'CONFIRMED'].map(type => (
-                                <MenuItem value={type} key={type}>
-                                  {type}
-                                </MenuItem>
-                              ))
-                            }
-                          </Select>
-                        </Grid>
-                      </Grid>
-                      <Grid item={true} lg={5}>
-                        <TextField
-                          label={translations.notes}
-                          rows={5}
-                          fullWidth={true}
-                          variant='outlined'
-                          multiline={true}
-                          defaultValue='Sugester for name/season pass, add more/remove buttons implementation. Mb another field paid? hmm'
-                        />
-                      </Grid>
-                      <Grid container={true} justify='center' direction='column' item={true} lg={1}>
-                        <Button color='primary'>
-                          Remove
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </Grid>
+              trainees.map((trainee, index) => (
+                <TraineeRow trainee={trainee} index={index} remove={removeTrainee} key={index} />
               ))
+            }
+            {
+              trainees.length < 3 && (
+                <Grid item={true} container={true} justify='flex-end'>
+                  <Button variant='outlined' color='primary' onClick={addTrainee}> Add trainee </Button>
+                </Grid>
+              )
             }
           </Grid>
 
           <Grid item={true} container={true} justify='flex-end'>
-            <Button variant='contained' color='primary' onClick={save}> Save </Button>
+            <Box marginTop={1}>
+              <Button variant='contained' color='primary' onClick={save}> Save </Button>
+            </Box>
           </Grid>
         </Grid>
       </Box>
