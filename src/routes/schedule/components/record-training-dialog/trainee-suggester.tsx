@@ -47,7 +47,9 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
   const [filter, setFilter] = React.useState<string>('')
 
   const handleInputChange = (e: any) => {
-    setFilter(e.target.value)
+    if (e) {
+      setFilter(e.target.value)
+    }
   }
 
   React.useEffect(
