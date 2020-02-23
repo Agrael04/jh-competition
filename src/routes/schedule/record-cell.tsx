@@ -30,7 +30,7 @@ const RecordCell = ({ time, resource }: any) => {
 
   const trainer = React.useMemo(
     () => record && trainers.find(tr => tr.id === record.trainer),
-    [record, trainers]
+    [record]
   )
 
   const source = React.useMemo(

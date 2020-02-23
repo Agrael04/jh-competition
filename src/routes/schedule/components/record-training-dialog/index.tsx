@@ -4,10 +4,6 @@ import { IStoreState } from '../../../../store'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItem from '@material-ui/core/ListItem'
-import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
@@ -18,15 +14,13 @@ import { TransitionProps } from '@material-ui/core/transitions'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
-import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
-import DeleteIcon from '@material-ui/icons/Delete'
+import TextField from '../../../../containers/text-field'
+import DatePicker from '../../../../containers/date-picker'
+import Select from '../../../../containers/select'
 
-import { DatePicker } from '@material-ui/pickers'
-
-import Select from '../../../../components/select'
+import TraineesBlock from './trainees-block'
 
 import useStyles from './styles'
 
@@ -84,102 +78,20 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-const TraineeRow = ({ trainee, index, remove }: any) => {
-  const removeTrainee = () => remove(index)
+type FieldName = keyof IStoreState['schedule']['recordForm']
 
-  return (
-    <Grid item={true} lg={12}>
-      <Box marginX={1} border={1} borderRadius={5} padding={1} borderColor='text.disabled'>
-        <Grid container={true} spacing={2}>
-          <Grid item={true} lg={3}>
-            <TextField
-              label={'Name'}
-              fullWidth={true}
-              variant='outlined'
-              defaultValue={trainee.name}
-            />
-          </Grid>
-          <Grid item={true} lg={2}>
-            <TextField
-              label={'Abonement'}
-              fullWidth={true}
-              variant='outlined'
-              defaultValue={trainee.seasonPass}
-            />
-          </Grid>
-          <Grid item={true} lg={2}>
-            <Select
-              label={'Status'}
-              fullWidth={true}
-              variant='outlined'
-              value={trainee.status}
-            >
-              {
-                ['RESERVED', 'PENDING', 'CONFIRMED'].map(type => (
-                  <MenuItem value={type} key={type}>
-                    {type}
-                  </MenuItem>
-                ))
-              }
-            </Select>
-          </Grid>
-          <Grid item={true} lg={4}>
-            <TextField
-              label={translations.notes}
-              // rows={5}
-              fullWidth={true}
-              variant='outlined'
-              // multiline={true}
-            />
-          </Grid>
-          <Grid item={true} lg={1} container={true} justify='flex-end'>
-            <Box marginY='auto'>
-              <IconButton onClick={removeTrainee}>
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    </Grid>
-  )
-}
+const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.recordForm[name]
 
 export default function AddTrainingDialog() {
-  const state = useSelector((state: IStoreState) => state.schedule)
+  const openedRecordDialog = useSelector((state: IStoreState) => state.schedule.openedRecordDialog)
   const dispatch = useDispatch()
   const classes = useStyles()
-  const [date, setDate] = React.useState(null)
-
-  const { openedRecordDialog, recordDialogPayload } = state
-
-  const [trainees, setTrainees] = React.useState<any[]>([])
 
   const close = () => dispatch(actions.schedule.closeRecordDialog())
-  const save = () => recordDialogPayload && dispatch(actions.schedule.createRecord(recordDialogPayload))
+  const save = () => dispatch(actions.schedule.createRecord())
 
-  const addTrainee = React.useCallback(
-    () => {
-      if (trainees.length < 3) {
-        setTrainees(trainees => [...trainees, { name: '', seasonPass: '', status: '', paymentMethod: 'SEASON_PASS', paid: true }])
-      }
-    },
-    [setTrainees, trainees]
-  )
-
-  const removeTrainee = React.useCallback(
-    (index: number) => {
-      setTrainees(trainees => trainees.filter((t, i) => i !== index))
-    },
-    [setTrainees]
-  )
-
-  const handleDateChange = React.useCallback(e => {
-    setDate(e)
-  }, [setDate])
-
-  if (!recordDialogPayload) {
-    return null
+  const handleChange = (name: string, value: any) => {
+    dispatch(actions.schedule.updateFormField(name, value))
   }
 
   return (
@@ -200,7 +112,9 @@ export default function AddTrainingDialog() {
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={6}>
                 <Select
-                  value={recordDialogPayload.gym}
+                  name='gym'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.gym}
                   fullWidth={true}
                   variant='outlined'
@@ -217,8 +131,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <DatePicker
-                  value={recordDialogPayload.date}
-                  onChange={handleDateChange}
+                  name='date'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   disablePast={true}
                   label={translations.date}
                   cancelLabel={translations.cancelLabel}
@@ -230,7 +145,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={12}>
                 <Select
-                  value={recordDialogPayload.trainer}
+                  name='trainer'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.trainer}
                   fullWidth={true}
                   variant='outlined'
@@ -247,7 +164,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <Select
-                  value={recordDialogPayload.time}
+                  name='time'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.startTime}
                   fullWidth={true}
                   variant='outlined'
@@ -264,7 +183,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <Select
-                  value={recordDialogPayload.resource}
+                  name='resource'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.trampolines}
                   fullWidth={true}
                   variant='outlined'
@@ -283,6 +204,9 @@ export default function AddTrainingDialog() {
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={12}>
                 <TextField
+                  name='name'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.trainingName}
                   fullWidth={true}
                   variant='outlined'
@@ -290,7 +214,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={12}>
                 <Select
-                  value={null}
+                  name='type'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.trainingType}
                   fullWidth={true}
                   variant='outlined'
@@ -306,6 +232,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <TextField
+                  name='moneyPrice'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.moneyPrice}
                   fullWidth={true}
                   variant='outlined'
@@ -313,6 +242,9 @@ export default function AddTrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <TextField
+                  name='markPrice'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.markPrice}
                   fullWidth={true}
                   variant='outlined'
@@ -322,27 +254,18 @@ export default function AddTrainingDialog() {
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={12}>
                 <TextField
+                  name='note'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
                   label={translations.notes}
                   rows={9}
                   fullWidth={true}
                   variant='outlined'
                   multiline={true}
-                  defaultValue='Sugester for name/season pass, add more/remove buttons implementation. Mb another field paid? hmm'
                 />
               </Grid>
             </Grid>
-            {
-              trainees.map((trainee, index) => (
-                <TraineeRow trainee={trainee} index={index} remove={removeTrainee} key={index} />
-              ))
-            }
-            {
-              trainees.length < 3 && (
-                <Grid item={true} container={true} justify='flex-end'>
-                  <Button variant='outlined' color='primary' onClick={addTrainee}> Add trainee </Button>
-                </Grid>
-              )
-            }
+            <TraineesBlock />
           </Grid>
 
           <Grid item={true} container={true} justify='flex-end'>

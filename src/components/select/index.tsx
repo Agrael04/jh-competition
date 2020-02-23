@@ -6,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 interface IProps {
   value: any
   label?: string
+  name?: string
   helperText?: string
   disabled?: boolean
   onChange?: (e: any) => void
@@ -17,7 +18,7 @@ interface IProps {
   multiple?: boolean
 }
 
-export default ({ value, onChange, label, variant, disabled, multiple, fullWidth, children }: IProps) => {
+export default ({ value, onChange, label, name, variant, disabled, multiple, fullWidth, children }: IProps) => {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
   const [labelWidth, setLabelWidth] = React.useState(0)
   React.useEffect(() => {
@@ -33,6 +34,7 @@ export default ({ value, onChange, label, variant, disabled, multiple, fullWidth
         onChange={onChange}
         labelWidth={labelWidth}
         multiple={multiple}
+        name={name}
       >
         {children}
       </Select>

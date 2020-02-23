@@ -13,9 +13,8 @@ interface ICell {
   time: string
 }
 
-export const createRecord = (record: IRecord) => ({
+export const createRecord = () => ({
   type: constants.CREATE_RECORD,
-  payload: { record },
 })
 
 export const moveRecord = (source: ICell, target: ICell, trainer: number) => ({
@@ -38,10 +37,33 @@ export const closeRecordDialog = () => ({
   payload: null,
 })
 
+export const updateFormField = (field: string, value: any) => ({
+  type: constants.UPDATE_FORM_FIELD,
+  payload: { field, value },
+})
+
+export const addTrainee = () => ({
+  type: constants.ADD_TRAINEE,
+})
+
+export const updateTraineeFormField = (index: number, field: string, value: any) => ({
+  type: constants.UPDATE_TRAINEE_FORM_FIELD,
+  payload: { index, field, value },
+})
+
+export const removeTrainee = (index: number) => ({
+  type: constants.REMOVE_TRAINEE,
+  payload: { index },
+})
+
 export default {
   createRecord,
   moveRecord,
   openCreateDialog,
   openUpdateDialog,
   closeRecordDialog,
+  updateFormField,
+  addTrainee,
+  updateTraineeFormField,
+  removeTrainee,
 }

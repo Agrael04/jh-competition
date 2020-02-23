@@ -1,6 +1,6 @@
 import teal from '@material-ui/core/colors/teal'
 import amber from '@material-ui/core/colors/amber'
-import lightGreen from '@material-ui/core/colors/lightGreen'
+// import lightGreen from '@material-ui/core/colors/lightGreen'
 
 import { createMuiTheme } from '@material-ui/core/styles'
 

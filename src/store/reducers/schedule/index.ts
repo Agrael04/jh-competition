@@ -2,6 +2,27 @@ import constants from '../../constants/schedule'
 
 import { schedule as initialSchedule } from '../../../routes/schedule/data'
 
+interface IRecordForm {
+  gym: number | undefined
+  date: Date | undefined
+  trainer: number | undefined
+  time: string
+  resource: number | undefined
+
+  name?: string
+  type: string
+  markPrice: number | null
+  moneyPrice: number | null
+  note: string
+
+  trainees: Array<{
+    name: string
+    seasonPass: string
+    status: string
+    note: string
+  }>
+}
+
 interface IRecord {
   time: string
   resource: number
@@ -13,29 +34,43 @@ interface IRecord {
 export interface IState {
   schedule: IRecord[]
   openedRecordDialog: boolean
-  recordDialogPayload: IRecord | null
   dialogMode: string | null
+  recordForm: IRecordForm
 }
 
 const initialState: IState = {
   schedule: initialSchedule,
   openedRecordDialog: false,
-  recordDialogPayload: null,
   dialogMode: null,
+  recordForm: {
+    time: '',
+    resource: undefined,
+    trainer: undefined,
+    gym: undefined,
+    date: undefined,
+
+    name: '',
+    type: '',
+    markPrice: null,
+    moneyPrice: null,
+    note: '',
+
+    trainees: [],
+  },
 }
 
-export default (state = initialState, { type, payload }: { type: string, payload: any }) => {
+export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
   switch (type) {
     case constants.CREATE_RECORD: {
+      console.log(state.recordForm)
       return {
         ...state,
-        openedRecordDialog: false,
-        recordDialogPayload: null,
-        dialogMode: null,
-        schedule: [
-          ...state.schedule,
-          payload.record as IRecord,
-        ],
+        // openedRecordDialog: false,
+        // dialogMode: null,
+        // schedule: [
+        //   ...state.schedule,
+        //   payload.record as IRecord,
+        // ],
       }
     }
 
@@ -69,7 +104,21 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: 'create',
         openedRecordDialog: true,
-        recordDialogPayload: payload,
+        recordForm: {
+          time: payload.time,
+          resource: payload.resource,
+          trainer: payload.trainer,
+          gym: payload.gym,
+          date: payload.date,
+
+          name: '',
+          type: '',
+          markPrice: 0,
+          moneyPrice: 0,
+          note: '',
+
+          trainees: [],
+        },
       }
     }
 
@@ -78,7 +127,64 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: 'update',
         openedRecordDialog: true,
-        recordDialogPayload: payload,
+        recordForm: payload,
+      }
+    }
+
+    case constants.UPDATE_FORM_FIELD: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          [payload.field]: payload.value,
+        } as any,
+      }
+    }
+
+    case constants.ADD_TRAINEE: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          trainees: state.recordForm.trainees.length < 3 ? [
+            ...state.recordForm.trainees,
+            {
+              name: '',
+              seasonPass: '',
+              status: '',
+              note: '',
+            },
+          ] : state.recordForm.trainees,
+        } as any,
+      }
+    }
+
+    case constants.UPDATE_TRAINEE_FORM_FIELD: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          trainees: state.recordForm?.trainees.map((item, index) => {
+            if (index !== payload.index) {
+              return item
+            }
+
+            return {
+              ...item,
+              [payload.field]: payload.value,
+            }
+          }),
+        } as any,
+      }
+    }
+
+    case constants.REMOVE_TRAINEE: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          trainees: state.recordForm.trainees.filter((item, index) => index !== payload.index),
+        } as any,
       }
     }
 
@@ -87,7 +193,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: null,
         openedRecordDialog: false,
-        recordDialogPayload: null,
+        recordForm: initialState.recordForm,
       }
     }
 
