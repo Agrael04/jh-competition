@@ -52,7 +52,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
 
   React.useEffect(
     () => {
-      if (opened && filter) {
+      if (opened) {
         actions.schedule.searchTrainees(filter)
       }
     },

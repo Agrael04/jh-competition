@@ -10,6 +10,11 @@ export function* searchTrainees(action: ReturnType<typeof actions.searchTrainees
   try {
     yield delay(500)
 
+    if (!action.payload.filter) {
+      yield put(actions.searchTraineesCancel())
+      return
+    }
+
     const res: PromiseResponse<typeof searchUsers> = yield call(
       searchUsers,
       action.payload.filter
@@ -25,7 +30,7 @@ function* watchSearchTrainees() {
   yield takeLatest(constants.SEARCH_TRAINEES, searchTrainees)
 }
 
-export default function*() {
+export default function* () {
   yield all([
     watchSearchTrainees(),
   ])

@@ -68,6 +68,10 @@ export const searchTraineesSuccess = (options: ISearchedTrainee[]) => ({
   payload: { options },
 })
 
+export const searchTraineesCancel = () => ({
+  type: constants.SEARCH_TRAINEES_CANCEL,
+})
+
 export default {
   createRecord,
   moveRecord,
@@ -80,4 +84,5 @@ export default {
   removeTrainee,
   searchTrainees,
   searchTraineesSuccess,
+  searchTraineesCancel,
 }

@@ -232,6 +232,16 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
+    case constants.SEARCH_TRAINEES_CANCEL: {
+      return {
+        ...state,
+        traineeSuggester: {
+          loading: false,
+          options: [],
+        },
+      }
+    }
+
     default:
       return state
   }
