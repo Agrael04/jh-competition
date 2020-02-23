@@ -49,7 +49,7 @@ const RecordCell = ({ time, resource }: any) => {
         actions.schedule.moveRecord(source, { time, resource }, trainer)
       }
     },
-    [time, resource]
+    [time, resource, actions]
   )
 
   const canDrop = React.useCallback(
@@ -75,7 +75,7 @@ const RecordCell = ({ time, resource }: any) => {
 
   const handleDoubleClick = React.useCallback(
     () => record && actions.schedule.openUpdateDialog(record),
-    [record]
+    [record, actions]
   )
 
   return (
