@@ -1,5 +1,7 @@
 import constants from '../../constants/schedule'
 
+import { ISearchedTrainee } from '../../../interfaces/trainee'
+
 interface IRecord {
   time: string
   resource: number
@@ -56,6 +58,16 @@ export const removeTrainee = (index: number) => ({
   payload: { index },
 })
 
+export const searchTrainees = (filter: string) => ({
+  type: constants.SEARCH_TRAINEES,
+  payload: { filter },
+})
+
+export const searchTraineesSuccess = (options: ISearchedTrainee[]) => ({
+  type: constants.SEARCH_TRAINEES_SUCCESS,
+  payload: { options },
+})
+
 export default {
   createRecord,
   moveRecord,
@@ -66,4 +78,6 @@ export default {
   addTrainee,
   updateTraineeFormField,
   removeTrainee,
+  searchTrainees,
+  searchTraineesSuccess,
 }

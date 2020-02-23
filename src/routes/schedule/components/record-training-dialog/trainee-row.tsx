@@ -12,6 +12,8 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import TextField from '../../../../containers/text-field'
 import Select from '../../../../containers/select'
 
+import TraineeSuggester from './trainee-suggester'
+
 type FieldName = keyof IStoreState['schedule']['recordForm']['trainees'][0]
 
 export default function TraineeRow({ index }: { index: number }) {
@@ -36,13 +38,10 @@ export default function TraineeRow({ index }: { index: number }) {
       <Box marginX={1} border={1} borderRadius={5} padding={1} borderColor='text.disabled'>
         <Grid container={true} spacing={2}>
           <Grid item={true} lg={3}>
-            <TextField
-              name='name'
+            <TraineeSuggester
+              name='traineeId'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Name'}
-              fullWidth={true}
-              variant='outlined'
             />
           </Grid>
           <Grid item={true} lg={2}>

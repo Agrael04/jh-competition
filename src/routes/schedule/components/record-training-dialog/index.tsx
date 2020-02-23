@@ -264,7 +264,6 @@ export default function AddTrainingDialog() {
             </Grid>
             <TraineesBlock />
           </Grid>
-
           <Grid item={true} container={true} justify='flex-end'>
             <Box marginTop={1}>
               <Button variant='contained' color='primary' onClick={save}> Save </Button>

@@ -1,12 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { TypedUseSelectorHook, useSelector as useReduxSelector } from 'react-redux'
-// import createSagaMiddleware from 'redux-saga'
+import createSagaMiddleware from 'redux-saga'
 
 // import { routerMiddleware } from 'connected-react-router'
 // import { createBrowserHistory } from 'history'
 
 import reducer from './reducers'
-// import saga from './sagas'
+import saga from './sagas'
 import { useActions } from './actions'
 
 // const history = createBrowserHistory()
@@ -23,10 +23,10 @@ const composeEnhancers =
     })) ||
   compose
 
-// const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
 
 const middlewares = applyMiddleware(
-  // sagaMiddleware,
+  sagaMiddleware
   // routerMiddleware(history)
 )
 
@@ -35,7 +35,7 @@ const store = createStore(
   composeEnhancers(middlewares)
 )
 
-// sagaMiddleware.run(saga)
+sagaMiddleware.run(saga)
 
 export type IStoreState = ReturnType<ReturnType<typeof reducer>>
 

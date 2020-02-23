@@ -2,6 +2,8 @@ import constants from '../../constants/schedule'
 
 import { schedule as initialSchedule } from '../../../routes/schedule/data'
 
+import { ISearchedTrainee } from '../../../interfaces/trainee'
+
 interface IRecordForm {
   gym: number | undefined
   date: Date | undefined
@@ -16,11 +18,16 @@ interface IRecordForm {
   note: string
 
   trainees: Array<{
-    name: string
+    traineeId: string
     seasonPass: string
     status: string
     note: string
   }>
+}
+
+interface ITraineeSuggester {
+  loading: boolean
+  options: ISearchedTrainee[]
 }
 
 interface IRecord {
@@ -36,6 +43,7 @@ export interface IState {
   openedRecordDialog: boolean
   dialogMode: string | null
   recordForm: IRecordForm
+  traineeSuggester: ITraineeSuggester
 }
 
 const initialState: IState = {
@@ -56,6 +64,10 @@ const initialState: IState = {
     note: '',
 
     trainees: [],
+  },
+  traineeSuggester: {
+    loading: false,
+    options: [],
   },
 }
 
@@ -127,7 +139,10 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: 'update',
         openedRecordDialog: true,
-        recordForm: payload,
+        recordForm: {
+          ...initialState.recordForm,
+          ...payload,
+        },
       }
     }
 
@@ -194,6 +209,26 @@ export default (state = initialState, { type, payload }: { type: string, payload
         dialogMode: null,
         openedRecordDialog: false,
         recordForm: initialState.recordForm,
+      }
+    }
+
+    case constants.SEARCH_TRAINEES: {
+      return {
+        ...state,
+        traineeSuggester: {
+          loading: true,
+          options: [],
+        },
+      }
+    }
+
+    case constants.SEARCH_TRAINEES_SUCCESS: {
+      return {
+        ...state,
+        traineeSuggester: {
+          loading: false,
+          options: payload.options,
+        },
       }
     }
 
