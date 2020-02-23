@@ -1,6 +1,5 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { IStoreState } from '../../../../store'
+import { useSelector, useActions } from '../../../../store'
 
 import Button from '@material-ui/core/Button'
 
@@ -8,16 +7,11 @@ import Grid from '@material-ui/core/Grid'
 
 import TraineeRow from './trainee-row'
 
-import actions from '../../../../store/actions'
-
 export default function AddTrainingDialog() {
-  const trainees = useSelector((state: IStoreState) => state.schedule.recordForm.trainees)
-  const dispatch = useDispatch()
+  const trainees = useSelector(state => state.schedule.recordForm.trainees)
+  const actions = useActions()
 
-  const addTrainee = React.useCallback(
-    () => dispatch(actions.schedule.addTrainee()),
-    [dispatch]
-  )
+  const addTrainee = actions.schedule.addTrainee
 
   return (
     <>

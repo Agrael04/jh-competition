@@ -1,6 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { IStoreState } from '../../../../store'
+import { IStoreState, useActions } from '../../../../store'
 
 import IconButton from '@material-ui/core/IconButton'
 
@@ -13,8 +12,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import TextField from '../../../../containers/text-field'
 import Select from '../../../../containers/select'
 
-import actions from '../../../../store/actions'
-
 type FieldName = keyof IStoreState['schedule']['recordForm']['trainees'][0]
 
 export default function TraineeRow({ index }: { index: number }) {
@@ -26,12 +23,12 @@ export default function TraineeRow({ index }: { index: number }) {
     [index]
   )
 
-  const dispatch = useDispatch()
+  const actions = useActions()
 
-  const removeTrainee = () => dispatch(actions.schedule.removeTrainee(index))
+  const removeTrainee = () => actions.schedule.removeTrainee(index)
 
   const handleChange = (name: string, value: any) => {
-    dispatch(actions.schedule.updateTraineeFormField(index, name, value))
+    actions.schedule.updateTraineeFormField(index, name, value)
   }
 
   return (

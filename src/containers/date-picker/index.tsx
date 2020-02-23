@@ -1,6 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { IStoreState } from '../../store'
+import { IStoreState, useSelector } from '../../store'
 
 import { DatePicker } from '@material-ui/pickers'
 

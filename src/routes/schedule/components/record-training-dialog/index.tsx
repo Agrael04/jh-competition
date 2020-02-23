@@ -1,6 +1,5 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { IStoreState } from '../../../../store'
+import { IStoreState, useSelector, useActions } from '../../../../store'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -25,8 +24,6 @@ import TraineesBlock from './trainees-block'
 import useStyles from './styles'
 
 import { times, resources, trainers } from '../../data'
-
-import actions from '../../../../store/actions'
 
 const translations = {
   'okLabel': 'Oк',
@@ -83,15 +80,15 @@ type FieldName = keyof IStoreState['schedule']['recordForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.recordForm[name]
 
 export default function AddTrainingDialog() {
-  const openedRecordDialog = useSelector((state: IStoreState) => state.schedule.openedRecordDialog)
-  const dispatch = useDispatch()
+  const openedRecordDialog = useSelector(state => state.schedule.openedRecordDialog)
+  const actions = useActions()
   const classes = useStyles()
 
-  const close = () => dispatch(actions.schedule.closeRecordDialog())
-  const save = () => dispatch(actions.schedule.createRecord())
+  const close = () => actions.schedule.closeRecordDialog()
+  const save = () => actions.schedule.createRecord()
 
   const handleChange = (name: string, value: any) => {
-    dispatch(actions.schedule.updateFormField(name, value))
+    actions.schedule.updateFormField(name, value)
   }
 
   return (

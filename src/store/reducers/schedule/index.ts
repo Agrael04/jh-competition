@@ -62,15 +62,15 @@ const initialState: IState = {
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
   switch (type) {
     case constants.CREATE_RECORD: {
-      console.log(state.recordForm)
       return {
         ...state,
-        // openedRecordDialog: false,
-        // dialogMode: null,
-        // schedule: [
-        //   ...state.schedule,
-        //   payload.record as IRecord,
-        // ],
+        openedRecordDialog: false,
+        dialogMode: null,
+        recordForm: initialState.recordForm,
+        schedule: [
+          ...state.schedule,
+          state.recordForm as IRecord,
+        ],
       }
     }
 
