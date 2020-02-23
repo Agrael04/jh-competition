@@ -78,7 +78,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
       getOptionLabel={mapOptionLabel}
       loading={loading}
       // freeSolo={true}
-      renderInput={renderInput(loading, 'Search user')}
+      renderInput={renderInput(loading && opened, 'Search user')}
     />
   )
 }
