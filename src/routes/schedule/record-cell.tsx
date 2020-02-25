@@ -6,7 +6,10 @@ import { trainerSchedule, trainers } from './data'
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
 
 import DragableAvatar from './components/dragable-avatar'
+import EmptyAvatar from './components/empty-avatar'
 import DropableCell from './components/dropable-cell'
+
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
 
 const isTrainerAvailableAtTime = (trainer: number, time: string) => {
   const scheduleRow = trainerSchedule.find(record => record.time === time)
@@ -74,12 +77,19 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   const handleDoubleClick = React.useCallback(
-    () => record && actions.schedule.openUpdateDialog(record),
-    [record, actions]
+    e => {
+      e.stopPropagation()
+      if (record) {
+        actions.schedule.openUpdateDialog(record)
+      } else {
+        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date() })
+      }
+    },
+    [record, actions, resource, time]
   )
 
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source}>
+    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source} >
       {
         record ? (
           <DragableAvatar
@@ -94,7 +104,16 @@ const RecordCell = ({ time, resource }: any) => {
               'Very important',
             ]}
           />
-        ) : null
+        ) : (
+            <EmptyAvatar
+              handleDoubleClick={handleDoubleClick}
+              tooltipRows={[
+                'Add new',
+              ]}
+            >
+              <PersonAddIcon />
+            </EmptyAvatar>
+          )
       }
     </DropableCell>
   )

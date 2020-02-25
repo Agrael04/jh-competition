@@ -5,7 +5,7 @@ import { ISearchedTrainee } from '../../../interfaces/trainee'
 interface IRecord {
   time: string
   resource: number
-  trainer: number
+  trainer?: number
   gym: number
   date: Date
 }
