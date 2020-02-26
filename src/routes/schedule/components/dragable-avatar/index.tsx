@@ -7,6 +7,8 @@ import Badge from '@material-ui/core/Badge'
 
 import { useDrag } from 'react-dnd'
 
+import FaceIcon from '@material-ui/icons/Face'
+
 import Tooltip from '../../../../components/multiline-tooltip'
 
 const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick, badgeContent, ...rest }: any) => {
@@ -30,7 +32,9 @@ const DragableAvatar = ({ type, source, trainer, tooltipRows, handleDoubleClick,
             badgeContent={badgeContent}
             color={'error'}
           >
-            <Avatar {...rest} />
+            <Avatar {...rest} >
+              <FaceIcon />
+            </Avatar>
           </Badge>
         </Button>
       </Box>

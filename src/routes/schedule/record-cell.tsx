@@ -11,7 +11,11 @@ import DropableCell from './components/dropable-cell'
 
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 
-const isTrainerAvailableAtTime = (trainer: number, time: string) => {
+const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
+  if (!trainer) {
+    return true
+  }
+
   const scheduleRow = trainerSchedule.find(record => record.time === time)
   const tr = scheduleRow && scheduleRow.trainers.find(tr => tr === trainer)
 
@@ -23,6 +27,12 @@ const selector =
     (state: IStoreState) => state.schedule.schedule.find(
       record => record.time === time && record.resource === resource
     )
+
+interface IDropProps {
+  type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING
+  source: { time: string, resource: number }
+  trainer: number
+}
 
 const RecordCell = ({ time, resource }: any) => {
   const record = useSelector(selector(time, resource))
@@ -39,7 +49,7 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   const onDrop = React.useCallback(
-    (type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
+    ({ type, source, trainer}: IDropProps) => {
       if (type === DND_CREATE_TRAINING) {
         actions.schedule.openCreateDialog({
           gym: 1,
@@ -47,6 +57,7 @@ const RecordCell = ({ time, resource }: any) => {
           trainer,
           time,
           resource,
+          trainees: [],
         })
       } else if (type === DND_MOVE_TRAINING) {
         actions.schedule.moveRecord(source, { time, resource }, trainer)
@@ -56,8 +67,12 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   const canDrop = React.useCallback(
-    (type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING, source: { time: string, resource: number }, trainer: number) => {
-      if (!isTrainerAvailableAtTime(trainer, time)) {
+    ({ type, source, trainer}: IDropProps) => {
+      if (source.time === time && source.resource === resource) {
+        return false
+      }
+
+      if (!isTrainerAvailableAtTime(time, trainer)) {
         return false
       }
 
@@ -66,7 +81,7 @@ const RecordCell = ({ time, resource }: any) => {
           return false
         }
 
-        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(record.trainer, source.time)) {
+        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, record?.trainer)) {
           return false
         }
       }
@@ -82,14 +97,14 @@ const RecordCell = ({ time, resource }: any) => {
       if (record) {
         actions.schedule.openUpdateDialog(record)
       } else {
-        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date() })
+        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), trainees: [] })
       }
     },
     [record, actions, resource, time]
   )
 
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source} >
+    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source} colorId={record?.trainer}>
       {
         record ? (
           <DragableAvatar

@@ -3,46 +3,18 @@ import constants from '../../constants/schedule'
 import { schedule as initialSchedule } from '../../../routes/schedule/data'
 
 import { ISearchedTrainee } from '../../../interfaces/trainee'
-
-interface IRecordForm {
-  gym: number | undefined
-  date: Date | undefined
-  trainer: number | undefined
-  time: string
-  resource: number | undefined
-
-  name?: string
-  type: string
-  markPrice: number | null
-  moneyPrice: number | null
-  note: string
-
-  trainees: Array<{
-    traineeId: string
-    seasonPass: string
-    status: string
-    note: string
-  }>
-}
+import IRecord from '../../../interfaces/record'
 
 interface ITraineeSuggester {
   loading: boolean
   options: ISearchedTrainee[]
 }
 
-interface IRecord {
-  time: string
-  resource: number
-  trainer: number
-  gym: number
-  date: Date
-}
-
 export interface IState {
   schedule: IRecord[]
   openedRecordDialog: boolean
   dialogMode: string | null
-  recordForm: IRecordForm
+  recordForm: IRecord
   traineeSuggester: ITraineeSuggester
 }
 

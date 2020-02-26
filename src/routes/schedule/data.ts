@@ -57,10 +57,64 @@ export const trainerSchedule = [
 ]
 
 export const schedule = [
-  { time: '8:00', resource: 1, trainer: 2, gym: 1, date: new Date() },
-  { time: '8:00', resource: 2, trainer: 0, gym: 1, date: new Date() },
-  { time: '8:00', resource: 3, trainer: 2, gym: 1, date: new Date() },
-  { time: '8:00', resource: 4, trainer: 4, gym: 1, date: new Date() },
-  { time: '8:00', resource: 5, trainer: 5, gym: 1, date: new Date() },
-  { time: '8:00', resource: 6, trainer: 7, gym: 1, date: new Date() },
+  { time: '8:00', resource: 1, trainer: 2, gym: 1, date: new Date(), trainees: [] },
+  { time: '9:00', resource: 1, trainer: 2, gym: 1, date: new Date(), trainees: [] },
+  { time: '10:00', resource: 1, trainer: 2, gym: 1, date: new Date(), trainees: [] },
+  { time: '11:00', resource: 1, trainer: 2, gym: 1, date: new Date(), trainees: [] },
+  { time: '12:00', resource: 1, trainer: 2, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '14:00', resource: 4, gym: 1, date: new Date(), trainees: [] },
+  { time: '15:00', resource: 4, gym: 1, date: new Date(), trainees: [] },
+  { time: '16:00', resource: 4, gym: 1, date: new Date(), trainees: [] },
+  { time: '17:00', resource: 4, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '8:00', resource: 8, trainer: 0, gym: 1, date: new Date(), trainees: [] },
+  { time: '9:00', resource: 8, trainer: 0, gym: 1, date: new Date(), trainees: [] },
+  { time: '10:00', resource: 8, trainer: 0, gym: 1, date: new Date(), trainees: [] },
+  { time: '11:00', resource: 8, trainer: 0, gym: 1, date: new Date(), trainees: [] },
+  { time: '12:00', resource: 8, trainer: 0, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '8:00', resource: 4, trainer: 4, gym: 1, date: new Date(), trainees: [] },
+  { time: '9:00', resource: 4, trainer: 4, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '8:00', resource: 5, trainer: 5, gym: 1, date: new Date(), trainees: [] },
+  { time: '9:00', resource: 5, trainer: 5, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '8:00', resource: 6, trainer: 7, gym: 1, date: new Date(), trainees: [] },
+  { time: '9:00', resource: 6, trainer: 7, gym: 1, date: new Date(), trainees: [] },
+  { time: '13:00', resource: 6, trainer: 7, gym: 1, date: new Date(), trainees: [] },
+  { time: '14:00', resource: 6, trainer: 7, gym: 1, date: new Date(), trainees: [] },
+  { time: '15:00', resource: 6, trainer: 7, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '10:00', resource: 2, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+  { time: '10:00', resource: 3, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+  { time: '11:00', resource: 2, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+  { time: '11:00', resource: 3, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+  { time: '12:00', resource: 2, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+  { time: '12:00', resource: 3, trainer: 9, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '13:00', resource: 0, trainer: 1, gym: 1, date: new Date(), trainees: [] },
+  { time: '14:00', resource: 0, trainer: 1, gym: 1, date: new Date(), trainees: [] },
+  { time: '15:00', resource: 0, trainer: 1, gym: 1, date: new Date(), trainees: [] },
+  { time: '16:00', resource: 0, trainer: 1, gym: 1, date: new Date(), trainees: [] },
+  { time: '17:00', resource: 0, trainer: 1, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '15:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
+  { time: '16:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
+  { time: '17:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
+  { time: '18:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '16:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '17:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '18:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '19:00', resource: 0, trainer: 8, gym: 1, date: new Date(), trainees: [] },
+  { time: '19:00', resource: 1, trainer: 8, gym: 1, date: new Date(), trainees: [] },
+  { time: '20:30', resource: 0, trainer: 8, gym: 1, date: new Date(), trainees: [] },
+  { time: '20:30', resource: 1, trainer: 8, gym: 1, date: new Date(), trainees: [] },
+
+  { time: '19:00', resource: 4, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '19:00', resource: 5, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '20:30', resource: 4, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '20:30', resource: 5, trainer: 6, gym: 1, date: new Date(), trainees: [] },
 ]

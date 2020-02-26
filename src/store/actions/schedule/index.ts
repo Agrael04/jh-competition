@@ -1,14 +1,7 @@
 import constants from '../../constants/schedule'
 
 import { ISearchedTrainee } from '../../../interfaces/trainee'
-
-interface IRecord {
-  time: string
-  resource: number
-  trainer?: number
-  gym: number
-  date: Date
-}
+import IRecord from '../../../interfaces/record'
 
 interface ICell {
   resource: number

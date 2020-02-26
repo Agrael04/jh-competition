@@ -115,7 +115,6 @@ export default function AddTrainingDialog() {
                   label={translations.gym}
                   fullWidth={true}
                   variant='outlined'
-                  disabled={true}
                 >
                   {
                     gyms.map(gym => (
@@ -137,7 +136,8 @@ export default function AddTrainingDialog() {
                   okLabel={translations.okLabel}
                   fullWidth={true}
                   inputVariant='outlined'
-                  disabled={true}
+                  disableToolbar={true}
+                  variant='inline'
                 />
               </Grid>
               <Grid item={true} lg={12}>
@@ -148,7 +148,6 @@ export default function AddTrainingDialog() {
                   label={translations.trainer}
                   fullWidth={true}
                   variant='outlined'
-                  disabled={true}
                 >
                   {
                     trainers.map(trainer => (
@@ -167,7 +166,6 @@ export default function AddTrainingDialog() {
                   label={translations.startTime}
                   fullWidth={true}
                   variant='outlined'
-                  disabled={true}
                 >
                   {
                     times.map(time => (
@@ -186,7 +184,6 @@ export default function AddTrainingDialog() {
                   label={translations.trampolines}
                   fullWidth={true}
                   variant='outlined'
-                  disabled={true}
                 >
                   {
                     resources.map(r => (

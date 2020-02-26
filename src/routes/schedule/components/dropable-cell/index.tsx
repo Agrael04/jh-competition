@@ -9,38 +9,82 @@ import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from '../../constants'
 
 import useStyles from './styles'
 
-const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, ...rest }: any) => {
+import purple from '@material-ui/core/colors/purple'
+import indigo from '@material-ui/core/colors/indigo'
+import teal from '@material-ui/core/colors/teal'
+import lime from '@material-ui/core/colors/lime'
+import lightBlue from '@material-ui/core/colors/lightBlue'
+import brown from '@material-ui/core/colors/brown'
+import blue from '@material-ui/core/colors/blue'
+import deepPurple from '@material-ui/core/colors/deepPurple'
+import cyan from '@material-ui/core/colors/cyan'
+import green from '@material-ui/core/colors/green'
+import blueGrey from '@material-ui/core/colors/blueGrey'
+
+const colors = [
+  purple, indigo, teal, lime, lightBlue, brown, blue, green, deepPurple, cyan,
+]
+
+const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, colorId, ...rest }: any) => {
   const classes = useStyles()
-  const [{ over, dropable, item }, drop] = useDrop({
+
+  const [{ item, over, dropable }, drop] = useDrop({
     accept: [DND_CREATE_TRAINING, DND_MOVE_TRAINING],
-    drop: ({ type, source, trainer }: any) => {
-      onDrop(type, source, trainer)
-    },
+    drop: onDrop,
     collect: monitor => ({
       over: !!monitor.isOver(),
-      dropable: !!monitor.canDrop(),
-      item: monitor.getItem(),
+      dropable: !!monitor.isOver() && !!monitor.canDrop(),
+      item: !!monitor.isOver() &&  monitor.getItem(),
     }),
-    canDrop: ({ type, source, trainer }) => {
-      return canDrop(type, source, trainer)
-    },
+    canDrop,
   })
+
+  const color = React.useMemo(
+    () => colors[colorId] || blueGrey,
+    [colorId]
+  )
+
+  const itemColor = React.useMemo(
+    () => {
+      return colors[item?.trainer] || blueGrey
+    },
+    [item]
+  )
+
+  const backgroundStyle = React.useMemo(
+    () => ({ backgroundColor: color[400] }),
+    [color]
+  )
+
+  const itemBackgroundStyle = React.useMemo(
+    () => ({ backgroundColor: itemColor[100] }),
+    [itemColor]
+  )
+
+  const darkItemBackgroundStyle = React.useMemo(
+    () => ({ backgroundColor: itemColor[700] }),
+    [itemColor]
+  )
 
   return (
     <TableCell ref={drop} {...rest} className={classes.box} align='center' padding='none'>
       {
-        over && dropable && !isOccupied && <div className={clsx(classes.overlay, classes.greenOverlay)} />
+        isOccupied && <div className={classes.overlay} style={backgroundStyle} />
       }
       {
-        over && dropable && isOccupied && <div className={clsx(classes.overlay, classes.amberOverlay)} />
+        over && dropable && !isOccupied && <div className={classes.overlay} style={itemBackgroundStyle}/>
       }
       {
-        over && !dropable && <div className={clsx(classes.overlay, classes.redOverlay)} />
+        over && dropable && isOccupied && <div className={classes.overlay} style={darkItemBackgroundStyle} />
       }
       {
-        item?.source?.time === source.time &&
-        item?.source?.resource === source.resource &&
-        <div className={clsx(classes.overlay, classes.amberOverlay)} />
+        over && !dropable &&
+        !(
+          item?.source?.time === source.time &&
+          item?.source?.resource === source.resource
+        ) && (
+          <div className={clsx(classes.overlay, classes.redOverlay)} />
+        )
       }
       {children}
     </TableCell>

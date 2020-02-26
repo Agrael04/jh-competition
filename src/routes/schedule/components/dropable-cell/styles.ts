@@ -17,16 +17,8 @@ export default makeStyles((theme: Theme) => {
       top: 0,
       borderRadius: 4,
     },
-    greenOverlay: {
-      background: lightGreen[500],
-      opacity: 0.5,
-    },
-    amberOverlay: {
-      background: amber[500],
-      opacity: 0.5,
-    },
     redOverlay: {
-      background: theme.palette.error.main,
+      backgroundColor: theme.palette.error.main,
       opacity: 0.5,
     },
   }
