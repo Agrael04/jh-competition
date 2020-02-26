@@ -39,7 +39,7 @@ export default function TraineeRow({ index }: { index: number }) {
         <Grid container={true} spacing={2}>
           <Grid item={true} lg={3}>
             <TraineeSuggester
-              name='traineeId'
+              name='name'
               onChange={handleChange}
               fieldSelector={fieldSelector}
             />
