@@ -270,7 +270,12 @@ export default function TrainingDialog() {
           </Grid>
           <Box marginTop={1}>
             <Grid item={true} container={true} justify='space-between'>
-              <Button variant='text' color='primary' onClick={remove}> Delete </Button>
+              {
+                dialogMode === 'update'
+                ? <Button variant='text' color='primary' onClick={remove}> Delete </Button>
+                : <div />
+              }
+
               <Button variant='contained' color='primary' onClick={save}> Save </Button>
             </Grid>
           </Box>
