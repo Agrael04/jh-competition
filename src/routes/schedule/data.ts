@@ -104,9 +104,9 @@ export const schedule = [
   { time: '17:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
   { time: '18:00', resource: 2, trainer: 3, gym: 1, date: new Date(), trainees: [] },
 
-  { time: '16:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
-  { time: '17:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
-  { time: '18:00', resource: 2, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '16:00', resource: 5, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '17:00', resource: 5, trainer: 6, gym: 1, date: new Date(), trainees: [] },
+  { time: '18:00', resource: 5, trainer: 6, gym: 1, date: new Date(), trainees: [] },
 
   { time: '19:00', resource: 0, trainer: 8, gym: 1, date: new Date(), trainees: [] },
   { time: '19:00', resource: 1, trainer: 8, gym: 1, date: new Date(), trainees: [] },
