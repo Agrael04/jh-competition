@@ -20,7 +20,7 @@ export default function SelectContainer({ name, onChange, fieldSelector, childre
 
   return (
     <Select
-      value={value}
+      value={value?.toString() || ''}
       onChange={handleChange}
       {...rest}
     >

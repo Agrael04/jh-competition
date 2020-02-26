@@ -21,7 +21,7 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
   trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
 }))
 
-const SchedulePage = ({ }) => {
+const SchedulePage = () => {
   return (
     <Paper>
       <Table>

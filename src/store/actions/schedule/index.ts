@@ -12,6 +12,14 @@ export const createRecord = () => ({
   type: constants.CREATE_RECORD,
 })
 
+export const updateRecord = () => ({
+  type: constants.UPDATE_RECORD,
+})
+
+export const removeRecord = () => ({
+  type: constants.REMOVE_RECORD,
+})
+
 export const moveRecord = (source: ICell, target: ICell, trainer: number) => ({
   type: constants.MOVE_RECORD,
   payload: { source, target, trainer },
@@ -67,6 +75,8 @@ export const searchTraineesCancel = () => ({
 
 export default {
   createRecord,
+  updateRecord,
+  removeRecord,
   moveRecord,
   openCreateDialog,
   openUpdateDialog,

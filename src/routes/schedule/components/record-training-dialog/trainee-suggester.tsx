@@ -58,7 +58,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
         actions.schedule.searchTrainees(filter)
       }
     },
-    [opened, filter]
+    [opened, filter, actions]
   )
 
   const open = () => setOpened(true)

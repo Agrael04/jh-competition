@@ -79,13 +79,20 @@ type FieldName = keyof IStoreState['schedule']['recordForm']
 
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.recordForm[name]
 
-export default function AddTrainingDialog() {
-  const openedRecordDialog = useSelector(state => state.schedule.openedRecordDialog)
+export default function TrainingDialog() {
+  const { openedRecordDialog, dialogMode } = useSelector(state => state.schedule)
   const actions = useActions()
   const classes = useStyles()
 
   const close = () => actions.schedule.closeRecordDialog()
-  const save = () => actions.schedule.createRecord()
+  const remove = () => actions.schedule.removeRecord()
+  const save = () => {
+    if (dialogMode === 'create') {
+      actions.schedule.createRecord()
+    } else {
+      actions.schedule.updateRecord()
+    }
+  }
 
   const handleChange = (name: string, value: any) => {
     actions.schedule.updateFormField(name, value)
@@ -261,11 +268,12 @@ export default function AddTrainingDialog() {
             </Grid>
             <TraineesBlock />
           </Grid>
-          <Grid item={true} container={true} justify='flex-end'>
-            <Box marginTop={1}>
+          <Box marginTop={1}>
+            <Grid item={true} container={true} justify='space-between'>
+              <Button variant='text' color='primary' onClick={remove}> Delete </Button>
               <Button variant='contained' color='primary' onClick={save}> Save </Button>
-            </Box>
-          </Grid>
+            </Grid>
+          </Box>
         </Grid>
       </Box>
     </Dialog>

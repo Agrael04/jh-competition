@@ -53,8 +53,38 @@ export default (state = initialState, { type, payload }: { type: string, payload
         recordForm: initialState.recordForm,
         schedule: [
           ...state.schedule,
-          state.recordForm as IRecord,
+          state.recordForm,
         ],
+      }
+    }
+
+    case constants.UPDATE_RECORD: {
+      return {
+        ...state,
+        openedRecordDialog: false,
+        dialogMode: null,
+        recordForm: initialState.recordForm,
+        schedule: [
+          ...state.schedule.map(r => {
+            if (r.time === state.recordForm.time && r.resource === state.recordForm.resource) {
+              return state.recordForm
+            }
+
+            return r
+          }),
+        ],
+      }
+    }
+
+    case constants.REMOVE_RECORD: {
+      return {
+        ...state,
+        openedRecordDialog: false,
+        dialogMode: null,
+        recordForm: initialState.recordForm,
+        schedule: state.schedule.filter(
+          record => record.time !== state.recordForm.time || record.resource !== state.recordForm.resource
+        ),
       }
     }
 

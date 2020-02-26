@@ -88,7 +88,7 @@ const RecordCell = ({ time, resource }: any) => {
 
       return true
     },
-    [record, time]
+    [record, time, resource]
   )
 
   const handleDoubleClick = React.useCallback(
