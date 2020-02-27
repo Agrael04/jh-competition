@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid'
 
 import TraineeRow from './trainee-row'
 
-export default function AddTrainingDialog() {
-  const trainees = useSelector(state => state.schedule.recordForm.trainees)
+export default function TraineesBlock() {
+  const records = useSelector(state => state.schedule.recordForm.records)
   const actions = useActions()
 
   const addTrainee = actions.schedule.addTrainee
@@ -16,12 +16,12 @@ export default function AddTrainingDialog() {
   return (
     <>
       {
-        trainees.map((trainee, index) => (
+        records.map((trainee, index) => (
           <TraineeRow index={index} key={index} />
         ))
       }
       {
-        trainees.length < 3 && (
+        records.length < 3 && (
           <Grid item={true} container={true} justify='flex-end'>
             <Button variant='outlined' color='primary' onClick={addTrainee}> Add trainee </Button>
           </Grid>

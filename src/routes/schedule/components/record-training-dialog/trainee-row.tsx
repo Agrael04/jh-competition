@@ -14,12 +14,12 @@ import Select from '../../../../containers/select'
 
 import TraineeSuggester from './trainee-suggester'
 
-type FieldName = keyof IStoreState['schedule']['recordForm']['trainees'][0]
+type FieldName = keyof IStoreState['schedule']['recordForm']['records'][0]
 
 export default function TraineeRow({ index }: { index: number }) {
   const fieldSelector = React.useCallback(
     (name: FieldName) => (state: IStoreState) => {
-      const trainee = state.schedule.recordForm.trainees.find((item, id) => id === index)
+      const trainee = state.schedule.recordForm.records.find((item, id) => id === index)
       return trainee ? trainee[name] : trainee
     },
     [index]
@@ -39,7 +39,7 @@ export default function TraineeRow({ index }: { index: number }) {
         <Grid container={true} spacing={2}>
           <Grid item={true} lg={3}>
             <TraineeSuggester
-              name='name'
+              name='trainee'
               onChange={handleChange}
               fieldSelector={fieldSelector}
             />

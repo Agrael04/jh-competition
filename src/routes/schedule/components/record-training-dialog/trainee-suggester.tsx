@@ -35,10 +35,9 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
 export default function TraineeSuggester({ name, onChange, fieldSelector }: IProps) {
   const { options, loading } = useSelector(state => state.schedule.traineeSuggester)
   const value = useSelector(fieldSelector(name))
-  const optionValue = options.find(o => o.fullName === value) || null
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
-    onChange(name, option?.fullName || '')
+    onChange(name, option || { fullName: '', _id: '' })
     setFilter(option?.fullName || '')
   }
 
@@ -73,7 +72,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
       onOpen={open}
       onClose={close}
       onChange={handleChange}
-      value={optionValue}
+      value={value}
       options={options}
       onInputChange={handleInputChange}
       inputValue={filter}

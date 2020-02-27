@@ -57,7 +57,7 @@ const RecordCell = ({ time, resource }: any) => {
           trainer,
           time,
           resource,
-          trainees: [],
+          records: [],
         })
       } else if (type === DND_MOVE_TRAINING) {
         actions.schedule.moveRecord(source, { time, resource }, trainer)
@@ -97,7 +97,7 @@ const RecordCell = ({ time, resource }: any) => {
       if (record) {
         actions.schedule.openUpdateDialog(record)
       } else {
-        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), trainees: [] })
+        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), records: [] })
       }
     },
     [record, actions, resource, time]

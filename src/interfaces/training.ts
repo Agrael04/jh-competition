@@ -1,4 +1,4 @@
-export default interface IRecord {
+export default interface ITraining {
   id?: string
 
   gym: number | undefined
@@ -13,8 +13,11 @@ export default interface IRecord {
   moneyPrice?: number | null
   note?: string
 
-  trainees: Array<{
-    traineeId?: string
+  records: Array<{
+    trainee: {
+      _id: string
+      fullName: string
+    }
     seasonPass?: string
     status?: string
     note?: string

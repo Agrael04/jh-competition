@@ -3,7 +3,7 @@ import constants from '../../constants/schedule'
 import { schedule as initialSchedule } from '../../../routes/schedule/data'
 
 import { ISearchedTrainee } from '../../../interfaces/trainee'
-import IRecord from '../../../interfaces/record'
+import ITraining from '../../../interfaces/training'
 
 interface ITraineeSuggester {
   loading: boolean
@@ -11,10 +11,10 @@ interface ITraineeSuggester {
 }
 
 export interface IState {
-  schedule: IRecord[]
+  schedule: ITraining[]
   openedRecordDialog: boolean
   dialogMode: string | null
-  recordForm: IRecord
+  recordForm: ITraining
   traineeSuggester: ITraineeSuggester
 }
 
@@ -35,7 +35,7 @@ const initialState: IState = {
     moneyPrice: null,
     note: '',
 
-    trainees: [],
+    records: [],
   },
   traineeSuggester: {
     loading: false,
@@ -98,7 +98,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
           ...state,
           schedule: [
             ...state.schedule.filter((i, index) => index !== sourceIndex),
-            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as IRecord,
+            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
           ],
         }
       } else {
@@ -106,8 +106,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
           ...state,
           schedule: [
             ...state.schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
-            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as IRecord,
-            { time: source.time, resource: source.resource, trainer: state.schedule[targetIndex].trainer } as IRecord,
+            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
+            { time: source.time, resource: source.resource, trainer: state.schedule[targetIndex].trainer } as ITraining,
           ],
         }
       }
@@ -131,7 +131,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
           moneyPrice: 0,
           note: '',
 
-          trainees: [],
+          records: [],
         },
       }
     }
@@ -154,7 +154,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         recordForm: {
           ...state.recordForm,
           [payload.field]: payload.value,
-        } as any,
+        },
       }
     }
 
@@ -163,16 +163,19 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         recordForm: {
           ...state.recordForm,
-          trainees: state.recordForm.trainees.length < 3 ? [
-            ...state.recordForm.trainees,
+          records: state.recordForm.records.length < 3 ? [
+            ...state.recordForm.records,
             {
-              name: '',
+              trainee: {
+                fullName: '',
+                _id: '',
+              },
               seasonPass: '',
               status: '',
               note: '',
             },
-          ] : state.recordForm.trainees,
-        } as any,
+          ] : state.recordForm.records,
+        },
       }
     }
 
@@ -181,7 +184,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         recordForm: {
           ...state.recordForm,
-          trainees: state.recordForm?.trainees.map((item, index) => {
+          records: state.recordForm?.records.map((item, index) => {
             if (index !== payload.index) {
               return item
             }
@@ -191,7 +194,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
               [payload.field]: payload.value,
             }
           }),
-        } as any,
+        },
       }
     }
 
@@ -200,8 +203,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         recordForm: {
           ...state.recordForm,
-          trainees: state.recordForm.trainees.filter((item, index) => index !== payload.index),
-        } as any,
+          records: state.recordForm.records.filter((item, index) => index !== payload.index),
+        },
       }
     }
 
