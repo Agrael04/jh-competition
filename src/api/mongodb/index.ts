@@ -6,9 +6,9 @@ const APP_ID = 'mongodb-provider-gzjek'
 const DATABASE = 'test-db'
 const COLLECTION = 'users'
 
-const client = Stitch.initializeDefaultAppClient(APP_ID)
+export const client = Stitch.initializeDefaultAppClient(APP_ID)
 
-const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(DATABASE)
+export const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(DATABASE)
 
 // await db.collection(COLLECTION).updateOne({ owner_id: user.id }, { $set: { number: 42 } }, { upsert: true })
 

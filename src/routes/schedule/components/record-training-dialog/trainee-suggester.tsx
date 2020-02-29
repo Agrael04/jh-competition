@@ -38,7 +38,6 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
     onChange(name, option || { fullName: '', _id: '' })
-    setFilter(option?.fullName || '')
   }
 
   const actions = useActions()
@@ -59,6 +58,15 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
       }
     },
     [opened, filter, actions]
+  )
+
+  React.useEffect(
+    () => {
+      if (value) {
+        setFilter(value.fullName)
+      }
+    },
+    [value]
   )
 
   const open = () => setOpened(true)

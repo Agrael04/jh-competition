@@ -85,17 +85,21 @@ export default function TrainingDialog() {
   const classes = useStyles()
 
   const close = () => actions.schedule.closeRecordDialog()
-  const remove = () => actions.schedule.removeRecord()
+  const remove = () => actions.trainings.deleteTraining()
   const save = () => {
     if (dialogMode === 'create') {
-      actions.schedule.createRecord()
+      actions.trainings.createTraining()
     } else {
-      actions.schedule.updateRecord()
+      actions.trainings.updateTraining()
     }
   }
 
   const handleChange = (name: string, value: any) => {
-    actions.schedule.updateFormField(name, value)
+    let v = value
+    if (name === 'markPrice' || name === 'moneyPrice') {
+      v = Number(value)
+    }
+    actions.schedule.updateFormField(name, v)
   }
 
   return (
@@ -272,8 +276,8 @@ export default function TrainingDialog() {
             <Grid item={true} container={true} justify='space-between'>
               {
                 dialogMode === 'update'
-                ? <Button variant='text' color='primary' onClick={remove}> Delete </Button>
-                : <div />
+                  ? <Button variant='text' color='primary' onClick={remove}> Delete </Button>
+                  : <div />
               }
 
               <Button variant='contained' color='primary' onClick={save}> Save </Button>

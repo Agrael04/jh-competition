@@ -30,7 +30,7 @@ function* watchSearchTrainees() {
   yield takeLatest(constants.SEARCH_TRAINEES, searchTrainees)
 }
 
-export default function*() {
+export default function* () {
   yield all([
     watchSearchTrainees(),
   ])

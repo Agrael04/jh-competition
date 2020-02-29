@@ -1,5 +1,16 @@
+export interface ITrainingRecord {
+  _id?: string
+  trainee: {
+    _id: string
+    fullName: string
+  }
+  seasonPass?: string
+  status?: string
+  note?: string
+}
+
 export default interface ITraining {
-  id?: string
+  _id?: string
 
   gym: number | undefined
   date: Date | undefined
@@ -13,13 +24,5 @@ export default interface ITraining {
   moneyPrice?: number | null
   note?: string
 
-  records: Array<{
-    trainee: {
-      _id: string
-      fullName: string
-    }
-    seasonPass?: string
-    status?: string
-    note?: string
-  }>
+  records: ITrainingRecord[]
 }

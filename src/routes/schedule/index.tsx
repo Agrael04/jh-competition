@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
+import { useActions } from '../../store'
 import { times, resources, trainerSchedule, trainers } from './data'
 
 import RecordTrainingDialog from './components/record-training-dialog'
@@ -22,6 +23,13 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 }))
 
 const SchedulePage = () => {
+  const actions = useActions()
+
+  React.useEffect(
+    () => {
+      actions.trainings.readTrainings()
+    }, [actions]
+  )
   return (
     <Paper>
       <Table>

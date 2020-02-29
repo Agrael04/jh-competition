@@ -15,8 +15,6 @@ import './index.css'
 
 import Routes from './routes'
 
-console.log(process.env)
-
 ReactDOM.render((
   <DndProvider backend={Backend}>
     <MuiPickersUtilsProvider utils={MomentUtils} locale='uk'>

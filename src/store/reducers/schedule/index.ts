@@ -1,6 +1,6 @@
 import constants from '../../constants/schedule'
 
-import { schedule as initialSchedule } from '../../../routes/schedule/data'
+// import { schedule as initialSchedule } from '../../../routes/schedule/data'
 
 import { ISearchedTrainee } from '../../../interfaces/trainee'
 import ITraining from '../../../interfaces/training'
@@ -11,7 +11,7 @@ interface ITraineeSuggester {
 }
 
 export interface IState {
-  schedule: ITraining[]
+  // schedule: ITraining[]
   openedRecordDialog: boolean
   dialogMode: string | null
   recordForm: ITraining
@@ -19,7 +19,7 @@ export interface IState {
 }
 
 const initialState: IState = {
-  schedule: initialSchedule,
+  // schedule: initialSchedule,
   openedRecordDialog: false,
   dialogMode: null,
   recordForm: {
@@ -45,73 +45,30 @@ const initialState: IState = {
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
   switch (type) {
-    case constants.CREATE_RECORD: {
-      return {
-        ...state,
-        openedRecordDialog: false,
-        dialogMode: null,
-        recordForm: initialState.recordForm,
-        schedule: [
-          ...state.schedule,
-          state.recordForm,
-        ],
-      }
-    }
+    // case constants.MOVE_RECORD: {
+    //   const { target, source } = payload
+    //   const targetIndex = state.schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
+    //   const sourceIndex = state.schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
 
-    case constants.UPDATE_RECORD: {
-      return {
-        ...state,
-        openedRecordDialog: false,
-        dialogMode: null,
-        recordForm: initialState.recordForm,
-        schedule: [
-          ...state.schedule.map(r => {
-            if (r.time === state.recordForm.time && r.resource === state.recordForm.resource) {
-              return state.recordForm
-            }
-
-            return r
-          }),
-        ],
-      }
-    }
-
-    case constants.REMOVE_RECORD: {
-      return {
-        ...state,
-        openedRecordDialog: false,
-        dialogMode: null,
-        recordForm: initialState.recordForm,
-        schedule: state.schedule.filter(
-          record => record.time !== state.recordForm.time || record.resource !== state.recordForm.resource
-        ),
-      }
-    }
-
-    case constants.MOVE_RECORD: {
-      const { target, source } = payload
-      const targetIndex = state.schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
-      const sourceIndex = state.schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
-
-      if (targetIndex === -1) {
-        return {
-          ...state,
-          schedule: [
-            ...state.schedule.filter((i, index) => index !== sourceIndex),
-            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
-          ],
-        }
-      } else {
-        return {
-          ...state,
-          schedule: [
-            ...state.schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
-            { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
-            { time: source.time, resource: source.resource, trainer: state.schedule[targetIndex].trainer } as ITraining,
-          ],
-        }
-      }
-    }
+    //   if (targetIndex === -1) {
+    //     return {
+    //       ...state,
+    //       schedule: [
+    //         ...state.schedule.filter((i, index) => index !== sourceIndex),
+    //         { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
+    //       ],
+    //     }
+    //   } else {
+    //     return {
+    //       ...state,
+    //       schedule: [
+    //         ...state.schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
+    //         { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
+    //         { time: source.time, resource: source.resource, trainer: state.schedule[targetIndex].trainer } as ITraining,
+    //       ],
+    //     }
+    //   }
+    // }
 
     case constants.OPEN_CREATE_RECORD_DIALOG: {
       return {
@@ -127,8 +84,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
 
           name: '',
           type: '',
-          markPrice: 0,
-          moneyPrice: 0,
+          markPrice: 2,
+          moneyPrice: 400,
           note: '',
 
           records: [],

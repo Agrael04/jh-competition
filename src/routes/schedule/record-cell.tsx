@@ -24,7 +24,7 @@ const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
 
 const selector =
   (time: string, resource: number) =>
-    (state: IStoreState) => state.schedule.schedule.find(
+    (state: IStoreState) => state.trainings.data.find(
       record => record.time === time && record.resource === resource
     )
 
@@ -49,7 +49,7 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   const onDrop = React.useCallback(
-    ({ type, source, trainer}: IDropProps) => {
+    ({ type, source, trainer }: IDropProps) => {
       if (type === DND_CREATE_TRAINING) {
         actions.schedule.openCreateDialog({
           gym: 1,
@@ -67,7 +67,7 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   const canDrop = React.useCallback(
-    ({ type, source, trainer}: IDropProps) => {
+    ({ type, source, trainer }: IDropProps) => {
       if (source.time === time && source.resource === resource) {
         return false
       }
