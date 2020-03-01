@@ -8,9 +8,9 @@ interface ICell {
   time: string
 }
 
-export const moveRecord = (source: ICell, target: ICell, trainer: number) => ({
+export const moveRecord = (source: ICell, target: ICell) => ({
   type: constants.MOVE_RECORD,
-  payload: { source, target, trainer },
+  payload: { source, target },
 })
 
 export const openCreateDialog = (payload: IRecord) => ({

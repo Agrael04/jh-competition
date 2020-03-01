@@ -5,6 +5,8 @@ import { trainerSchedule, trainers } from './data'
 
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
 
+import CircularProgress from '@material-ui/core/CircularProgress'
+
 import DragableAvatar from './components/dragable-avatar'
 import EmptyAvatar from './components/empty-avatar'
 import DropableCell from './components/dropable-cell'
@@ -37,6 +39,7 @@ interface IDropProps {
 const RecordCell = ({ time, resource }: any) => {
   const record = useSelector(selector(time, resource))
   const actions = useActions()
+  const loading = useSelector(state => state.trainings.loading)
 
   const trainer = React.useMemo(
     () => record && trainers.find(tr => tr.id === record.trainer),
@@ -60,7 +63,7 @@ const RecordCell = ({ time, resource }: any) => {
           records: [],
         })
       } else if (type === DND_MOVE_TRAINING) {
-        actions.schedule.moveRecord(source, { time, resource }, trainer)
+        actions.trainings.moveTraining(source, { time, resource })
       }
     },
     [time, resource, actions]
@@ -68,6 +71,10 @@ const RecordCell = ({ time, resource }: any) => {
 
   const canDrop = React.useCallback(
     ({ type, source, trainer }: IDropProps) => {
+      if (loading) {
+        return false
+      }
+
       if (source.time === time && source.resource === resource) {
         return false
       }
@@ -88,7 +95,7 @@ const RecordCell = ({ time, resource }: any) => {
 
       return true
     },
-    [record, time, resource]
+    [record, time, resource, loading]
   )
 
   const handleDoubleClick = React.useCallback(
@@ -106,7 +113,24 @@ const RecordCell = ({ time, resource }: any) => {
   return (
     <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source} colorId={record?.trainer}>
       {
-        record ? (
+        loading && (
+          <CircularProgress />
+        )
+      }
+      {
+        !loading && !record && (
+          <EmptyAvatar
+            handleDoubleClick={handleDoubleClick}
+            tooltipRows={[
+              'Add new',
+            ]}
+          >
+            <PersonAddIcon />
+          </EmptyAvatar>
+        )
+      }
+      {
+        record && (
           <DragableAvatar
             type={DND_MOVE_TRAINING}
             source={source}
@@ -119,16 +143,7 @@ const RecordCell = ({ time, resource }: any) => {
               'Very important',
             ]}
           />
-        ) : (
-            <EmptyAvatar
-              handleDoubleClick={handleDoubleClick}
-              tooltipRows={[
-                'Add new',
-              ]}
-            >
-              <PersonAddIcon />
-            </EmptyAvatar>
-          )
+        )
       }
     </DropableCell>
   )

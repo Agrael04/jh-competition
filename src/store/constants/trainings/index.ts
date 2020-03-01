@@ -2,6 +2,7 @@ export const CREATE_TRAINING = 'trainings/CREATE_TRAINING'
 export const READ_TRAININGS = 'trainings/READ_TRAININGS'
 export const UPDATE_TRAINING = 'trainings/UPDATE_TRAINING'
 export const DELETE_TRAINING = 'trainings/DELETE_TRAINING'
+export const MOVE_TRAINING = 'trainings/MOVE_TRAINING'
 
 export const READ_TRAININGS_SUCCESS = 'trainings/READ_TRAININGS_SUCCESS'
 
@@ -11,4 +12,5 @@ export default {
   UPDATE_TRAINING,
   DELETE_TRAINING,
   READ_TRAININGS_SUCCESS,
+  MOVE_TRAINING,
 }

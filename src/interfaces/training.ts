@@ -9,15 +9,22 @@ export interface ITrainingRecord {
   note?: string
 }
 
+export interface ITrainingId {
+  /* gym */
+  /* date */
+  time: string
+  resource: number
+}
+
 export default interface ITraining {
   _id?: string
 
   gym: number | undefined
   date: Date | undefined
-  trainer?: number | undefined
   time: string
   resource: number | undefined
 
+  trainer?: number | undefined
   name?: string
   type?: string
   markPrice?: number | null

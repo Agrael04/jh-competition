@@ -17,6 +17,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
     case constants.READ_TRAININGS: {
       return {
         ...state,
+        data: [],
         loading: true,
       }
     }

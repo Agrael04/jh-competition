@@ -9,13 +9,13 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import { useActions } from '../../store'
+import { useActions, useSelector } from '../../store'
 import { times, resources, trainerSchedule, trainers } from './data'
 
-import RecordTrainingDialog from './components/record-training-dialog'
+import TrainingDialog from './components/training-dialog'
 
 import TrainerAvatar from './trainer-avatar'
-import RecordCell from './record-cell'
+import TrainingCell from './training-cell'
 
 const mappedTrainerSchedule = trainerSchedule.map(ts => ({
   time: ts.time,
@@ -66,19 +66,20 @@ const SchedulePage = () => {
                 </TableCell>
                 {
                   resources.map(r => (
-                    <RecordCell
+                    <TrainingCell
                       resource={r.id}
                       time={time}
                       key={r.id}
                     />
                   ))
                 }
+
               </TableRow>
             ))
           }
         </TableBody>
       </Table>
-      <RecordTrainingDialog />
+      <TrainingDialog />
     </Paper>
   )
 }
