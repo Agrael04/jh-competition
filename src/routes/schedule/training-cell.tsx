@@ -6,12 +6,15 @@ import { trainerSchedule, trainers } from './data'
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Avatar from '@material-ui/core/Avatar'
 
-import DragableAvatar from './components/dragable-avatar'
-import EmptyAvatar from './components/empty-avatar'
+import { AvatarWrap } from './components/avatar-wrap'
 import DropableCell from './components/dropable-cell'
+import TrainingItem from './components/training-item'
 
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
+
+import Tooltip from '../../components/multiline-tooltip'
 
 const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
   if (!trainer) {
@@ -40,11 +43,6 @@ const RecordCell = ({ time, resource }: any) => {
   const record = useSelector(selector(time, resource))
   const actions = useActions()
   const loading = useSelector(state => state.trainings.loading)
-
-  const trainer = React.useMemo(
-    () => record && trainers.find(tr => tr.id === record.trainer),
-    [record]
-  )
 
   const source = React.useMemo(
     () => ({ time, resource }),
@@ -119,32 +117,18 @@ const RecordCell = ({ time, resource }: any) => {
       }
       {
         !loading && !record && (
-          <EmptyAvatar
+          <AvatarWrap
             handleDoubleClick={handleDoubleClick}
-            tooltipRows={[
-              'Add new',
-            ]}
           >
-            <PersonAddIcon />
-          </EmptyAvatar>
+            <Tooltip rows={['Add new']}>
+              <Avatar>
+                <PersonAddIcon />
+              </Avatar>
+            </Tooltip>
+          </AvatarWrap>
         )
       }
-      {
-        record && (
-          <DragableAvatar
-            type={DND_MOVE_TRAINING}
-            source={source}
-            trainer={record.trainer}
-            src={trainer && trainer.avatar}
-            handleDoubleClick={handleDoubleClick}
-            tooltipRows={[
-              'Rent tramp',
-              'Agarkov D',
-              'Very important',
-            ]}
-          />
-        )
-      }
+      <TrainingItem time={time} resource={resource} />
     </DropableCell>
   )
 }
