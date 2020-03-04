@@ -15,7 +15,7 @@ const colors = [
 ]
 
 export default function(id?: number) {
-  if (!id || !colors[id]) {
+  if (id === undefined || id === null || !colors[id]) {
     return blueGrey
   }
 

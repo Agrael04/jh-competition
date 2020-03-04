@@ -56,6 +56,11 @@ const TrainingItem = ({ time, resource }: any) => {
     [trainer]
   )
 
+  const noTrainerStyle = React.useMemo(
+    () => !trainer && ({ margin: 0 }),
+    [trainer]
+  )
+
   if (!record) {
     return null
   }
@@ -68,15 +73,27 @@ const TrainingItem = ({ time, resource }: any) => {
       handleDoubleClick={handleDoubleClick}
     >
       <div style={{ display: 'flex' }}>
-        <Tooltip rows={['Rent tramp']}>
-          <Avatar src={trainer?.avatar} className={classes.mainAvatar} style={borderColorStyle}>
-            <FaceIcon />
-          </Avatar>
-        </Tooltip>
+        {
+          trainer && (
+            <Tooltip rows={['Rent tramp']}>
+              <Avatar src={trainer?.avatar} className={classes.mainAvatar} style={borderColorStyle} />
+            </Tooltip>
+          )
+        }
+        {
+          !trainer && record.records.length === 0 && (
+            <Tooltip rows={['Нет учеников и тренера']}>
+              <Avatar className={classes.mainAvatar} style={borderColorStyle}>
+                <FaceIcon />
+              </Avatar>
+            </Tooltip>
+          )
+        }
+
         {
           record.records.map((r, index) => (
             <Tooltip rows={[r.trainee.fullName]} key={index}>
-              <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle }}>
+              <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
                 {
                   r.trainee.fullName
                   ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
