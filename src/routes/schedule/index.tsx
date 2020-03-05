@@ -9,11 +9,12 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import { useActions } from 'store'
+import { useSelector, useActions } from 'store'
 import { times, resources, trainerSchedule, trainers } from './data'
 
 import TrainingDialog from './components/training-dialog'
 
+import Toolbar from './toolbar'
 import TrainerAvatar from './trainer-avatar'
 import TrainingCell from './training-cell'
 
@@ -24,14 +25,17 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 
 const SchedulePage = () => {
   const actions = useActions()
+  const date = useSelector(state => state.schedule.currentDate)
 
   React.useEffect(
     () => {
-      actions.trainings.readTrainings()
-    }, [actions]
+      actions.trainings.readTrainings(date)
+    }, [actions, date]
   )
+
   return (
     <Paper>
+      <Toolbar />
       <Table>
         <TableHead>
           <TableRow>

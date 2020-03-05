@@ -10,10 +10,11 @@ import api from 'api/mongodb/training'
 export function* createTrainingSaga(action: ReturnType<typeof actions.trainings.createTraining>) {
   try {
     const training = yield select((state: IStoreState) => state.schedule.recordForm)
+    const date = yield select((state: IStoreState) => state.schedule.currentDate)
 
     yield call(api.createTraining, training)
 
-    yield put(actions.trainings.readTrainings())
+    yield put(actions.trainings.readTrainings(date))
     yield put(actions.schedule.closeRecordDialog())
   } catch (error) {
     console.log(error)
@@ -22,7 +23,7 @@ export function* createTrainingSaga(action: ReturnType<typeof actions.trainings.
 
 export function* readTrainingsSaga(action: ReturnType<typeof actions.trainings.readTrainings>) {
   try {
-    const res = yield call(api.readTrainings)
+    const res = yield call(api.readTrainings, action.payload.date)
 
     yield put(actions.trainings.readTrainingsSuccess(res))
   } catch (error) {
@@ -34,10 +35,11 @@ export function* updateTrainingSaga(action: ReturnType<typeof actions.trainings.
   try {
     const training = yield select((state: IStoreState) => state.schedule.recordForm)
     const oldTraining = yield select((state: IStoreState) => state.trainings.data.find(tr => tr._id === training._id))
+    const date = yield select((state: IStoreState) => state.schedule.currentDate)
 
     yield call(api.updateTraining, oldTraining, training)
 
-    yield put(actions.trainings.readTrainings())
+    yield put(actions.trainings.readTrainings(date))
     yield put(actions.schedule.closeRecordDialog())
   } catch (error) {
     console.log(error)
@@ -47,10 +49,11 @@ export function* updateTrainingSaga(action: ReturnType<typeof actions.trainings.
 export function* deleteTrainingSaga(action: ReturnType<typeof actions.trainings.deleteTraining>) {
   try {
     const training = yield select((state: IStoreState) => state.schedule.recordForm)
+    const date = yield select((state: IStoreState) => state.schedule.currentDate)
 
     yield call(api.deleteTraining, training)
 
-    yield put(actions.trainings.readTrainings())
+    yield put(actions.trainings.readTrainings(date))
     yield put(actions.schedule.closeRecordDialog())
   } catch (error) {
     console.log(error)
@@ -59,9 +62,11 @@ export function* deleteTrainingSaga(action: ReturnType<typeof actions.trainings.
 
 export function* moveTrainingSaga(action: ReturnType<typeof actions.trainings.moveTraining>) {
   try {
+    const date = yield select((state: IStoreState) => state.schedule.currentDate)
+
     yield call(api.moveTraining, action.payload.from, action.payload.to)
 
-    yield put(actions.trainings.readTrainings())
+    yield put(actions.trainings.readTrainings(date))
     yield put(actions.schedule.closeRecordDialog())
   } catch (error) {
     console.log(error)

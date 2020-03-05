@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd'
 import AvatarWrap from './wrap'
 
 const DragableAvatarWrap = ({ children, type, source, trainer, handleDoubleClick }: any) => {
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: { type, source, trainer },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),

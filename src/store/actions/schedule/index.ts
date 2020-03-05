@@ -8,14 +8,14 @@ interface ICell {
   time: string
 }
 
-export const moveRecord = (source: ICell, target: ICell) => ({
-  type: constants.MOVE_RECORD,
-  payload: { source, target },
-})
+// export const moveRecord = (source: ICell, target: ICell) => ({
+//   type: constants.MOVE_RECORD,
+//   payload: { source, target },
+// })
 
-export const openCreateDialog = (payload: IRecord) => ({
+export const openCreateDialog = (target: ICell, trainer?: number) => ({
   type: constants.OPEN_CREATE_RECORD_DIALOG,
-  payload,
+  payload: { trainer, target },
 })
 
 export const openUpdateDialog = (payload: IRecord) => ({
@@ -61,16 +61,24 @@ export const searchTraineesCancel = () => ({
   type: constants.SEARCH_TRAINEES_CANCEL,
 })
 
+export const setCurrentDate = (date: Date) => ({
+  type: constants.SET_CURRENT_DATE,
+  payload: { date },
+})
+
 export default {
-  moveRecord,
   openCreateDialog,
   openUpdateDialog,
   closeRecordDialog,
+
   updateFormField,
   addTrainee,
   updateTraineeFormField,
   removeTrainee,
+
   searchTrainees,
   searchTraineesSuccess,
   searchTraineesCancel,
+
+  setCurrentDate,
 }

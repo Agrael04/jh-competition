@@ -36,16 +36,15 @@ const TrainingItem = ({ time, resource }: any) => {
     () => ({ time, resource }),
     [time, resource]
   )
+
   const handleDoubleClick = React.useCallback(
     e => {
       e.stopPropagation()
       if (record) {
         actions.schedule.openUpdateDialog(record)
-      } else {
-        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), records: [] })
       }
     },
-    [record, actions, resource, time]
+    [record, actions]
   )
 
   const borderColorStyle = React.useMemo(

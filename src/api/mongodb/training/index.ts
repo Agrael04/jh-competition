@@ -25,9 +25,9 @@ export const createTraining = async (tr: ITraining) => {
   return res.insertedId
 }
 
-export const readTrainings = async () => {
+export const readTrainings = async (date: Date) => {
   await client.auth.loginWithCredential(new AnonymousCredential())
-  const res = await client.callFunction('readTrainings', [])
+  const res = await client.callFunction('readTrainings', [removeTimeFromDate(date)])
 
   return res
 }

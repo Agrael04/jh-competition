@@ -6,8 +6,9 @@ export const createTraining = () => ({
   type: constants.CREATE_TRAINING,
 })
 
-export const readTrainings = () => ({
+export const readTrainings = (date: Date) => ({
   type: constants.READ_TRAININGS,
+  payload: { date },
 })
 
 export const updateTraining = () => ({

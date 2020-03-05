@@ -52,14 +52,7 @@ const RecordCell = ({ time, resource }: any) => {
   const onDrop = React.useCallback(
     ({ type, source, trainer }: IDropProps) => {
       if (type === DND_CREATE_TRAINING) {
-        actions.schedule.openCreateDialog({
-          gym: 1,
-          date: new Date(),
-          trainer,
-          time,
-          resource,
-          records: [],
-        })
+        actions.schedule.openCreateDialog({ time, resource }, trainer)
       } else if (type === DND_MOVE_TRAINING) {
         actions.trainings.moveTraining(source, { time, resource })
       }
@@ -102,7 +95,7 @@ const RecordCell = ({ time, resource }: any) => {
       if (record) {
         actions.schedule.openUpdateDialog(record)
       } else {
-        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), records: [] })
+        actions.schedule.openCreateDialog({ resource, time })
       }
     },
     [record, actions, resource, time]

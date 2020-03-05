@@ -99,6 +99,11 @@ export default function TrainingDialog() {
     if (name === 'markPrice' || name === 'moneyPrice') {
       v = Number(value)
     }
+
+    if (typeof v === 'object') {
+      v = v.toDate()
+    }
+
     actions.schedule.updateFormField(name, v)
   }
 
@@ -141,7 +146,8 @@ export default function TrainingDialog() {
                   name='date'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  disablePast={true}
+                  // disablePast={true}
+                  // minDateMessage=''
                   label={translations.date}
                   cancelLabel={translations.cancelLabel}
                   okLabel={translations.okLabel}

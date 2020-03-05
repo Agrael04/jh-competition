@@ -10,6 +10,7 @@ interface ITraineeSuggester {
 
 export interface IState {
   openedRecordDialog: boolean
+  currentDate: Date
   dialogMode: string | null
   recordForm: ITraining
   traineeSuggester: ITraineeSuggester
@@ -17,6 +18,7 @@ export interface IState {
 
 const initialState: IState = {
   openedRecordDialog: false,
+  currentDate: new Date(),
   dialogMode: null,
   recordForm: {
     time: '',
@@ -47,11 +49,11 @@ export default (state = initialState, { type, payload }: { type: string, payload
         dialogMode: 'create',
         openedRecordDialog: true,
         recordForm: {
-          time: payload.time,
-          resource: payload.resource,
-          trainer: payload.trainer,
-          gym: payload.gym,
-          date: payload.date,
+          time: payload.target.time,
+          resource: payload.target.resource,
+          trainer: payload.trainer || undefined,
+          gym: 1,
+          date: new Date(),
 
           name: '',
           type: '',
@@ -172,6 +174,13 @@ export default (state = initialState, { type, payload }: { type: string, payload
           loading: false,
           options: [],
         },
+      }
+    }
+
+    case constants.SET_CURRENT_DATE: {
+      return {
+        ...state,
+        currentDate: payload.date,
       }
     }
 
