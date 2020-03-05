@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from '../../store'
+import { useSelector } from 'store'
 
 import Avatar from '@material-ui/core/Avatar'
 import Badge from '@material-ui/core/Badge'
 import { DND_CREATE_TRAINING } from './constants'
 
 import DragableAvatarWrap from './components/avatar-wrap'
-import Tooltip from '../../components/multiline-tooltip'
+import Tooltip from 'components/multiline-tooltip'
 
 const TrainerAvatar = ({ trainer, time }: any) => {
   const recordsCount = useSelector(state => state.trainings.data.filter(r => r.time === time && r.trainer === trainer.id).length)

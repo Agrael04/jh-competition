@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from '../../../../store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import { trainers } from '../../data'
 
@@ -7,13 +7,12 @@ import { DND_MOVE_TRAINING } from '../../constants'
 
 import Avatar from '@material-ui/core/Avatar'
 
-// import DragableAvatar from './components/dragable-avatar'
 import { DragableAvatarWrap } from '../avatar-wrap'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import getColorPallete from '../../../../utils/get-color-pallete'
-import Tooltip from '../../../../components/multiline-tooltip'
+import getColorPallete from 'utils/get-color-pallete'
+import Tooltip from 'components/multiline-tooltip'
 
 import useStyles from './styles'
 

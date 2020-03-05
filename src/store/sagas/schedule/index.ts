@@ -1,10 +1,10 @@
 import { all, call, put, takeLatest, delay } from 'redux-saga/effects'
 
-import searchUsers from '../../../api/mongodb'
-import PromiseResponse from '../../../interfaces/promise-response'
+import searchUsers from 'api/mongodb'
+import PromiseResponse from 'interfaces/promise-response'
 
-import actions from '../../actions/schedule'
-import constants from '../../constants/schedule'
+import actions from 'store/actions/schedule'
+import constants from 'store/constants/schedule'
 
 export function* searchTrainees(action: ReturnType<typeof actions.searchTrainees>) {
   try {
@@ -30,7 +30,7 @@ function* watchSearchTrainees() {
   yield takeLatest(constants.SEARCH_TRAINEES, searchTrainees)
 }
 
-export default function* () {
+export default function*() {
   yield all([
     watchSearchTrainees(),
   ])

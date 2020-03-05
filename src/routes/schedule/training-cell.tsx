@@ -1,7 +1,7 @@
 import React from 'react'
 import { IStoreState, useSelector, useActions } from '../../store'
 
-import { trainerSchedule, trainers } from './data'
+import { trainerSchedule } from './data'
 
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
 

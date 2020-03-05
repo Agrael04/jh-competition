@@ -7,7 +7,7 @@ import { useDrop } from 'react-dnd'
 
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from '../../constants'
 
-import getColorPallete from '../../../../utils/get-color-pallete'
+import getColorPallete from 'utils/get-color-pallete'
 
 import useStyles from './styles'
 

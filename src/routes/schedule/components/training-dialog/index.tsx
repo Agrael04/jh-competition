@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from '../../../../store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -15,9 +15,9 @@ import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import TextField from '../../../../containers/text-field'
-import DatePicker from '../../../../containers/date-picker'
-import Select from '../../../../containers/select'
+import TextField from 'containers/text-field'
+import DatePicker from 'containers/date-picker'
+import Select from 'containers/select'
 
 import TraineesBlock from './trainees-block'
 

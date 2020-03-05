@@ -1,6 +1,6 @@
-import constants from '../../constants/trainings'
+import constants from 'store/constants/trainings'
 
-import ITraining, { ITrainingId } from '../../../interfaces/training'
+import ITraining, { ITrainingId } from 'interfaces/training'
 
 export const createTraining = () => ({
   type: constants.CREATE_TRAINING,

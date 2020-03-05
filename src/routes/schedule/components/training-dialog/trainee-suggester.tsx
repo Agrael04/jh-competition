@@ -1,11 +1,11 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from '../../../../store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { ISearchedTrainee } from '../../../../interfaces/trainee'
+import { ISearchedTrainee } from 'interfaces/trainee'
 
 interface IProps {
   name: any

@@ -1,11 +1,11 @@
 import { all, takeLatest, select, call, put } from 'redux-saga/effects'
 
-import actions from '../../actions'
-import constants from '../../constants/trainings'
+import actions from 'store/actions'
+import constants from 'store/constants/trainings'
 
-import { IStoreState } from '../../index'
+import { IStoreState } from 'store'
 
-import api from '../../../api/mongodb/training'
+import api from 'api/mongodb/training'
 
 export function* createTrainingSaga(action: ReturnType<typeof actions.trainings.createTraining>) {
   try {
@@ -88,7 +88,7 @@ function* watchMoveTraining() {
   yield takeLatest(constants.MOVE_TRAINING, moveTrainingSaga)
 }
 
-export default function* () {
+export default function*() {
   yield all([
     watchCreateTraining(),
     watchReadTrainings(),

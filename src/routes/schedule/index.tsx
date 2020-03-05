@@ -9,7 +9,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import { useActions, useSelector } from '../../store'
+import { useActions } from 'store'
 import { times, resources, trainerSchedule, trainers } from './data'
 
 import TrainingDialog from './components/training-dialog'
@@ -48,7 +48,7 @@ const SchedulePage = () => {
           {
             times.map(time => (
               <TableRow key={time}>
-                <TableCell>
+                <TableCell padding='none'>
                   {time}
                 </TableCell>
                 <TableCell padding='none'>
