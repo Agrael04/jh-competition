@@ -48,7 +48,7 @@ const SchedulePage = () => {
           {
             times.map(time => (
               <TableRow key={time}>
-                <TableCell padding='none'>
+                <TableCell>
                   {time}
                 </TableCell>
                 <TableCell padding='none'>
