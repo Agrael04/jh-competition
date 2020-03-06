@@ -19,7 +19,7 @@ const ToolbarContainer = () => {
   return (
     <Toolbar>
       <Typography variant='body1'>
-        Schedule for:
+        {'Расписание на: '}
       </Typography>
       <Box marginLeft={0.5}>
         <DatePicker

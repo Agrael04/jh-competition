@@ -115,7 +115,7 @@ export default function TrainingDialog() {
             <CloseIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            Add training
+            Тренировка
           </Typography>
         </Toolbar>
       </AppBar>
@@ -282,11 +282,11 @@ export default function TrainingDialog() {
             <Grid item={true} container={true} justify='space-between'>
               {
                 dialogMode === 'update'
-                  ? <Button variant='text' color='primary' onClick={remove}> Delete </Button>
+                  ? <Button variant='text' color='primary' onClick={remove}> Удалить </Button>
                   : <div />
               }
 
-              <Button variant='contained' color='primary' onClick={save}> Save </Button>
+              <Button variant='contained' color='primary' onClick={save}> Сохранить </Button>
             </Grid>
           </Box>
         </Grid>

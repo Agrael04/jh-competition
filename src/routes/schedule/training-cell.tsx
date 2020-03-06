@@ -113,7 +113,7 @@ const RecordCell = ({ time, resource }: any) => {
           <AvatarWrap
             handleDoubleClick={handleDoubleClick}
           >
-            <Tooltip rows={['Add new']}>
+            <Tooltip rows={['Добавить тренировку']}>
               <Avatar>
                 <PersonAddIcon />
               </Avatar>

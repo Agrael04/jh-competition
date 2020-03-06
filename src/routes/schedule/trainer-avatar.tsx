@@ -8,8 +8,25 @@ import { DND_CREATE_TRAINING } from './constants'
 import DragableAvatarWrap from './components/avatar-wrap'
 import Tooltip from 'components/multiline-tooltip'
 
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import getColorPallete from 'utils/get-color-pallete'
+
+const useStyles = (color: any) => makeStyles((theme: Theme) => ({
+  badgeBackground: {
+    backgroundColor: color[400],
+  },
+}))
+
+export const useBadgeBackground = (id: number) => {
+  const color = getColorPallete(id)
+  const classes = useStyles(color)
+
+  return classes
+}
+
 const TrainerAvatar = ({ trainer, time }: any) => {
   const recordsCount = useSelector(state => state.trainings.data.filter(r => r.time === time && r.trainer === trainer.id).length)
+  const classes = useBadgeBackground(trainer.id)()
 
   return (
     <DragableAvatarWrap
@@ -28,6 +45,9 @@ const TrainerAvatar = ({ trainer, time }: any) => {
           }}
           badgeContent={recordsCount}
           color={'error'}
+          classes={{
+            'badge': classes.badgeBackground,
+          }}
         >
           <Avatar src={trainer.avatar} />
         </Badge>

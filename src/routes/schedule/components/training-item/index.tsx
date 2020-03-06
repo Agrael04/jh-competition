@@ -73,7 +73,7 @@ const TrainingItem = ({ time, resource }: any) => {
       <div style={{ display: 'flex' }}>
         {
           trainer && (
-            <Tooltip rows={['Rent tramp']}>
+            <Tooltip rows={['Информация о тренировке']}>
               <Avatar src={trainer?.avatar} className={classes.mainAvatar} style={borderColorStyle} />
             </Tooltip>
           )

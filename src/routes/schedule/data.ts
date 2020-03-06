@@ -15,16 +15,15 @@ export const times = [
 ]
 
 export const resources = [
-  { id: 0, name: 'Resourse 0' },
-  { id: 1, name: 'Resourse 1' },
-  { id: 2, name: 'Resourse 2' },
-  { id: 3, name: 'Resourse 3' },
-  { id: 4, name: 'Resourse 4' },
-  { id: 5, name: 'Resourse 5' },
-  { id: 6, name: 'Resourse 6' },
-  { id: 7, name: 'Resourse 7' },
-  { id: 8, name: 'Resourse 8' },
-  { id: 9, name: 'Resourse 9' },
+  { id: 0, name: 'Батут 1 Сцена' },
+  { id: 1, name: 'Батут 2 Фал' },
+  { id: 2, name: 'Батут 3 Сцена' },
+  { id: 3, name: 'Батут 4 Центр' },
+  { id: 4, name: 'Батут 5 Вход' },
+  { id: 5, name: 'Батут 6 Яма' },
+  { id: 6, name: 'Батут 7 Акро' },
+  { id: 7, name: 'Мягкий зал 1' },
+  { id: 8, name: 'Мягкий зал 2' },
 ]
 
 export const trainers = [

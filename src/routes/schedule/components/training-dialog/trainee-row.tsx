@@ -49,7 +49,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='seasonPass'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Abonement'}
+              label={'Абонимент'}
               fullWidth={true}
               variant='outlined'
             />
@@ -59,7 +59,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='status'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Status'}
+              label={'Статус'}
               fullWidth={true}
               variant='outlined'
             >
@@ -77,7 +77,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='note'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Notes'}
+              label={'Заметки'}
               fullWidth={true}
               variant='outlined'
             />

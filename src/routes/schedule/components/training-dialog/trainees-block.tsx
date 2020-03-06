@@ -22,7 +22,7 @@ export default function TraineesBlock() {
       {
         records.length < 3 && (
           <Grid item={true} container={true} justify='flex-end'>
-            <Button variant='outlined' color='primary' onClick={addTrainee}> Add trainee </Button>
+            <Button variant='outlined' color='primary' onClick={addTrainee}> Добавить клиента </Button>
           </Grid>
         )
       }
