@@ -49,7 +49,7 @@ const TrainingItem = ({ time, resource }: any) => {
 
   const borderColorStyle = React.useMemo(
     () => ({
-      borderColor: getColorPallete(trainer?.id)[400],
+      borderColor: getColorPallete(trainer?.id)[500],
     }),
     [trainer]
   )

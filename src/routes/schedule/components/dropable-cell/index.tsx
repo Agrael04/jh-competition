@@ -38,7 +38,7 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, colorId, 
   )
 
   const backgroundStyle = React.useMemo(
-    () => ({ backgroundColor: color[400] }),
+    () => ({ backgroundColor: color[500] }),
     [color]
   )
 

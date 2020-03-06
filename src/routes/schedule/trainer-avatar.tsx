@@ -13,7 +13,7 @@ import getColorPallete from 'utils/get-color-pallete'
 
 const useStyles = (color: any) => makeStyles((theme: Theme) => ({
   badgeBackground: {
-    backgroundColor: color[400],
+    backgroundColor: color[500],
   },
 }))
 
