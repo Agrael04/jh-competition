@@ -51,7 +51,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         recordForm: {
           time: payload.target.time,
           resource: payload.target.resource,
-          trainer: payload.trainer || undefined,
+          trainer: payload.trainer  === null ? undefined : payload.trainer,
           gym: 1,
           date: new Date(),
 
