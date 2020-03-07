@@ -1,17 +1,20 @@
 import React from 'react'
 import { IStoreState, useSelector, useActions } from '../../store'
 
-import { trainerSchedule, trainers } from './data'
+import { trainerSchedule } from './data'
 
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Avatar from '@material-ui/core/Avatar'
 
-import DragableAvatar from './components/dragable-avatar'
-import EmptyAvatar from './components/empty-avatar'
+import { AvatarWrap } from './components/avatar-wrap'
 import DropableCell from './components/dropable-cell'
+import TrainingItem from './components/training-item'
 
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
+
+import Tooltip from '../../components/multiline-tooltip'
 
 const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
   if (!trainer) {
@@ -41,11 +44,6 @@ const RecordCell = ({ time, resource }: any) => {
   const actions = useActions()
   const loading = useSelector(state => state.trainings.loading)
 
-  const trainer = React.useMemo(
-    () => record && trainers.find(tr => tr.id === record.trainer),
-    [record]
-  )
-
   const source = React.useMemo(
     () => ({ time, resource }),
     [time, resource]
@@ -54,14 +52,7 @@ const RecordCell = ({ time, resource }: any) => {
   const onDrop = React.useCallback(
     ({ type, source, trainer }: IDropProps) => {
       if (type === DND_CREATE_TRAINING) {
-        actions.schedule.openCreateDialog({
-          gym: 1,
-          date: new Date(),
-          trainer,
-          time,
-          resource,
-          records: [],
-        })
+        actions.schedule.openCreateDialog({ time, resource }, trainer)
       } else if (type === DND_MOVE_TRAINING) {
         actions.trainings.moveTraining(source, { time, resource })
       }
@@ -104,7 +95,7 @@ const RecordCell = ({ time, resource }: any) => {
       if (record) {
         actions.schedule.openUpdateDialog(record)
       } else {
-        actions.schedule.openCreateDialog({ gym: 1, resource, time, date: new Date(), records: [] })
+        actions.schedule.openCreateDialog({ resource, time })
       }
     },
     [record, actions, resource, time]
@@ -119,32 +110,18 @@ const RecordCell = ({ time, resource }: any) => {
       }
       {
         !loading && !record && (
-          <EmptyAvatar
+          <AvatarWrap
             handleDoubleClick={handleDoubleClick}
-            tooltipRows={[
-              'Add new',
-            ]}
           >
-            <PersonAddIcon />
-          </EmptyAvatar>
+            <Tooltip rows={['Добавить тренировку']}>
+              <Avatar>
+                <PersonAddIcon />
+              </Avatar>
+            </Tooltip>
+          </AvatarWrap>
         )
       }
-      {
-        record && (
-          <DragableAvatar
-            type={DND_MOVE_TRAINING}
-            source={source}
-            trainer={record.trainer}
-            src={trainer?.avatarSrc}
-            handleDoubleClick={handleDoubleClick}
-            tooltipRows={[
-              'Rent tramp',
-              'Agarkov D',
-              'Very important',
-            ]}
-          />
-        )
-      }
+      <TrainingItem time={time} resource={resource} />
     </DropableCell>
   )
 }

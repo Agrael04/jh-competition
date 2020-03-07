@@ -1,75 +1,39 @@
 import React from 'react'
 
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import Box from '@material-ui/core/Box'
 
-import { Link } from 'react-router-dom'
+import AppBar from './app-bar'
+import Drawer from './drawer'
 
-import useStyles from '../../hooks/use-styles'
-import useFirebaseAuth from '../../hooks/use-firebase-auth'
-import css from './styles'
-
-import SigninDialog from '../signin-dialog'
+import useStyles from './styles'
 
 interface IProps {
-  children: React.ReactNode
+  children: any
 }
 
-export default function Layout({ children }: IProps) {
-  const recaptcha = React.useRef(null)
-  const { signedIn, signOut } = useFirebaseAuth(recaptcha)
-  const [openedSigninDialog, setOpenedSigninDialog] = React.useState(false)
-  const classes = useStyles(css)
+function Layout({ children }: IProps) {
+  const classes = useStyles()
+  const [open, setOpen] = React.useState(false)
 
-  const openSigninDialog = () => setOpenedSigninDialog(true)
-  const closeSigninDialog = () => setOpenedSigninDialog(false)
+  function handleDrawerOpen() {
+    setOpen(true)
+  }
+
+  function handleDrawerClose() {
+    setOpen(false)
+  }
 
   return (
     <div className={classes.app}>
-      <AppBar position='fixed' className={classes.appBar}>
-        <Container>
-          <Toolbar>
-            <Typography variant='h6' className={classes.title}>
-              Jumping Hall Competitions
-            </Typography>
-            <Button color='inherit' className={classes.button}>
-              <Link to='/schedule'>
-                Добавить тренировку
-              </Link>
-            </Button>
-            {
-              !signedIn && (
-                <Button color='inherit' className={classes.button} onClick={openSigninDialog}>
-                  Войти
-                </Button>
-              )
-            }
-            {
-              signedIn && (
-                <Button color='inherit' className={classes.button} onClick={signOut}>
-                  Выйти
-                </Button>
-              )
-            }
-
-          </Toolbar>
-        </Container>
-      </AppBar>
-      {
-        !signedIn && (
-          <SigninDialog
-            open={openedSigninDialog}
-            onClose={closeSigninDialog}
-          />
-        )
-      }
-      <Box paddingTop={8}>
+      <CssBaseline />
+      <AppBar open={open} handleDrawerOpen={handleDrawerOpen}/>
+      <Drawer open={open} handleDrawerClose={handleDrawerClose} />
+      <Box paddingTop={11} paddingX={3}>
         {children}
       </Box>
     </div>
   )
 }
+
+export default Layout

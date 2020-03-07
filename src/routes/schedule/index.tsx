@@ -8,12 +8,14 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import Divider from '@material-ui/core/Divider'
 
-import { useActions, useSelector } from '../../store'
+import { useSelector, useActions } from 'store'
 import { times, resources, trainerSchedule, trainers } from './data'
 
 import TrainingDialog from './components/training-dialog'
 
+import Toolbar from './toolbar'
 import TrainerAvatar from './trainer-avatar'
 import TrainingCell from './training-cell'
 
@@ -24,19 +26,23 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 
 const SchedulePage = () => {
   const actions = useActions()
+  const date = useSelector(state => state.schedule.currentDate)
 
   React.useEffect(
     () => {
-      actions.trainings.readTrainings()
-    }, [actions]
+      actions.trainings.readTrainings(date)
+    }, [actions, date]
   )
+
   return (
     <Paper>
+      <Toolbar />
+      <Divider />
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Time</TableCell>
-            <TableCell>Trainers</TableCell>
+            <TableCell>{'Время'}</TableCell>
+            <TableCell>{'Тренера'}</TableCell>
             {
               resources.map(r => (
                 <TableCell key={r.id} align='center'>{r.name}</TableCell>

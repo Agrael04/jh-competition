@@ -1,27 +1,41 @@
-import { Theme } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 import background from '../../assets/background.jpg'
 
-export default (theme: Theme) => ({
+const drawerWidth = 240
+
+export default makeStyles((theme: Theme) => ({
   app: {
     background: `url(${background})`,
     textAlign: 'center',
     minHeight: '100vh',
   },
-  appWrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    color: '#f26000',
-    fontSize: '36px',
-    fontWeight: 'bold',
-    margin: 'auto',
-  },
   appBar: {
-    color: 'black',
-    background: 'white',
+    backgroundColor: theme.palette.primary.main,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
-  title: {
-    flexGrow: '1',
-    textAlign: 'left',
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
-})
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    justifyContent: 'space-between',
+  },
+  link: {
+
+  },
+}))

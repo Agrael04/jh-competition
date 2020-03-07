@@ -1,8 +1,7 @@
 import React from 'react'
-import { useSelector, useActions } from '../../../../store'
+import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
-
 import Grid from '@material-ui/core/Grid'
 
 import TraineeRow from './trainee-row'
@@ -23,7 +22,7 @@ export default function TraineesBlock() {
       {
         records.length < 3 && (
           <Grid item={true} container={true} justify='flex-end'>
-            <Button variant='outlined' color='primary' onClick={addTrainee}> Add trainee </Button>
+            <Button variant='outlined' color='primary' onClick={addTrainee}> Добавить клиента </Button>
           </Grid>
         )
       }

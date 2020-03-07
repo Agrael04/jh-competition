@@ -1,9 +1,7 @@
-import constants from '../../constants/schedule'
+import constants from 'store/constants/schedule'
 
-// import { schedule as initialSchedule } from '../../../routes/schedule/data'
-
-import { ISearchedTrainee } from '../../../interfaces/trainee'
-import ITraining from '../../../interfaces/training'
+import { ISearchedTrainee } from 'interfaces/trainee'
+import ITraining from 'interfaces/training'
 
 interface ITraineeSuggester {
   loading: boolean
@@ -11,16 +9,16 @@ interface ITraineeSuggester {
 }
 
 export interface IState {
-  // schedule: ITraining[]
   openedRecordDialog: boolean
+  currentDate: Date
   dialogMode: string | null
   recordForm: ITraining
   traineeSuggester: ITraineeSuggester
 }
 
 const initialState: IState = {
-  // schedule: initialSchedule,
   openedRecordDialog: false,
+  currentDate: new Date(),
   dialogMode: null,
   recordForm: {
     time: '',
@@ -45,42 +43,17 @@ const initialState: IState = {
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
   switch (type) {
-    // case constants.MOVE_RECORD: {
-    //   const { target, source } = payload
-    //   const targetIndex = state.schedule.findIndex(record => record.time === target.time && record.resource === target.resource)
-    //   const sourceIndex = state.schedule.findIndex(record => record.time === source.time && record.resource === source.resource)
-
-    //   if (targetIndex === -1) {
-    //     return {
-    //       ...state,
-    //       schedule: [
-    //         ...state.schedule.filter((i, index) => index !== sourceIndex),
-    //         { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
-    //       ],
-    //     }
-    //   } else {
-    //     return {
-    //       ...state,
-    //       schedule: [
-    //         ...state.schedule.filter((i, index) => index !== sourceIndex && index !== targetIndex),
-    //         { time: target.time, resource: target.resource, trainer: state.schedule[sourceIndex].trainer } as ITraining,
-    //         { time: source.time, resource: source.resource, trainer: state.schedule[targetIndex].trainer } as ITraining,
-    //       ],
-    //     }
-    //   }
-    // }
-
     case constants.OPEN_CREATE_RECORD_DIALOG: {
       return {
         ...state,
         dialogMode: 'create',
         openedRecordDialog: true,
         recordForm: {
-          time: payload.time,
-          resource: payload.resource,
-          trainer: payload.trainer,
-          gym: payload.gym,
-          date: payload.date,
+          time: payload.target.time,
+          resource: payload.target.resource,
+          trainer: payload.trainer  === null ? undefined : payload.trainer,
+          gym: 1,
+          date: new Date(),
 
           name: '',
           type: '',
@@ -201,6 +174,13 @@ export default (state = initialState, { type, payload }: { type: string, payload
           loading: false,
           options: [],
         },
+      }
+    }
+
+    case constants.SET_CURRENT_DATE: {
+      return {
+        ...state,
+        currentDate: payload.date,
       }
     }
 

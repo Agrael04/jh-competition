@@ -1,6 +1,6 @@
-import constants from '../../constants/trainings'
+import constants from 'store/constants/trainings'
 
-import ITraining from '../../../interfaces/training'
+import ITraining from 'interfaces/training'
 
 export interface IState {
   data: ITraining[],

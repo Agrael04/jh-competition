@@ -2,7 +2,6 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 
-import App from './app'
 import Schedule from './schedule'
 
 import Layout from '../components/layout'
@@ -13,14 +12,11 @@ export default function Routes() {
     <ThemeProvider theme={theme}>
       <Layout>
         <Switch>
-          <Route path={'/app'} exact={true}>
-            <App />
-          </Route>
           <Route path={'/schedule'} exact={true}>
             <Schedule />
           </Route>
           <Route>
-            <App />
+            <Schedule />
           </Route>
         </Switch>
       </Layout>

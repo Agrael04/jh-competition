@@ -15,16 +15,15 @@ export const times = [
 ]
 
 export const resources = [
-  { id: 0, name: 'Resourse 0' },
-  { id: 1, name: 'Resourse 1' },
-  { id: 2, name: 'Resourse 2' },
-  { id: 3, name: 'Resourse 3' },
-  { id: 4, name: 'Resourse 4' },
-  { id: 5, name: 'Resourse 5' },
-  { id: 6, name: 'Resourse 6' },
-  { id: 7, name: 'Resourse 7' },
-  { id: 8, name: 'Resourse 8' },
-  { id: 9, name: 'Resourse 9' },
+  { id: 0, name: 'Батут 1 Сцена' },
+  { id: 1, name: 'Батут 2 Фал' },
+  { id: 2, name: 'Батут 3 Сцена' },
+  { id: 3, name: 'Батут 4 Центр' },
+  { id: 4, name: 'Батут 5 Вход' },
+  { id: 5, name: 'Батут 6 Яма' },
+  { id: 6, name: 'Батут 7 Акро' },
+  { id: 7, name: 'Мягкий зал 1' },
+  { id: 8, name: 'Мягкий зал 2' },
 ]
 
 export const trainers = [
@@ -58,67 +57,4 @@ export const trainerSchedule = [
   { time: '18:00', trainers: [2, 3, 4, 5, 6] },
   { time: '19:00', trainers: [2, 6, 8] },
   { time: '20:30', trainers: [2, 6, 8] },
-]
-
-export const schedule = [
-  { time: '8:00', resource: 1, trainer: 2, gym: 1, date: new Date(), records: [] },
-  { time: '9:00', resource: 1, trainer: 2, gym: 1, date: new Date(), records: [] },
-  { time: '10:00', resource: 1, trainer: 2, gym: 1, date: new Date(), records: [] },
-  { time: '11:00', resource: 1, trainer: 2, gym: 1, date: new Date(), records: [] },
-  { time: '12:00', resource: 1, trainer: 2, gym: 1, date: new Date(), records: [] },
-
-  { time: '14:00', resource: 4, gym: 1, date: new Date(), records: [] },
-  { time: '15:00', resource: 4, gym: 1, date: new Date(), records: [] },
-  { time: '16:00', resource: 4, gym: 1, date: new Date(), records: [] },
-  { time: '17:00', resource: 4, gym: 1, date: new Date(), records: [] },
-
-  { time: '8:00', resource: 8, trainer: 0, gym: 1, date: new Date(), records: [] },
-  { time: '9:00', resource: 8, trainer: 0, gym: 1, date: new Date(), records: [] },
-  { time: '10:00', resource: 8, trainer: 0, gym: 1, date: new Date(), records: [] },
-  { time: '11:00', resource: 8, trainer: 0, gym: 1, date: new Date(), records: [] },
-  { time: '12:00', resource: 8, trainer: 0, gym: 1, date: new Date(), records: [] },
-
-  { time: '8:00', resource: 4, trainer: 4, gym: 1, date: new Date(), records: [] },
-  { time: '9:00', resource: 4, trainer: 4, gym: 1, date: new Date(), records: [] },
-
-  { time: '8:00', resource: 5, trainer: 5, gym: 1, date: new Date(), records: [] },
-  { time: '9:00', resource: 5, trainer: 5, gym: 1, date: new Date(), records: [] },
-
-  { time: '8:00', resource: 6, trainer: 7, gym: 1, date: new Date(), records: [] },
-  { time: '9:00', resource: 6, trainer: 7, gym: 1, date: new Date(), records: [] },
-  { time: '13:00', resource: 6, trainer: 7, gym: 1, date: new Date(), records: [] },
-  { time: '14:00', resource: 6, trainer: 7, gym: 1, date: new Date(), records: [] },
-  { time: '15:00', resource: 6, trainer: 7, gym: 1, date: new Date(), records: [] },
-
-  { time: '10:00', resource: 2, trainer: 9, gym: 1, date: new Date(), records: [] },
-  { time: '10:00', resource: 3, trainer: 9, gym: 1, date: new Date(), records: [] },
-  { time: '11:00', resource: 2, trainer: 9, gym: 1, date: new Date(), records: [] },
-  { time: '11:00', resource: 3, trainer: 9, gym: 1, date: new Date(), records: [] },
-  { time: '12:00', resource: 2, trainer: 9, gym: 1, date: new Date(), records: [] },
-  { time: '12:00', resource: 3, trainer: 9, gym: 1, date: new Date(), records: [] },
-
-  { time: '13:00', resource: 0, trainer: 1, gym: 1, date: new Date(), records: [] },
-  { time: '14:00', resource: 0, trainer: 1, gym: 1, date: new Date(), records: [] },
-  { time: '15:00', resource: 0, trainer: 1, gym: 1, date: new Date(), records: [] },
-  { time: '16:00', resource: 0, trainer: 1, gym: 1, date: new Date(), records: [] },
-  { time: '17:00', resource: 0, trainer: 1, gym: 1, date: new Date(), records: [] },
-
-  { time: '15:00', resource: 2, trainer: 3, gym: 1, date: new Date(), records: [] },
-  { time: '16:00', resource: 2, trainer: 3, gym: 1, date: new Date(), records: [] },
-  { time: '17:00', resource: 2, trainer: 3, gym: 1, date: new Date(), records: [] },
-  { time: '18:00', resource: 2, trainer: 3, gym: 1, date: new Date(), records: [] },
-
-  { time: '16:00', resource: 5, trainer: 6, gym: 1, date: new Date(), records: [] },
-  { time: '17:00', resource: 5, trainer: 6, gym: 1, date: new Date(), records: [] },
-  { time: '18:00', resource: 5, trainer: 6, gym: 1, date: new Date(), records: [] },
-
-  { time: '19:00', resource: 0, trainer: 8, gym: 1, date: new Date(), records: [] },
-  { time: '19:00', resource: 1, trainer: 8, gym: 1, date: new Date(), records: [] },
-  { time: '20:30', resource: 0, trainer: 8, gym: 1, date: new Date(), records: [] },
-  { time: '20:30', resource: 1, trainer: 8, gym: 1, date: new Date(), records: [] },
-
-  { time: '19:00', resource: 4, trainer: 6, gym: 1, date: new Date(), records: [] },
-  { time: '19:00', resource: 5, trainer: 6, gym: 1, date: new Date(), records: [] },
-  { time: '20:30', resource: 4, trainer: 6, gym: 1, date: new Date(), records: [] },
-  { time: '20:30', resource: 5, trainer: 6, gym: 1, date: new Date(), records: [] },
 ]

@@ -7,23 +7,9 @@ import { useDrop } from 'react-dnd'
 
 import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from '../../constants'
 
+import getColorPallete from 'utils/get-color-pallete'
+
 import useStyles from './styles'
-
-import purple from '@material-ui/core/colors/purple'
-import indigo from '@material-ui/core/colors/indigo'
-import teal from '@material-ui/core/colors/teal'
-import lime from '@material-ui/core/colors/lime'
-import lightBlue from '@material-ui/core/colors/lightBlue'
-import brown from '@material-ui/core/colors/brown'
-import blue from '@material-ui/core/colors/blue'
-import deepPurple from '@material-ui/core/colors/deepPurple'
-import cyan from '@material-ui/core/colors/cyan'
-import green from '@material-ui/core/colors/green'
-import blueGrey from '@material-ui/core/colors/blueGrey'
-
-const colors = [
-  purple, indigo, teal, lime, lightBlue, brown, blue, green, deepPurple, cyan,
-]
 
 const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, colorId, ...rest }: any) => {
   const classes = useStyles()
@@ -40,19 +26,19 @@ const DropableCell = ({ children, onDrop, canDrop, isOccupied, source, colorId, 
   })
 
   const color = React.useMemo(
-    () => colors[colorId] || blueGrey,
+    () => getColorPallete(colorId),
     [colorId]
   )
 
   const itemColor = React.useMemo(
     () => {
-      return colors[item?.trainer] || blueGrey
+      return getColorPallete(item?.trainer)
     },
     [item]
   )
 
   const backgroundStyle = React.useMemo(
-    () => ({ backgroundColor: color[400] }),
+    () => ({ backgroundColor: color[500] }),
     [color]
   )
 

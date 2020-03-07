@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from '../../../../store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -15,9 +15,9 @@ import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import TextField from '../../../../containers/text-field'
-import DatePicker from '../../../../containers/date-picker'
-import Select from '../../../../containers/select'
+import TextField from 'containers/text-field'
+import DatePicker from 'containers/date-picker'
+import Select from 'containers/select'
 
 import TraineesBlock from './trainees-block'
 
@@ -99,6 +99,11 @@ export default function TrainingDialog() {
     if (name === 'markPrice' || name === 'moneyPrice') {
       v = Number(value)
     }
+
+    if (typeof v === 'object') {
+      v = v.toDate()
+    }
+
     actions.schedule.updateFormField(name, v)
   }
 
@@ -110,7 +115,7 @@ export default function TrainingDialog() {
             <CloseIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            Add training
+            Тренировка
           </Typography>
         </Toolbar>
       </AppBar>
@@ -141,7 +146,8 @@ export default function TrainingDialog() {
                   name='date'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  disablePast={true}
+                  // disablePast={true}
+                  // minDateMessage=''
                   label={translations.date}
                   cancelLabel={translations.cancelLabel}
                   okLabel={translations.okLabel}
@@ -276,11 +282,11 @@ export default function TrainingDialog() {
             <Grid item={true} container={true} justify='space-between'>
               {
                 dialogMode === 'update'
-                  ? <Button variant='text' color='primary' onClick={remove}> Delete </Button>
+                  ? <Button variant='text' color='primary' onClick={remove}> Удалить </Button>
                   : <div />
               }
 
-              <Button variant='contained' color='primary' onClick={save}> Save </Button>
+              <Button variant='contained' color='primary' onClick={save}> Сохранить </Button>
             </Grid>
           </Box>
         </Grid>

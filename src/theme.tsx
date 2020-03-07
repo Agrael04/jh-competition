@@ -1,6 +1,5 @@
-import teal from '@material-ui/core/colors/teal'
-import amber from '@material-ui/core/colors/amber'
-// import lightGreen from '@material-ui/core/colors/lightGreen'
+import amber from '@material-ui/core/colors/orange'
+import green from '@material-ui/core/colors/green'
 
 import { createMuiTheme } from '@material-ui/core/styles'
 
@@ -11,7 +10,12 @@ export default createMuiTheme({
     },
   },
   palette: {
-    primary: teal,
+    primary: {
+      'light': green[100],
+      'main': green[500],
+      'dark': green[700],
+      'contrastText': '#fff',
+    },
     secondary: amber,
   },
 })

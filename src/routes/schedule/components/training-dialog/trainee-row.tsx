@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useActions } from '../../../../store'
+import { IStoreState, useActions } from 'store'
 
 import IconButton from '@material-ui/core/IconButton'
 
@@ -9,8 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import TextField from '../../../../containers/text-field'
-import Select from '../../../../containers/select'
+import TextField from 'containers/text-field'
+import Select from 'containers/select'
 
 import TraineeSuggester from './trainee-suggester'
 
@@ -49,7 +49,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='seasonPass'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Abonement'}
+              label={'Абонимент'}
               fullWidth={true}
               variant='outlined'
             />
@@ -59,7 +59,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='status'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Status'}
+              label={'Статус'}
               fullWidth={true}
               variant='outlined'
             >
@@ -77,7 +77,7 @@ export default function TraineeRow({ index }: { index: number }) {
               name='note'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Notes'}
+              label={'Заметки'}
               fullWidth={true}
               variant='outlined'
             />
