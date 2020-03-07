@@ -135,7 +135,7 @@ const RecordCell = ({ time, resource }: any) => {
             type={DND_MOVE_TRAINING}
             source={source}
             trainer={record.trainer}
-            src={trainer && trainer.avatar}
+            src={trainer?.avatarSrc}
             handleDoubleClick={handleDoubleClick}
             tooltipRows={[
               'Rent tramp',

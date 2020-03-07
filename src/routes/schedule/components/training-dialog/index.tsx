@@ -163,7 +163,7 @@ export default function TrainingDialog() {
                   {
                     trainers.map(trainer => (
                       <MenuItem value={trainer.id} key={trainer.id}>
-                        {trainer.name}
+                        {trainer.firstName} {trainer.lastName}
                       </MenuItem>
                     ))
                   }
