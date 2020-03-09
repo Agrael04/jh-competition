@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'store'
+// import { useSelector } from 'store'
 
 import Avatar from '@material-ui/core/Avatar'
 import Badge from '@material-ui/core/Badge'
@@ -24,8 +24,8 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ trainer, time }: any) => {
-  const recordsCount = useSelector(state => state.trainings.data.filter(r => r.time === time && r.trainer === trainer.id).length)
+const TrainerAvatar = ({ trainer, time, count }: any) => {
+  // const recordsCount = useSelector(state => state.trainings.data.filter(r => r.time === time && r.trainer === trainer.id).length)
   const classes = useBadgeBackground(trainer.id)()
 
   return (
@@ -41,7 +41,7 @@ const TrainerAvatar = ({ trainer, time }: any) => {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          badgeContent={recordsCount}
+          badgeContent={count}
           color={'error'}
           classes={{
             'badge': classes.badgeBackground,

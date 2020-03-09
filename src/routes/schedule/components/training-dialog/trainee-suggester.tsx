@@ -37,7 +37,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
-    onChange(name, option || { fullName: '', _id: '' })
+    onChange(name, { ...option, __typename: 'User' } || { fullName: '', _id: '' })
   }
 
   const actions = useActions()

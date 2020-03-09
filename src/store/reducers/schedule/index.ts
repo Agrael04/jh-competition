@@ -2,6 +2,7 @@ import constants from 'store/constants/schedule'
 
 import { ISearchedTrainee } from 'interfaces/trainee'
 import ITraining from 'interfaces/training'
+import PartialBy from 'interfaces/partial-by'
 
 interface ITraineeSuggester {
   loading: boolean
@@ -12,7 +13,7 @@ export interface IState {
   openedRecordDialog: boolean
   currentDate: Date
   dialogMode: string | null
-  recordForm: ITraining
+  recordForm: PartialBy<ITraining, '_id'>
   traineeSuggester: ITraineeSuggester
 }
 
@@ -25,7 +26,7 @@ const initialState: IState = {
     resource: undefined,
     trainer: undefined,
     gym: undefined,
-    date: undefined,
+    date: new Date(),
 
     name: '',
     type: '',
@@ -51,7 +52,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         recordForm: {
           time: payload.target.time,
           resource: payload.target.resource,
-          trainer: payload.trainer  === null ? undefined : payload.trainer,
+          trainer: payload.trainer === null ? undefined : payload.trainer,
           gym: 1,
           date: new Date(),
 
@@ -74,6 +75,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         recordForm: {
           ...initialState.recordForm,
           ...payload,
+          date: new Date(payload.date),
         },
       }
     }

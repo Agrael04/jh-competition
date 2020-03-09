@@ -1,5 +1,6 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from '../../store'
+import { useQuery } from '@apollo/react-hooks'
+import { useActions } from '../../store'
 
 import { trainerSchedule } from './data'
 
@@ -16,6 +17,9 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 
 import Tooltip from '../../components/multiline-tooltip'
 
+import GET_TRAINING from './queries/get-training'
+import useMoveTraining from './mutations/use-move-training'
+
 const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
   if (!trainer) {
     return true
@@ -27,22 +31,24 @@ const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
   return tr !== undefined
 }
 
-const selector =
-  (time: string, resource: number) =>
-    (state: IStoreState) => state.trainings.data.find(
-      record => record.time === time && record.resource === resource
-    )
-
 interface IDropProps {
   type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING
   source: { time: string, resource: number }
   trainer: number
 }
 
-const RecordCell = ({ time, resource }: any) => {
-  const record = useSelector(selector(time, resource))
+const RecordCell = ({ time, resource, id }: any) => {
   const actions = useActions()
-  const loading = useSelector(state => state.trainings.loading)
+  const moveTraining = useMoveTraining()
+
+  const { data, loading } = useQuery(GET_TRAINING, {
+    variables: {
+      id,
+    },
+    skip: !id,
+  })
+
+  const record = data?.training
 
   const source = React.useMemo(
     () => ({ time, resource }),
@@ -54,10 +60,10 @@ const RecordCell = ({ time, resource }: any) => {
       if (type === DND_CREATE_TRAINING) {
         actions.schedule.openCreateDialog({ time, resource }, trainer)
       } else if (type === DND_MOVE_TRAINING) {
-        actions.trainings.moveTraining(source, { time, resource })
+        moveTraining(source, { time, resource })
       }
     },
-    [time, resource, actions]
+    [time, resource, actions, moveTraining]
   )
 
   const canDrop = React.useCallback(
@@ -102,7 +108,7 @@ const RecordCell = ({ time, resource }: any) => {
   )
 
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!!record} source={source} colorId={record?.trainer}>
+    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!loading && !!record} source={source} colorId={!loading && record?.trainer}>
       {
         loading && (
           <CircularProgress />
@@ -121,7 +127,11 @@ const RecordCell = ({ time, resource }: any) => {
           </AvatarWrap>
         )
       }
-      <TrainingItem time={time} resource={resource} />
+      {
+        !loading && record && (
+          <TrainingItem record={record} />
+        )
+      }
     </DropableCell>
   )
 }

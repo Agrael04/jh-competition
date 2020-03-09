@@ -3,11 +3,9 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import schedule from './schedule'
-import trainings from './trainings'
 
 const actions = {
   schedule,
-  trainings,
 }
 
 export default actions

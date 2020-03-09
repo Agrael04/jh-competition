@@ -17,10 +17,10 @@ export interface ITrainingId {
 }
 
 export default interface ITraining {
-  _id?: string
+  _id: string
 
   gym: number | undefined
-  date: Date | undefined
+  date: Date
   time: string
   resource: number | undefined
 

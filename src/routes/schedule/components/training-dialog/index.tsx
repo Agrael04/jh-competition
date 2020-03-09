@@ -23,6 +23,10 @@ import TraineesBlock from './trainees-block'
 
 import useStyles from './styles'
 
+import useCreateTraining from '../../mutations/use-create-training'
+import useUpdateTraining from '../../mutations/use-update-training'
+import useDeleteTraining from '../../mutations/use-delete-training'
+
 import { times, resources, trainers } from '../../data'
 
 const translations = {
@@ -83,14 +87,17 @@ export default function TrainingDialog() {
   const { openedRecordDialog, dialogMode } = useSelector(state => state.schedule)
   const actions = useActions()
   const classes = useStyles()
+  const createTraining = useCreateTraining()
+  const updateTraining = useUpdateTraining()
+  const deleteTraining = useDeleteTraining()
 
   const close = () => actions.schedule.closeRecordDialog()
-  const remove = () => actions.trainings.deleteTraining()
+  const remove = () => deleteTraining()
   const save = () => {
     if (dialogMode === 'create') {
-      actions.trainings.createTraining()
+      createTraining()
     } else {
-      actions.trainings.updateTraining()
+      updateTraining()
     }
   }
 

@@ -1,28 +1,19 @@
-import { AnonymousCredential } from 'mongodb-stitch-browser-sdk'
+import { AnonymousCredential, BSON } from 'mongodb-stitch-browser-sdk'
 
-import ITraining, { ITrainingId } from '../../../interfaces/training'
+import ITraining, { ITrainingId, ITrainingRecord } from 'interfaces/training'
 import { client } from '../index'
+import PartialBy from 'interfaces/partial-by'
 
-interface Training extends ITraining {
-  _id: string
-}
+import removeTimeFromDate from 'utils/remove-time-from-date'
 
-const removeTimeFromDate = (date: Date | undefined) => {
-  if (!date) {
-    return null
-  }
-
-  return new Date(date.toDateString())
-}
-
-export const createTraining = async (tr: ITraining) => {
+export const createTraining = async (tr: PartialBy<ITraining, '_id'>) => {
   const date = removeTimeFromDate(tr.date)
   const training = { ...tr, date }
 
   await client.auth.loginWithCredential(new AnonymousCredential())
   const res = await client.callFunction('createTraining', [training])
 
-  return res.insertedId
+  return res
 }
 
 export const readTrainings = async (date: Date) => {
@@ -32,19 +23,32 @@ export const readTrainings = async (date: Date) => {
   return res
 }
 
-export const updateTraining = async (oldTr: Training, newTr: ITraining) => {
+export const updateTraining = async (oldTr: ITraining, newTr: PartialBy<ITraining, '_id'>) => {
   const date = removeTimeFromDate(newTr.date)
-  const training = { ...newTr, date }
+  const training = {
+    ...newTr,
+    date,
+    _id: new BSON.ObjectID(newTr._id),
+    records: newTr.records.map(r => ({
+      ...r,
+      trainee: new BSON.ObjectID(r.trainee._id),
+    })),
+  }
+
+  const records = oldTr.records.map(r => new BSON.ObjectID(r._id))
 
   await client.auth.loginWithCredential(new AnonymousCredential())
-  const res = await client.callFunction('updateTraining', [oldTr, training])
+  const res = await client.callFunction('updateTraining', [training, records])
 
   return res
 }
 
-export const deleteTraining = async (tr: ITraining) => {
+export const deleteTraining = async (id: string, rawRecords: ITrainingRecord[]) => {
+  const _id = new BSON.ObjectID(id)
+  const records = rawRecords.map(r => new BSON.ObjectID(r._id))
+
   await client.auth.loginWithCredential(new AnonymousCredential())
-  await client.callFunction('deleteTraining', [tr])
+  await client.callFunction('deleteTraining', [_id, records])
 
   return
 }

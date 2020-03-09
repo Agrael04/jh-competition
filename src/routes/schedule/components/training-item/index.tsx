@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { useActions } from 'store'
 
 import { trainers } from '../../data'
 
@@ -16,25 +16,18 @@ import Tooltip from 'components/multiline-tooltip'
 
 import useStyles from './styles'
 
-const selector =
-  (time: string, resource: number) =>
-    (state: IStoreState) => state.trainings.data.find(
-      record => record.time === time && record.resource === resource
-    )
-
-const TrainingItem = ({ time, resource }: any) => {
-  const record = useSelector(selector(time, resource))
+const TrainingItem = ({ record }: any) => {
   const actions = useActions()
   const classes = useStyles()
 
   const trainer = React.useMemo(
-    () => record && trainers.find(tr => tr.id === record.trainer),
+    () => trainers.find(tr => tr.id === record.trainer),
     [record]
   )
 
   const source = React.useMemo(
-    () => ({ time, resource }),
-    [time, resource]
+    () => ({ time: record.time, resource: record.resource }),
+    [record]
   )
 
   const handleDoubleClick = React.useCallback(
@@ -58,10 +51,6 @@ const TrainingItem = ({ time, resource }: any) => {
     () => !trainer && ({ margin: 0 }),
     [trainer]
   )
-
-  if (!record) {
-    return null
-  }
 
   return (
     <DragableAvatarWrap
@@ -89,12 +78,12 @@ const TrainingItem = ({ time, resource }: any) => {
         }
 
         {
-          record.records.map((r, index) => (
+          record.records.map((r: any, index: number) => (
             <Tooltip rows={[r.trainee.fullName]} key={index}>
               <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
                 {
                   r.trainee.fullName
-                    ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
+                    ? r.trainee.fullName.split(' ').filter((r: any, i: number) => i < 2).map((r: any) => r[0]).join('')
                     : <FaceIcon />
                 }
               </Avatar>
