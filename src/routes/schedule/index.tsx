@@ -23,7 +23,9 @@ import TrainerAvatar from './trainer-avatar'
 import TrainingCell from './training-cell'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
+
 import GET_TRAININGS from './queries/get-trainings'
+import { GetTrainingsQuery } from 'generated/graphql'
 
 const mappedTrainerSchedule = trainerSchedule.map(ts => ({
   time: ts.time,
@@ -33,7 +35,7 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 const SchedulePage = () => {
   const date = useSelector(state => state.schedule.currentDate)
 
-  const { data, loading } = useQuery(GET_TRAININGS, {
+  const { data, loading } = useQuery<GetTrainingsQuery>(GET_TRAININGS, {
     variables: {
       date: removeTimeFromDate(date),
     },
@@ -70,7 +72,7 @@ const SchedulePage = () => {
                           time={time}
                           trainer={trainer}
                           key={trainer?.id}
-                          count={data?.trainings.filter((tr: any) => tr.time === time && tr.trainer === trainer?.id).length}
+                          count={data?.trainings.filter(tr => tr?.time === time && tr?.trainer === trainer?.id).length}
                         />
                       ))
                     }
@@ -84,7 +86,7 @@ const SchedulePage = () => {
                       </TableCell>
                     ) : (
                         <TrainingCell
-                          id={data?.trainings.find((tr: any) => tr.time === time && tr.resource === r.id)?._id}
+                          id={data?.trainings.find(tr => tr?.time === time && tr?.resource === r.id)?._id}
                           resource={r.id}
                           time={time}
                           key={r.id}

@@ -15,8 +15,9 @@ import getColorPallete from 'utils/get-color-pallete'
 import Tooltip from 'components/multiline-tooltip'
 
 import useStyles from './styles'
+import ITraining from 'interfaces/training'
 
-const TrainingItem = ({ record }: any) => {
+const TrainingItem = ({ record }: { record: ITraining }) => {
   const actions = useActions()
   const classes = useStyles()
 
@@ -78,12 +79,12 @@ const TrainingItem = ({ record }: any) => {
         }
 
         {
-          record.records.map((r: any, index: number) => (
+          record.records.map((r, index) => (
             <Tooltip rows={[r.trainee.fullName]} key={index}>
               <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
                 {
                   r.trainee.fullName
-                    ? r.trainee.fullName.split(' ').filter((r: any, i: number) => i < 2).map((r: any) => r[0]).join('')
+                    ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
                     : <FaceIcon />
                 }
               </Avatar>

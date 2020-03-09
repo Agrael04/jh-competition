@@ -5,6 +5,7 @@ import api from 'api/mongodb/training'
 import client from 'api/mongodb/graphql'
 
 import GET_TRAINING from '../queries/get-training'
+import { GetTrainingQuery } from 'generated/graphql'
 
 export default () => {
   const actions = useActions()
@@ -17,13 +18,13 @@ export default () => {
           id: newTraining._id,
         }
 
-        const { training } = client?.readQuery({ query: GET_TRAINING, variables: trainingVariables }) as any
+        const data = client?.readQuery<GetTrainingQuery>({ query: GET_TRAINING, variables: trainingVariables })
 
-        if (!training) {
+        if (!data?.training?.records) {
           return
         }
 
-        const records = await api.updateTraining(training, newTraining)
+        const records = await api.updateTraining(data.training.records as any, newTraining)
 
         client?.writeQuery({
           query: GET_TRAINING,

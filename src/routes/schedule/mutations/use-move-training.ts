@@ -8,6 +8,7 @@ import client from 'api/mongodb/graphql'
 import { ITrainingId } from 'interfaces/training'
 
 import GET_TRAININGS from '../queries/get-trainings'
+import { GetTrainingsQuery } from 'generated/graphql'
 
 export default () => {
   const date = useSelector(state => state.schedule.currentDate)
@@ -21,16 +22,16 @@ export default () => {
 
         await api.moveTraining(from, to)
 
-        const { trainings } = client?.readQuery({ query: GET_TRAININGS, variables: { date: removeTimeFromDate(date) } }) as any
+        const data = client?.readQuery<GetTrainingsQuery>({ query: GET_TRAININGS, variables: { date: removeTimeFromDate(date) } })
 
-        const toIndex = trainings.findIndex((tr: any) => tr.time === to.time && tr.resource === to.resource)
-        const fromIndex = trainings.findIndex((tr: any) => tr.time === from.time && tr.resource === from.resource)
+        const toIndex = data?.trainings.findIndex(tr => tr?.time === to.time && tr?.resource === to.resource)
+        const fromIndex = data?.trainings.findIndex(tr => tr?.time === from.time && tr?.resource === from.resource)
 
         client?.writeQuery({
           query: GET_TRAININGS,
           variables,
           data: {
-            trainings: trainings.map(((item: any, index: number) => {
+            trainings: data?.trainings.map(((item, index) => {
               if (index === fromIndex) {
                 return {
                   ...item,

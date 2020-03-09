@@ -6,6 +6,7 @@ import api from 'api/mongodb/training'
 import client from 'api/mongodb/graphql'
 
 import GET_TRAININGS from '../queries/get-trainings'
+import { GetTrainingsQuery } from 'generated/graphql'
 
 export default () => {
   const actions = useActions()
@@ -24,13 +25,13 @@ export default () => {
 
         await api.deleteTraining(training._id, training.records)
 
-        const { trainings } = client?.readQuery({ query: GET_TRAININGS, variables: trainingsVariables }) as any
+        const data = client?.readQuery<GetTrainingsQuery>({ query: GET_TRAININGS, variables: trainingsVariables })
 
         client?.writeQuery({
           query: GET_TRAININGS,
           variables: trainingsVariables,
           data: {
-            trainings: trainings.filter((tr: any) => tr._id !== training._id),
+            trainings: data?.trainings.filter(tr => tr?._id !== training._id),
           },
         })
 

@@ -6,6 +6,7 @@ import api from 'api/mongodb/training'
 import client from 'api/mongodb/graphql'
 
 import GET_TRAININGS from '../queries/get-trainings'
+import { GetTrainingsQuery } from 'generated/graphql'
 
 export default () => {
   const actions = useActions()
@@ -28,13 +29,13 @@ export default () => {
           __typename: 'Training',
         }
 
-        const { trainings } = client?.readQuery({ query: GET_TRAININGS, variables }) as any
+        const data = client?.readQuery<GetTrainingsQuery>({ query: GET_TRAININGS, variables })
 
         client?.writeQuery({
           query: GET_TRAININGS,
           variables,
           data: {
-            trainings: [...trainings, newTraining],
+            trainings: [...data?.trainings!, newTraining],
           },
         })
 

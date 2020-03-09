@@ -18,6 +18,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import Tooltip from '../../components/multiline-tooltip'
 
 import GET_TRAINING from './queries/get-training'
+import { GetTrainingQuery } from 'generated/graphql'
 import useMoveTraining from './mutations/use-move-training'
 
 const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
@@ -41,7 +42,7 @@ const RecordCell = ({ time, resource, id }: any) => {
   const actions = useActions()
   const moveTraining = useMoveTraining()
 
-  const { data, loading } = useQuery(GET_TRAINING, {
+  const { data, loading } = useQuery<GetTrainingQuery>(GET_TRAINING, {
     variables: {
       id,
     },
@@ -85,7 +86,7 @@ const RecordCell = ({ time, resource, id }: any) => {
           return false
         }
 
-        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, record?.trainer)) {
+        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, record?.trainer!)) {
           return false
         }
       }
@@ -99,7 +100,7 @@ const RecordCell = ({ time, resource, id }: any) => {
     e => {
       e.stopPropagation()
       if (record) {
-        actions.schedule.openUpdateDialog(record)
+        actions.schedule.openUpdateDialog(record as any)
       } else {
         actions.schedule.openCreateDialog({ resource, time })
       }
@@ -129,7 +130,7 @@ const RecordCell = ({ time, resource, id }: any) => {
       }
       {
         !loading && record && (
-          <TrainingItem record={record} />
+          <TrainingItem record={record as any} />
         )
       }
     </DropableCell>

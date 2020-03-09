@@ -23,7 +23,7 @@ export const readTrainings = async (date: Date) => {
   return res
 }
 
-export const updateTraining = async (oldTr: ITraining, newTr: PartialBy<ITraining, '_id'>) => {
+export const updateTraining = async (oldRecords: ITrainingRecord[], newTr: PartialBy<ITraining, '_id'>) => {
   const date = removeTimeFromDate(newTr.date)
   const training = {
     ...newTr,
@@ -35,7 +35,7 @@ export const updateTraining = async (oldTr: ITraining, newTr: PartialBy<ITrainin
     })),
   }
 
-  const records = oldTr.records.map(r => new BSON.ObjectID(r._id))
+  const records = oldRecords.map(r => new BSON.ObjectID(r._id))
 
   await client.auth.loginWithCredential(new AnonymousCredential())
   const res = await client.callFunction('updateTraining', [training, records])
