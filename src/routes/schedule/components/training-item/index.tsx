@@ -74,7 +74,7 @@ const TrainingItem = ({ time, resource }: any) => {
         {
           trainer && (
             <Tooltip rows={['Информация о тренировке']}>
-              <Avatar src={trainer?.avatar} className={classes.mainAvatar} style={borderColorStyle} />
+              <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle} />
             </Tooltip>
           )
         }
@@ -94,8 +94,8 @@ const TrainingItem = ({ time, resource }: any) => {
               <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
                 {
                   r.trainee.fullName
-                  ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
-                  : <FaceIcon />
+                    ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
+                    : <FaceIcon />
                 }
               </Avatar>
             </Tooltip>

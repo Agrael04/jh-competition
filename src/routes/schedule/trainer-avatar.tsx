@@ -33,10 +33,8 @@ const TrainerAvatar = ({ trainer, time }: any) => {
       type={DND_CREATE_TRAINING}
       source={{ time, resource: null }}
       trainer={trainer.id}
-      src={trainer.avatar}
-      badgeContent={recordsCount}
     >
-      <Tooltip rows={[trainer.name]}>
+      <Tooltip rows={[`${trainer.lastName} ${trainer.firstName}`]}>
         <Badge
           overlap='circle'
           anchorOrigin={{
@@ -49,7 +47,7 @@ const TrainerAvatar = ({ trainer, time }: any) => {
             'badge': classes.badgeBackground,
           }}
         >
-          <Avatar src={trainer.avatar} />
+          <Avatar src={trainer.avatarSrc} />
         </Badge>
       </Tooltip>
     </DragableAvatarWrap>
