@@ -49,7 +49,8 @@ const RecordCell = ({ time, resource, id }: any) => {
     skip: !id,
   })
 
-  const record = data?.training
+  const training = data?.training
+  const records = data?.trainingRecords
 
   const source = React.useMemo(
     () => ({ time, resource }),
@@ -81,42 +82,38 @@ const RecordCell = ({ time, resource, id }: any) => {
         return false
       }
 
-      if (record) {
+      if (training) {
         if (type === DND_CREATE_TRAINING) {
           return false
         }
 
-        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, record?.trainer!)) {
+        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, training?.trainer!)) {
           return false
         }
       }
 
       return true
     },
-    [record, time, resource, loading]
+    [training, time, resource, loading]
   )
 
   const handleDoubleClick = React.useCallback(
     e => {
       e.stopPropagation()
-      if (record) {
-        actions.schedule.openUpdateDialog(record as any)
-      } else {
-        actions.schedule.openCreateDialog({ resource, time })
-      }
+      actions.schedule.openCreateDialog({ resource, time })
     },
-    [record, actions, resource, time]
+    [actions, resource, time]
   )
 
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!loading && !!record} source={source} colorId={!loading && record?.trainer}>
+    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!loading && !!training} source={source} colorId={!loading && training?.trainer}>
       {
         loading && (
           <CircularProgress />
         )
       }
       {
-        !loading && !record && (
+        !loading && !training && (
           <AvatarWrap
             handleDoubleClick={handleDoubleClick}
           >
@@ -129,8 +126,8 @@ const RecordCell = ({ time, resource, id }: any) => {
         )
       }
       {
-        !loading && record && (
-          <TrainingItem record={record as any} />
+        !loading && training && (
+          <TrainingItem training={training as any} records={records as any} />
         )
       }
     </DropableCell>

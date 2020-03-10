@@ -9,9 +9,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  ObjectId: any;
   /** The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string */
   DateTime: any;
-  ObjectId: any;
 };
 
 
@@ -115,8 +115,8 @@ export type MutationInsertOneUserArgs = {
 
 
 export type MutationReplaceOneTrainingArgs = {
-  query?: Maybe<TrainingQueryInput>;
   data: TrainingInsertInput;
+  query?: Maybe<TrainingQueryInput>;
 };
 
 
@@ -139,8 +139,8 @@ export type MutationUpdateManyTrainingRecordsArgs = {
 
 
 export type MutationUpdateManyTrainingsArgs = {
-  set: TrainingUpdateInput;
   query?: Maybe<TrainingQueryInput>;
+  set: TrainingUpdateInput;
 };
 
 
@@ -163,8 +163,8 @@ export type MutationUpdateOneTrainingRecordArgs = {
 
 
 export type MutationUpdateOneUserArgs = {
-  query?: Maybe<UserQueryInput>;
   set: UserUpdateInput;
+  query?: Maybe<UserQueryInput>;
 };
 
 
@@ -181,8 +181,8 @@ export type MutationUpsertOneTrainingRecordArgs = {
 
 
 export type MutationUpsertOneUserArgs = {
-  query?: Maybe<UserQueryInput>;
   data: UserInsertInput;
+  query?: Maybe<UserQueryInput>;
 };
 
 
@@ -249,32 +249,32 @@ export type Training = {
 };
 
 export type TrainingInsertInput = {
-  gym?: Maybe<Scalars['Int']>;
   markPrice?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['DateTime']>;
-  type?: Maybe<Scalars['String']>;
-  trainer?: Maybe<Scalars['Int']>;
-  _id?: Maybe<Scalars['ObjectId']>;
   name?: Maybe<Scalars['String']>;
-  resource?: Maybe<Scalars['Int']>;
-  time?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['ObjectId']>;
+  gym?: Maybe<Scalars['Int']>;
   note?: Maybe<Scalars['String']>;
+  time?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['DateTime']>;
   moneyPrice?: Maybe<Scalars['Int']>;
+  trainer?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['Int']>;
 };
 
 export type TrainingQueryInput = {
-  trainer?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
   resource?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['DateTime']>;
   records?: Maybe<Array<Maybe<TrainingRecordQueryInput>>>;
+  trainer?: Maybe<Scalars['Int']>;
+  note?: Maybe<Scalars['String']>;
   markPrice?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['ObjectId']>;
+  time?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['DateTime']>;
   gym?: Maybe<Scalars['Int']>;
   moneyPrice?: Maybe<Scalars['Int']>;
-  note?: Maybe<Scalars['String']>;
-  time?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type TrainingRecord = {
@@ -284,35 +284,40 @@ export type TrainingRecord = {
   seasonPass?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   trainee?: Maybe<User>;
+  training?: Maybe<Scalars['ObjectId']>;
 };
 
 export type TrainingRecordInsertInput = {
-  seasonPass?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   trainee?: Maybe<TrainingRecordTraineeRelationInput>;
+  training?: Maybe<Scalars['ObjectId']>;
   _id?: Maybe<Scalars['ObjectId']>;
   note?: Maybe<Scalars['String']>;
+  seasonPass?: Maybe<Scalars['String']>;
 };
 
 export type TrainingRecordQueryInput = {
+  trainee?: Maybe<UserQueryInput>;
+  training?: Maybe<Scalars['ObjectId']>;
+  _id?: Maybe<Scalars['ObjectId']>;
   note?: Maybe<Scalars['String']>;
   seasonPass?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
-  trainee?: Maybe<UserQueryInput>;
-  _id?: Maybe<Scalars['ObjectId']>;
 };
 
 export enum TrainingRecordSortByInput {
-  NoteDesc = 'NOTE_DESC',
   StatusAsc = 'STATUS_ASC',
+  StatusDesc = 'STATUS_DESC',
   TraineeAsc = 'TRAINEE_ASC',
+  TraineeDesc = 'TRAINEE_DESC',
+  TrainingAsc = 'TRAINING_ASC',
+  TrainingDesc = 'TRAINING_DESC',
   IdAsc = '_ID_ASC',
   NoteAsc = 'NOTE_ASC',
-  SeasonpassDesc = 'SEASONPASS_DESC',
-  StatusDesc = 'STATUS_DESC',
-  TraineeDesc = 'TRAINEE_DESC',
+  NoteDesc = 'NOTE_DESC',
   IdDesc = '_ID_DESC',
-  SeasonpassAsc = 'SEASONPASS_ASC'
+  SeasonpassAsc = 'SEASONPASS_ASC',
+  SeasonpassDesc = 'SEASONPASS_DESC'
 }
 
 export type TrainingRecordTraineeRelationInput = {
@@ -326,44 +331,45 @@ export type TrainingRecordUpdateInput = {
   seasonPass?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   trainee?: Maybe<TrainingRecordTraineeRelationInput>;
+  training?: Maybe<Scalars['ObjectId']>;
 };
 
 export enum TrainingSortByInput {
   IdAsc = '_ID_ASC',
-  MoneypriceAsc = 'MONEYPRICE_ASC',
-  NameAsc = 'NAME_ASC',
-  NoteDesc = 'NOTE_DESC',
-  ResourceAsc = 'RESOURCE_ASC',
-  TrainerDesc = 'TRAINER_DESC',
-  TypeAsc = 'TYPE_ASC',
+  TrainerAsc = 'TRAINER_ASC',
   IdDesc = '_ID_DESC',
-  NameDesc = 'NAME_DESC',
+  MoneypriceAsc = 'MONEYPRICE_ASC',
+  ResourceAsc = 'RESOURCE_ASC',
+  TypeAsc = 'TYPE_ASC',
+  TypeDesc = 'TYPE_DESC',
+  GymAsc = 'GYM_ASC',
+  NoteDesc = 'NOTE_DESC',
+  ResourceDesc = 'RESOURCE_DESC',
   TimeAsc = 'TIME_ASC',
   TimeDesc = 'TIME_DESC',
+  MarkpriceAsc = 'MARKPRICE_ASC',
+  TrainerDesc = 'TRAINER_DESC',
+  NameDesc = 'NAME_DESC',
+  GymDesc = 'GYM_DESC',
   MoneypriceDesc = 'MONEYPRICE_DESC',
   NoteAsc = 'NOTE_ASC',
-  TypeDesc = 'TYPE_DESC',
-  MarkpriceDesc = 'MARKPRICE_DESC',
-  ResourceDesc = 'RESOURCE_DESC',
   DateAsc = 'DATE_ASC',
   DateDesc = 'DATE_DESC',
-  GymAsc = 'GYM_ASC',
-  GymDesc = 'GYM_DESC',
-  MarkpriceAsc = 'MARKPRICE_ASC',
-  TrainerAsc = 'TRAINER_ASC'
+  MarkpriceDesc = 'MARKPRICE_DESC',
+  NameAsc = 'NAME_ASC'
 }
 
 export type TrainingUpdateInput = {
-  date?: Maybe<Scalars['DateTime']>;
   moneyPrice?: Maybe<Scalars['Int']>;
-  markPrice?: Maybe<Scalars['Int']>;
-  resource?: Maybe<Scalars['Int']>;
-  trainer?: Maybe<Scalars['Int']>;
-  _id?: Maybe<Scalars['ObjectId']>;
-  name?: Maybe<Scalars['String']>;
-  time?: Maybe<Scalars['String']>;
   gym?: Maybe<Scalars['Int']>;
   note?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  trainer?: Maybe<Scalars['Int']>;
+  _id?: Maybe<Scalars['ObjectId']>;
+  time?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['Int']>;
+  markPrice?: Maybe<Scalars['Int']>;
   type?: Maybe<Scalars['String']>;
 };
 
@@ -390,76 +396,135 @@ export type User = {
 };
 
 export type UserInsertInput = {
-  childName?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  source?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  fullName?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
-  surname?: Maybe<Scalars['String']>;
-  questionaryNumber?: Maybe<Scalars['String']>;
-  altPhone?: Maybe<Scalars['String']>;
   birthday?: Maybe<Scalars['String']>;
   note?: Maybe<Scalars['String']>;
+  questionaryNumber?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+  surname?: Maybe<Scalars['String']>;
+  altPhone?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['ObjectId']>;
+  childName?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
 };
 
 export type UserQueryInput = {
-  source?: Maybe<Scalars['String']>;
-  fullName?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  altPhone?: Maybe<Scalars['String']>;
-  childName?: Maybe<Scalars['String']>;
-  questionaryNumber?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
-  _id?: Maybe<Scalars['ObjectId']>;
+  altPhone?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
   surname?: Maybe<Scalars['String']>;
   birthday?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
+  questionaryNumber?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  childName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['ObjectId']>;
 };
 
 export enum UserSortByInput {
-  BirthdayDesc = 'BIRTHDAY_DESC',
-  FullnameDesc = 'FULLNAME_DESC',
-  QuestionarynumberDesc = 'QUESTIONARYNUMBER_DESC',
-  ChildnameAsc = 'CHILDNAME_ASC',
-  ChildnameDesc = 'CHILDNAME_DESC',
-  SurnameDesc = 'SURNAME_DESC',
-  IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC',
-  BirthdayAsc = 'BIRTHDAY_ASC',
-  NameDesc = 'NAME_DESC',
-  PhoneAsc = 'PHONE_ASC',
-  PhoneDesc = 'PHONE_DESC',
-  QuestionarynumberAsc = 'QUESTIONARYNUMBER_ASC',
-  SourceDesc = 'SOURCE_DESC',
-  AltphoneAsc = 'ALTPHONE_ASC',
-  SurnameAsc = 'SURNAME_ASC',
-  TypeAsc = 'TYPE_ASC',
-  NameAsc = 'NAME_ASC',
   NoteAsc = 'NOTE_ASC',
+  PhoneAsc = 'PHONE_ASC',
+  ChildnameAsc = 'CHILDNAME_ASC',
+  BirthdayAsc = 'BIRTHDAY_ASC',
+  PhoneDesc = 'PHONE_DESC',
+  FullnameDesc = 'FULLNAME_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
   NoteDesc = 'NOTE_DESC',
-  TypeDesc = 'TYPE_DESC',
+  QuestionarynumberAsc = 'QUESTIONARYNUMBER_ASC',
+  QuestionarynumberDesc = 'QUESTIONARYNUMBER_DESC',
+  ChildnameDesc = 'CHILDNAME_DESC',
+  TypeAsc = 'TYPE_ASC',
+  IdAsc = '_ID_ASC',
+  AltphoneAsc = 'ALTPHONE_ASC',
+  AltphoneDesc = 'ALTPHONE_DESC',
+  BirthdayDesc = 'BIRTHDAY_DESC',
   FullnameAsc = 'FULLNAME_ASC',
   SourceAsc = 'SOURCE_ASC',
-  AltphoneDesc = 'ALTPHONE_DESC'
+  SourceDesc = 'SOURCE_DESC',
+  SurnameAsc = 'SURNAME_ASC',
+  SurnameDesc = 'SURNAME_DESC',
+  TypeDesc = 'TYPE_DESC'
 }
 
 export type UserUpdateInput = {
-  childName?: Maybe<Scalars['String']>;
-  fullName?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
-  _id?: Maybe<Scalars['ObjectId']>;
-  birthday?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
   source?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
   surname?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
   altPhone?: Maybe<Scalars['String']>;
+  childName?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['ObjectId']>;
+  birthday?: Maybe<Scalars['String']>;
   questionaryNumber?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
 };
+
+export type CreateTrainingRecordsMutationVariables = {
+  records: Array<TrainingRecordInsertInput>;
+};
+
+
+export type CreateTrainingRecordsMutation = (
+  { __typename?: 'Mutation' }
+  & { insertManyTrainingRecords: Maybe<(
+    { __typename?: 'InsertManyPayload' }
+    & Pick<InsertManyPayload, 'insertedIds'>
+  )> }
+);
+
+export type CreateTrainingMutationVariables = {
+  training: TrainingInsertInput;
+};
+
+
+export type CreateTrainingMutation = (
+  { __typename?: 'Mutation' }
+  & { insertOneTraining: Maybe<(
+    { __typename?: 'Training' }
+    & Pick<Training, '_id'>
+  )> }
+);
+
+export type DeleteTrainingMutationVariables = {
+  _id: Scalars['ObjectId'];
+};
+
+
+export type DeleteTrainingMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteOneTraining: Maybe<(
+    { __typename?: 'Training' }
+    & Pick<Training, '_id'>
+  )>, deleteManyTrainingRecords: Maybe<(
+    { __typename?: 'DeleteManyPayload' }
+    & Pick<DeleteManyPayload, 'deletedCount'>
+  )> }
+);
+
+export type UpdateTrainingMutationVariables = {
+  _id: Scalars['ObjectId'];
+  training: TrainingUpdateInput;
+};
+
+
+export type UpdateTrainingMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTraining: Maybe<(
+    { __typename?: 'Training' }
+    & Pick<Training, '_id'>
+  )>, deleteManyTrainingRecords: Maybe<(
+    { __typename?: 'DeleteManyPayload' }
+    & Pick<DeleteManyPayload, 'deletedCount'>
+  )> }
+);
 
 export type GetTrainingQueryVariables = {
   id?: Maybe<Scalars['ObjectId']>;
@@ -471,15 +536,14 @@ export type GetTrainingQuery = (
   & { training: Maybe<(
     { __typename?: 'Training' }
     & Pick<Training, '_id' | 'date' | 'gym' | 'markPrice' | 'moneyPrice' | 'name' | 'note' | 'resource' | 'time' | 'trainer' | 'type'>
-    & { records: Maybe<Array<Maybe<(
-      { __typename?: 'TrainingRecord' }
-      & Pick<TrainingRecord, '_id' | 'seasonPass' | 'note' | 'status'>
-      & { trainee: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, '_id' | 'fullName'>
-      )> }
-    )>>> }
-  )> }
+  )>, trainingRecords: Array<Maybe<(
+    { __typename?: 'TrainingRecord' }
+    & Pick<TrainingRecord, 'seasonPass' | 'note' | 'status' | 'training'>
+    & { trainee: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'fullName'>
+    )> }
+  )>> }
 );
 
 export type GetTrainingsQueryVariables = {
@@ -496,6 +560,141 @@ export type GetTrainingsQuery = (
 );
 
 
+export const CreateTrainingRecordsDocument = gql`
+    mutation createTrainingRecords($records: [TrainingRecordInsertInput!]!) {
+  insertManyTrainingRecords(data: $records) {
+    insertedIds
+  }
+}
+    `;
+export type CreateTrainingRecordsMutationFn = ApolloReactCommon.MutationFunction<CreateTrainingRecordsMutation, CreateTrainingRecordsMutationVariables>;
+
+/**
+ * __useCreateTrainingRecordsMutation__
+ *
+ * To run a mutation, you first call `useCreateTrainingRecordsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTrainingRecordsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTrainingRecordsMutation, { data, loading, error }] = useCreateTrainingRecordsMutation({
+ *   variables: {
+ *      records: // value for 'records'
+ *   },
+ * });
+ */
+export function useCreateTrainingRecordsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTrainingRecordsMutation, CreateTrainingRecordsMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTrainingRecordsMutation, CreateTrainingRecordsMutationVariables>(CreateTrainingRecordsDocument, baseOptions);
+      }
+export type CreateTrainingRecordsMutationHookResult = ReturnType<typeof useCreateTrainingRecordsMutation>;
+export type CreateTrainingRecordsMutationResult = ApolloReactCommon.MutationResult<CreateTrainingRecordsMutation>;
+export type CreateTrainingRecordsMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTrainingRecordsMutation, CreateTrainingRecordsMutationVariables>;
+export const CreateTrainingDocument = gql`
+    mutation createTraining($training: TrainingInsertInput!) {
+  insertOneTraining(data: $training) {
+    _id
+  }
+}
+    `;
+export type CreateTrainingMutationFn = ApolloReactCommon.MutationFunction<CreateTrainingMutation, CreateTrainingMutationVariables>;
+
+/**
+ * __useCreateTrainingMutation__
+ *
+ * To run a mutation, you first call `useCreateTrainingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTrainingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTrainingMutation, { data, loading, error }] = useCreateTrainingMutation({
+ *   variables: {
+ *      training: // value for 'training'
+ *   },
+ * });
+ */
+export function useCreateTrainingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTrainingMutation, CreateTrainingMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTrainingMutation, CreateTrainingMutationVariables>(CreateTrainingDocument, baseOptions);
+      }
+export type CreateTrainingMutationHookResult = ReturnType<typeof useCreateTrainingMutation>;
+export type CreateTrainingMutationResult = ApolloReactCommon.MutationResult<CreateTrainingMutation>;
+export type CreateTrainingMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTrainingMutation, CreateTrainingMutationVariables>;
+export const DeleteTrainingDocument = gql`
+    mutation deleteTraining($_id: ObjectId!) {
+  deleteOneTraining(query: {_id: $_id}) {
+    _id
+  }
+  deleteManyTrainingRecords(query: {_id: $_id}) {
+    deletedCount
+  }
+}
+    `;
+export type DeleteTrainingMutationFn = ApolloReactCommon.MutationFunction<DeleteTrainingMutation, DeleteTrainingMutationVariables>;
+
+/**
+ * __useDeleteTrainingMutation__
+ *
+ * To run a mutation, you first call `useDeleteTrainingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTrainingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTrainingMutation, { data, loading, error }] = useDeleteTrainingMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useDeleteTrainingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteTrainingMutation, DeleteTrainingMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteTrainingMutation, DeleteTrainingMutationVariables>(DeleteTrainingDocument, baseOptions);
+      }
+export type DeleteTrainingMutationHookResult = ReturnType<typeof useDeleteTrainingMutation>;
+export type DeleteTrainingMutationResult = ApolloReactCommon.MutationResult<DeleteTrainingMutation>;
+export type DeleteTrainingMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTrainingMutation, DeleteTrainingMutationVariables>;
+export const UpdateTrainingDocument = gql`
+    mutation updateTraining($_id: ObjectId!, $training: TrainingUpdateInput!) {
+  updateOneTraining(query: {_id: $_id}, set: $training) {
+    _id
+  }
+  deleteManyTrainingRecords(query: {training: $_id}) {
+    deletedCount
+  }
+}
+    `;
+export type UpdateTrainingMutationFn = ApolloReactCommon.MutationFunction<UpdateTrainingMutation, UpdateTrainingMutationVariables>;
+
+/**
+ * __useUpdateTrainingMutation__
+ *
+ * To run a mutation, you first call `useUpdateTrainingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTrainingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTrainingMutation, { data, loading, error }] = useUpdateTrainingMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      training: // value for 'training'
+ *   },
+ * });
+ */
+export function useUpdateTrainingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateTrainingMutation, UpdateTrainingMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateTrainingMutation, UpdateTrainingMutationVariables>(UpdateTrainingDocument, baseOptions);
+      }
+export type UpdateTrainingMutationHookResult = ReturnType<typeof useUpdateTrainingMutation>;
+export type UpdateTrainingMutationResult = ApolloReactCommon.MutationResult<UpdateTrainingMutation>;
+export type UpdateTrainingMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateTrainingMutation, UpdateTrainingMutationVariables>;
 export const GetTrainingDocument = gql`
     query getTraining($id: ObjectId) {
   training(query: {_id: $id}) {
@@ -506,20 +705,20 @@ export const GetTrainingDocument = gql`
     moneyPrice
     name
     note
-    records {
-      _id
-      seasonPass
-      trainee {
-        _id
-        fullName
-      }
-      note
-      status
-    }
     resource
     time
     trainer
     type
+  }
+  trainingRecords(query: {training: $id}) {
+    seasonPass
+    trainee {
+      _id
+      fullName
+    }
+    note
+    status
+    training
   }
 }
     `;

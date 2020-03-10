@@ -19,7 +19,7 @@ export default function DatePickerContainer({ name, onChange, fieldSelector, ...
 
   return (
     <DatePicker
-      value={value}
+      value={new Date(value)}
       onChange={handleChange}
       {...rest}
     />

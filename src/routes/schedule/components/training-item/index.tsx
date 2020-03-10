@@ -15,30 +15,35 @@ import getColorPallete from 'utils/get-color-pallete'
 import Tooltip from 'components/multiline-tooltip'
 
 import useStyles from './styles'
-import ITraining from 'interfaces/training'
+import ITraining, { ITrainingRecord } from 'interfaces/training'
 
-const TrainingItem = ({ record }: { record: ITraining }) => {
+const TrainingItem = ({ training, records }: { training: ITraining, records: ITrainingRecord[] }) => {
   const actions = useActions()
   const classes = useStyles()
 
   const trainer = React.useMemo(
-    () => trainers.find(tr => tr.id === record.trainer),
-    [record]
+    () => trainers.find(tr => tr.id === training.trainer),
+    [training]
   )
 
   const source = React.useMemo(
-    () => ({ time: record.time, resource: record.resource }),
-    [record]
+    () => ({ time: training.time, resource: training.resource }),
+    [training]
   )
 
   const handleDoubleClick = React.useCallback(
     e => {
       e.stopPropagation()
-      if (record) {
-        actions.schedule.openUpdateDialog(record)
+      if (training) {
+        const tr = {...training } as any
+        delete tr.__typename
+        const clearedRecords: any = [...records!]
+        clearedRecords.forEach((r: any) => delete r?.__typename)
+
+        actions.schedule.openUpdateDialog(tr as any, clearedRecords)
       }
     },
-    [record, actions]
+    [training, records, actions]
   )
 
   const borderColorStyle = React.useMemo(
@@ -57,7 +62,7 @@ const TrainingItem = ({ record }: { record: ITraining }) => {
     <DragableAvatarWrap
       type={DND_MOVE_TRAINING}
       source={source}
-      trainer={record.trainer}
+      trainer={training.trainer}
       handleDoubleClick={handleDoubleClick}
     >
       <div style={{ display: 'flex' }}>
@@ -69,7 +74,7 @@ const TrainingItem = ({ record }: { record: ITraining }) => {
           )
         }
         {
-          !trainer && record.records.length === 0 && (
+          !trainer && records.length === 0 && (
             <Tooltip rows={['Нет учеников и тренера']}>
               <Avatar className={classes.mainAvatar} style={borderColorStyle}>
                 <FaceIcon />
@@ -79,9 +84,9 @@ const TrainingItem = ({ record }: { record: ITraining }) => {
         }
 
         {
-          record.records.map((r, index) => (
+          records.map((r, index) => (
             <Tooltip rows={[r.trainee.fullName]} key={index}>
-              <Avatar className={classes.secondaryAvatar} style={{ zIndex: record.records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
+              <Avatar className={classes.secondaryAvatar} style={{ zIndex: records.length - index, ...borderColorStyle, ...noTrainerStyle }}>
                 {
                   r.trainee.fullName
                     ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')

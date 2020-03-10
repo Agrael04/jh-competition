@@ -1,7 +1,7 @@
 import constants from 'store/constants/schedule'
 
 import { ISearchedTrainee } from 'interfaces/trainee'
-import IRecord from 'interfaces/training'
+import IRecord, { ITrainingRecord } from 'interfaces/training'
 
 interface ICell {
   resource: number
@@ -18,9 +18,9 @@ export const openCreateDialog = (target: ICell, trainer?: number) => ({
   payload: { trainer, target },
 })
 
-export const openUpdateDialog = (payload: IRecord) => ({
+export const openUpdateDialog = (training: IRecord, records: ITrainingRecord[]) => ({
   type: constants.OPEN_UPDATE_RECORD_DIALOG,
-  payload,
+  payload: { training, records },
 })
 
 export const closeRecordDialog = () => ({

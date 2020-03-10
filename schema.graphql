@@ -24,18 +24,18 @@ type Mutation {
   insertOneTraining(data: TrainingInsertInput!): Training
   insertOneTrainingRecord(data: TrainingRecordInsertInput!): TrainingRecord
   insertOneUser(data: UserInsertInput!): User
-  replaceOneTraining(query: TrainingQueryInput, data: TrainingInsertInput!): Training
+  replaceOneTraining(data: TrainingInsertInput!, query: TrainingQueryInput): Training
   replaceOneTrainingRecord(query: TrainingRecordQueryInput, data: TrainingRecordInsertInput!): TrainingRecord
   replaceOneUser(query: UserQueryInput, data: UserInsertInput!): User
   updateManyTrainingRecords(query: TrainingRecordQueryInput, set: TrainingRecordUpdateInput!): UpdateManyPayload
-  updateManyTrainings(set: TrainingUpdateInput!, query: TrainingQueryInput): UpdateManyPayload
+  updateManyTrainings(query: TrainingQueryInput, set: TrainingUpdateInput!): UpdateManyPayload
   updateManyUsers(query: UserQueryInput, set: UserUpdateInput!): UpdateManyPayload
   updateOneTraining(query: TrainingQueryInput, set: TrainingUpdateInput!): Training
   updateOneTrainingRecord(query: TrainingRecordQueryInput, set: TrainingRecordUpdateInput!): TrainingRecord
-  updateOneUser(query: UserQueryInput, set: UserUpdateInput!): User
+  updateOneUser(set: UserUpdateInput!, query: UserQueryInput): User
   upsertOneTraining(query: TrainingQueryInput, data: TrainingInsertInput!): Training
   upsertOneTrainingRecord(query: TrainingRecordQueryInput, data: TrainingRecordInsertInput!): TrainingRecord
-  upsertOneUser(query: UserQueryInput, data: UserInsertInput!): User
+  upsertOneUser(data: UserInsertInput!, query: UserQueryInput): User
 }
 
 scalar ObjectId
@@ -65,32 +65,32 @@ type Training {
 }
 
 input TrainingInsertInput {
-  gym: Int
   markPrice: Int
-  date: DateTime
-  type: String
-  trainer: Int
-  _id: ObjectId
   name: String
-  resource: Int
-  time: String
+  _id: ObjectId
+  gym: Int
   note: String
+  time: String
+  date: DateTime
   moneyPrice: Int
+  trainer: Int
+  type: String
+  resource: Int
 }
 
 input TrainingQueryInput {
-  trainer: Int
-  type: String
-  name: String
   resource: Int
-  date: DateTime
   records: [TrainingRecordQueryInput]
+  trainer: Int
+  note: String
   markPrice: Int
+  type: String
   _id: ObjectId
+  time: String
+  date: DateTime
   gym: Int
   moneyPrice: Int
-  note: String
-  time: String
+  name: String
 }
 
 type TrainingRecord {
@@ -99,35 +99,40 @@ type TrainingRecord {
   seasonPass: String
   status: String
   trainee: User
+  training: ObjectId
 }
 
 input TrainingRecordInsertInput {
-  seasonPass: String
   status: String
   trainee: TrainingRecordTraineeRelationInput
+  training: ObjectId
   _id: ObjectId
   note: String
+  seasonPass: String
 }
 
 input TrainingRecordQueryInput {
+  trainee: UserQueryInput
+  training: ObjectId
+  _id: ObjectId
   note: String
   seasonPass: String
   status: String
-  trainee: UserQueryInput
-  _id: ObjectId
 }
 
 enum TrainingRecordSortByInput {
-  NOTE_DESC
   STATUS_ASC
+  STATUS_DESC
   TRAINEE_ASC
+  TRAINEE_DESC
+  TRAINING_ASC
+  TRAINING_DESC
   _ID_ASC
   NOTE_ASC
-  SEASONPASS_DESC
-  STATUS_DESC
-  TRAINEE_DESC
+  NOTE_DESC
   _ID_DESC
   SEASONPASS_ASC
+  SEASONPASS_DESC
 }
 
 input TrainingRecordTraineeRelationInput {
@@ -141,44 +146,45 @@ input TrainingRecordUpdateInput {
   seasonPass: String
   status: String
   trainee: TrainingRecordTraineeRelationInput
+  training: ObjectId
 }
 
 enum TrainingSortByInput {
   _ID_ASC
-  MONEYPRICE_ASC
-  NAME_ASC
-  NOTE_DESC
-  RESOURCE_ASC
-  TRAINER_DESC
-  TYPE_ASC
+  TRAINER_ASC
   _ID_DESC
-  NAME_DESC
+  MONEYPRICE_ASC
+  RESOURCE_ASC
+  TYPE_ASC
+  TYPE_DESC
+  GYM_ASC
+  NOTE_DESC
+  RESOURCE_DESC
   TIME_ASC
   TIME_DESC
+  MARKPRICE_ASC
+  TRAINER_DESC
+  NAME_DESC
+  GYM_DESC
   MONEYPRICE_DESC
   NOTE_ASC
-  TYPE_DESC
-  MARKPRICE_DESC
-  RESOURCE_DESC
   DATE_ASC
   DATE_DESC
-  GYM_ASC
-  GYM_DESC
-  MARKPRICE_ASC
-  TRAINER_ASC
+  MARKPRICE_DESC
+  NAME_ASC
 }
 
 input TrainingUpdateInput {
-  date: DateTime
   moneyPrice: Int
-  markPrice: Int
-  resource: Int
-  trainer: Int
-  _id: ObjectId
-  name: String
-  time: String
   gym: Int
   note: String
+  date: DateTime
+  name: String
+  trainer: Int
+  _id: ObjectId
+  time: String
+  resource: Int
+  markPrice: Int
   type: String
 }
 
@@ -203,73 +209,73 @@ type User {
 }
 
 input UserInsertInput {
-  childName: String
-  name: String
-  source: String
-  type: String
-  fullName: String
-  phone: String
-  surname: String
-  questionaryNumber: String
-  altPhone: String
   birthday: String
   note: String
+  questionaryNumber: String
+  source: String
+  surname: String
+  altPhone: String
+  phone: String
+  name: String
+  type: String
   _id: ObjectId
+  childName: String
+  fullName: String
 }
 
 input UserQueryInput {
-  source: String
-  fullName: String
-  note: String
-  name: String
-  altPhone: String
-  childName: String
-  questionaryNumber: String
   type: String
-  _id: ObjectId
+  altPhone: String
+  phone: String
+  fullName: String
+  source: String
   surname: String
   birthday: String
-  phone: String
+  questionaryNumber: String
+  note: String
+  childName: String
+  name: String
+  _id: ObjectId
 }
 
 enum UserSortByInput {
-  BIRTHDAY_DESC
-  FULLNAME_DESC
-  QUESTIONARYNUMBER_DESC
-  CHILDNAME_ASC
-  CHILDNAME_DESC
-  SURNAME_DESC
-  _ID_ASC
   _ID_DESC
-  BIRTHDAY_ASC
-  NAME_DESC
-  PHONE_ASC
-  PHONE_DESC
-  QUESTIONARYNUMBER_ASC
-  SOURCE_DESC
-  ALTPHONE_ASC
-  SURNAME_ASC
-  TYPE_ASC
-  NAME_ASC
   NOTE_ASC
+  PHONE_ASC
+  CHILDNAME_ASC
+  BIRTHDAY_ASC
+  PHONE_DESC
+  FULLNAME_DESC
+  NAME_ASC
+  NAME_DESC
   NOTE_DESC
-  TYPE_DESC
+  QUESTIONARYNUMBER_ASC
+  QUESTIONARYNUMBER_DESC
+  CHILDNAME_DESC
+  TYPE_ASC
+  _ID_ASC
+  ALTPHONE_ASC
+  ALTPHONE_DESC
+  BIRTHDAY_DESC
   FULLNAME_ASC
   SOURCE_ASC
-  ALTPHONE_DESC
+  SOURCE_DESC
+  SURNAME_ASC
+  SURNAME_DESC
+  TYPE_DESC
 }
 
 input UserUpdateInput {
-  childName: String
-  fullName: String
   phone: String
-  _id: ObjectId
-  birthday: String
-  note: String
   source: String
+  note: String
   surname: String
   type: String
   altPhone: String
+  childName: String
   name: String
+  _id: ObjectId
+  birthday: String
   questionaryNumber: String
+  fullName: String
 }

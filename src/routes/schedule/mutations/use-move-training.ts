@@ -33,17 +33,11 @@ export default () => {
           data: {
             trainings: data?.trainings.map(((item, index) => {
               if (index === fromIndex) {
-                return {
-                  ...item,
-                  ...to,
-                }
+                return { ...item, ...to }
               }
 
               if (index === toIndex) {
-                return {
-                  ...item,
-                  ...from,
-                }
+                return { ...item, ...from }
               }
 
               return item

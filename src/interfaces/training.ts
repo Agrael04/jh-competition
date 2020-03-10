@@ -7,6 +7,7 @@ export interface ITrainingRecord {
   seasonPass?: string
   status?: string
   note?: string
+  training?: string
 }
 
 export interface ITrainingId {
@@ -20,7 +21,7 @@ export default interface ITraining {
   _id: string
 
   gym: number | undefined
-  date: Date
+  date: string
   time: string
   resource: number | undefined
 
@@ -30,6 +31,4 @@ export default interface ITraining {
   markPrice?: number | null
   moneyPrice?: number | null
   note?: string
-
-  records: ITrainingRecord[]
 }

@@ -23,10 +23,12 @@ import TraineesBlock from './trainees-block'
 
 import useStyles from './styles'
 
-import useCreateTraining from '../../mutations/use-create-training'
-import useUpdateTraining from '../../mutations/use-update-training'
-import useDeleteTraining from '../../mutations/use-delete-training'
+import useCreateTraining from '../../mutations/create-training'
+import useUpdateTraining from '../../mutations/update-training'
+import useDeleteTraining from '../../mutations/delete-training'
+import useCreateTrainingRecords from '../../mutations/create-training-records'
 
+import removeTimeFromDate from 'utils/remove-time-from-date'
 import { times, resources, trainers } from '../../data'
 
 const translations = {
@@ -79,27 +81,54 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-type FieldName = keyof IStoreState['schedule']['recordForm']
+type FieldName = keyof IStoreState['schedule']['trainingForm']
 
-const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.recordForm[name]
+const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingForm[name]
 
 export default function TrainingDialog() {
-  const { openedRecordDialog, dialogMode } = useSelector(state => state.schedule)
+  const { openedRecordDialog, dialogMode, trainingForm, recordsForm } = useSelector(state => state.schedule)
   const actions = useActions()
   const classes = useStyles()
   const createTraining = useCreateTraining()
   const updateTraining = useUpdateTraining()
   const deleteTraining = useDeleteTraining()
+  const createTrainingRecords = useCreateTrainingRecords()
 
-  const close = () => actions.schedule.closeRecordDialog()
-  const remove = () => deleteTraining()
-  const save = () => {
-    if (dialogMode === 'create') {
-      createTraining()
-    } else {
-      updateTraining()
-    }
-  }
+  const close = React.useCallback(
+    () => actions.schedule.closeRecordDialog(),
+    [actions]
+  )
+  const remove = React.useCallback(
+    async () => {
+      const date = removeTimeFromDate(new Date(trainingForm.date))
+      const training = {...trainingForm, date }
+      await deleteTraining(training as any)
+
+      close()
+    },
+    [trainingForm, close, deleteTraining]
+  )
+
+  const save = React.useCallback(
+    async () => {
+      const date = removeTimeFromDate(new Date(trainingForm.date))
+      const records = recordsForm
+      const training = {...trainingForm, date }
+
+      if (dialogMode === 'create') {
+        await createTraining(training as any)
+      } else {
+        await updateTraining(training as any)
+      }
+
+      if (records.length > 0) {
+        await createTrainingRecords(training._id, records)
+      }
+
+      close()
+    },
+    [dialogMode, createTraining, recordsForm, updateTraining, createTrainingRecords, trainingForm, close]
+  )
 
   const handleChange = (name: string, value: any) => {
     let v = value

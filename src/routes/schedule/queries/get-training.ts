@@ -10,20 +10,20 @@ export default gql`
       moneyPrice
       name
       note
-      records {
-        _id
-        seasonPass
-        trainee {
-          _id
-          fullName
-        }
-        note
-        status
-      }
       resource
       time
       trainer
       type
+    }
+    trainingRecords(query: { training: $id }) {
+      seasonPass
+      trainee {
+        _id
+        fullName
+      }
+      note
+      status
+      training
     }
   }
 `

@@ -248,51 +248,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "trainer",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "type",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "name",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "resource",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "date",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
               "ofType": null
             },
             "defaultValue": null
@@ -312,6 +272,26 @@
             "defaultValue": null
           },
           {
+            "name": "trainer",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "note",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "markPrice",
             "description": "",
             "type": {
@@ -322,11 +302,41 @@
             "defaultValue": null
           },
           {
+            "name": "type",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_id",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "time",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "date",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
               "ofType": null
             },
             "defaultValue": null
@@ -352,17 +362,7 @@
             "defaultValue": null
           },
           {
-            "name": "note",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "time",
+            "name": "name",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -387,31 +387,41 @@
         "possibleTypes": null
       },
       {
-        "kind": "SCALAR",
-        "name": "String",
-        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "DateTime",
-        "description": "The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "INPUT_OBJECT",
         "name": "TrainingRecordQueryInput",
         "description": "",
         "fields": null,
         "inputFields": [
+          {
+            "name": "trainee",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "UserQueryInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "training",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "_id",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "note",
             "description": "",
@@ -441,26 +451,6 @@
               "ofType": null
             },
             "defaultValue": null
-          },
-          {
-            "name": "trainee",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UserQueryInput",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "_id",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ObjectId",
-              "ofType": null
-            },
-            "defaultValue": null
           }
         ],
         "interfaces": null,
@@ -474,37 +464,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "source",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "fullName",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "note",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "name",
+            "name": "type",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -524,7 +484,7 @@
             "defaultValue": null
           },
           {
-            "name": "childName",
+            "name": "phone",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -534,7 +494,7 @@
             "defaultValue": null
           },
           {
-            "name": "questionaryNumber",
+            "name": "fullName",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -544,21 +504,11 @@
             "defaultValue": null
           },
           {
-            "name": "type",
+            "name": "source",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "_id",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ObjectId",
               "ofType": null
             },
             "defaultValue": null
@@ -584,11 +534,51 @@
             "defaultValue": null
           },
           {
-            "name": "phone",
+            "name": "questionaryNumber",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "note",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "childName",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "_id",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
               "ofType": null
             },
             "defaultValue": null
@@ -600,8 +590,28 @@
       },
       {
         "kind": "SCALAR",
+        "name": "String",
+        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
         "name": "ObjectId",
         "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "DateTime",
+        "description": "The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -831,6 +841,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "training",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1002,19 +1024,37 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "NOTE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "STATUS_ASC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
+            "name": "STATUS_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "TRAINEE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRAINEE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRAINING_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRAINING_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1032,19 +1072,7 @@
             "deprecationReason": null
           },
           {
-            "name": "SEASONPASS_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STATUS_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TRAINEE_DESC",
+            "name": "NOTE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1057,6 +1085,12 @@
           },
           {
             "name": "SEASONPASS_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SEASONPASS_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1079,37 +1113,7 @@
             "deprecationReason": null
           },
           {
-            "name": "MONEYPRICE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NAME_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NOTE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RESOURCE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TRAINER_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TYPE_ASC",
+            "name": "TRAINER_ASC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1121,7 +1125,43 @@
             "deprecationReason": null
           },
           {
-            "name": "NAME_DESC",
+            "name": "MONEYPRICE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESOURCE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TYPE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TYPE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GYM_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NOTE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESOURCE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1139,6 +1179,30 @@
             "deprecationReason": null
           },
           {
+            "name": "MARKPRICE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRAINER_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GYM_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "MONEYPRICE_DESC",
             "description": "",
             "isDeprecated": false,
@@ -1146,24 +1210,6 @@
           },
           {
             "name": "NOTE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TYPE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MARKPRICE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RESOURCE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1181,25 +1227,13 @@
             "deprecationReason": null
           },
           {
-            "name": "GYM_ASC",
+            "name": "MARKPRICE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GYM_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MARKPRICE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TRAINER_ASC",
+            "name": "NAME_ASC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1216,109 +1250,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "BIRTHDAY_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FULLNAME_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "QUESTIONARYNUMBER_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CHILDNAME_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CHILDNAME_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SURNAME_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "_ID_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "_ID_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "BIRTHDAY_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NAME_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PHONE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PHONE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "QUESTIONARYNUMBER_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SOURCE_DESC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ALTPHONE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SURNAME_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TYPE_ASC",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NAME_ASC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1330,13 +1262,97 @@
             "deprecationReason": null
           },
           {
+            "name": "PHONE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CHILDNAME_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "BIRTHDAY_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PHONE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FULLNAME_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NOTE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "TYPE_DESC",
+            "name": "QUESTIONARYNUMBER_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "QUESTIONARYNUMBER_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CHILDNAME_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TYPE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "_ID_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALTPHONE_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALTPHONE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "BIRTHDAY_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1354,7 +1370,25 @@
             "deprecationReason": null
           },
           {
-            "name": "ALTPHONE_DESC",
+            "name": "SOURCE_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SURNAME_ASC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SURNAME_DESC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TYPE_DESC",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -1708,16 +1742,6 @@
             "description": "",
             "args": [
               {
-                "name": "query",
-                "description": "",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "TrainingQueryInput",
-                  "ofType": null
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "data",
                 "description": "",
                 "type": {
@@ -1728,6 +1752,16 @@
                     "name": "TrainingInsertInput",
                     "ofType": null
                   }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "query",
+                "description": "",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TrainingQueryInput",
+                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -1856,6 +1890,16 @@
             "description": "",
             "args": [
               {
+                "name": "query",
+                "description": "",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TrainingQueryInput",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "set",
                 "description": "",
                 "type": {
@@ -1866,16 +1910,6 @@
                     "name": "TrainingUpdateInput",
                     "ofType": null
                   }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "query",
-                "description": "",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "TrainingQueryInput",
-                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -2004,16 +2038,6 @@
             "description": "",
             "args": [
               {
-                "name": "query",
-                "description": "",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "UserQueryInput",
-                  "ofType": null
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "set",
                 "description": "",
                 "type": {
@@ -2024,6 +2048,16 @@
                     "name": "UserUpdateInput",
                     "ofType": null
                   }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "query",
+                "description": "",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "UserQueryInput",
+                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -2115,16 +2149,6 @@
             "description": "",
             "args": [
               {
-                "name": "query",
-                "description": "",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "UserQueryInput",
-                  "ofType": null
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "data",
                 "description": "",
                 "type": {
@@ -2135,6 +2159,16 @@
                     "name": "UserInsertInput",
                     "ofType": null
                   }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "query",
+                "description": "",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "UserQueryInput",
+                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -2187,16 +2221,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "seasonPass",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "status",
             "description": "",
             "type": {
@@ -2217,6 +2241,16 @@
             "defaultValue": null
           },
           {
+            "name": "training",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_id",
             "description": "",
             "type": {
@@ -2228,6 +2262,16 @@
           },
           {
             "name": "note",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "seasonPass",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2279,96 +2323,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "childName",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "name",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "source",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "type",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "fullName",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "phone",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "surname",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "questionaryNumber",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "altPhone",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "birthday",
             "description": "",
             "type": {
@@ -2389,11 +2343,101 @@
             "defaultValue": null
           },
           {
+            "name": "questionaryNumber",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "source",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "surname",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "altPhone",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "phone",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "type",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_id",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "childName",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "fullName",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null
@@ -2441,61 +2485,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "gym",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "markPrice",
             "description": "",
             "type": {
               "kind": "SCALAR",
               "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "date",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "type",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "trainer",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "_id",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ObjectId",
               "ofType": null
             },
             "defaultValue": null
@@ -2511,21 +2505,21 @@
             "defaultValue": null
           },
           {
-            "name": "resource",
+            "name": "_id",
             "description": "",
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "ObjectId",
               "ofType": null
             },
             "defaultValue": null
           },
           {
-            "name": "time",
+            "name": "gym",
             "description": "",
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null
@@ -2541,7 +2535,57 @@
             "defaultValue": null
           },
           {
+            "name": "time",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "date",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "moneyPrice",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "trainer",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "type",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "resource",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2610,6 +2654,16 @@
               "ofType": null
             },
             "defaultValue": null
+          },
+          {
+            "name": "training",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
           }
         ],
         "interfaces": null,
@@ -2666,16 +2720,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "date",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "moneyPrice",
             "description": "",
             "type": {
@@ -2686,7 +2730,7 @@
             "defaultValue": null
           },
           {
-            "name": "markPrice",
+            "name": "gym",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2696,11 +2740,31 @@
             "defaultValue": null
           },
           {
-            "name": "resource",
+            "name": "note",
             "description": "",
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "date",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null
@@ -2726,16 +2790,6 @@
             "defaultValue": null
           },
           {
-            "name": "name",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "time",
             "description": "",
             "type": {
@@ -2746,7 +2800,7 @@
             "defaultValue": null
           },
           {
-            "name": "gym",
+            "name": "resource",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2756,11 +2810,11 @@
             "defaultValue": null
           },
           {
-            "name": "note",
+            "name": "markPrice",
             "description": "",
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null
@@ -2787,26 +2841,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "childName",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "fullName",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "phone",
             "description": "",
             "type": {
@@ -2817,17 +2851,7 @@
             "defaultValue": null
           },
           {
-            "name": "_id",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ObjectId",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "birthday",
+            "name": "source",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2838,16 +2862,6 @@
           },
           {
             "name": "note",
-            "description": "",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "source",
             "description": "",
             "type": {
               "kind": "SCALAR",
@@ -2887,6 +2901,16 @@
             "defaultValue": null
           },
           {
+            "name": "childName",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "name",
             "description": "",
             "type": {
@@ -2897,7 +2921,37 @@
             "defaultValue": null
           },
           {
+            "name": "_id",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ObjectId",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "birthday",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "questionaryNumber",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "fullName",
             "description": "",
             "type": {
               "kind": "SCALAR",

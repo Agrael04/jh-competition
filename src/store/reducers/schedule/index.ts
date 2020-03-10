@@ -1,8 +1,8 @@
+import { BSON } from 'mongodb-stitch-browser-sdk'
 import constants from 'store/constants/schedule'
 
 import { ISearchedTrainee } from 'interfaces/trainee'
-import ITraining from 'interfaces/training'
-import PartialBy from 'interfaces/partial-by'
+import ITraining, { ITrainingRecord } from 'interfaces/training'
 
 interface ITraineeSuggester {
   loading: boolean
@@ -13,7 +13,8 @@ export interface IState {
   openedRecordDialog: boolean
   currentDate: Date
   dialogMode: string | null
-  recordForm: PartialBy<ITraining, '_id'>
+  trainingForm: ITraining
+  recordsForm: ITrainingRecord[]
   traineeSuggester: ITraineeSuggester
 }
 
@@ -21,21 +22,22 @@ const initialState: IState = {
   openedRecordDialog: false,
   currentDate: new Date(),
   dialogMode: null,
-  recordForm: {
+  trainingForm: {
+    _id: '',
+
     time: '',
     resource: undefined,
     trainer: undefined,
     gym: undefined,
-    date: new Date(),
+    date: '',
 
     name: '',
     type: '',
     markPrice: null,
     moneyPrice: null,
     note: '',
-
-    records: [],
   },
+  recordsForm: [],
   traineeSuggester: {
     loading: false,
     options: [],
@@ -49,21 +51,21 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: 'create',
         openedRecordDialog: true,
-        recordForm: {
+        trainingForm: {
+          _id: new BSON.ObjectID(),
           time: payload.target.time,
           resource: payload.target.resource,
           trainer: payload.trainer === null ? undefined : payload.trainer,
           gym: 1,
-          date: new Date(),
+          date: '',
 
           name: '',
           type: '',
           markPrice: 2,
           moneyPrice: 400,
           note: '',
-
-          records: [],
         },
+        recordsForm: [],
       }
     }
 
@@ -72,19 +74,19 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: 'update',
         openedRecordDialog: true,
-        recordForm: {
-          ...initialState.recordForm,
-          ...payload,
-          date: new Date(payload.date),
+        trainingForm: {
+          ...initialState.trainingForm,
+          ...payload.training,
         },
+        recordsForm: payload.records,
       }
     }
 
     case constants.UPDATE_FORM_FIELD: {
       return {
         ...state,
-        recordForm: {
-          ...state.recordForm,
+        trainingForm: {
+          ...state.trainingForm,
           [payload.field]: payload.value,
         },
       }
@@ -93,50 +95,42 @@ export default (state = initialState, { type, payload }: { type: string, payload
     case constants.ADD_TRAINEE: {
       return {
         ...state,
-        recordForm: {
-          ...state.recordForm,
-          records: state.recordForm.records.length < 3 ? [
-            ...state.recordForm.records,
-            {
-              trainee: {
-                fullName: '',
-                _id: '',
-              },
-              seasonPass: '',
-              status: '',
-              note: '',
+        recordsForm: state.recordsForm.length < 3 ? [
+          ...state.recordsForm,
+          {
+            trainee: {
+              fullName: '',
+              _id: '',
             },
-          ] : state.recordForm.records,
-        },
+            seasonPass: '',
+            status: '',
+            note: '',
+            training: state.trainingForm._id,
+          },
+        ] : state.recordsForm,
       }
     }
 
     case constants.UPDATE_TRAINEE_FORM_FIELD: {
       return {
         ...state,
-        recordForm: {
-          ...state.recordForm,
-          records: state.recordForm?.records.map((item, index) => {
-            if (index !== payload.index) {
-              return item
-            }
+        recordsForm: state.recordsForm.map((item, index) => {
+          if (index !== payload.index) {
+            return item
+          }
 
-            return {
-              ...item,
-              [payload.field]: payload.value,
-            }
-          }),
-        },
+          return {
+            ...item,
+            [payload.field]: payload.value,
+          }
+        }),
       }
     }
 
     case constants.REMOVE_TRAINEE: {
       return {
         ...state,
-        recordForm: {
-          ...state.recordForm,
-          records: state.recordForm.records.filter((item, index) => index !== payload.index),
-        },
+        recordsForm: state.recordsForm.filter((item, index) => index !== payload.index),
       }
     }
 
@@ -145,7 +139,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         dialogMode: null,
         openedRecordDialog: false,
-        recordForm: initialState.recordForm,
+        trainingForm: initialState.trainingForm,
+        recordsForm: initialState.recordsForm,
       }
     }
 
