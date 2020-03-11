@@ -25,15 +25,16 @@ const useDeleteTraining = () => {
 
       return deleteTraining({
         variables: { _id: training._id },
-        update: cache => {
-          const queryData = cache.readQuery<any>(trainingsQuery)
-          cache.writeQuery({
-            ...trainingsQuery,
-            data: {
-              trainings: queryData?.trainings.filter((tr: any) => tr._id !== training._id),
-            },
-          })
-        },
+        refetchQueries: [trainingsQuery],
+        // update: (cache, { data }) => {
+        //   const queryData = cache.readQuery<any>(trainingsQuery)
+        //   cache.writeQuery({
+        //     ...trainingsQuery,
+        //     data: {
+        //       trainings: queryData?.trainings.filter((tr: any) => tr._id !== data.deleteOneTraining._id),
+        //     },
+        //   })
+        // },
       })
     },
     [deleteTraining]

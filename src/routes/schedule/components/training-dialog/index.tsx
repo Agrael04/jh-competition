@@ -8,8 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
-import Slide from '@material-ui/core/Slide'
-import { TransitionProps } from '@material-ui/core/transitions'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
@@ -28,7 +26,6 @@ import useUpdateTraining from '../../mutations/update-training'
 import useDeleteTraining from '../../mutations/delete-training'
 import useCreateTrainingRecords from '../../mutations/create-training-records'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
 import { times, resources, trainers } from '../../data'
 
 const translations = {
@@ -77,10 +74,6 @@ const gyms = [
   { id: 4, text: 'Парк дружбы народов' },
 ]
 
-const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
-  return <Slide direction='up' ref={ref} {...props} />
-})
-
 type FieldName = keyof IStoreState['schedule']['trainingForm']
 
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingForm[name]
@@ -98,11 +91,10 @@ export default function TrainingDialog() {
     () => actions.schedule.closeRecordDialog(),
     [actions]
   )
+
   const remove = React.useCallback(
     async () => {
-      const date = removeTimeFromDate(new Date(trainingForm.date))
-      const training = {...trainingForm, date }
-      await deleteTraining(training as any)
+      await deleteTraining(trainingForm)
 
       close()
     },
@@ -111,18 +103,16 @@ export default function TrainingDialog() {
 
   const save = React.useCallback(
     async () => {
-      const date = removeTimeFromDate(new Date(trainingForm.date))
       const records = recordsForm
-      const training = {...trainingForm, date }
 
       if (dialogMode === 'create') {
-        await createTraining(training as any)
+        await createTraining(trainingForm)
       } else {
-        await updateTraining(training as any)
+        await updateTraining(trainingForm)
       }
 
       if (records.length > 0) {
-        await createTrainingRecords(training._id, records)
+        await createTrainingRecords(trainingForm._id, records)
       }
 
       close()
@@ -144,7 +134,7 @@ export default function TrainingDialog() {
   }
 
   return (
-    <Dialog open={openedRecordDialog} onClose={close} TransitionComponent={Transition} maxWidth='lg' fullWidth={true}>
+    <Dialog open={openedRecordDialog} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
@@ -182,11 +172,7 @@ export default function TrainingDialog() {
                   name='date'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  // disablePast={true}
-                  // minDateMessage=''
                   label={translations.date}
-                  cancelLabel={translations.cancelLabel}
-                  okLabel={translations.okLabel}
                   fullWidth={true}
                   inputVariant='outlined'
                   disableToolbar={true}

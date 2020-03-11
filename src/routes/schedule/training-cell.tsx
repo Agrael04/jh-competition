@@ -43,9 +43,7 @@ const RecordCell = ({ time, resource, id }: any) => {
   const moveTraining = useMoveTraining()
 
   const { data, loading } = useQuery<GetTrainingQuery>(GET_TRAINING, {
-    variables: {
-      id,
-    },
+    variables: { id },
     skip: !id,
   })
 

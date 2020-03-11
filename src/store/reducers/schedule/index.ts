@@ -4,6 +4,8 @@ import constants from 'store/constants/schedule'
 import { ISearchedTrainee } from 'interfaces/trainee'
 import ITraining, { ITrainingRecord } from 'interfaces/training'
 
+import removeTimeFromDate from 'utils/remove-time-from-date'
+
 interface ITraineeSuggester {
   loading: boolean
   options: ISearchedTrainee[]
@@ -20,7 +22,7 @@ export interface IState {
 
 const initialState: IState = {
   openedRecordDialog: false,
-  currentDate: new Date(),
+  currentDate: removeTimeFromDate(new Date())!,
   dialogMode: null,
   trainingForm: {
     _id: '',
@@ -29,7 +31,7 @@ const initialState: IState = {
     resource: undefined,
     trainer: undefined,
     gym: undefined,
-    date: '',
+    date: removeTimeFromDate(new Date())!,
 
     name: '',
     type: '',
@@ -57,7 +59,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
           resource: payload.target.resource,
           trainer: payload.trainer === null ? undefined : payload.trainer,
           gym: 1,
-          date: '',
+          date: removeTimeFromDate(new Date())!,
 
           name: '',
           type: '',
@@ -70,24 +72,31 @@ export default (state = initialState, { type, payload }: { type: string, payload
     }
 
     case constants.OPEN_UPDATE_RECORD_DIALOG: {
+      const training = payload.training
+      delete training.__typename
+      const records = payload.records
+      records.forEach((r: any) => delete r.__typename)
+
       return {
         ...state,
         dialogMode: 'update',
         openedRecordDialog: true,
         trainingForm: {
           ...initialState.trainingForm,
-          ...payload.training,
+          ...training,
         },
-        recordsForm: payload.records,
+        recordsForm: records,
       }
     }
 
     case constants.UPDATE_FORM_FIELD: {
+      const value = payload.field === 'date' ? removeTimeFromDate(new Date(payload.value)) : payload.value
+
       return {
         ...state,
         trainingForm: {
           ...state.trainingForm,
-          [payload.field]: payload.value,
+          [payload.field]: value,
         },
       }
     }
@@ -177,7 +186,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
     case constants.SET_CURRENT_DATE: {
       return {
         ...state,
-        currentDate: payload.date,
+        currentDate: removeTimeFromDate(payload.date)!,
       }
     }
 

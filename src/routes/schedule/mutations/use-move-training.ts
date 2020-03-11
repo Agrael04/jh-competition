@@ -1,6 +1,5 @@
 import React from 'react'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
 import { useSelector } from 'store'
 import api from 'api/mongodb/training'
 import client from 'api/mongodb/graphql'
@@ -16,13 +15,11 @@ export default () => {
   const mutate = React.useCallback(
     async (from: ITrainingId, to: ITrainingId) => {
       try {
-        const variables = {
-          date: removeTimeFromDate(date),
-        }
+        const variables = { date }
 
         await api.moveTraining(from, to)
 
-        const data = client?.readQuery<GetTrainingsQuery>({ query: GET_TRAININGS, variables: { date: removeTimeFromDate(date) } })
+        const data = client?.readQuery<GetTrainingsQuery>({ query: GET_TRAININGS, variables })
 
         const toIndex = data?.trainings.findIndex(tr => tr?.time === to.time && tr?.resource === to.resource)
         const fromIndex = data?.trainings.findIndex(tr => tr?.time === from.time && tr?.resource === from.resource)

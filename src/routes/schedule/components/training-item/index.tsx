@@ -6,6 +6,7 @@ import { trainers } from '../../data'
 import { DND_MOVE_TRAINING } from '../../constants'
 
 import Avatar from '@material-ui/core/Avatar'
+import Grid from '@material-ui/core/Grid'
 
 import { DragableAvatarWrap } from '../avatar-wrap'
 
@@ -34,14 +35,7 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
   const handleDoubleClick = React.useCallback(
     e => {
       e.stopPropagation()
-      if (training) {
-        const tr = {...training } as any
-        delete tr.__typename
-        const clearedRecords: any = [...records!]
-        clearedRecords.forEach((r: any) => delete r?.__typename)
-
-        actions.schedule.openUpdateDialog(tr as any, clearedRecords)
-      }
+      actions.schedule.openUpdateDialog(training, records)
     },
     [training, records, actions]
   )
@@ -65,7 +59,7 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
       trainer={training.trainer}
       handleDoubleClick={handleDoubleClick}
     >
-      <div style={{ display: 'flex' }}>
+      <Grid container={true} wrap='nowrap'>
         {
           trainer && (
             <Tooltip rows={['Информация о тренировке']}>
@@ -96,7 +90,7 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
             </Tooltip>
           ))
         }
-      </div>
+      </Grid>
     </DragableAvatarWrap>
   )
 }

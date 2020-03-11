@@ -21,7 +21,7 @@ export default interface ITraining {
   _id: string
 
   gym: number | undefined
-  date: string
+  date: Date
   time: string
   resource: number | undefined
 

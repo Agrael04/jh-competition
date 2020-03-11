@@ -22,8 +22,6 @@ import Toolbar from './toolbar'
 import TrainerAvatar from './trainer-avatar'
 import TrainingCell from './training-cell'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
-
 import GET_TRAININGS from './queries/get-trainings'
 import { GetTrainingsQuery } from 'generated/graphql'
 
@@ -36,9 +34,7 @@ const SchedulePage = () => {
   const date = useSelector(state => state.schedule.currentDate)
 
   const { data, loading } = useQuery<GetTrainingsQuery>(GET_TRAININGS, {
-    variables: {
-      date: removeTimeFromDate(date),
-    },
+    variables: { date },
   })
 
   return (
@@ -81,7 +77,7 @@ const SchedulePage = () => {
                 {
                   resources.map(r => (
                     loading ? (
-                      <TableCell align='center' padding='none'>
+                      <TableCell align='center' padding='none' key={r.id}>
                         <CircularProgress />
                       </TableCell>
                     ) : (

@@ -9,6 +9,9 @@ export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
     insertOneTraining(data: $training) {
       _id
+      time
+      resource
+      trainer
     }
   }
 `
@@ -22,18 +25,19 @@ const useCreateTraining = () => {
 
       return createTraining({
         variables: { training },
-        update: (cache, { data }) => {
-          const queryData = cache.readQuery<any>(trainingsQuery)
-          cache.writeQuery({
-            ...trainingsQuery,
-            data: {
-              trainings: [
-                ...queryData.trainings,
-                { ...training, ...data.insertOneTraining },
-              ],
-            },
-          })
-        },
+        refetchQueries: [trainingsQuery],
+        // update: (cache, { data }) => {
+        //   const queryData = cache.readQuery<any>(trainingsQuery)
+        //   cache.writeQuery({
+        //     ...trainingsQuery,
+        //     data: {
+        //       trainings: [
+        //         ...queryData.trainings,
+        //         data.insertOneTraining,
+        //       ],
+        //     },
+        //   })
+        // },
       })
     },
     [createTraining]

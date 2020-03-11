@@ -9,6 +9,16 @@ export const UPDATE_TRAINING = gql`
   mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!) {
     updateOneTraining(query: { _id: $_id }, set: $training) {
       _id
+      date
+      gym
+      markPrice
+      moneyPrice
+      name
+      note
+      resource
+      time
+      trainer
+      type
     }
     deleteManyTrainingRecords(query: { training: $_id }) {
       deletedCount
@@ -25,15 +35,11 @@ const useUpdateTraining = () => {
 
       return updateTraining({
         variables: { _id: training._id, training },
-        update: cache => {
-          const queryData = cache.readQuery<any>(trainingQuery)
+        update: (cache, { data }) => {
           cache.writeQuery({
             ...trainingQuery,
             data: {
-              training: {
-                ...queryData?.training,
-                ...training,
-              },
+              training: data?.updateOneTraining,
               trainingRecords: [],
             },
           })

@@ -28,7 +28,10 @@ const useCreateTrainingRecords = () => {
           cache.writeQuery({
             ...trainingQuery,
             data: {
-              training: queryData.training,
+              training: {
+                ...queryData.training,
+                __typename: 'Training',
+              },
               trainingRecords: records.map(r => ({ ...r, __typename: 'TrainingRecord' })),
             },
           })
