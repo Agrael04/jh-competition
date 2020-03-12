@@ -8,11 +8,6 @@ interface ICell {
   time: string
 }
 
-// export const moveRecord = (source: ICell, target: ICell) => ({
-//   type: constants.MOVE_RECORD,
-//   payload: { source, target },
-// })
-
 export const openCreateDialog = (target: ICell, trainer?: number) => ({
   type: constants.OPEN_CREATE_RECORD_DIALOG,
   payload: { trainer, target },

@@ -2,9 +2,8 @@ import React from 'react'
 
 import Avatar from '@material-ui/core/Avatar'
 import Badge from '@material-ui/core/Badge'
-import { DND_CREATE_TRAINING } from './constants'
+import Button from '@material-ui/core/Button'
 
-import DragableAvatarWrap from './components/avatar-wrap'
 import Tooltip from 'components/multiline-tooltip'
 
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -23,15 +22,11 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ trainer, time, count }: any) => {
+const TrainerAvatar = ({ trainer, count }: any) => {
   const classes = useBadgeBackground(trainer.id)()
 
   return (
-    <DragableAvatarWrap
-      type={DND_CREATE_TRAINING}
-      source={{ time, resource: null }}
-      trainer={trainer.id}
-    >
+    <Button>
       <Tooltip rows={[`${trainer.lastName} ${trainer.firstName}`]}>
         <Badge
           overlap='circle'
@@ -48,7 +43,7 @@ const TrainerAvatar = ({ trainer, time, count }: any) => {
           <Avatar src={trainer.avatarSrc} />
         </Badge>
       </Tooltip>
-    </DragableAvatarWrap>
+    </Button>
   )
 }
 

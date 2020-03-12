@@ -3,12 +3,9 @@ import { useActions } from 'store'
 
 import { trainers } from '../../data'
 
-import { DND_MOVE_TRAINING } from '../../constants'
-
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
-
-import { DragableAvatarWrap } from '../avatar-wrap'
+import Button from '@material-ui/core/Button'
 
 import FaceIcon from '@material-ui/icons/Face'
 
@@ -24,11 +21,6 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
 
   const trainer = React.useMemo(
     () => trainers.find(tr => tr.id === training.trainer),
-    [training]
-  )
-
-  const source = React.useMemo(
-    () => ({ time: training.time, resource: training.resource }),
     [training]
   )
 
@@ -53,12 +45,7 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
   )
 
   return (
-    <DragableAvatarWrap
-      type={DND_MOVE_TRAINING}
-      source={source}
-      trainer={training.trainer}
-      handleDoubleClick={handleDoubleClick}
-    >
+    <Button onDoubleClick={handleDoubleClick}>
       <Grid container={true} wrap='nowrap'>
         {
           trainer && (
@@ -91,7 +78,7 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
           ))
         }
       </Grid>
-    </DragableAvatarWrap>
+    </Button>
   )
 }
 

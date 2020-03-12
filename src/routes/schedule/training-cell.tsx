@@ -2,15 +2,11 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { useActions } from '../../store'
 
-import { trainerSchedule } from './data'
-
-import { DND_CREATE_TRAINING, DND_MOVE_TRAINING } from './constants'
-
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import TableCell from '@material-ui/core/TableCell'
 
-import { AvatarWrap } from './components/avatar-wrap'
-import DropableCell from './components/dropable-cell'
 import TrainingItem from './components/training-item'
 
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
@@ -19,28 +15,11 @@ import Tooltip from '../../components/multiline-tooltip'
 
 import GET_TRAINING from './queries/get-training'
 import { GetTrainingQuery } from 'generated/graphql'
-import useMoveTraining from './mutations/use-move-training'
 
-const isTrainerAvailableAtTime = (time: string, trainer?: number) => {
-  if (!trainer) {
-    return true
-  }
-
-  const scheduleRow = trainerSchedule.find(record => record.time === time)
-  const tr = scheduleRow && scheduleRow.trainers.find(tr => tr === trainer)
-
-  return tr !== undefined
-}
-
-interface IDropProps {
-  type: typeof DND_CREATE_TRAINING | typeof DND_MOVE_TRAINING
-  source: { time: string, resource: number }
-  trainer: number
-}
+import getColorPallete from 'utils/get-color-pallete'
 
 const RecordCell = ({ time, resource, id }: any) => {
   const actions = useActions()
-  const moveTraining = useMoveTraining()
 
   const { data, loading } = useQuery<GetTrainingQuery>(GET_TRAINING, {
     variables: { id },
@@ -50,51 +29,6 @@ const RecordCell = ({ time, resource, id }: any) => {
   const training = data?.training
   const records = data?.trainingRecords
 
-  const source = React.useMemo(
-    () => ({ time, resource }),
-    [time, resource]
-  )
-
-  const onDrop = React.useCallback(
-    ({ type, source, trainer }: IDropProps) => {
-      if (type === DND_CREATE_TRAINING) {
-        actions.schedule.openCreateDialog({ time, resource }, trainer)
-      } else if (type === DND_MOVE_TRAINING) {
-        moveTraining(source, { time, resource })
-      }
-    },
-    [time, resource, actions, moveTraining]
-  )
-
-  const canDrop = React.useCallback(
-    ({ type, source, trainer }: IDropProps) => {
-      if (loading) {
-        return false
-      }
-
-      if (source.time === time && source.resource === resource) {
-        return false
-      }
-
-      if (!isTrainerAvailableAtTime(time, trainer)) {
-        return false
-      }
-
-      if (training) {
-        if (type === DND_CREATE_TRAINING) {
-          return false
-        }
-
-        if (type === DND_MOVE_TRAINING && !isTrainerAvailableAtTime(source.time, training?.trainer!)) {
-          return false
-        }
-      }
-
-      return true
-    },
-    [training, time, resource, loading]
-  )
-
   const handleDoubleClick = React.useCallback(
     e => {
       e.stopPropagation()
@@ -103,8 +37,20 @@ const RecordCell = ({ time, resource, id }: any) => {
     [actions, resource, time]
   )
 
+  const color = React.useMemo(
+    () => getColorPallete((!loading && training?.trainer) || undefined),
+    [loading, training]
+  )
+
+  const backgroundStyle = React.useMemo(
+    () => ({ backgroundColor: color[500] }),
+    [color]
+  )
+
+  const isOccupied = !loading && !!training
+
   return (
-    <DropableCell onDrop={onDrop} canDrop={canDrop} isOccupied={!loading && !!training} source={source} colorId={!loading && training?.trainer}>
+    <TableCell align='center' padding='none' style={isOccupied ? backgroundStyle : undefined}>
       {
         loading && (
           <CircularProgress />
@@ -112,15 +58,13 @@ const RecordCell = ({ time, resource, id }: any) => {
       }
       {
         !loading && !training && (
-          <AvatarWrap
-            handleDoubleClick={handleDoubleClick}
-          >
+          <Button onDoubleClick={handleDoubleClick}>
             <Tooltip rows={['Добавить тренировку']}>
               <Avatar>
                 <PersonAddIcon />
               </Avatar>
             </Tooltip>
-          </AvatarWrap>
+          </Button>
         )
       }
       {
@@ -128,7 +72,7 @@ const RecordCell = ({ time, resource, id }: any) => {
           <TrainingItem training={training as any} records={records as any} />
         )
       }
-    </DropableCell>
+    </TableCell>
   )
 }
 
