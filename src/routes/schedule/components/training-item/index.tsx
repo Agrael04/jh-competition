@@ -45,8 +45,8 @@ const TrainingItem = ({ training, records }: { training: ITraining, records: ITr
   )
 
   return (
-    <Button onDoubleClick={handleDoubleClick}>
-      <Grid container={true} wrap='nowrap'>
+    <Button onDoubleClick={handleDoubleClick} fullWidth={true}>
+      <Grid container={true} wrap='nowrap' justify='center'>
         {
           trainer && (
             <Tooltip rows={['Информация о тренировке']}>

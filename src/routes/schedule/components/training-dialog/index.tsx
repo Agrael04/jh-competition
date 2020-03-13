@@ -26,7 +26,7 @@ import useUpdateTraining from '../../mutations/update-training'
 import useDeleteTraining from '../../mutations/delete-training'
 import useCreateTrainingRecords from '../../mutations/create-training-records'
 
-import { times, resources, trainers } from '../../data'
+import { times, resources, trainerSchedule, trainers } from '../../data'
 
 const translations = {
   'okLabel': 'Oк',
@@ -80,6 +80,7 @@ const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedul
 
 export default function TrainingDialog() {
   const { openedRecordDialog, dialogMode, trainingForm, recordsForm } = useSelector(state => state.schedule)
+  const time = useSelector(fieldSelector('time')) as string
   const actions = useActions()
   const classes = useStyles()
   const createTraining = useCreateTraining()
@@ -189,7 +190,9 @@ export default function TrainingDialog() {
                   variant='outlined'
                 >
                   {
-                    trainers.map(trainer => (
+                    trainers
+                    .filter(trainer => trainerSchedule.find(ts => ts.id === trainer.id && ts.times.includes(time)))
+                    .map(trainer => (
                       <MenuItem value={trainer.id} key={trainer.id}>
                         {trainer.firstName} {trainer.lastName}
                       </MenuItem>

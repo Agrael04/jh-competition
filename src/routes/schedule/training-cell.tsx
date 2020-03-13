@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/react-hooks'
 import { useActions } from '../../store'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TableCell from '@material-ui/core/TableCell'
 
@@ -38,7 +37,13 @@ const RecordCell = ({ time, resource, id }: any) => {
   )
 
   const color = React.useMemo(
-    () => getColorPallete((!loading && training?.trainer) || undefined),
+    () => {
+      if (loading || training?.trainer === null || training?.trainer === undefined) {
+        return getColorPallete(undefined)
+      }
+
+      return getColorPallete(training.trainer)
+    },
     [loading, training]
   )
 
@@ -58,11 +63,9 @@ const RecordCell = ({ time, resource, id }: any) => {
       }
       {
         !loading && !training && (
-          <Button onDoubleClick={handleDoubleClick}>
+          <Button onDoubleClick={handleDoubleClick} fullWidth={true}>
             <Tooltip rows={['Добавить тренировку']}>
-              <Avatar>
-                <PersonAddIcon />
-              </Avatar>
+              <PersonAddIcon />
             </Tooltip>
           </Button>
         )

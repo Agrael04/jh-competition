@@ -12,6 +12,11 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Divider from '@material-ui/core/Divider'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+
+import Tooltip from 'components/multiline-tooltip'
 
 import { useSelector } from 'store'
 import { times, resources, trainerSchedule, trainers } from './data'
@@ -25,12 +30,15 @@ import TrainingCell from './training-cell'
 import GET_TRAININGS from './queries/get-trainings'
 import { GetTrainingsQuery } from 'generated/graphql'
 
+import useStyles from './styles'
+
 const mappedTrainerSchedule = trainerSchedule.map(ts => ({
-  time: ts.time,
-  trainers: ts.trainers.map(t => trainers.find(tr => tr.id === t)),
+  times: ts.times,
+  trainer: trainers.find(tr => tr.id === ts.id),
 }))
 
 const SchedulePage = () => {
+  const classes = useStyles()
   const date = useSelector(state => state.schedule.currentDate)
 
   const { data, loading } = useQuery<GetTrainingsQuery>(GET_TRAININGS, {
@@ -48,27 +56,37 @@ const SchedulePage = () => {
             <TableCell>{'Тренера'}</TableCell>
             {
               resources.map(r => (
-                <TableCell key={r.id} align='center'>{r.name}</TableCell>
+                <TableCell key={r.id} align='center' padding='none'>
+                  <Button>
+                    <Tooltip rows={[r.name]}>
+                      <Avatar className={classes.avatarBackground}>
+                        {r.shortName}
+                      </Avatar>
+                    </Tooltip>
+                  </Button>
+                </TableCell>
               ))
             }
           </TableRow>
         </TableHead>
         <TableBody>
           {
-            times.map(time => (
+            times.map((time, index) => (
               <TableRow key={time}>
-                <TableCell>
-                  {time}
+                <TableCell padding='none'>
+                  <Box paddingLeft={2}>
+                    {time}
+                  </Box>
                 </TableCell>
                 <TableCell padding='none'>
                   <Grid container={true}>
                     {
-                      mappedTrainerSchedule.find(ts => ts.time === time)?.trainers.map(trainer => (
+                      mappedTrainerSchedule.filter(ts => ts.times.find(t => t === time)).map(ts => (
                         <TrainerAvatar
                           time={time}
-                          trainer={trainer}
-                          key={trainer?.id}
-                          count={data?.trainings.filter(tr => tr?.time === time && tr?.trainer === trainer?.id).length}
+                          trainer={ts.trainer}
+                          key={ts.trainer?.id}
+                          count={data?.trainings.filter(tr => tr?.time === time && tr?.trainer === ts.trainer?.id).length}
                         />
                       ))
                     }
@@ -88,7 +106,6 @@ const SchedulePage = () => {
                           key={r.id}
                         />
                       )
-
                   ))
                 }
 

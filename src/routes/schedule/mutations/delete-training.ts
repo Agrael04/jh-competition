@@ -21,20 +21,19 @@ const useDeleteTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingsQuery = { query: GET_TRAININGS, variables: { date: training.date }}
+      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) }}
 
       return deleteTraining({
         variables: { _id: training._id },
-        refetchQueries: [trainingsQuery],
-        // update: (cache, { data }) => {
-        //   const queryData = cache.readQuery<any>(trainingsQuery)
-        //   cache.writeQuery({
-        //     ...trainingsQuery,
-        //     data: {
-        //       trainings: queryData?.trainings.filter((tr: any) => tr._id !== data.deleteOneTraining._id),
-        //     },
-        //   })
-        // },
+        update: (cache, { data }) => {
+          const queryData = cache.readQuery<any>(trainingsQuery)
+          cache.writeQuery({
+            ...trainingsQuery,
+            data: {
+              trainings: queryData.trainings.filter((tr: any) => tr._id !== data.deleteOneTraining._id),
+            },
+          })
+        },
       })
     },
     [deleteTraining]
