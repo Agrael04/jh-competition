@@ -16,7 +16,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Fab from '@material-ui/core/Fab'
-import IconButton from '@material-ui/core/IconButton'
 import Box from '@material-ui/core/Box'
 
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
