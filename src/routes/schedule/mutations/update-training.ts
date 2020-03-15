@@ -31,7 +31,7 @@ const useUpdateTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingQuery = { query: GET_TRAINING, variables: { id: training._id }}
+      const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
 
       return updateTraining({
         variables: { _id: training._id, training },

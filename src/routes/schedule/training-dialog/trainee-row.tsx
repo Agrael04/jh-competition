@@ -40,18 +40,9 @@ export default function TraineeRow({ index }: { index: number }) {
           <Grid item={true} lg={3}>
             <TraineeSuggester
               name='trainee'
+              label='Поиск клиента'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-            />
-          </Grid>
-          <Grid item={true} lg={2}>
-            <TextField
-              name='seasonPass'
-              onChange={handleChange}
-              fieldSelector={fieldSelector}
-              label={'Абонимент'}
-              fullWidth={true}
-              variant='outlined'
             />
           </Grid>
           <Grid item={true} lg={2}>
@@ -64,7 +55,7 @@ export default function TraineeRow({ index }: { index: number }) {
               variant='outlined'
             >
               {
-                ['RESERVED', 'PENDING', 'CONFIRMED'].map(type => (
+                ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED'].map(type => (
                   <MenuItem value={type} key={type}>
                     {type}
                   </MenuItem>
@@ -72,12 +63,32 @@ export default function TraineeRow({ index }: { index: number }) {
               }
             </Select>
           </Grid>
-          <Grid item={true} lg={4}>
+          <Grid item={true} lg={2}>
             <TextField
-              name='note'
+              name='seasonPass'
               onChange={handleChange}
               fieldSelector={fieldSelector}
-              label={'Заметки'}
+              label={'Абонимент'}
+              fullWidth={true}
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item={true} lg={2}>
+            <TextField
+              name='moneyPrice'
+              onChange={handleChange}
+              fieldSelector={fieldSelector}
+              label={'Разовая цена'}
+              fullWidth={true}
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item={true} lg={2}>
+            <TextField
+              name='marksPrice'
+              onChange={handleChange}
+              fieldSelector={fieldSelector}
+              label={'Количество отметок'}
               fullWidth={true}
               variant='outlined'
             />
@@ -88,6 +99,24 @@ export default function TraineeRow({ index }: { index: number }) {
                 <DeleteIcon />
               </IconButton>
             </Box>
+          </Grid>
+          <Grid item={true} lg={3}>
+            <TraineeSuggester
+              name='trainee'
+              label='Поиск посетителя'
+              onChange={handleChange}
+              fieldSelector={fieldSelector}
+            />
+          </Grid>
+          <Grid item={true} lg={9}>
+            <TextField
+              name='note'
+              onChange={handleChange}
+              fieldSelector={fieldSelector}
+              label={'Заметки'}
+              fullWidth={true}
+              variant='outlined'
+            />
           </Grid>
         </Grid>
       </Box>

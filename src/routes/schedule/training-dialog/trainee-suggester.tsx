@@ -12,6 +12,7 @@ interface IProps {
   onChange: (name: any, value: any) => void
   fieldSelector: (name: any) => (state: IStoreState) => any
   [x: string]: any
+  label: string
 }
 
 const renderInput = (loading: boolean, label: string) => (params: any) => (
@@ -32,7 +33,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
   />
 )
 
-export default function TraineeSuggester({ name, onChange, fieldSelector }: IProps) {
+export default function TraineeSuggester({ name, onChange, fieldSelector, label }: IProps) {
   const { options, loading } = useSelector(state => state.schedule.traineeSuggester)
   const value = useSelector(fieldSelector(name))
 
@@ -87,7 +88,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector }: IPro
       getOptionLabel={mapOptionLabel}
       loading={loading}
       // freeSolo={true}
-      renderInput={renderInput(loading && opened, 'Поиск клиента')}
+      renderInput={renderInput(loading && opened, label)}
     />
   )
 }

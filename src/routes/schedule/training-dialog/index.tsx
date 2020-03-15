@@ -21,12 +21,12 @@ import TraineesBlock from './trainees-block'
 
 import useStyles from './styles'
 
-import useCreateTraining from '../../mutations/create-training'
-import useUpdateTraining from '../../mutations/update-training'
-import useDeleteTraining from '../../mutations/delete-training'
-import useCreateTrainingRecords from '../../mutations/create-training-records'
+import useCreateTraining from '../mutations/create-training'
+import useUpdateTraining from '../mutations/update-training'
+import useDeleteTraining from '../mutations/delete-training'
+import useCreateTrainingRecords from '../mutations/create-training-records'
 
-import { times, resources, trainerSchedule, trainers } from '../../data'
+import { times, resources, trainerSchedule, trainers } from '../data'
 
 const translations = {
   'okLabel': 'Oк',
@@ -182,19 +182,17 @@ export default function TrainingDialog() {
               </Grid>
               <Grid item={true} lg={12}>
                 <Select
-                  name='trainer'
+                  name='resource'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  label={translations.trainer}
+                  label={translations.trampolines}
                   fullWidth={true}
                   variant='outlined'
                 >
                   {
-                    trainers
-                    .filter(trainer => trainerSchedule.find(ts => ts.id === trainer.id && ts.times.includes(time)))
-                    .map(trainer => (
-                      <MenuItem value={trainer.id} key={trainer.id}>
-                        {trainer.firstName} {trainer.lastName}
+                    resources.map(r => (
+                      <MenuItem value={r.id} key={r.id}>
+                        {r.name}
                       </MenuItem>
                     ))
                   }
@@ -220,17 +218,17 @@ export default function TrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <Select
-                  name='resource'
+                  name='time'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  label={translations.trampolines}
+                  label={translations.startTime}
                   fullWidth={true}
                   variant='outlined'
                 >
                   {
-                    resources.map(r => (
-                      <MenuItem value={r.id} key={r.id}>
-                        {r.name}
+                    times.map(time => (
+                      <MenuItem value={time} key={time}>
+                        {time}
                       </MenuItem>
                     ))
                   }
@@ -250,6 +248,26 @@ export default function TrainingDialog() {
               </Grid>
               <Grid item={true} lg={12}>
                 <Select
+                  name='trainer'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
+                  label={translations.trainer}
+                  fullWidth={true}
+                  variant='outlined'
+                >
+                  {
+                    trainers
+                      .filter(trainer => trainerSchedule.find(ts => ts.id === trainer.id && ts.times.includes(time)))
+                      .map(trainer => (
+                        <MenuItem value={trainer.id} key={trainer.id}>
+                          {trainer.firstName} {trainer.lastName}
+                        </MenuItem>
+                      ))
+                  }
+                </Select>
+              </Grid>
+              <Grid item={true} lg={12}>
+                <Select
                   name='type'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
@@ -266,7 +284,7 @@ export default function TrainingDialog() {
                   }
                 </Select>
               </Grid>
-              <Grid item={true} lg={6}>
+              {/* <Grid item={true} lg={6}>
                 <TextField
                   name='moneyPrice'
                   onChange={handleChange}
@@ -285,7 +303,7 @@ export default function TrainingDialog() {
                   fullWidth={true}
                   variant='outlined'
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={12}>

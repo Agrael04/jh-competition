@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import GET_TRAININGS from '../queries/get-trainings'
+import GET_TRAININGS, { IGetTrainingsResponse } from '../queries/get-trainings'
 import ITraining from 'interfaces/training'
 
 export const CREATE_TRAINING = gql`
@@ -26,12 +26,12 @@ const useCreateTraining = () => {
       return createTraining({
         variables: { training },
         update: (cache, { data }) => {
-          const queryData = cache.readQuery<any>(trainingsQuery)
+          const queryData = cache.readQuery<IGetTrainingsResponse>(trainingsQuery)
           cache.writeQuery({
             ...trainingsQuery,
             data: {
               trainings: [
-                ...queryData.trainings,
+                ...queryData?.trainings!,
                 data.insertOneTraining,
               ],
             },

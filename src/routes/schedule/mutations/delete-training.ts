@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import GET_TRAININGS from '../queries/get-trainings'
+import GET_TRAININGS, { IGetTrainingsResponse } from '../queries/get-trainings'
 import ITraining from 'interfaces/training'
 
 export const DELETE_TRAINING = gql`
@@ -21,16 +21,16 @@ const useDeleteTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) }}
+      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
 
       return deleteTraining({
         variables: { _id: training._id },
         update: (cache, { data }) => {
-          const queryData = cache.readQuery<any>(trainingsQuery)
+          const queryData = cache.readQuery<IGetTrainingsResponse>(trainingsQuery)
           cache.writeQuery({
             ...trainingsQuery,
             data: {
-              trainings: queryData.trainings.filter((tr: any) => tr._id !== data.deleteOneTraining._id),
+              trainings: queryData?.trainings.filter(tr => tr._id !== data.deleteOneTraining._id),
             },
           })
         },

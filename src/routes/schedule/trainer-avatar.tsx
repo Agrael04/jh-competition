@@ -22,11 +22,11 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ trainer, count }: any) => {
+const TrainerAvatar = ({ trainer, count, className }: any) => {
   const classes = useBadgeBackground(trainer.id)()
 
   return (
-    <Button>
+    <Button className={className}>
       <Tooltip rows={[`${trainer.lastName} ${trainer.firstName}`]}>
         <Badge
           overlap='circle'
