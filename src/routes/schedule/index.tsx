@@ -16,10 +16,10 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Fab from '@material-ui/core/Fab'
-import Box from '@material-ui/core/Box'
 
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
+import UnfoldMore from '@material-ui/icons/UnfoldMore'
 
 import Tooltip from 'components/multiline-tooltip'
 
@@ -98,11 +98,14 @@ const SchedulePage = () => {
         <TableBody>
           {
             times.map(time => (
-              <TableRow key={time} className={classes.timeTd}>
-                <TableCell padding='none'>
-                  <Box paddingLeft={2}>
+              <TableRow key={time}>
+                <TableCell padding='none' className={classes.timeTd}>
+                  <Typography>
                     {time}
-                  </Box>
+                  </Typography>
+                  <Fab onClick={toggleTrainers} className={classes.toggleOpenedTime} color='secondary' size='small'>
+                    <UnfoldMore fontSize='small' />
+                  </Fab>
                 </TableCell>
                 <TableCell padding='none' className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift)}>
                   <Grid container={true} wrap='nowrap'>
@@ -119,9 +122,7 @@ const SchedulePage = () => {
                             />
                           )
                           : (
-                            <Button className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)}>
-                              <div className={classes.avatarPlaceholder} />
-                            </Button>
+                            <div className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)}/>
                           )
                       ))
                     }

@@ -6,6 +6,8 @@ export default makeStyles((theme: Theme) => ({
   },
   timeTd: {
     width: theme.spacing(10),
+    paddingLeft: theme.spacing(2),
+    position: 'relative',
   },
   trainersTh: {
     width: theme.spacing(20),
@@ -58,6 +60,7 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   emptyTrainerAvatar: {
+    width: theme.spacing(8),
     marginLeft: theme.spacing(-8),
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
@@ -65,6 +68,7 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   firstEmptyTrainerAvatar: {
+    width: theme.spacing(8),
     marginLeft: theme.spacing(-3),
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
@@ -81,5 +85,18 @@ export default makeStyles((theme: Theme) => ({
     bottom: 0,
     transform: 'translate(50%, 50%)',
     zIndex: 10,
+  },
+  toggleOpenedTime: {
+    position: 'absolute',
+    color: 'white',
+    left: theme.spacing(-3),
+    top: 0,
+    transform: 'translate(50%, -50%)',
+    zIndex: 10,
+    height: theme.spacing(3),
+    minHeight: theme.spacing(3),
+    width: theme.spacing(3),
+    minWidth: theme.spacing(3),
+    textTransform: 'unset',
   },
 }))
