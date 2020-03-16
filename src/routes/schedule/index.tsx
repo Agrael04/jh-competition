@@ -46,6 +46,9 @@ const SchedulePage = () => {
   const classes = useStyles()
   const date = useSelector(state => state.schedule.currentDate)
   const [openedTrainers, setOpenedTrainers] = React.useState(false)
+  const [hiddenTimes, setHiddenTimes] = React.useState([
+    '8:00', '8:30', '9:00', '9:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:30', '19:30', '21:00', '21:30',
+  ])
 
   const toggleTrainers = React.useCallback(() => {
     setOpenedTrainers(openedTrainers => !openedTrainers)
@@ -97,7 +100,9 @@ const SchedulePage = () => {
         </TableHead>
         <TableBody>
           {
-            times.map(time => (
+            times
+            .filter(time => !hiddenTimes.find(t => t === time))
+            .map(time => (
               <TableRow key={time}>
                 <TableCell padding='none' className={classes.timeTd}>
                   <Typography>
