@@ -100,7 +100,12 @@ const SchedulePage = () => {
 
   const hideTime = React.useCallback(
     (time: string) => {
-      setHiddenTimes(times => [...times, time])
+      setHiddenTimes(times => [...times, time].sort((a, b) => {
+        const aTime = a.length === 4 ? `0${a}` : a
+        const bTime = b.length === 4 ? `0${b}` : b
+
+        return aTime > bTime ? 1 : -1
+      }))
     },
     [setHiddenTimes]
   )
