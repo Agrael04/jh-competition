@@ -14,6 +14,8 @@ import Select from 'containers/select'
 
 import TraineeSuggester from './trainee-suggester'
 
+const statuses = ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
+
 type FieldName = keyof IStoreState['schedule']['recordsForm'][0]
 
 export default function TraineeRow({ index }: { index: number }) {
@@ -27,7 +29,10 @@ export default function TraineeRow({ index }: { index: number }) {
 
   const actions = useActions()
 
-  const removeTrainee = () => actions.schedule.removeTrainee(index)
+  const removeTrainee = React.useCallback(
+    () => actions.schedule.removeTrainee(index),
+    [actions, index]
+  )
 
   const handleChange = (name: string, value: any) => {
     actions.schedule.updateTraineeFormField(index, name, value)
@@ -55,7 +60,7 @@ export default function TraineeRow({ index }: { index: number }) {
               variant='outlined'
             >
               {
-                ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED'].map(type => (
+                statuses.map(type => (
                   <MenuItem value={type} key={type}>
                     {type}
                   </MenuItem>

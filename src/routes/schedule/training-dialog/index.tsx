@@ -1,7 +1,6 @@
 import React from 'react'
 import { IStoreState, useSelector, useActions } from 'store'
 
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -18,15 +17,11 @@ import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
 import TraineesBlock from './trainees-block'
+import TrainerSelect from './trainer-select'
+import SubmitButton from './submit-button'
+import DeleteButton from './delete-button'
 
-import useStyles from './styles'
-
-import useCreateTraining from '../mutations/create-training'
-import useUpdateTraining from '../mutations/update-training'
-import useDeleteTraining from '../mutations/delete-training'
-import useCreateTrainingRecords from '../mutations/create-training-records'
-
-import { times, resources, trainerSchedule, trainers } from '../data'
+import { times, resources } from '../data'
 
 const translations = {
   'okLabel': 'Oк',
@@ -79,75 +74,44 @@ type FieldName = keyof IStoreState['schedule']['trainingForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingForm[name]
 
 export default function TrainingDialog() {
-  const { openedRecordDialog, dialogMode, trainingForm, recordsForm } = useSelector(state => state.schedule)
-  const time = useSelector(fieldSelector('time')) as string
+  const openedRecordDialog = useSelector(state => state.schedule.openedRecordDialog)
   const actions = useActions()
-  const classes = useStyles()
-  const createTraining = useCreateTraining()
-  const updateTraining = useUpdateTraining()
-  const deleteTraining = useDeleteTraining()
-  const createTrainingRecords = useCreateTrainingRecords()
 
   const close = React.useCallback(
     () => actions.schedule.closeRecordDialog(),
     [actions]
   )
 
-  const remove = React.useCallback(
-    async () => {
-      await deleteTraining(trainingForm)
-
-      close()
-    },
-    [trainingForm, close, deleteTraining]
-  )
-
-  const save = React.useCallback(
-    async () => {
-      const records = recordsForm
-
-      if (dialogMode === 'create') {
-        await createTraining(trainingForm)
-      } else {
-        await updateTraining(trainingForm)
+  const handleChange = React.useCallback(
+    (name: string, value: any) => {
+      let v = value
+      if (name === 'markPrice' || name === 'moneyPrice') {
+        v = Number(value)
       }
 
-      if (records.length > 0) {
-        await createTrainingRecords(trainingForm._id, records)
+      if (typeof v === 'object') {
+        v = v.toDate()
       }
 
-      close()
+      actions.schedule.updateFormField(name, v)
     },
-    [dialogMode, createTraining, recordsForm, updateTraining, createTrainingRecords, trainingForm, close]
+    [actions]
   )
-
-  const handleChange = (name: string, value: any) => {
-    let v = value
-    if (name === 'markPrice' || name === 'moneyPrice') {
-      v = Number(value)
-    }
-
-    if (typeof v === 'object') {
-      v = v.toDate()
-    }
-
-    actions.schedule.updateFormField(name, v)
-  }
 
   return (
     <Dialog open={openedRecordDialog} onClose={close} maxWidth='lg' fullWidth={true}>
-      <AppBar className={classes.appBar}>
+      <AppBar position='relative'>
         <Toolbar>
           <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
             <CloseIcon />
           </IconButton>
-          <Typography variant='h6' className={classes.title}>
+          <Typography variant='h6'>
             Тренировка
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box padding={3} className={classes.box}>
-        <Grid container={true} direction='column' justify='space-around' className={classes.dialogBody}>
+      <Box padding={3}>
+        <Grid container={true} direction='column' justify='space-around'>
           <Grid item={true} container={true} spacing={3} justify='space-around'>
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={6}>
@@ -247,24 +211,12 @@ export default function TrainingDialog() {
                 />
               </Grid>
               <Grid item={true} lg={12}>
-                <Select
+                <TrainerSelect
                   name='trainer'
+                  label='Тренер'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
-                  label={translations.trainer}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    trainers
-                      .filter(trainer => trainerSchedule.find(ts => ts.id === trainer.id && ts.times.includes(time)))
-                      .map(trainer => (
-                        <MenuItem value={trainer.id} key={trainer.id}>
-                          {trainer.firstName} {trainer.lastName}
-                        </MenuItem>
-                      ))
-                  }
-                </Select>
+                />
               </Grid>
               <Grid item={true} lg={12}>
                 <Select
@@ -284,26 +236,6 @@ export default function TrainingDialog() {
                   }
                 </Select>
               </Grid>
-              {/* <Grid item={true} lg={6}>
-                <TextField
-                  name='moneyPrice'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.moneyPrice}
-                  fullWidth={true}
-                  variant='outlined'
-                />
-              </Grid>
-              <Grid item={true} lg={6}>
-                <TextField
-                  name='markPrice'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.markPrice}
-                  fullWidth={true}
-                  variant='outlined'
-                />
-              </Grid> */}
             </Grid>
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={12}>
@@ -323,13 +255,8 @@ export default function TrainingDialog() {
           </Grid>
           <Box marginTop={1}>
             <Grid item={true} container={true} justify='space-between'>
-              {
-                dialogMode === 'update'
-                  ? <Button variant='text' color='primary' onClick={remove}> Удалить </Button>
-                  : <div />
-              }
-
-              <Button variant='contained' color='primary' onClick={save}> Сохранить </Button>
+              <DeleteButton />
+              <SubmitButton />
             </Grid>
           </Box>
         </Grid>

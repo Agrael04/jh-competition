@@ -18,6 +18,7 @@ export interface IState {
   trainingForm: ITraining
   recordsForm: ITrainingRecord[]
   traineeSuggester: ITraineeSuggester
+  openedTrainers: boolean
 }
 
 const initialState: IState = {
@@ -44,6 +45,7 @@ const initialState: IState = {
     loading: false,
     options: [],
   },
+  openedTrainers: false,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -187,6 +189,13 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         currentDate: removeTimeFromDate(payload.date)!,
+      }
+    }
+
+    case constants.TOGGLE_OPENED_TRAINERS: {
+      return {
+        ...state,
+        openedTrainers: !state.openedTrainers,
       }
     }
 

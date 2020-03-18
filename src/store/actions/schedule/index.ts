@@ -61,6 +61,10 @@ export const setCurrentDate = (date: Date) => ({
   payload: { date },
 })
 
+export const toggleOpenedTrainers = () => ({
+  type: constants.TOGGLE_OPENED_TRAINERS,
+})
+
 export default {
   openCreateDialog,
   openUpdateDialog,
@@ -76,4 +80,6 @@ export default {
   searchTraineesCancel,
 
   setCurrentDate,
+
+  toggleOpenedTrainers,
 }

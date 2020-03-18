@@ -22,8 +22,15 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ trainer, count, className }: any) => {
+const TrainerAvatar = ({ trainer, getCount, className }: any) => {
   const classes = useBadgeBackground(trainer.id)()
+
+  const count = React.useMemo(
+    () => {
+      return getCount(trainer.id)
+    },
+    [getCount, trainer]
+  )
 
   return (
     <Button className={className}>
