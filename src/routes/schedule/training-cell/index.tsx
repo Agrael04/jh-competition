@@ -20,7 +20,7 @@ import useStyles from './styles'
 
 import getColorPallete from 'utils/get-color-pallete'
 
-const TrainingCell = ({ time, resource, id }: any) => {
+const TrainingCell = ({ time, resource, id, duration }: any) => {
   const classes = useStyles()
   const actions = useActions()
 
@@ -82,7 +82,7 @@ const TrainingCell = ({ time, resource, id }: any) => {
   const isOccupied = !loading && !!training
 
   return (
-    <TableCell align='center' padding='none' style={isOccupied ? backgroundStyle : undefined} className={classes.resourceTd}>
+    <TableCell align='center' padding='none' style={isOccupied ? backgroundStyle : undefined} className={classes.resourceTd} rowSpan={duration ? duration : 1}>
       {
         loading && (
           <CircularProgress />

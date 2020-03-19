@@ -16,9 +16,10 @@ export const UPDATE_TRAINING = gql`
       name
       note
       resource
-      time
       trainer
       type
+      startTime
+      endTime
     }
     deleteManyTrainingRecords(query: { training: $_id }) {
       deletedCount

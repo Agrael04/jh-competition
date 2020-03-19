@@ -164,7 +164,7 @@ export default function TrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <Select
-                  name='time'
+                  name='startTime'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.startTime}
@@ -173,8 +173,8 @@ export default function TrainingDialog() {
                 >
                   {
                     times.map(time => (
-                      <MenuItem value={time} key={time}>
-                        {time}
+                      <MenuItem value={time.id} key={time.id}>
+                        {time.label}
                       </MenuItem>
                     ))
                   }
@@ -182,7 +182,7 @@ export default function TrainingDialog() {
               </Grid>
               <Grid item={true} lg={6}>
                 <Select
-                  name='time'
+                  name='endTime'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.startTime}
@@ -191,8 +191,8 @@ export default function TrainingDialog() {
                 >
                   {
                     times.map(time => (
-                      <MenuItem value={time} key={time}>
-                        {time}
+                      <MenuItem value={time.id} key={time.id}>
+                        {time.label}
                       </MenuItem>
                     ))
                   }

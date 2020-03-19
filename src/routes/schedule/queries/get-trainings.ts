@@ -4,8 +4,9 @@ export interface IGetTrainingsResponse {
   trainings: Array<{
     _id: string
     resource: number
-    time: string
     trainer: number
+    startTime: number
+    endTime: number
   }>
 }
 
@@ -14,8 +15,9 @@ export default gql`
     trainings(query: { date: $date }) {
       _id
       resource
-      time
       trainer
+      startTime
+      endTime
     }
   }
 `

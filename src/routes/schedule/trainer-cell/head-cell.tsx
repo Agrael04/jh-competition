@@ -25,7 +25,7 @@ const TrainerHeaderCell = () => {
         {'Тренера'}
       </Typography>
 
-      <Fab onClick={toggleTrainers} className={classes.toggleOpenedTrainers} color='secondary' size='small'>
+      <Fab onClick={toggleTrainers} className={classes.toggleOpenedTrainers} color='primary' size='small'>
         {
           openedTrainers
             ? <KeyboardArrowLeft />

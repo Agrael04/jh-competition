@@ -10,7 +10,7 @@ export default makeStyles((theme: Theme) => ({
     position: 'relative',
   },
   resourceTd: {
-    borderLeft: `2px dotted ${theme.palette.primary.main}`,
+    borderLeft: `2px dashed ${theme.palette.primary.main}`,
   },
   avatarPlaceholder: {
     width: theme.spacing(0),

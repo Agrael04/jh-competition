@@ -31,37 +31,31 @@ import GET_TRAININGS, { IGetTrainingsResponse } from './queries/get-trainings'
 
 import useStyles from './styles'
 
-const hideableTimes = [
-  '8:00', '8:30', '9:00', '9:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:30', '19:30', '21:00', '21:30',
-]
-
-const isHideable = (time: string) => !!hideableTimes.find(ht => ht === time)
-
-const TimeFab = ({ time, onClick, index }: { time: string, index: number, onClick: (time: string) => void }) => {
+const TimeFab = ({ time, onClick, index }: { time: any, index: number, onClick: (time: number) => void }) => {
   const classes = useStyles()
   const boundOnClick = React.useCallback(
-    () => onClick(time),
+    () => onClick(time.id),
     [onClick, time]
   )
 
   return (
-    <Fab onClick={boundOnClick} className={classes.toggleHiddenTime} color='secondary' size='small' style={{ left: -40 + index * 56 }}>
+    <Fab onClick={boundOnClick} className={classes.toggleHiddenTime} color='primary' size='small' style={{ left: -40 + index * 56 }}>
       <Typography variant='caption'>
-        {time}
+        {time.label}
       </Typography>
     </Fab>
   )
 }
 
-const OpenedTimeFab = ({ time, onClick }: { time: string, onClick: (time: string) => void }) => {
+const OpenedTimeFab = ({ time, onClick }: { time: any, onClick: (time: number) => void }) => {
   const classes = useStyles()
   const boundOnClick = React.useCallback(
-    () => onClick(time),
+    () => onClick(time.id),
     [onClick, time]
   )
 
   return (
-    <Fab onClick={boundOnClick} className={classes.toggleOpenedTime} color='secondary' size='small'>
+    <Fab onClick={boundOnClick} className={classes.toggleOpenedTime} color='primary' size='small'>
       <UnfoldLess />
     </Fab>
   )
@@ -70,7 +64,7 @@ const OpenedTimeFab = ({ time, onClick }: { time: string, onClick: (time: string
 const SchedulePage = () => {
   const classes = useStyles()
   const date = useSelector(state => state.schedule.currentDate)
-  const [hiddenTimes, setHiddenTimes] = React.useState(hideableTimes)
+  const [hiddenTimes, setHiddenTimes] = React.useState<number[]>(times.filter(t => t.isHideable).map(t => t.id))
 
   const { data, loading } = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
     variables: { date },
@@ -78,49 +72,72 @@ const SchedulePage = () => {
 
   const filteredTimes = React.useMemo(
     () => {
-      return times.filter(time => !hiddenTimes.find(t => t === time))
+      return times.filter(time => !hiddenTimes.find(t => t === time.id))
     },
     [hiddenTimes]
   )
 
   const showTime = React.useCallback(
-    (time: string) => {
+    (time: any) => {
       setHiddenTimes(times => times.filter(t => t !== time))
     },
     [setHiddenTimes]
   )
 
   const hideTime = React.useCallback(
-    (time: string) => {
-      setHiddenTimes(times => [...times, time].sort((a, b) => {
-        const aTime = a.length === 4 ? `0${a}` : a
-        const bTime = b.length === 4 ? `0${b}` : b
-
-        return aTime > bTime ? 1 : -1
-      }))
+    (time: any) => {
+      setHiddenTimes(times => [...times, time].sort((a, b) => a > b ? 1 : -1))
     },
     [setHiddenTimes]
   )
 
   const getHiddenTimes = React.useCallback(
-    (from: string, to: string) => {
-      const fromTime = from.length === 4 ? `0${from}` : from
-      const toTime = to.length === 4 ? `0${to}` : to
-
-      return hiddenTimes.filter(ht => {
-        const time = ht.length === 4 ? `0${ht}` : ht
-
-        return time > fromTime && time < toTime
-      })
+    (from: number, to?: number) => {
+      return hiddenTimes.filter(ht => ht > from && ht < (to || 100)).map(ht => times.find(t => t.id === ht))
     },
     [hiddenTimes]
   )
 
   const getTrainingsCount = React.useCallback(
-    (time: string) => (trainer: number) => {
-      return data?.trainings.filter(tr => tr?.time === time && tr?.trainer === trainer).length
+    (time: number) => (trainer: number) => {
+      return data?.trainings.filter(tr => tr?.startTime === time && tr?.trainer === trainer).length
     },
     [data]
+  )
+
+  const getTraining = React.useCallback(
+    (time: number, resource: number) => {
+      return data?.trainings.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource === resource)
+    },
+    [data]
+  )
+
+  const getTrainingDuration = React.useCallback(
+    (time: number, resource: number) => {
+      const tr = getTraining(time, resource)
+
+      const startTime = tr?.startTime || 0
+      const endTime = tr?.endTime || 0
+
+      const hiddenLength = hiddenTimes.filter(ht => ht >= startTime && ht <= endTime).length
+
+      return endTime - startTime - hiddenLength
+    },
+    [getTraining, hiddenTimes]
+  )
+
+  const isResourceOccupied = React.useCallback(
+    (time: number, resource: number) => {
+      const tr = getTraining(time, resource)
+
+      const ts = filteredTimes.filter(t => t.id >= tr?.startTime! && t.id <= tr?.endTime!)
+      const isFirst = ts[0]?.id === time
+
+      console.log(time, isFirst)
+
+      return (tr && !isFirst)
+    },
+    [getTraining, hiddenTimes]
   )
 
   return (
@@ -135,8 +152,8 @@ const SchedulePage = () => {
                 {'Время'}
               </Typography>
               {
-                getHiddenTimes('', filteredTimes[0]).map((ht, index) => (
-                  <TimeFab time={ht} key={ht} index={index} onClick={showTime} />
+                getHiddenTimes(0, filteredTimes[0].id).map((ht, index) => (
+                  <TimeFab time={ht} key={ht?.id} index={index} onClick={showTime} />
                 ))
               }
             </TableCell>
@@ -160,23 +177,23 @@ const SchedulePage = () => {
           {
             filteredTimes
               .map((time, index, arr) => (
-                <TableRow key={time}>
+                <TableRow key={time.id}>
                   <TableCell padding='none' className={classes.timeTd}>
                     <Typography>
-                      {time}
+                      {time.label}
                     </Typography>
                     {
-                      isHideable(time) && (
+                      time.isHideable && (
                         <OpenedTimeFab time={time} onClick={hideTime} />
                       )
                     }
                     {
-                      getHiddenTimes(time, arr[index + 1] || '22:00').map((ht, index) => (
-                        <TimeFab time={ht} key={ht} index={index} onClick={showTime} />
+                      getHiddenTimes(time.id, arr[index + 1]?.id).map((ht, index) => (
+                        <TimeFab time={ht} key={ht?.id} index={index} onClick={showTime} />
                       ))
                     }
                   </TableCell>
-                  <TrainerBodyCell key={time} time={time} getTrainingsCount={getTrainingsCount} />
+                  <TrainerBodyCell key={time.id} time={time.id} getTrainingsCount={getTrainingsCount} />
                   {
                     loading && time === times[0] ? (
                       <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
@@ -185,14 +202,19 @@ const SchedulePage = () => {
                     ) : null
                   }
                   {
-                    !loading && resources.map(r => (
-                      <TrainingCell
-                        id={data?.trainings.find(tr => tr?.time === time && tr?.resource === r.id)?._id}
-                        resource={r.id}
-                        time={time}
-                        key={r.id}
-                      />
-                    ))
+                    !loading && resources.map(r =>
+                      isResourceOccupied(time.id, r.id)
+                        ? null
+                        : (
+                          <TrainingCell
+                            id={getTraining(time.id, r.id)?._id}
+                            resource={r.id}
+                            time={time.id}
+                            key={r.id}
+                            duration={getTrainingDuration(time.id, r.id)}
+                          />
+                        )
+                    )
                   }
                 </TableRow>
               ))

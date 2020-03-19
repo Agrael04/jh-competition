@@ -18,8 +18,8 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 }))
 
 interface IProps {
-  time: string
-  getTrainingsCount: (time: string) => (trainer: number) => number | undefined
+  time: number
+  getTrainingsCount: (time: number) => (trainer: number) => number | undefined
 }
 
 const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {

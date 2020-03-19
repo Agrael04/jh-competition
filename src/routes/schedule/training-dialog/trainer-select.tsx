@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
-  const time = useSelector(fieldSelector('time')) as string
+  const time = useSelector(fieldSelector('startTime')) as number
 
   return (
     <Select

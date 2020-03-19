@@ -2,7 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export default makeStyles((theme: Theme) => ({
   resourceTd: {
-    borderLeft: `2px dotted ${theme.palette.primary.main}`,
+    borderLeft: `2px dashed ${theme.palette.primary.main}`,
   },
   mainAvatar: {
     zIndex: 10,

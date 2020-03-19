@@ -9,9 +9,10 @@ export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
     insertOneTraining(data: $training) {
       _id
-      time
       resource
       trainer
+      startTime
+      endTime
     }
   }
 `
@@ -21,7 +22,7 @@ const useCreateTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) }}
+      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
 
       return createTraining({
         variables: { training },

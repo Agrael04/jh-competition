@@ -28,7 +28,8 @@ const initialState: IState = {
   trainingForm: {
     _id: '',
 
-    time: '',
+    startTime: null,
+    endTime: null,
     resource: undefined,
     trainer: undefined,
     gym: undefined,
@@ -57,7 +58,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
         openedRecordDialog: true,
         trainingForm: {
           _id: new BSON.ObjectID(),
-          time: payload.target.time,
+          startTime: payload.target.time,
+          endTime: null,
           resource: payload.target.resource,
           trainer: payload.trainer === null ? undefined : payload.trainer,
           gym: 1,

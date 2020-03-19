@@ -10,9 +10,10 @@ export interface IGetTrainingResponse {
     name: string
     note: string
     resource: number
-    time: string
     trainer: number
     type: string
+    startTime: number
+    endTime: number
   }
   trainingRecords: Array<{
     seasonPass: string
@@ -37,9 +38,10 @@ export default gql`
       name
       note
       resource
-      time
       trainer
       type
+      startTime
+      endTime
     }
     trainingRecords(query: { training: $id }) {
       seasonPass
