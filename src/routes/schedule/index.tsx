@@ -100,7 +100,7 @@ const SchedulePage = () => {
 
   const getTrainingsCount = React.useCallback(
     (time: number) => (trainer: number) => {
-      return data?.trainings.filter(tr => tr?.startTime === time && tr?.trainer === trainer).length
+      return data?.trainings.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer === trainer).length
     },
     [data]
   )
@@ -133,11 +133,9 @@ const SchedulePage = () => {
       const ts = filteredTimes.filter(t => t.id >= tr?.startTime! && t.id <= tr?.endTime!)
       const isFirst = ts[0]?.id === time
 
-      console.log(time, isFirst)
-
       return (tr && !isFirst)
     },
-    [getTraining, hiddenTimes]
+    [getTraining, filteredTimes]
   )
 
   return (

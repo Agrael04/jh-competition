@@ -1,4 +1,5 @@
 import React from 'react'
+import clsx from 'clsx'
 
 import Avatar from '@material-ui/core/Avatar'
 import Badge from '@material-ui/core/Badge'
@@ -13,6 +14,9 @@ const useStyles = (color: any) => makeStyles((theme: Theme) => ({
   badgeBackground: {
     backgroundColor: color[500],
   },
+  emptyTrainer: {
+    filter: 'grayscale(1)',
+  },
 }))
 
 export const useBadgeBackground = (id: number) => {
@@ -22,7 +26,7 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ trainer, getCount, className }: any) => {
+const TrainerAvatar = ({ trainer, getCount, showBadge, className }: any) => {
   const classes = useBadgeBackground(trainer.id)()
 
   const count = React.useMemo(
@@ -41,13 +45,13 @@ const TrainerAvatar = ({ trainer, getCount, className }: any) => {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          badgeContent={count}
+          badgeContent={showBadge ? count : undefined}
           color={'error'}
           classes={{
             'badge': classes.badgeBackground,
           }}
         >
-          <Avatar src={trainer.avatarSrc} />
+          <Avatar src={trainer.avatarSrc} className={clsx(!count && classes.emptyTrainer)} />
         </Badge>
       </Tooltip>
     </Button>

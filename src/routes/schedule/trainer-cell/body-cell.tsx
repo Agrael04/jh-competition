@@ -28,11 +28,7 @@ const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
 
   const getCount = React.useCallback(
     trainer => {
-      if (openedTrainers) {
-        return getTrainingsCount(time)(trainer)
-      }
-
-      return 0
+      return getTrainingsCount(time)(trainer)
     },
     [getTrainingsCount, openedTrainers, time]
   )
@@ -49,6 +45,7 @@ const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
                   trainer={ts.trainer}
                   key={ts.trainer?.id}
                   getCount={getCount}
+                  showBadge={openedTrainers}
                   className={index > 0 ? clsx(classes.trainerAvatar, openedTrainers && classes.openedTrainerAvatar) : undefined}
                 />
               )
