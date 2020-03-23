@@ -6,8 +6,6 @@ import ITraining, { ITrainingRecord } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
-import { times } from 'routes/schedule/data'
-
 interface ITraineeSuggester {
   loading: boolean
   options: ISearchedTrainee[]
@@ -17,7 +15,6 @@ export interface IState {
   currentDate: Date
   currentGym: number
   openedTrainers: boolean
-  hiddenTimes: number[]
 
   openedTrainingDialog: boolean
   dialogMode: string | null
@@ -30,7 +27,6 @@ const initialState: IState = {
   currentDate: removeTimeFromDate(new Date())!,
   currentGym: 1,
   openedTrainers: false,
-  hiddenTimes: times.filter(t => t.isHideable).map(t => t.id),
 
   openedTrainingDialog: false,
   dialogMode: null,
@@ -213,20 +209,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         openedTrainers: !state.openedTrainers,
-      }
-    }
-
-    case constants.SHOW_TIME: {
-      return {
-        ...state,
-        hiddenTimes: state.hiddenTimes.filter(t => t !== payload.time),
-      }
-    }
-
-    case constants.HIDE_TIME: {
-      return {
-        ...state,
-        hiddenTimes: [...state.hiddenTimes, payload.time].sort((a, b) => a > b ? 1 : -1),
       }
     }
 

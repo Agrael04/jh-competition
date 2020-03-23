@@ -66,16 +66,6 @@ export const setCurrentGym = (gym: number) => ({
   payload: { gym },
 })
 
-export const showTime = (time: number) => ({
-  type: constants.SHOW_TIME,
-  payload: { time },
-})
-
-export const hideTime = (time: number) => ({
-  type: constants.HIDE_TIME,
-  payload: { time },
-})
-
 export const toggleOpenedTrainers = () => ({
   type: constants.TOGGLE_OPENED_TRAINERS,
 })
@@ -96,9 +86,6 @@ export default {
 
   setCurrentDate,
   setCurrentGym,
-
-  showTime,
-  hideTime,
 
   toggleOpenedTrainers,
 }

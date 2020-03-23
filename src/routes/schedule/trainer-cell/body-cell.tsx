@@ -30,7 +30,7 @@ const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
     trainer => {
       return getTrainingsCount(time)(trainer)
     },
-    [getTrainingsCount, openedTrainers, time]
+    [getTrainingsCount, time]
   )
 
   return (
