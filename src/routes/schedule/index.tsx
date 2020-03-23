@@ -18,7 +18,7 @@ import UnfoldLess from '@material-ui/icons/UnfoldLess'
 
 import Tooltip from 'components/multiline-tooltip'
 
-import { useSelector } from 'store'
+import { useSelector, useActions } from 'store'
 import { times, resources } from './data'
 
 import TrainingDialog from './training-dialog'
@@ -63,8 +63,9 @@ const OpenedTimeFab = ({ time, onClick }: { time: any, onClick: (time: number) =
 
 const SchedulePage = () => {
   const classes = useStyles()
+  const actions = useActions()
   const date = useSelector(state => state.schedule.currentDate)
-  const [hiddenTimes, setHiddenTimes] = React.useState<number[]>(times.filter(t => t.isHideable).map(t => t.id))
+  const hiddenTimes = useSelector(state => state.schedule.hiddenTimes)
 
   const { data, loading } = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
     variables: { date },
@@ -77,19 +78,8 @@ const SchedulePage = () => {
     [hiddenTimes]
   )
 
-  const showTime = React.useCallback(
-    (time: any) => {
-      setHiddenTimes(times => times.filter(t => t !== time))
-    },
-    [setHiddenTimes]
-  )
-
-  const hideTime = React.useCallback(
-    (time: any) => {
-      setHiddenTimes(times => [...times, time].sort((a, b) => a > b ? 1 : -1))
-    },
-    [setHiddenTimes]
-  )
+  const showTime = actions.schedule.showTime
+  const hideTime = actions.schedule.hideTime
 
   const getHiddenTimes = React.useCallback(
     (from: number, to?: number) => {

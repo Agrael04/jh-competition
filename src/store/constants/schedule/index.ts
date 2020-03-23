@@ -12,6 +12,10 @@ export const SEARCH_TRAINEES_SUCCESS = 'schedule/SEARCH_TRAINEES_SUCCESS'
 export const SEARCH_TRAINEES_CANCEL = 'schedule/SEARCH_TRAINEES_CANCEL'
 
 export const SET_CURRENT_DATE = 'schedule/SET_CURRENT_DATE'
+export const SET_CURRENT_GYM = 'schedule/SET_CURRENT_GYM'
+
+export const SHOW_TIME = 'schedule/SHOW_TIME'
+export const HIDE_TIME = 'schedule/HIDE_TIME'
 
 export const TOGGLE_OPENED_TRAINERS = 'schedule/TOGGLE_OPENED_TRAINERS'
 
@@ -30,6 +34,10 @@ export default {
   SEARCH_TRAINEES_CANCEL,
 
   SET_CURRENT_DATE,
+  SET_CURRENT_GYM,
+
+  SHOW_TIME,
+  HIDE_TIME,
 
   TOGGLE_OPENED_TRAINERS,
 }

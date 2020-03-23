@@ -6,24 +6,33 @@ import ITraining, { ITrainingRecord } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
+import { times } from 'routes/schedule/data'
+
 interface ITraineeSuggester {
   loading: boolean
   options: ISearchedTrainee[]
 }
 
 export interface IState {
-  openedRecordDialog: boolean
   currentDate: Date
+  currentGym: number
+  openedTrainers: boolean
+  hiddenTimes: number[]
+
+  openedTrainingDialog: boolean
   dialogMode: string | null
   trainingForm: ITraining
   recordsForm: ITrainingRecord[]
   traineeSuggester: ITraineeSuggester
-  openedTrainers: boolean
 }
 
 const initialState: IState = {
-  openedRecordDialog: false,
   currentDate: removeTimeFromDate(new Date())!,
+  currentGym: 1,
+  openedTrainers: false,
+  hiddenTimes: times.filter(t => t.isHideable).map(t => t.id),
+
+  openedTrainingDialog: false,
   dialogMode: null,
   trainingForm: {
     _id: '',
@@ -46,7 +55,6 @@ const initialState: IState = {
     loading: false,
     options: [],
   },
-  openedTrainers: false,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -55,7 +63,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         dialogMode: 'create',
-        openedRecordDialog: true,
+        openedTrainingDialog: true,
         trainingForm: {
           _id: new BSON.ObjectID(),
           startTime: payload.target.time,
@@ -84,7 +92,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         dialogMode: 'update',
-        openedRecordDialog: true,
+        openedTrainingDialog: true,
         trainingForm: {
           ...initialState.trainingForm,
           ...training,
@@ -151,7 +159,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         dialogMode: null,
-        openedRecordDialog: false,
+        openedTrainingDialog: false,
         trainingForm: initialState.trainingForm,
         recordsForm: initialState.recordsForm,
       }
@@ -188,9 +196,18 @@ export default (state = initialState, { type, payload }: { type: string, payload
     }
 
     case constants.SET_CURRENT_DATE: {
+      console.log(typeof payload.date)
+      console.log(typeof removeTimeFromDate(payload.date))
       return {
         ...state,
         currentDate: removeTimeFromDate(payload.date)!,
+      }
+    }
+
+    case constants.SET_CURRENT_GYM: {
+      return {
+        ...state,
+        currentGym: payload.gym,
       }
     }
 
@@ -198,6 +215,20 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         openedTrainers: !state.openedTrainers,
+      }
+    }
+
+    case constants.SHOW_TIME: {
+      return {
+        ...state,
+        hiddenTimes: state.hiddenTimes.filter(t => t !== payload.time),
+      }
+    }
+
+    case constants.HIDE_TIME: {
+      return {
+        ...state,
+        hiddenTimes: [...state.hiddenTimes, payload.time].sort((a, b) => a > b ? 1 : -1),
       }
     }
 

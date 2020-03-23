@@ -1,34 +1,92 @@
 import React from 'react'
-import { IStoreState, useActions } from 'store'
+import moment from 'moment'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import Grid from '@material-ui/core/Grid'
+import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@material-ui/core/IconButton'
+
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 
 import DatePicker from 'containers/date-picker'
+import Select from 'containers/select'
 
-const fieldSelector = () => (state: IStoreState) => state.schedule.currentDate
+const currentDateSelector = () => (state: IStoreState) => state.schedule.currentDate
+const currentGymSelector = () => (state: IStoreState) => state.schedule.currentGym
+
+const gyms = [
+  { id: 1, text: 'Берестейська' },
+  { id: 2, text: 'Харькiвське шосе' },
+  { id: 3, text: 'Почайна' },
+  { id: 4, text: 'Парк дружбы народов' },
+]
+
 
 const ToolbarContainer = () => {
   const actions = useActions()
+  const currentDate = useSelector(currentDateSelector())
 
-  const handleChange = (name: string, value: any) => {
+  const handleGymChange = (name: string, value: any) => {
+    actions.schedule.setCurrentGym(value)
+  }
+
+  const handleDateChange = (name: string, value: any) => {
     actions.schedule.setCurrentDate(value.toDate())
+  }
+
+  const handlePrevDateClick = () => {
+    let d = moment(currentDate).subtract(1, 'days')
+    actions.schedule.setCurrentDate(d.toDate())
+  }
+
+  const handleNextDateClick = () => {
+    let d = moment(currentDate).add(1, 'days')
+    actions.schedule.setCurrentDate(d.toDate())
   }
 
   return (
     <Toolbar>
-      <Typography variant='body1'>
-        {'Расписание на: '}
-      </Typography>
-      <Box marginLeft={0.5}>
-        <DatePicker
-          name='date'
-          onChange={handleChange}
-          fieldSelector={fieldSelector}
-          disableToolbar={true}
-        />
-      </Box>
+      <Grid container={true} justify='space-between'>
+        <Box marginY={1}>
+          <Grid container={true} wrap='nowrap'>
+            <IconButton onClick={handlePrevDateClick}>
+              <KeyboardArrowLeft />
+            </IconButton>
+            <DatePicker
+              name='date'
+              onChange={handleDateChange}
+              fieldSelector={currentDateSelector}
+              disableToolbar={true}
+              inputVariant='outlined'
+              fullWidth={true}
+            />
+            <IconButton onClick={handleNextDateClick}>
+              <KeyboardArrowRight />
+            </IconButton>
+          </Grid>
+        </Box>
+        <Box marginY={1}>
+          <Select
+            name='gym'
+            onChange={handleGymChange}
+            fieldSelector={currentGymSelector}
+            label={'Зал'}
+            fullWidth={true}
+            variant='outlined'
+          >
+            {
+              gyms.map(gym => (
+                <MenuItem value={gym.id} key={gym.id}>
+                  {gym.text}
+                </MenuItem>
+              ))
+            }
+          </Select>
+        </Box>
+      </Grid>
     </Toolbar>
   )
 }

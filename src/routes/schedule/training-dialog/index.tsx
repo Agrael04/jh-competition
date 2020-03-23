@@ -74,7 +74,7 @@ type FieldName = keyof IStoreState['schedule']['trainingForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingForm[name]
 
 export default function TrainingDialog() {
-  const openedRecordDialog = useSelector(state => state.schedule.openedRecordDialog)
+  const openedTrainingDialog = useSelector(state => state.schedule.openedTrainingDialog)
   const actions = useActions()
 
   const close = React.useCallback(
@@ -99,7 +99,7 @@ export default function TrainingDialog() {
   )
 
   return (
-    <Dialog open={openedRecordDialog} onClose={close} maxWidth='lg' fullWidth={true}>
+    <Dialog open={openedTrainingDialog} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
         <Toolbar>
           <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
