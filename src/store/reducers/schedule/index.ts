@@ -196,8 +196,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
     }
 
     case constants.SET_CURRENT_DATE: {
-      console.log(typeof payload.date)
-      console.log(typeof removeTimeFromDate(payload.date))
       return {
         ...state,
         currentDate: removeTimeFromDate(payload.date)!,

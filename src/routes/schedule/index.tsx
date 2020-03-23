@@ -65,10 +65,11 @@ const SchedulePage = () => {
   const classes = useStyles()
   const actions = useActions()
   const date = useSelector(state => state.schedule.currentDate)
+  const gym = useSelector(state => state.schedule.currentGym)
   const hiddenTimes = useSelector(state => state.schedule.hiddenTimes)
 
   const { data, loading } = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
-    variables: { date },
+    variables: { date, gym },
   })
 
   const filteredTimes = React.useMemo(

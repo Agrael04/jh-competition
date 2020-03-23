@@ -11,8 +11,8 @@ export interface IGetTrainingsResponse {
 }
 
 export default gql`
-  query getTrainings($date: DateTime){
-    trainings(query: { date: $date }) {
+  query getTrainings($date: DateTime, $gym: Int){
+    trainings(query: { date: $date, gym: $gym }) {
       _id
       resource
       trainer
