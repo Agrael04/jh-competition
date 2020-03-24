@@ -40,7 +40,6 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
         return !!ts.times.find(t => t === endTime - 1)
       }
 
-
       return true
     })),
     [startTime, endTime]

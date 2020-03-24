@@ -29,7 +29,7 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
 
         const index = trainerTimes.findIndex((item, index) => index && item.id - 1 !== trainerTimes[index - 1].id)
 
-        if (index === -1) {
+        if (!endTime || index === -1) {
           return trainerTimes
         }
 

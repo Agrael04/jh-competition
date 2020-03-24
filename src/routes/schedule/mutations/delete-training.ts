@@ -21,7 +21,7 @@ const useDeleteTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
+      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date), gym: training.gym } }
 
       return deleteTraining({
         variables: { _id: training._id },
