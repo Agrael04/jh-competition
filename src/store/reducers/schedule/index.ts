@@ -66,8 +66,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
           endTime: null,
           resource: payload.target.resource,
           trainer: payload.trainer === null ? undefined : payload.trainer,
-          gym: 1,
-          date: removeTimeFromDate(new Date())!,
+          gym: state.currentGym,
+          date: state.currentDate,
 
           name: '',
           type: '',

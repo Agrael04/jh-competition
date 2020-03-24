@@ -107,49 +107,53 @@ const SchedulePage = () => {
           {
             times
               .map((time, index, arr) => (
-                <TableRow key={time.id}>
-                  {
-                    index % 2 === 0 && (
-                      <TableCell padding='none' className={classes.timeTd} rowSpan={2}>
+                arr.length - 1 === index
+                  ? (
+                    <TableRow key={time.id}>
+                      <TableCell className={classes.timeTd} colSpan={2 + resources.length}>
                         <Typography>
                           {time.label}
                         </Typography>
                       </TableCell>
-                    )
-                  }
-                  <TrainerBodyCell key={time.id} time={time.id} getTrainingsCount={getTrainingsCount} />
-                  {
-                    loading && time === times[0] ? (
-                      <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
-                        <CircularProgress />
-                      </TableCell>
-                    ) : null
-                  }
-                  {
-                    !loading && resources.map(r =>
-                      isResourceOccupied(time.id, r.id)
-                        ? null
-                        : (
-                          <TrainingCell
-                            id={getTraining(time.id, r.id)?._id}
-                            resource={r.id}
-                            time={time.id}
-                            key={r.id}
-                            duration={getTrainingDuration(time.id, r.id)}
-                          />
+                    </TableRow>
+                  ) : (
+                    <TableRow key={time.id}>
+                      {
+                        index % 2 === 0 && (
+                          <TableCell padding='none' className={classes.timeTd} rowSpan={2}>
+                            <Typography>
+                              {time.label}
+                            </Typography>
+                          </TableCell>
                         )
-                    )
-                  }
-                </TableRow>
+                      }
+                      <TrainerBodyCell key={time.id} time={time.id} getTrainingsCount={getTrainingsCount} />
+                      {
+                        loading && time === times[0] ? (
+                          <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
+                            <CircularProgress />
+                          </TableCell>
+                        ) : null
+                      }
+                      {
+                        !loading && resources.map(r =>
+                          isResourceOccupied(time.id, r.id)
+                            ? null
+                            : (
+                              <TrainingCell
+                                id={getTraining(time.id, r.id)?._id}
+                                resource={r.id}
+                                time={time.id}
+                                key={r.id}
+                                duration={getTrainingDuration(time.id, r.id)}
+                              />
+                            )
+                        )
+                      }
+                    </TableRow>
+                  )
               ))
           }
-          <TableRow>
-            <TableCell className={classes.timeTd} colSpan={2 + resources.length}>
-              <Typography>
-                22:00
-              </Typography>
-            </TableCell>
-          </TableRow>
         </TableBody>
       </Table>
       <TrainingDialog />

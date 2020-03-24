@@ -16,12 +16,14 @@ import TextField from 'containers/text-field'
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
+import EndTimeSelect from './fields/end-time-select'
+import StartTimeSelect from './fields/start-time-select'
+import TrainerSelect from './fields/trainer-select'
 import TraineesBlock from './trainees-block'
-import TrainerSelect from './trainer-select'
 import SubmitButton from './submit-button'
 import DeleteButton from './delete-button'
 
-import { times, resources } from '../data'
+import { resources } from '../data'
 
 const translations = {
   'okLabel': 'Oк',
@@ -163,40 +165,20 @@ export default function TrainingDialog() {
                 </Select>
               </Grid>
               <Grid item={true} lg={6}>
-                <Select
+                <StartTimeSelect
                   name='startTime'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.startTime}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    times.map(time => (
-                      <MenuItem value={time.id} key={time.id}>
-                        {time.label}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
+                />
               </Grid>
               <Grid item={true} lg={6}>
-                <Select
+                <EndTimeSelect
                   name='endTime'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.startTime}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    times.map(time => (
-                      <MenuItem value={time.id} key={time.id}>
-                        {time.label}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
+                />
               </Grid>
             </Grid>
             <Grid item={true} container={true} lg={4} spacing={2}>

@@ -8,7 +8,6 @@ export default makeStyles((theme: Theme) => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    borderRight: `2px dotted ${theme.palette.secondary.main}`,
   },
   trainersColumnShift: {
     width: theme.spacing(40),
