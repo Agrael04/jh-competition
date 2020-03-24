@@ -4,6 +4,7 @@ export default makeStyles((theme: Theme) => ({
   trainersTd: {
     width: theme.spacing(20),
     position: 'relative',
+    willChange: 'width',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -11,6 +12,7 @@ export default makeStyles((theme: Theme) => ({
   },
   trainersColumnShift: {
     width: theme.spacing(40),
+    willChange: 'width',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -18,6 +20,7 @@ export default makeStyles((theme: Theme) => ({
   },
   trainerAvatar: {
     marginLeft: theme.spacing(-5),
+    willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -26,6 +29,7 @@ export default makeStyles((theme: Theme) => ({
   emptyTrainerAvatar: {
     width: theme.spacing(8),
     marginLeft: theme.spacing(-8),
+    willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -34,6 +38,7 @@ export default makeStyles((theme: Theme) => ({
   firstEmptyTrainerAvatar: {
     width: theme.spacing(8),
     marginLeft: theme.spacing(-3),
+    willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 export default makeStyles((theme: Theme) => ({
   resourceTd: {
     borderLeft: `2px dashed ${theme.palette.primary.main}`,
+    position: 'relative'
   },
   mainAvatar: {
     zIndex: 10,
@@ -17,4 +18,13 @@ export default makeStyles((theme: Theme) => ({
     border: '2px solid',
     fontSize: '0.75rem',
   },
+  cellWrap: {
+    position: 'absolute',
+    top: 0,
+    height: '100%',
+    width: '100%',
+  },
+  button: {
+    height: '100%'
+  }
 }))

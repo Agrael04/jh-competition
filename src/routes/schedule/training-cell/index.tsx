@@ -83,58 +83,61 @@ const TrainingCell = ({ time, resource, id, duration }: any) => {
 
   return (
     <TableCell align='center' padding='none' style={isOccupied ? backgroundStyle : undefined} className={classes.resourceTd} rowSpan={duration ? duration : 1}>
-      {
-        loading && (
-          <CircularProgress />
-        )
-      }
-      {
-        !loading && !training && (
-          <Button onDoubleClick={handleCreateClick} fullWidth={true}>
-            <Tooltip rows={['Добавить тренировку']}>
-              <PersonAddIcon />
-            </Tooltip>
-          </Button>
-        )
-      }
-      {
-        !loading && training && (
-          <Button onDoubleClick={handleUpdateClick} fullWidth={true}>
-            <Grid container={true} wrap='nowrap' justify='center'>
-              {
-                trainer && (
-                  <Tooltip rows={['Информация о тренировке']}>
-                    <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle} />
-                  </Tooltip>
-                )
-              }
-              {
-                !trainer && records?.length === 0 && (
-                  <Tooltip rows={['Нет учеников и тренера']}>
-                    <Avatar className={classes.mainAvatar} style={borderColorStyle}>
-                      <FaceIcon />
-                    </Avatar>
-                  </Tooltip>
-                )
-              }
+      <div className={classes.cellWrap}>
 
-              {
-                records?.map((r, index) => (
-                  <Tooltip rows={[r.trainee.fullName]} key={index}>
-                    <Avatar className={classes.secondaryAvatar} style={{ zIndex: records?.length - index, ...borderColorStyle, ...noTrainerStyle }}>
-                      {
-                        r.trainee.fullName
-                          ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
-                          : <FaceIcon />
-                      }
-                    </Avatar>
-                  </Tooltip>
-                ))
-              }
-            </Grid>
-          </Button>
-        )
-      }
+        {
+          loading && (
+            <CircularProgress />
+          )
+        }
+        {
+          !loading && !training && (
+            <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button}>
+              <Tooltip rows={['Добавить тренировку']}>
+                <PersonAddIcon />
+              </Tooltip>
+            </Button>
+          )
+        }
+        {
+          !loading && training && (
+            <Button onDoubleClick={handleUpdateClick} fullWidth={true} className={classes.button}>
+              <Grid container={true} wrap='nowrap' justify='center'>
+                {
+                  trainer && (
+                    <Tooltip rows={['Информация о тренировке']}>
+                      <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle} />
+                    </Tooltip>
+                  )
+                }
+                {
+                  !trainer && records?.length === 0 && (
+                    <Tooltip rows={['Нет учеников и тренера']}>
+                      <Avatar className={classes.mainAvatar} style={borderColorStyle}>
+                        <FaceIcon />
+                      </Avatar>
+                    </Tooltip>
+                  )
+                }
+
+                {
+                  records?.map((r, index) => (
+                    <Tooltip rows={[r.trainee.fullName]} key={index}>
+                      <Avatar className={classes.secondaryAvatar} style={{ zIndex: records?.length - index, ...borderColorStyle, ...noTrainerStyle }}>
+                        {
+                          r.trainee.fullName
+                            ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
+                            : <FaceIcon />
+                        }
+                      </Avatar>
+                    </Tooltip>
+                  ))
+                }
+              </Grid>
+            </Button>
+          )
+        }
+      </div>
     </TableCell>
   )
 }
