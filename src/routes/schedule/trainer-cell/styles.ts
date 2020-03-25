@@ -2,7 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export default makeStyles((theme: Theme) => ({
   trainersTd: {
-    width: theme.spacing(20),
+    width: theme.spacing(21),
     position: 'relative',
     willChange: 'width',
     transition: theme.transitions.create(['width'], {
@@ -11,7 +11,7 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   trainersColumnShift: {
-    width: theme.spacing(40),
+    width: theme.spacing(36),
     willChange: 'width',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.easeOut,
@@ -19,7 +19,7 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   trainerAvatar: {
-    marginLeft: theme.spacing(-5),
+    marginLeft: theme.spacing(-3),
     willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
@@ -27,8 +27,8 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   emptyTrainerAvatar: {
-    width: theme.spacing(8),
-    marginLeft: theme.spacing(-8),
+    width: theme.spacing(6),
+    marginLeft: theme.spacing(-6),
     willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {
       easing: theme.transitions.easing.easeOut,
@@ -36,7 +36,7 @@ export default makeStyles((theme: Theme) => ({
     }),
   },
   firstEmptyTrainerAvatar: {
-    width: theme.spacing(8),
+    width: theme.spacing(6),
     marginLeft: theme.spacing(-3),
     willChange: 'margin-left',
     transition: theme.transitions.create(['margin-left'], {

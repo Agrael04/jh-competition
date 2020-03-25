@@ -17,6 +17,10 @@ const useStyles = (color: any) => makeStyles((theme: Theme) => ({
   emptyTrainer: {
     filter: 'grayscale(1)',
   },
+  avatarButton: {
+    minWidth: 'unset',
+    padding: theme.spacing(0.5),
+  },
 }))
 
 export const useBadgeBackground = (id: number) => {
@@ -37,7 +41,7 @@ const TrainerAvatar = ({ trainer, getCount, showBadge, className }: any) => {
   )
 
   return (
-    <Button className={className}>
+    <Button className={clsx(classes.avatarButton, className)}>
       <Tooltip rows={[`${trainer.lastName} ${trainer.firstName}`]}>
         <Badge
           overlap='circle'

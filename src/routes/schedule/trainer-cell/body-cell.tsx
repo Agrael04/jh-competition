@@ -34,7 +34,7 @@ const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
   )
 
   return (
-    <TableCell padding='none' className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift)}>
+    <TableCell padding='none' className={clsx(openedTrainers && classes.trainersColumnShift)}>
       <Grid container={true} wrap='nowrap'>
         {
           mappedTrainerSchedule.map((ts, index) => (
