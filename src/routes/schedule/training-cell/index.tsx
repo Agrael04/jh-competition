@@ -83,7 +83,7 @@ const TrainingCell = ({ time, resource, id, duration }: any) => {
   const isOccupied = !loading && !!training
 
   return (
-    <TableCell align='center' padding='none' style={isOccupied ? backgroundStyle : undefined} className={classes.resourceTd} rowSpan={duration ? duration : 1}>
+    <TableCell align='center' padding='none' className={classes.resourceTd} rowSpan={duration ? duration : 1}>
       <div className={classes.cellWrap}>
 
         {
@@ -96,7 +96,7 @@ const TrainingCell = ({ time, resource, id, duration }: any) => {
         {
           !loading && !training && (
             <Zoom in={true}>
-              <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button}>
+              <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
                 <Tooltip rows={['Добавить тренировку']}>
                   <PersonAddIcon />
                 </Tooltip>
@@ -107,7 +107,7 @@ const TrainingCell = ({ time, resource, id, duration }: any) => {
         {
           !loading && training && (
             <Zoom in={true}>
-              <Button onDoubleClick={handleUpdateClick} fullWidth={true} className={classes.button}>
+              <Button onDoubleClick={handleUpdateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
                 <Grid container={true} wrap='nowrap' justify='center'>
                   {
                     trainer && (
