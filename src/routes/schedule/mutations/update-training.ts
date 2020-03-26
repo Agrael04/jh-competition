@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import GET_TRAINING from '../queries/get-training'
+import { GET_TRAINING } from '../queries/get-training'
 import ITraining from 'interfaces/training'
 
 export const UPDATE_TRAINING = gql`

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 
 export interface IGetTrainingResponse {
   training: {
@@ -27,7 +28,7 @@ export interface IGetTrainingResponse {
   }>
 }
 
-export default gql`
+export const GET_TRAINING = gql`
   query getTraining($id: ObjectId){
     training(query: { _id: $id }) {
       _id
@@ -55,3 +56,15 @@ export default gql`
     }
   }
 `
+
+export const useGetTrainingQuery = (id: string | undefined) => {
+
+  const result = useQuery<IGetTrainingResponse>(GET_TRAINING, {
+    variables: { id },
+    skip: !id,
+  })
+
+  return result
+}
+
+export default useGetTrainingQuery

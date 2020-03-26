@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import clsx from 'clsx'
 
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography'
 
 import Tooltip from 'components/multiline-tooltip'
 
-import { useSelector } from 'store'
 import { times, resources } from './data'
 
 import TrainingDialog from './training-dialog'
@@ -24,56 +23,14 @@ import Toolbar from './toolbar'
 import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 
-import GET_TRAININGS, { IGetTrainingsResponse } from './queries/get-trainings'
+import useGetTrainingsQuery from './queries/get-trainings'
 
 import useStyles from './styles'
 
 const SchedulePage = () => {
   const classes = useStyles()
-  const date = useSelector(state => state.schedule.currentDate)
-  const gym = useSelector(state => state.schedule.currentGym)
 
-  const { data, loading } = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
-    variables: { date, gym },
-  })
-
-  const getTrainingsCount = React.useCallback(
-    (time: number) => (trainer: number) => {
-      return data?.trainings.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer === trainer).length
-    },
-    [data]
-  )
-
-  const getTraining = React.useCallback(
-    (time: number, resource: number) => {
-      return data?.trainings.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource === resource)
-    },
-    [data]
-  )
-
-  const getTrainingDuration = React.useCallback(
-    (time: number, resource: number) => {
-      const tr = getTraining(time, resource)
-
-      const startTime = tr?.startTime || 0
-      const endTime = tr?.endTime || 0
-
-      return endTime - startTime
-    },
-    [getTraining]
-  )
-
-  const isResourceOccupied = React.useCallback(
-    (time: number, resource: number) => {
-      const tr = getTraining(time, resource)
-
-      const ts = times.filter(t => t.id >= tr?.startTime! && t.id <= tr?.endTime!)
-      const isFirst = ts[0]?.id === time
-
-      return (tr && !isFirst)
-    },
-    [getTraining]
-  )
+  const { loading } = useGetTrainingsQuery()
 
   return (
     <Paper>
@@ -81,7 +38,7 @@ const SchedulePage = () => {
       <Divider />
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow className={classes.secondaryRow}>
             <TableCell className={classes.timeTd}>
               <Typography>
                 {'Время'}
@@ -109,7 +66,7 @@ const SchedulePage = () => {
               .map((time, index, arr) => (
                 arr.length - 1 === index
                   ? (
-                    <TableRow key={time.id}>
+                    <TableRow key={time.id} className={clsx(time.id % 2 === 0 && classes.secondaryRow)}>
                       <TableCell className={classes.timeTd} colSpan={2 + resources.length}>
                         <Typography>
                           {time.label}
@@ -117,38 +74,32 @@ const SchedulePage = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    <TableRow key={time.id}>
+                    <TableRow key={time.id} className={clsx(time.id % 2 === 0 && classes.secondaryRow)}>
                       {
                         index % 2 === 0 && (
-                          <TableCell padding='none' className={classes.timeTd} rowSpan={2}>
+                          <TableCell padding='none' className={clsx(classes.timeTd, classes.secondaryTimeTd)} rowSpan={2}>
                             <Typography>
                               {time.label}
                             </Typography>
                           </TableCell>
                         )
                       }
-                      <TrainerBodyCell key={time.id} time={time.id} getTrainingsCount={getTrainingsCount} />
+                      <TrainerBodyCell key={time.id} time={time.id} />
                       {
-                        loading && time === times[0] ? (
+                        loading && index === 0 ? (
                           <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
                       }
                       {
-                        !loading && resources.map(r =>
-                          isResourceOccupied(time.id, r.id)
-                            ? null
-                            : (
-                              <TrainingCell
-                                id={getTraining(time.id, r.id)?._id}
-                                resource={r.id}
-                                time={time.id}
-                                key={r.id}
-                                duration={getTrainingDuration(time.id, r.id)}
-                              />
-                            )
-                        )
+                        !loading && resources.map(r => (
+                          <TrainingCell
+                            resource={r.id}
+                            time={time.id}
+                            key={r.id}
+                          />
+                        ))
                       }
                     </TableRow>
                   )

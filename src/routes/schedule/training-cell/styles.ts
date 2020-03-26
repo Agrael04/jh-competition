@@ -2,7 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export default makeStyles((theme: Theme) => ({
   resourceTd: {
-    borderLeft: `2px solid ${theme.palette.primary.main}`,
+    borderLeft: `2px solid ${theme.palette.primary.light}`,
     position: 'relative',
     height: theme.spacing(4.5),
   },

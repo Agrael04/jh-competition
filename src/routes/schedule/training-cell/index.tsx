@@ -1,149 +1,51 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-import { useActions } from 'store'
 
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Button from '@material-ui/core/Button'
 import TableCell from '@material-ui/core/TableCell'
-import Avatar from '@material-ui/core/Avatar'
-import Grid from '@material-ui/core/Grid'
-import Zoom from '@material-ui/core/Zoom'
 
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import FaceIcon from '@material-ui/icons/Face'
+import useGetTrainingsQuery from '../queries/get-trainings'
 
-import Tooltip from 'components/multiline-tooltip'
-
-import GET_TRAINING, { IGetTrainingResponse } from '../queries/get-training'
-import { trainers } from '../data'
+import TrainingItem from './training-item'
 
 import useStyles from './styles'
 
-import getColorPallete from 'utils/get-color-pallete'
+interface IProps {
+  time: number
+  resource: number
+}
 
-const TrainingCell = ({ time, resource, id, duration }: any) => {
+const TrainingCell = ({ time, resource }: IProps) => {
   const classes = useStyles()
-  const actions = useActions()
 
-  const { data, loading } = useQuery<IGetTrainingResponse>(GET_TRAINING, {
-    variables: { id },
-    skip: !id,
-  })
+  const { data } = useGetTrainingsQuery()
 
-  const training = data?.training
-  const records = data?.trainingRecords
+  const training = React.useMemo(
+    () => data?.trainings.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource === resource),
+    [data, time, resource]
+  )
 
-  const trainer = React.useMemo(
-    () => trainers.find(tr => tr.id === training?.trainer),
+  const duration = React.useMemo(
+    () => {
+      const startTime = training?.startTime || 0
+      const endTime = training?.endTime || 0
+
+      return endTime - startTime
+    },
     [training]
   )
 
-  const handleCreateClick = React.useCallback(
-    e => {
-      e.stopPropagation()
-      actions.schedule.openCreateDialog({ resource, time })
-    },
-    [actions, resource, time]
+  const isOccupied = React.useMemo(
+    () => training && training.startTime !== time,
+    [training, time]
   )
 
-  const handleUpdateClick = React.useCallback(
-    e => {
-      e.stopPropagation()
-      actions.schedule.openUpdateDialog(training!, records!)
-    },
-    [training, records, actions]
-  )
-
-  const color = React.useMemo(
-    () => {
-      if (loading || training?.trainer === null || training?.trainer === undefined) {
-        return getColorPallete(undefined)
-      }
-
-      return getColorPallete(training.trainer)
-    },
-    [loading, training]
-  )
-
-  const backgroundStyle = React.useMemo(
-    () => ({ backgroundColor: color[500] }),
-    [color]
-  )
-
-  const borderColorStyle = React.useMemo(
-    () => ({ borderColor: color[500] }),
-    [color]
-  )
-
-  const noTrainerStyle = React.useMemo(
-    () => !trainer && ({ margin: 0 }),
-    [trainer]
-  )
-
-  const isOccupied = !loading && !!training
+  if (isOccupied) {
+    return null
+  }
 
   return (
     <TableCell align='center' padding='none' className={classes.resourceTd} rowSpan={duration ? duration : 1}>
       <div className={classes.cellWrap}>
-
-        {
-          loading && (
-            <Button className={classes.button}>
-              <CircularProgress />
-            </Button>
-          )
-        }
-        {
-          !loading && !training && (
-            <Zoom in={true}>
-              <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-                <Tooltip rows={['Добавить тренировку']}>
-                  <PersonAddIcon />
-                </Tooltip>
-              </Button>
-            </Zoom>
-          )
-        }
-        {
-          !loading && training && (
-            <Zoom in={true}>
-              <Button onDoubleClick={handleUpdateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-                <Grid container={true} wrap='nowrap' justify='center'>
-                  {
-                    trainer && (
-                      <Tooltip rows={['Информация о тренировке']}>
-                        <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle} />
-                      </Tooltip>
-                    )
-                  }
-                  {
-                    !trainer && records?.length === 0 && (
-                      <Tooltip rows={['Нет учеников и тренера']}>
-                        <Avatar className={classes.mainAvatar} style={borderColorStyle}>
-                          <FaceIcon />
-                        </Avatar>
-                      </Tooltip>
-                    )
-                  }
-
-                  {
-                    records?.map((r, index) => (
-                      <Tooltip rows={[r.trainee.fullName]} key={index}>
-                        <Avatar className={classes.secondaryAvatar} style={{ zIndex: records?.length - index, ...borderColorStyle, ...noTrainerStyle }}>
-                          {
-                            r.trainee.fullName
-                              ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
-                              : <FaceIcon />
-                          }
-                        </Avatar>
-                      </Tooltip>
-                    ))
-                  }
-                </Grid>
-              </Button>
-            </Zoom>
-          )
-        }
+        <TrainingItem time={time} resource={resource} id={training?._id} />
       </div>
     </TableCell>
   )

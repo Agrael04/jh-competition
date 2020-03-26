@@ -19,19 +19,11 @@ const mappedTrainerSchedule = trainerSchedule.map(ts => ({
 
 interface IProps {
   time: number
-  getTrainingsCount: (time: number) => (trainer: number) => number | undefined
 }
 
-const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
+const TrainerBodyCell = ({ time }: IProps) => {
   const classes = useStyles()
   const openedTrainers = useSelector(state => state.schedule.openedTrainers)
-
-  const getCount = React.useCallback(
-    trainer => {
-      return getTrainingsCount(time)(trainer)
-    },
-    [getTrainingsCount, time]
-  )
 
   return (
     <TableCell padding='none' className={clsx(openedTrainers && classes.trainersColumnShift)}>
@@ -44,7 +36,6 @@ const TrainerBodyCell = ({ time, getTrainingsCount }: IProps) => {
                   time={time}
                   trainer={ts.trainer}
                   key={ts.trainer?.id}
-                  getCount={getCount}
                   showBadge={openedTrainers}
                   className={index > 0 ? clsx(classes.trainerAvatar, openedTrainers && classes.openedTrainerAvatar) : undefined}
                 />

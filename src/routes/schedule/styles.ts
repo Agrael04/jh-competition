@@ -4,13 +4,19 @@ export default makeStyles((theme: Theme) => ({
   avatarBackground: {
     background: theme.palette.secondary.main,
   },
+  secondaryRow: {
+    borderBottom: `2px solid ${theme.palette.primary.light}`,
+  },
   timeTd: {
     width: theme.spacing(10),
     paddingLeft: theme.spacing(2),
     position: 'relative',
   },
+  secondaryTimeTd: {
+    borderBottom: `2px solid ${theme.palette.primary.light}`,
+  },
   resourceTd: {
-    borderLeft: `2px solid ${theme.palette.primary.main}`,
+    borderLeft: `2px solid ${theme.palette.primary.light}`,
   },
   avatarPlaceholder: {
     width: theme.spacing(0),

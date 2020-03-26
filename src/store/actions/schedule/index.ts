@@ -5,7 +5,7 @@ import IRecord, { ITrainingRecord } from 'interfaces/training'
 
 interface ICell {
   resource: number
-  time: string
+  time: number
 }
 
 export const openCreateDialog = (target: ICell, trainer?: number) => ({
