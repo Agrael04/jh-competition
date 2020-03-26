@@ -42,7 +42,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleCreateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.openCreateDialog({ resource, time })
+      actions.schedule.openCreateDialog(resource, time)
     },
     [actions, resource, time]
   )

@@ -9,6 +9,7 @@ export interface IGetTrainingsResponse {
     trainer: number
     startTime: number
     endTime: number
+    __typename: string
   }>
 }
 

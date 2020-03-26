@@ -61,19 +61,12 @@ export default (state = initialState, { type, payload }: { type: string, payload
         dialogMode: 'create',
         openedTrainingDialog: true,
         trainingForm: {
+          ...state.trainingForm,
           _id: new BSON.ObjectID(),
-          startTime: payload.target.time,
-          endTime: null,
-          resource: payload.target.resource,
-          trainer: payload.trainer === null ? undefined : payload.trainer,
+          startTime: payload.time,
+          resource: payload.resource,
           gym: state.currentGym,
           date: state.currentDate,
-
-          name: '',
-          type: '',
-          markPrice: 2,
-          moneyPrice: 400,
-          note: '',
         },
         recordsForm: [],
       }

@@ -15,16 +15,19 @@ export interface IGetTrainingResponse {
     type: string
     startTime: number
     endTime: number
+    __typename: string
   }
   trainingRecords: Array<{
     seasonPass: string
     trainee: {
       _id: string
       fullName: string
+      __typename: string
     }
     note: string
     status: string
     training: string
+    __typename: string
   }>
 }
 
