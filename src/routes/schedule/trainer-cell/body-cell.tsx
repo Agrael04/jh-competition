@@ -41,7 +41,7 @@ const TrainerBodyCell = ({ time }: IProps) => {
                 />
               )
               : (
-                <div className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)} />
+                <div className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)} key={ts.trainer?.id}/>
               )
           ))
         }

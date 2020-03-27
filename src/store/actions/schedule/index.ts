@@ -1,16 +1,25 @@
 import constants from 'store/constants/schedule'
 
 import { ISearchedTrainee } from 'interfaces/trainee'
-import IRecord, { ITrainingRecord } from 'interfaces/training'
+import ITraining, { ITrainingRecord } from 'interfaces/training'
+
+interface IApolloTraining extends ITraining {
+  __typename?: string
+}
 
 export const openCreateDialog = (resource: number, time: number) => ({
-  type: constants.OPEN_CREATE_RECORD_DIALOG,
+  type: constants.OPEN_CREATE_TRAINING_DIALOG,
   payload: { resource, time },
 })
 
-export const openUpdateDialog = (training: IRecord, records: ITrainingRecord[]) => ({
-  type: constants.OPEN_UPDATE_RECORD_DIALOG,
+export const openUpdateDialog = (training: IApolloTraining, records: ITrainingRecord[]) => ({
+  type: constants.OPEN_UPDATE_TRAINING_DIALOG,
   payload: { training, records },
+})
+
+export const openTrainingDialog = (mode: string, training: Partial<IApolloTraining>, records: ITrainingRecord[]) => ({
+  type: constants.OPEN_TRAINING_DIALOG,
+  payload: { mode, training, records },
 })
 
 export const closeRecordDialog = () => ({
@@ -68,6 +77,7 @@ export const toggleOpenedTrainers = () => ({
 export default {
   openCreateDialog,
   openUpdateDialog,
+  openTrainingDialog,
   closeRecordDialog,
 
   updateFormField,

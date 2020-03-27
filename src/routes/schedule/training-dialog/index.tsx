@@ -26,11 +26,8 @@ import DeleteButton from './delete-button'
 import { resources } from '../data'
 
 const translations = {
-  'okLabel': 'Oк',
-  'cancelLabel': 'Отмена',
   'date': 'Дата',
   'startTime': 'Час початку',
-  'duration': 'Тривалiсть',
   'trainer': 'Тренер',
   'gym': 'Зал',
   'notes': 'Комментарi',
@@ -39,22 +36,11 @@ const translations = {
   'trainingName': 'Назва',
   'moneyPrice': 'Разова цiна',
   'markPrice': 'Кiлькiсть вiдмiток',
-  'paid': 'Оплачен',
-
-  'status.RESERVED': 'Зарезервовано',
-  'status.PENDING': 'Пiдтвердження надiслано',
-  'status.CANCELED': 'Скасовано',
-  'status.CONFIRMED': 'Пiдтведжено',
 
   'types.GROUP': 'Групове треннування',
   'types.RENT': 'Оренда батуту',
   'types.RENT_WITH_TRAINER': 'Оренда батута с тренером',
   'types.EVENT': 'Подiя',
-
-  'durations.1h': '1 година',
-  'durations.1.5h': '1.5 години',
-  'durations.2h': '2 години',
-  'durations.flexible': 'Гнучка',
 } as any
 
 const trainingTypes = [

@@ -1,4 +1,3 @@
-import { BSON } from 'mongodb-stitch-browser-sdk'
 import constants from 'store/constants/schedule'
 
 import { ISearchedTrainee } from 'interfaces/trainee'
@@ -17,7 +16,7 @@ export interface IState {
   openedTrainers: boolean
 
   openedTrainingDialog: boolean
-  dialogMode: string | null
+  dialogMode: 'create' | 'update' | null
   trainingForm: ITraining
   recordsForm: ITrainingRecord[]
   traineeSuggester: ITraineeSuggester
@@ -55,38 +54,16 @@ const initialState: IState = {
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
   switch (type) {
-    case constants.OPEN_CREATE_RECORD_DIALOG: {
+    case constants.OPEN_TRAINING_DIALOG: {
       return {
         ...state,
-        dialogMode: 'create',
-        openedTrainingDialog: true,
-        trainingForm: {
-          ...state.trainingForm,
-          _id: new BSON.ObjectID(),
-          startTime: payload.time,
-          resource: payload.resource,
-          gym: state.currentGym,
-          date: state.currentDate,
-        },
-        recordsForm: [],
-      }
-    }
-
-    case constants.OPEN_UPDATE_RECORD_DIALOG: {
-      const training = payload.training
-      delete training.__typename
-      const records = payload.records
-      records.forEach((r: any) => delete r.__typename)
-
-      return {
-        ...state,
-        dialogMode: 'update',
+        dialogMode: payload.mode,
         openedTrainingDialog: true,
         trainingForm: {
           ...initialState.trainingForm,
-          ...training,
+          ...payload.training,
         },
-        recordsForm: records,
+        recordsForm: payload.records,
       }
     }
 
