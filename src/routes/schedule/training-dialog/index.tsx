@@ -57,16 +57,16 @@ const gyms = [
   { id: 4, text: 'Парк дружбы народов' },
 ]
 
-type FieldName = keyof IStoreState['schedule']['trainingForm']
+type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 
-const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingForm[name]
+const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
 
 export default function TrainingDialog() {
-  const openedTrainingDialog = useSelector(state => state.schedule.openedTrainingDialog)
+  const opened = useSelector(state => state.schedule.trainingDialog.opened)
   const actions = useActions()
 
   const close = React.useCallback(
-    () => actions.schedule.closeRecordDialog(),
+    () => actions.schedule.trainingDialog.close(),
     [actions]
   )
 
@@ -81,13 +81,13 @@ export default function TrainingDialog() {
         v = v.toDate()
       }
 
-      actions.schedule.updateFormField(name, v)
+      actions.schedule.trainingDialog.updateField(name, v)
     },
     [actions]
   )
 
   return (
-    <Dialog open={openedTrainingDialog} onClose={close} maxWidth='lg' fullWidth={true}>
+    <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
         <Toolbar>
           <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>

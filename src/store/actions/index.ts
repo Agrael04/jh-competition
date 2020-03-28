@@ -10,18 +10,21 @@ const actions = {
 
 export default actions
 
+/* GET RID OF useActions hook */
+
 export const useActions = () => {
   const dispatch = useDispatch()
 
-  const boundActions = useMemo(() => {
-    const obj = { ...actions }
+  const result = useMemo(
+    () => ({
+      schedule: {
+        clientSuggester: bindActionCreators(schedule.clientSuggester, dispatch),
+        page: bindActionCreators(schedule.page, dispatch),
+        trainingDialog: bindActionCreators(schedule.trainingDialog, dispatch),
+      },
+    }),
+    [dispatch]
+  )
 
-    Object.keys(actions).forEach(key => {
-      (obj as any)[key] = bindActionCreators((actions as any)[key], dispatch)
-    })
-
-    return obj
-  }, [dispatch])
-
-  return boundActions
+  return result
 }

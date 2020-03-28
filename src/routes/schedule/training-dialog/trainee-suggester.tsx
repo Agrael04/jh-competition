@@ -34,7 +34,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
 )
 
 export default function TraineeSuggester({ name, onChange, fieldSelector, label }: IProps) {
-  const { options, loading } = useSelector(state => state.schedule.traineeSuggester)
+  const { options, loading } = useSelector(state => state.schedule.clientSuggester)
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
@@ -55,7 +55,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label 
   React.useEffect(
     () => {
       if (opened) {
-        actions.schedule.searchTrainees(filter)
+        actions.schedule.clientSuggester.search(filter)
       }
     },
     [opened, filter, actions]

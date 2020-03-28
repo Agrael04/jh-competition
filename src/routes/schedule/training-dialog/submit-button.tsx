@@ -8,17 +8,22 @@ import useUpdateTraining from '../mutations/update-training'
 import useCreateTrainingRecords from '../mutations/create-training-records'
 
 export default function TrainingDialog() {
-  const { dialogMode, trainingForm, recordsForm } = useSelector(state => state.schedule)
-  const actions = useActions()
   const createTraining = useCreateTraining()
   const updateTraining = useUpdateTraining()
   const createTrainingRecords = useCreateTrainingRecords()
+
+  const actions = useActions()
+  const { mode, trainingForm, recordsForm } = useSelector(state => ({
+    mode: state.schedule.trainingDialog.mode,
+    trainingForm: state.schedule.trainingDialog.trainingForm,
+    recordsForm: state.schedule.trainingDialog.recordsForm,
+  }))
 
   const save = React.useCallback(
     async () => {
       const records = recordsForm
 
-      if (dialogMode === 'create') {
+      if (mode === 'create') {
         await createTraining(trainingForm)
       } else {
         await updateTraining(trainingForm)
@@ -28,9 +33,9 @@ export default function TrainingDialog() {
         await createTrainingRecords(trainingForm._id, records)
       }
 
-      actions.schedule.closeRecordDialog()
+      actions.schedule.trainingDialog.close()
     },
-    [actions, dialogMode, createTraining, updateTraining, createTrainingRecords, trainingForm, recordsForm]
+    [actions, mode, createTraining, updateTraining, createTrainingRecords, trainingForm, recordsForm]
   )
 
   return (

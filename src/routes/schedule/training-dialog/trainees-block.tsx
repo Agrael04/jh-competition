@@ -7,10 +7,10 @@ import Grid from '@material-ui/core/Grid'
 import TraineeRow from './trainee-row'
 
 export default function TraineesBlock() {
-  const records = useSelector(state => state.schedule.recordsForm)
+  const records = useSelector(state => state.schedule.trainingDialog.recordsForm)
   const actions = useActions()
 
-  const addTrainee = actions.schedule.addTrainee
+  const addTrainee = actions.schedule.trainingDialog.addRecord
 
   return (
     <>

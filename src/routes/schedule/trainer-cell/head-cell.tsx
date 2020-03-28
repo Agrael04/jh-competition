@@ -15,9 +15,9 @@ import useStyles from './styles'
 const TrainerHeaderCell = () => {
   const classes = useStyles()
   const actions = useActions()
-  const openedTrainers = useSelector(state => state.schedule.openedTrainers)
+  const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
 
-  const toggleTrainers = actions.schedule.toggleOpenedTrainers
+  const toggleTrainers = actions.schedule.page.toggleOpenedTrainers
 
   return (
     <TableCell className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift)}>

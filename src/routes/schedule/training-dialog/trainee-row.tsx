@@ -16,12 +16,12 @@ import TraineeSuggester from './trainee-suggester'
 
 const statuses = ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
 
-type FieldName = keyof IStoreState['schedule']['recordsForm'][0]
+type FieldName = keyof IStoreState['schedule']['trainingDialog']['recordsForm'][0]
 
 export default function TraineeRow({ index }: { index: number }) {
   const fieldSelector = React.useCallback(
     (name: FieldName) => (state: IStoreState) => {
-      const trainee = state.schedule.recordsForm.find((item, id) => id === index)
+      const trainee = state.schedule.trainingDialog.recordsForm.find((item, id) => id === index)
       return trainee ? trainee[name] : trainee
     },
     [index]
@@ -30,12 +30,12 @@ export default function TraineeRow({ index }: { index: number }) {
   const actions = useActions()
 
   const removeTrainee = React.useCallback(
-    () => actions.schedule.removeTrainee(index),
+    () => actions.schedule.trainingDialog.removeRecord(index),
     [actions, index]
   )
 
   const handleChange = (name: string, value: any) => {
-    actions.schedule.updateTraineeFormField(index, name, value)
+    actions.schedule.trainingDialog.updateRecordField(index, name, value)
   }
 
   return (

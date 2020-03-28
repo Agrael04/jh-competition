@@ -14,8 +14,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
-const currentDateSelector = () => (state: IStoreState) => state.schedule.currentDate
-const currentGymSelector = () => (state: IStoreState) => state.schedule.currentGym
+const currentDateSelector = () => (state: IStoreState) => state.schedule.page.currentDate
+const currentGymSelector = () => (state: IStoreState) => state.schedule.page.currentGym
 
 const gyms = [
   { id: 1, text: 'Берестейська' },
@@ -24,27 +24,26 @@ const gyms = [
   { id: 4, text: 'Парк дружбы народов' },
 ]
 
-
 const ToolbarContainer = () => {
   const actions = useActions()
   const currentDate = useSelector(currentDateSelector())
 
   const handleGymChange = (name: string, value: any) => {
-    actions.schedule.setCurrentGym(value)
+    actions.schedule.page.setCurrentGym(value)
   }
 
   const handleDateChange = (name: string, value: any) => {
-    actions.schedule.setCurrentDate(value.toDate())
+    actions.schedule.page.setCurrentDate(value.toDate())
   }
 
   const handlePrevDateClick = () => {
-    let d = moment(currentDate).subtract(1, 'days')
-    actions.schedule.setCurrentDate(d.toDate())
+    const d = moment(currentDate).subtract(1, 'days')
+    actions.schedule.page.setCurrentDate(d.toDate())
   }
 
   const handleNextDateClick = () => {
-    let d = moment(currentDate).add(1, 'days')
-    actions.schedule.setCurrentDate(d.toDate())
+    const d = moment(currentDate).add(1, 'days')
+    actions.schedule.page.setCurrentDate(d.toDate())
   }
 
   return (

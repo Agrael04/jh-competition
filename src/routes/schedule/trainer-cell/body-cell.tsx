@@ -23,7 +23,7 @@ interface IProps {
 
 const TrainerBodyCell = ({ time }: IProps) => {
   const classes = useStyles()
-  const openedTrainers = useSelector(state => state.schedule.openedTrainers)
+  const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
 
   return (
     <TableCell padding='none' className={clsx(openedTrainers && classes.trainersColumnShift)}>

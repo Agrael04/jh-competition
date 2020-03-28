@@ -1,39 +1,11 @@
-export const OPEN_CREATE_TRAINING_DIALOG = 'schedule/OPEN_CREATE_TRAINING_DIALOG'
-export const OPEN_UPDATE_TRAINING_DIALOG = 'schedule/OPEN_UPDATE_TRAINING_DIALOG'
-export const OPEN_TRAINING_DIALOG = 'schedule/OPEN_TRAINING_DIALOG'
-export const CLOSE_RECORD_DIALOG = 'schedule/CLOSE_RECORD_DIALOG'
+import clientSuggester from './client-suggester'
+import page from './page'
+import trainingDialog from './training-dialog'
 
-export const UPDATE_FORM_FIELD = 'schedule/UPDATE_FORM_FIELD'
-export const ADD_TRAINEE = 'schedule/ADD_TRAINEE'
-export const UPDATE_TRAINEE_FORM_FIELD = 'schedule/UPDATE_TRAINEE_FORM_FIELD'
-export const REMOVE_TRAINEE = 'schedule/REMOVE_TRAINEE'
-
-export const SEARCH_TRAINEES = 'schedule/SEARCH_TRAINEES'
-export const SEARCH_TRAINEES_SUCCESS = 'schedule/SEARCH_TRAINEES_SUCCESS'
-export const SEARCH_TRAINEES_CANCEL = 'schedule/SEARCH_TRAINEES_CANCEL'
-
-export const SET_CURRENT_DATE = 'schedule/SET_CURRENT_DATE'
-export const SET_CURRENT_GYM = 'schedule/SET_CURRENT_GYM'
-
-export const TOGGLE_OPENED_TRAINERS = 'schedule/TOGGLE_OPENED_TRAINERS'
-
-export default {
-  OPEN_CREATE_TRAINING_DIALOG,
-  OPEN_UPDATE_TRAINING_DIALOG,
-  OPEN_TRAINING_DIALOG,
-  CLOSE_RECORD_DIALOG,
-
-  UPDATE_FORM_FIELD,
-  ADD_TRAINEE,
-  UPDATE_TRAINEE_FORM_FIELD,
-  REMOVE_TRAINEE,
-
-  SEARCH_TRAINEES,
-  SEARCH_TRAINEES_SUCCESS,
-  SEARCH_TRAINEES_CANCEL,
-
-  SET_CURRENT_DATE,
-  SET_CURRENT_GYM,
-
-  TOGGLE_OPENED_TRAINERS,
+export const constants = {
+  clientSuggester,
+  page,
+  trainingDialog,
 }
+
+export default constants
