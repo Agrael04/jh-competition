@@ -6,7 +6,7 @@ import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
 
-export function* openCreateDialog(action: ReturnType<typeof actions.page.openCreateDialog>) {
+export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
     const date = yield select((state: IStoreState) => state.schedule.page.currentDate)
     const gym = yield select((state: IStoreState) => state.schedule.page.currentGym)
@@ -25,7 +25,7 @@ export function* openCreateDialog(action: ReturnType<typeof actions.page.openCre
   }
 }
 
-export function* openUpdateDialog(action: ReturnType<typeof actions.page.openUpdateDialog>) {
+export function* openUpdateTrainingDialog(action: ReturnType<typeof actions.page.openUpdateTrainingDialog>) {
   try {
     const training = action.payload.training
     delete training.__typename
@@ -37,17 +37,33 @@ export function* openUpdateDialog(action: ReturnType<typeof actions.page.openUpd
   }
 }
 
-function* watchOpenCreateDialog() {
-  yield takeLatest(constants.page.OPEN_CREATE_TRAINING_DIALOG, openCreateDialog)
+export function* openAddTrainerDialog(action: ReturnType<typeof actions.page.openAddTrainerDialog>) {
+  try {
+    const date = yield select((state: IStoreState) => state.schedule.page.currentDate)
+    const gym = yield select((state: IStoreState) => state.schedule.page.currentGym)
+
+    yield put(actions.addTrainerDialog.open(gym, date))
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-function* watchOpenUpdateDialog() {
-  yield takeLatest(constants.page.OPEN_UPDATE_TRAINING_DIALOG, openUpdateDialog)
+function* watchOpenCreateTrainingDialog() {
+  yield takeLatest(constants.page.OPEN_CREATE_TRAINING_DIALOG, openCreateTrainingDialog)
+}
+
+function* watchOpenUpdateTrainingDialog() {
+  yield takeLatest(constants.page.OPEN_UPDATE_TRAINING_DIALOG, openUpdateTrainingDialog)
+}
+
+function* watchOpenAddTrainerDialog() {
+  yield takeLatest(constants.page.OPEN_ADD_TRAINER_DIALOG, openAddTrainerDialog)
 }
 
 export default function* root() {
   yield all([
-    watchOpenCreateDialog(),
-    watchOpenUpdateDialog(),
+    watchOpenCreateTrainingDialog(),
+    watchOpenUpdateTrainingDialog(),
+    watchOpenAddTrainerDialog(),
   ])
 }

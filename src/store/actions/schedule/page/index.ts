@@ -6,14 +6,18 @@ interface IApolloTraining extends ITraining {
   __typename?: string
 }
 
-export const openCreateDialog = (resource: number, time: number) => ({
+export const openCreateTrainingDialog = (resource: number, time: number) => ({
   type: constants.OPEN_CREATE_TRAINING_DIALOG,
   payload: { resource, time },
 })
 
-export const openUpdateDialog = (training: IApolloTraining, records: ITrainingRecord[]) => ({
+export const openUpdateTrainingDialog = (training: IApolloTraining, records: ITrainingRecord[]) => ({
   type: constants.OPEN_UPDATE_TRAINING_DIALOG,
   payload: { training, records },
+})
+
+export const openAddTrainerDialog = () => ({
+  type: constants.OPEN_ADD_TRAINER_DIALOG,
 })
 
 export const setCurrentDate = (date: Date) => ({
@@ -31,8 +35,10 @@ export const toggleOpenedTrainers = () => ({
 })
 
 export const actions = {
-  openCreateDialog,
-  openUpdateDialog,
+  openCreateTrainingDialog,
+  openUpdateTrainingDialog,
+
+  openAddTrainerDialog,
 
   setCurrentDate,
   setCurrentGym,

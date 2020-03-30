@@ -17,6 +17,7 @@ import Tooltip from 'components/multiline-tooltip'
 
 import { times, resources } from './data'
 
+import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
 
 import Toolbar from './toolbar'
@@ -108,6 +109,7 @@ const SchedulePage = () => {
         </TableBody>
       </Table>
       <TrainingDialog />
+      <AddTrainerDialog />
     </Paper>
   )
 }

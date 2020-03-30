@@ -6,7 +6,7 @@ import Select from '../../components/select'
 interface IProps {
   name: any
   fieldSelector: (name: any) => (state: IStoreState) => any
-  onChange: (name: any, value: any) => void
+  onChange?: (name: any, value: any) => void
   children: any
   [x: string]: any
 }
@@ -15,7 +15,9 @@ export default function SelectContainer({ name, onChange, fieldSelector, childre
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(name, e.target.value)
+    if (onChange) {
+      onChange(name, e.target.value)
+    }
   }
 
   return (

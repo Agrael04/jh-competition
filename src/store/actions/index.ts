@@ -20,6 +20,7 @@ export const useActions = () => {
       schedule: {
         clientSuggester: bindActionCreators(schedule.clientSuggester, dispatch),
         page: bindActionCreators(schedule.page, dispatch),
+        addTrainerDialog: bindActionCreators(schedule.addTrainerDialog, dispatch),
         trainingDialog: bindActionCreators(schedule.trainingDialog, dispatch),
       },
     }),

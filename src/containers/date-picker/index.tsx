@@ -6,7 +6,7 @@ import { DatePicker } from '@material-ui/pickers'
 interface IProps {
   name: any
   fieldSelector: (name: any) => (state: IStoreState) => any
-  onChange: (name: any, value: any) => void
+  onChange?: (name: any, value: any) => void
   [x: string]: any
 }
 
@@ -14,7 +14,9 @@ export default function DatePickerContainer({ name, onChange, fieldSelector, ...
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (e: any) => {
-    onChange(name, e)
+    if (onChange) {
+      onChange(name, e)
+    }
   }
 
   return (

@@ -42,7 +42,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleCreateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openCreateDialog(resource, time)
+      actions.schedule.page.openCreateTrainingDialog(resource, time)
     },
     [actions, resource, time]
   )
@@ -50,7 +50,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleUpdateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openUpdateDialog(training!, records!)
+      actions.schedule.page.openUpdateTrainingDialog(training!, records!)
     },
     [training, records, actions]
   )
