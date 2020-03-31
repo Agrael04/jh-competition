@@ -20,7 +20,7 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
   const endTime = useSelector(fieldSelector('endTime')) as number
   const gym = useSelector(fieldSelector('gym')) as number
   const date = useSelector(fieldSelector('date')) as Date
-  const { data } = useGetSchedulesQuery(date)
+  const { data, loading } = useGetSchedulesQuery(date)
 
   const filteredTrainers = React.useMemo(
     () => trainers.filter(trainer => {
@@ -49,6 +49,15 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
       return true
     }),
     [data, startTime, endTime, gym]
+  )
+
+  React.useEffect(
+    () => {
+      if (!loading && filteredTrainers.length > 0) {
+        onChange('trainer', undefined)
+      }
+    },
+    [loading, filteredTrainers, onChange]
   )
 
   return (
