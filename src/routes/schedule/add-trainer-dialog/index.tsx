@@ -17,16 +17,13 @@ import DatePicker from 'containers/date-picker'
 
 import useStyles from './styles'
 
-// import TextField from 'containers/text-field'
-// import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
-// import EndTimeSelect from './fields/end-time-select'
-// import StartTimeSelect from './fields/start-time-select'
 import TimeframesBlock from './timeframes-block'
 import SubmitButton from './submit-button'
 
-import { trainerSchedule, trainers } from '../data'
+import useGetSchedulesQuery from '../queries/get-schedules'
+import { trainers } from '../data'
 
 type FieldName = keyof IStoreState['schedule']['addTrainerDialog']['form']
 
@@ -36,10 +33,11 @@ export default function TrainingDialog() {
   const classes = useStyles()
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
   const actions = useActions()
+  const { data } = useGetSchedulesQuery()
 
   const filteredTrainers = React.useMemo(
-    () => trainers.filter(trainer => !trainerSchedule.find(ts => ts.id === trainer.id)),
-    []
+    () => trainers.filter(trainer => !data?.trainerSchedules.find(s => s.trainer === trainer.id)),
+    [data]
   )
 
   const close = React.useCallback(

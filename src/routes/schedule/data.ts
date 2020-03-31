@@ -67,10 +67,3 @@ export const trainers = [
 
   { id: 1, lastName: 'Ємельянов', firstName: 'Микола', avatarSrc: 'https://lh3.googleusercontent.com/XOttTpif156M04z8aryW-CWttjkpVzThS06Oc9pe_GEBin_n_2GZNKdm0HsJ1gML8B5NSEbvqVC8_EqTnPFYhjKCEnoP3R9JEf0duoGocalYTdBEzf4NYdxeBsMAsxLKgUiKmLNumg=w100-h100', features: ['Класика', 'Freestyle', 'Ski NS / SNB'] },
 ]
-
-export const trainerSchedule = [
-  { id: 2, times: [1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22] },
-  { id: 7, times: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] },
-  { id: 3, times: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22] },
-  { id: 0, times: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] },
-]
