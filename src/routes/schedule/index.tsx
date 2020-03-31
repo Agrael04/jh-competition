@@ -25,13 +25,23 @@ import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 
 import useGetTrainingsQuery from './queries/get-trainings'
+import useGetSchedulesQuery from './queries/get-schedules'
 
 import useStyles from './styles'
 
 const SchedulePage = () => {
   const classes = useStyles()
 
-  const { loading } = useGetTrainingsQuery()
+  const trainings = useGetTrainingsQuery()
+  const schedules = useGetSchedulesQuery()
+
+  /* another graphql request */
+  const trainers = React.useMemo(
+    () => {
+      return schedules?.data?.trainerSchedules.map(t => t.trainer).filter((tr, index, arr) => arr.indexOf(tr) === index) || []
+    },
+    [schedules]
+  )
 
   return (
     <Paper>
@@ -85,16 +95,27 @@ const SchedulePage = () => {
                           </TableCell>
                         )
                       }
-                      <TrainerBodyCell key={time.id} time={time.id} />
                       {
-                        loading && index === 0 ? (
+                        schedules.loading && index === 0 ? (
+                          <TableCell align='center' padding='none' rowSpan={times.length}>
+                            <CircularProgress />
+                          </TableCell>
+                        ) : null
+                      }
+
+                      {
+                        !schedules.loading && <TrainerBodyCell key={time.id} time={time.id} trainers={trainers} />
+                      }
+
+                      {
+                        trainings.loading && index === 0 ? (
                           <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
                       }
                       {
-                        !loading && resources.map(r => (
+                        !trainings.loading && resources.map(r => (
                           <TrainingCell
                             resource={r.id}
                             time={time.id}
