@@ -3,17 +3,18 @@ import { useActions } from 'store'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 import Zoom from '@material-ui/core/Zoom'
+import Divider from '@material-ui/core/Divider'
 
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import FaceIcon from '@material-ui/icons/Face'
 
-import Tooltip from 'components/multiline-tooltip'
-
 import useGetTrainingQuery from '../queries/get-training'
-import { trainers } from '../data'
+import { trainers, times } from '../data'
 
 import useStyles from './styles'
 
@@ -76,11 +77,6 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
     [color]
   )
 
-  const noTrainerStyle = React.useMemo(
-    () => !trainer && ({ margin: 0 }),
-    [trainer]
-  )
-
   const isOccupied = !loading && !!training
 
   if (loading) {
@@ -94,51 +90,31 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   if (!training) {
     return (
       <Zoom in={true}>
-        <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-          <Tooltip rows={['Добавить тренировку']}>
-            <PersonAddIcon />
-          </Tooltip>
-        </Button>
+        <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined} />
       </Zoom>
     )
   }
 
   return (
     <Zoom in={true}>
-      <Button onDoubleClick={handleUpdateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-        <Grid container={true} wrap='nowrap' justify='center'>
-          {
-            trainer && (
-              <Tooltip rows={['Информация о тренировке']}>
-                <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle} />
-              </Tooltip>
-            )
-          }
-          {
-            !trainer && records?.length === 0 && (
-              <Tooltip rows={['Нет учеников и тренера']}>
-                <Avatar className={classes.mainAvatar} style={borderColorStyle}>
-                  <FaceIcon />
-                </Avatar>
-              </Tooltip>
-            )
-          }
+      <ButtonBase onDoubleClick={handleUpdateClick} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
+        <Box height='100%' color='white'>
+          <Grid container={true} justify='space-between'>
+            <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle}>
+              <FaceIcon />
+            </Avatar>
 
-          {
-            records?.map((r, index) => (
-              <Tooltip rows={[r.trainee.fullName]} key={index}>
-                <Avatar className={classes.secondaryAvatar} style={{ ...borderColorStyle, ...noTrainerStyle }}>
-                  {
-                    r.trainee.fullName
-                      ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')
-                      : <FaceIcon />
-                  }
-                </Avatar>
-              </Tooltip>
-            ))
-          }
-        </Grid>
-      </Button>
+            <Box margin='auto'>
+              <Typography color='inherit' variant='caption'>
+                {times.find(t => t.id === training?.startTime)?.label} - {times.find(t => t.id === training?.endTime)?.label}
+              </Typography>
+            </Box>
+          </Grid>
+          <Box marginY={0.5}>
+            <Divider className={classes.divider} />
+          </Box>
+        </Box>
+      </ButtonBase>
     </Zoom>
   )
 }

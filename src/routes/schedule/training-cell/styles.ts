@@ -30,5 +30,11 @@ export default makeStyles((theme: Theme) => ({
   },
   button: {
     height: '100%',
+    width: '100%',
+    display: 'block',
+    padding: theme.spacing(0.5, 1),
+  },
+  divider: {
+    background: 'white',
   },
 }))
