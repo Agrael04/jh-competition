@@ -27,9 +27,9 @@ function Layout({ children }: IProps) {
   return (
     <div className={classes.app}>
       <CssBaseline />
-      <AppBar open={open} handleDrawerOpen={handleDrawerOpen}/>
+      <AppBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <Drawer open={open} handleDrawerClose={handleDrawerClose} />
-      <Box paddingTop={11} paddingX={3}>
+      <Box paddingTop={11} paddingX={3} paddingBottom={3}>
         {children}
       </Box>
     </div>

@@ -1,13 +1,16 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export default makeStyles((theme: Theme) => ({
+  secondaryTd: {
+    borderBottom: `2px solid ${theme.palette.primary.light}`,
+  },
   resourceTd: {
     borderLeft: `2px solid ${theme.palette.primary.light}`,
     position: 'relative',
     height: theme.spacing(4.5),
   },
   mainAvatar: {
-    zIndex: 10,
+    // zIndex: 10,
     border: '2px solid',
   },
   secondaryAvatar: {

@@ -44,21 +44,21 @@ const SchedulePage = () => {
   )
 
   return (
-    <Paper>
+    <Paper className={classes.rootPaper}>
       <Toolbar />
       <Divider />
-      <Table>
+      <Table stickyHeader={true}>
         <TableHead>
-          <TableRow className={classes.secondaryRow}>
-            <TableCell className={classes.timeTd}>
+          <TableRow>
+            <TableCell className={clsx(classes.timeTd, classes.headerTd)}>
               <Typography>
                 {'Время'}
               </Typography>
             </TableCell>
-            <TrainerHeaderCell />
+            <TrainerHeaderCell className={classes.headerTd} />
             {
-              resources.map(r => (
-                <TableCell key={r.id} align='center' padding='none' className={classes.resourceTd}>
+              resources.map((r, resourseIndex) => (
+                <TableCell key={r.id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
                   <Button>
                     <Tooltip rows={[r.name]}>
                       <Avatar className={classes.avatarBackground}>
@@ -77,7 +77,7 @@ const SchedulePage = () => {
               .map((time, index, arr) => (
                 arr.length - 1 === index
                   ? (
-                    <TableRow key={time.id} className={clsx(time.id % 2 === 0 && classes.secondaryRow)}>
+                    <TableRow key={time.id}>
                       <TableCell className={classes.timeTd} colSpan={2 + resources.length}>
                         <Typography>
                           {time.label}
@@ -85,10 +85,10 @@ const SchedulePage = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    <TableRow key={time.id} className={clsx(time.id % 2 === 0 && classes.secondaryRow)}>
+                    <TableRow key={time.id}>
                       {
                         index % 2 === 0 && (
-                          <TableCell padding='none' className={clsx(classes.timeTd, classes.secondaryTimeTd)} rowSpan={2}>
+                          <TableCell className={clsx(classes.timeTd, classes.secondaryTd)} rowSpan={2}>
                             <Typography>
                               {time.label}
                             </Typography>
@@ -104,22 +104,23 @@ const SchedulePage = () => {
                       }
 
                       {
-                        !schedules.loading && <TrainerBodyCell key={time.id} time={time.id} trainers={trainers} />
+                        !schedules.loading && <TrainerBodyCell key={time.id} time={time.id} trainers={trainers} className={clsx(index % 2 && classes.secondaryTd)} />
                       }
 
                       {
                         trainings.loading && index === 0 ? (
-                          <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length}>
+                          <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length} className={classes.firstResourceTd}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
                       }
                       {
-                        !trainings.loading && resources.map(r => (
+                        !trainings.loading && resources.map((r, resourseIndex) => (
                           <TrainingCell
                             resource={r.id}
                             time={time.id}
                             key={r.id}
+                            className={clsx(resourseIndex === 0 && classes.firstResourceTd)}
                           />
                         ))
                       }

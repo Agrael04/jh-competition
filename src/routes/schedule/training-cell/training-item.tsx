@@ -127,7 +127,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
           {
             records?.map((r, index) => (
               <Tooltip rows={[r.trainee.fullName]} key={index}>
-                <Avatar className={classes.secondaryAvatar} style={{ zIndex: records?.length - index, ...borderColorStyle, ...noTrainerStyle }}>
+                <Avatar className={classes.secondaryAvatar} style={{ ...borderColorStyle, ...noTrainerStyle }}>
                   {
                     r.trainee.fullName
                       ? r.trainee.fullName.split(' ').filter((r, i) => i < 2).map(r => r[0]).join('')

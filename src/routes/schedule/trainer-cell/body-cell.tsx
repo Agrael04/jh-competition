@@ -15,15 +15,16 @@ import useStyles from './styles'
 interface IProps {
   time: number
   trainers: number[]
+  className?: string
 }
 
-const TrainerBodyCell = ({ time, trainers }: IProps) => {
+const TrainerBodyCell = ({ time, trainers, className }: IProps) => {
   const classes = useStyles()
   const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
   const { data } = useGetSchedulesQuery()
 
   return (
-    <TableCell padding='none' className={clsx(openedTrainers && classes.trainersColumnShift)}>
+    <TableCell padding='none' className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift, className)}>
       <Grid container={true} wrap='nowrap'>
         {
           trainers.map((tr, index) => (

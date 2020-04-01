@@ -16,7 +16,11 @@ import { useSelector, useActions } from 'store'
 
 import useStyles from './styles'
 
-const TrainerHeaderCell = () => {
+interface IProps {
+  className?: string
+}
+
+const TrainerHeaderCell = ({ className }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
   const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
@@ -25,7 +29,7 @@ const TrainerHeaderCell = () => {
   const openTrainerScheduleDialog = () => actions.schedule.page.openAddTrainerDialog()
 
   return (
-    <TableCell className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift)}>
+    <TableCell className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift, className)}>
       <Grid container={true} justify='space-between'>
         <Box marginY='auto'>
           <Typography>
@@ -33,9 +37,18 @@ const TrainerHeaderCell = () => {
           </Typography>
         </Box>
 
-        <IconButton size='small' color='primary' onClick={openTrainerScheduleDialog}>
-          <AddCircle />
-        </IconButton>
+        <Grid item={true} lg={6} container={true} justify='flex-end'>
+          <IconButton size='small' color='primary' onClick={openTrainerScheduleDialog}>
+            <AddCircle />
+          </IconButton>
+          <IconButton size='small' color='primary' onClick={toggleTrainers}>
+            {
+              openedTrainers
+                ? <KeyboardArrowLeft />
+                : <KeyboardArrowRight />
+            }
+          </IconButton>
+        </Grid>
       </Grid>
 
       <Fab onClick={toggleTrainers} className={classes.toggleOpenedTrainers} color='primary' size='small'>

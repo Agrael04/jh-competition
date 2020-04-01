@@ -3,7 +3,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 export default makeStyles((theme: Theme) => ({
   trainersTd: {
     width: theme.spacing(21),
-    position: 'relative',
+    height: theme.spacing(4.5),
+    // position: 'relative',
     willChange: 'width',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.easeOut,
@@ -48,6 +49,7 @@ export default makeStyles((theme: Theme) => ({
     marginLeft: theme.spacing(0),
   },
   toggleOpenedTrainers: {
+    display: 'none',
     position: 'absolute',
     color: 'white',
     right: 0,

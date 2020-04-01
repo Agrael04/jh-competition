@@ -1,6 +1,11 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export default makeStyles((theme: Theme) => ({
+  rootPaper: {
+    maxHeight: `calc(100vh - ${theme.spacing(14)}px)`,
+    height: `calc(100vh - ${theme.spacing(14)}px)`,
+    overflow: 'auto',
+  },
   avatarBackground: {
     background: theme.palette.secondary.main,
   },
@@ -9,10 +14,16 @@ export default makeStyles((theme: Theme) => ({
   },
   timeTd: {
     width: theme.spacing(10),
+    height: theme.spacing(9),
     paddingLeft: theme.spacing(2),
-    position: 'relative',
   },
-  secondaryTimeTd: {
+  headerTd: {
+    borderBottom: `2px solid ${theme.palette.secondary.main}`,
+  },
+  firstResourceTd: {
+    borderLeft: `2px solid ${theme.palette.secondary.main}`,
+  },
+  secondaryTd: {
     borderBottom: `2px solid ${theme.palette.primary.light}`,
   },
   resourceTd: {

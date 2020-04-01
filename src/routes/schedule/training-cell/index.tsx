@@ -1,4 +1,5 @@
 import React from 'react'
+import clsx from 'clsx'
 
 import TableCell from '@material-ui/core/TableCell'
 
@@ -11,9 +12,10 @@ import useStyles from './styles'
 interface IProps {
   time: number
   resource: number
+  className?: string
 }
 
-const TrainingCell = ({ time, resource }: IProps) => {
+const TrainingCell = ({ time, resource, className }: IProps) => {
   const classes = useStyles()
 
   const { data } = useGetTrainingsQuery()
@@ -43,7 +45,7 @@ const TrainingCell = ({ time, resource }: IProps) => {
   }
 
   return (
-    <TableCell align='center' padding='none' className={classes.resourceTd} rowSpan={duration ? duration : 1}>
+    <TableCell align='center' padding='none' className={clsx(classes.resourceTd, (training?.endTime || time + 1) % 2 && classes.secondaryTd, className)} rowSpan={duration ? duration : 1}>
       <div className={classes.cellWrap}>
         <TrainingItem time={time} resource={resource} id={training?._id} />
       </div>
