@@ -30,7 +30,7 @@ const TrainingCell = ({ time, resource, className }: IProps) => {
       const startTime = training?.startTime || 0
       const endTime = training?.endTime || 0
 
-      return endTime - startTime
+      return (endTime - startTime) || 1
     },
     [training]
   )
@@ -45,7 +45,7 @@ const TrainingCell = ({ time, resource, className }: IProps) => {
   }
 
   return (
-    <TableCell align='center' padding='none' className={clsx(classes.resourceTd, (training?.endTime || time + 1) % 2 && classes.secondaryTd, className)} rowSpan={duration ? duration : 1}>
+    <TableCell align='center' padding='none' className={clsx(classes.resourceTd, (time + duration) % 2 && classes.secondaryTd, className)} rowSpan={duration}>
       <div className={classes.cellWrap}>
         <TrainingItem time={time} resource={resource} id={training?._id} />
       </div>

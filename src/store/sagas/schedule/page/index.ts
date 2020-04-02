@@ -14,6 +14,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
     const training = {
       _id: new BSON.ObjectID(),
       startTime: action.payload.time,
+      endTime: action.payload.time + 2,
       resource: action.payload.resource,
       date,
       gym,

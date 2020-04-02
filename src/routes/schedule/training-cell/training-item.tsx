@@ -26,6 +26,13 @@ interface IProps {
   id: string | undefined
 }
 
+const trainingTexts = {
+  'GROUP': 'Группа',
+  'RENT': 'Аренда',
+  'RENT_WITH_TRAINER': 'Аренда',
+  'EVENT': 'Событие',
+}
+
 const TrainingCell = ({ time, resource, id }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
@@ -107,6 +114,10 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
             <Box margin='auto'>
               <Typography color='inherit' variant='caption'>
                 {times.find(t => t.id === training?.startTime)?.label} - {times.find(t => t.id === training?.endTime)?.label}
+              </Typography>
+              <br />
+              <Typography color='inherit' variant='caption'>
+                {(trainingTexts as any)[training.type]}
               </Typography>
             </Box>
           </Grid>
