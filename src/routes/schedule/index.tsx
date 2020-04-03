@@ -27,6 +27,8 @@ import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 import useGetTrainingsQuery from './queries/get-trainings'
 import useGetSchedulesQuery from './queries/get-schedules'
 
+import { useSelector } from 'store'
+
 import useStyles from './styles'
 
 const SchedulePage = () => {
@@ -34,6 +36,7 @@ const SchedulePage = () => {
 
   const trainings = useGetTrainingsQuery()
   const schedules = useGetSchedulesQuery()
+  const activeResources = useSelector(state => state.schedule.page.activeResources)
 
   /* another graphql request */
   const trainers = React.useMemo(
@@ -57,17 +60,19 @@ const SchedulePage = () => {
             </TableCell>
             <TrainerHeaderCell className={classes.headerTd} />
             {
-              resources.map((r, resourseIndex) => (
-                <TableCell key={r.id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
-                  <Button>
-                    <Tooltip rows={[r.name]}>
-                      <Avatar className={classes.avatarBackground}>
-                        {r.shortName}
-                      </Avatar>
-                    </Tooltip>
-                  </Button>
-                </TableCell>
-              ))
+              activeResources
+                .map(r => resources.find(res => res.id === r)!)
+                .map((r, resourseIndex) => (
+                  <TableCell key={r.id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
+                    <Button>
+                      <Tooltip rows={[r.name]}>
+                        <Avatar className={classes.avatarBackground}>
+                          {r.shortName}
+                        </Avatar>
+                      </Tooltip>
+                    </Button>
+                  </TableCell>
+                ))
             }
           </TableRow>
         </TableHead>
@@ -78,7 +83,7 @@ const SchedulePage = () => {
                 arr.length - 1 === index
                   ? (
                     <TableRow key={time.id}>
-                      <TableCell className={classes.timeTd} colSpan={2 + resources.length}>
+                      <TableCell className={classes.timeTd} colSpan={2 + activeResources.length}>
                         <Typography>
                           {time.label}
                         </Typography>
@@ -109,13 +114,15 @@ const SchedulePage = () => {
 
                       {
                         trainings.loading && index === 0 ? (
-                          <TableCell align='center' padding='none' colSpan={resources.length} rowSpan={times.length} className={classes.firstResourceTd}>
+                          <TableCell align='center' padding='none' colSpan={activeResources.length} rowSpan={times.length} className={classes.firstResourceTd}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
                       }
                       {
-                        !trainings.loading && resources.map((r, resourseIndex) => (
+                        !trainings.loading && activeResources
+                        .map(r => resources.find(res => res.id === r)!)
+                        .map((r, resourseIndex) => (
                           <TrainingCell
                             resource={r.id}
                             time={time.id}

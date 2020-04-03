@@ -20,14 +20,19 @@ export const openAddTrainerDialog = () => ({
   type: constants.OPEN_ADD_TRAINER_DIALOG,
 })
 
-export const setCurrentDate = (date: Date) => ({
-  type: constants.SET_CURRENT_DATE,
+export const setActiveDate = (date: Date) => ({
+  type: constants.SET_ACTIVE_DATE,
   payload: { date },
 })
 
-export const setCurrentGym = (gym: number) => ({
-  type: constants.SET_CURRENT_GYM,
+export const setActiveGym = (gym: number) => ({
+  type: constants.SET_ACTIVE_GYM,
   payload: { gym },
+})
+
+export const setActiveResources = (resources: number[]) => ({
+  type: constants.SET_ACTIVE_RESOURCES,
+  payload: { resources },
 })
 
 export const toggleOpenedTrainers = () => ({
@@ -40,8 +45,9 @@ export const actions = {
 
   openAddTrainerDialog,
 
-  setCurrentDate,
-  setCurrentGym,
+  setActiveDate,
+  setActiveGym,
+  setActiveResources,
 
   toggleOpenedTrainers,
 }

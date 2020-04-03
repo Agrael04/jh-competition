@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
@@ -14,36 +15,36 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
-const currentDateSelector = () => (state: IStoreState) => state.schedule.page.currentDate
-const currentGymSelector = () => (state: IStoreState) => state.schedule.page.currentGym
+import { gyms, resources } from './data'
 
-const gyms = [
-  { id: 1, text: 'Берестейська' },
-  { id: 2, text: 'Харькiвське шосе' },
-  { id: 3, text: 'Почайна' },
-  { id: 4, text: 'Парк дружбы народов' },
-]
+const activeDateSelector = () => (state: IStoreState) => state.schedule.page.activeDate
+const activeGymSelector = () => (state: IStoreState) => state.schedule.page.activeGym
+const activeResourcesSelector = () => (state: IStoreState) => state.schedule.page.activeResources
 
 const ToolbarContainer = () => {
   const actions = useActions()
-  const currentDate = useSelector(currentDateSelector())
-
-  const handleGymChange = (name: string, value: any) => {
-    actions.schedule.page.setCurrentGym(value)
-  }
+  const activeDate = useSelector(activeDateSelector())
 
   const handleDateChange = (name: string, value: any) => {
-    actions.schedule.page.setCurrentDate(value.toDate())
+    actions.schedule.page.setActiveDate(value.toDate())
+  }
+
+  const handleGymChange = (name: string, value: any) => {
+    actions.schedule.page.setActiveGym(value)
+  }
+
+  const handleResourcesChange = (name: string, value: any) => {
+    actions.schedule.page.setActiveResources(value)
   }
 
   const handlePrevDateClick = () => {
-    const d = moment(currentDate).subtract(1, 'days')
-    actions.schedule.page.setCurrentDate(d.toDate())
+    const d = moment(activeDate).subtract(1, 'days')
+    actions.schedule.page.setActiveDate(d.toDate())
   }
 
   const handleNextDateClick = () => {
-    const d = moment(currentDate).add(1, 'days')
-    actions.schedule.page.setCurrentDate(d.toDate())
+    const d = moment(activeDate).add(1, 'days')
+    actions.schedule.page.setActiveDate(d.toDate())
   }
 
   return (
@@ -57,7 +58,7 @@ const ToolbarContainer = () => {
             <DatePicker
               name='date'
               onChange={handleDateChange}
-              fieldSelector={currentDateSelector}
+              fieldSelector={activeDateSelector}
               disableToolbar={true}
               inputVariant='outlined'
               fullWidth={true}
@@ -68,22 +69,52 @@ const ToolbarContainer = () => {
           </Grid>
         </Box>
         <Box marginY={1}>
-          <Select
-            name='gym'
-            onChange={handleGymChange}
-            fieldSelector={currentGymSelector}
-            label={'Зал'}
-            fullWidth={true}
-            variant='outlined'
-          >
-            {
-              gyms.map(gym => (
-                <MenuItem value={gym.id} key={gym.id}>
-                  {gym.text}
-                </MenuItem>
-              ))
-            }
-          </Select>
+          <Grid container={true} wrap='nowrap'>
+            <Select
+              name='gym'
+              onChange={handleGymChange}
+              fieldSelector={activeGymSelector}
+              label={'Зал'}
+              fullWidth={true}
+              variant='outlined'
+            >
+              {
+                gyms.map(gym => (
+                  <MenuItem value={gym.id} key={gym.id}>
+                    {gym.text}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+            <Box marginLeft={1} maxWidth={240}>
+              <Select
+                name='resources'
+                onChange={handleResourcesChange}
+                fieldSelector={activeResourcesSelector}
+                label={'Ресурсы'}
+                fullWidth={true}
+                variant='outlined'
+                multiple={true}
+              >
+                <ListSubheader>Батуты</ListSubheader>
+                {
+                  resources.filter(r => r.type === 'trampoline').map(r => (
+                    <MenuItem value={r.id} key={r.id}>
+                      {r.name}
+                    </MenuItem>
+                  ))
+                }
+                <ListSubheader>Другое</ListSubheader>
+                {
+                  resources.filter(r => r.type === 'softRoom').map(r => (
+                    <MenuItem value={r.id} key={r.id}>
+                      {r.name}
+                    </MenuItem>
+                  ))
+                }
+              </Select>
+            </Box>
+          </Grid>
         </Box>
       </Grid>
     </Toolbar>

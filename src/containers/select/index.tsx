@@ -14,6 +14,22 @@ interface IProps {
 export default function SelectContainer({ name, onChange, fieldSelector, children, ...rest }: IProps) {
   const value = useSelector(fieldSelector(name))
 
+  const v = React.useMemo(
+    () => {
+      if (Array.isArray(value)) {
+        return value
+      }
+
+      if (value === undefined || value === null) {
+        return ''
+      }
+
+      return value?.toString() || ''
+    }, [value]
+  )
+
+  console.log(v)
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(name, e.target.value)
@@ -22,7 +38,7 @@ export default function SelectContainer({ name, onChange, fieldSelector, childre
 
   return (
     <Select
-      value={value?.toString() || ''}
+      value={v}
       onChange={handleChange}
       {...rest}
     >

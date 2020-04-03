@@ -8,8 +8,8 @@ import { IStoreState } from 'store'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
-    const date = yield select((state: IStoreState) => state.schedule.page.currentDate)
-    const gym = yield select((state: IStoreState) => state.schedule.page.currentGym)
+    const date = yield select((state: IStoreState) => state.schedule.page.activeDate)
+    const gym = yield select((state: IStoreState) => state.schedule.page.activeGym)
 
     const training = {
       _id: new BSON.ObjectID(),
@@ -40,8 +40,8 @@ export function* openUpdateTrainingDialog(action: ReturnType<typeof actions.page
 
 export function* openAddTrainerDialog(action: ReturnType<typeof actions.page.openAddTrainerDialog>) {
   try {
-    const date = yield select((state: IStoreState) => state.schedule.page.currentDate)
-    const gym = yield select((state: IStoreState) => state.schedule.page.currentGym)
+    const date = yield select((state: IStoreState) => state.schedule.page.activeDate)
+    const gym = yield select((state: IStoreState) => state.schedule.page.activeGym)
 
     yield put(actions.addTrainerDialog.open(gym, date))
   } catch (error) {

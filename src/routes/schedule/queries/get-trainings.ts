@@ -26,8 +26,8 @@ export const GET_TRAININGS = gql`
 `
 
 export const useGetTrainingsQuery = () => {
-  const date = useSelector(state => state.schedule.page.currentDate)
-  const gym = useSelector(state => state.schedule.page.currentGym)
+  const date = useSelector(state => state.schedule.page.activeDate)
+  const gym = useSelector(state => state.schedule.page.activeGym)
 
   const result = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
     variables: { date, gym },

@@ -26,10 +26,10 @@ export const GET_SCHEDULES = gql`
 `
 
 export const useGetTrainingsQuery = (date?: Date) => {
-  const currentDate = useSelector(state => state.schedule.page.currentDate)
+  const activeDate = useSelector(state => state.schedule.page.activeDate)
 
   const result = useQuery<IGetSchedulesResponse>(GET_SCHEDULES, {
-    variables: { date: date || currentDate },
+    variables: { date: date || activeDate },
   })
 
   return result

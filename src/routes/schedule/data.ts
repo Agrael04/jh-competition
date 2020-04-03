@@ -38,15 +38,15 @@ export const gyms = [
 ]
 
 export const resources = [
-  { id: 0, name: 'Батут 1 Сцена', shortName: 'Б1' },
-  { id: 1, name: 'Батут 2 Фал', shortName: 'Б2' },
-  { id: 2, name: 'Батут 3 Сцена', shortName: 'Б3' },
-  { id: 3, name: 'Батут 4 Центр', shortName: 'Б4' },
-  { id: 4, name: 'Батут 5 Вход', shortName: 'Б5' },
-  { id: 5, name: 'Батут 6 Яма', shortName: 'Б6' },
-  { id: 6, name: 'Батут 7 Акро', shortName: 'Б7' },
-  { id: 7, name: 'Мягкий зал 1', shortName: 'З1' },
-  { id: 8, name: 'Мягкий зал 2', shortName: 'З2' },
+  { id: 0, name: 'Батут 1 Сцена', shortName: 'Б1', type: 'trampoline' },
+  { id: 1, name: 'Батут 2 Фал', shortName: 'Б2', type: 'trampoline' },
+  { id: 2, name: 'Батут 3 Сцена', shortName: 'Б3', type: 'trampoline' },
+  { id: 3, name: 'Батут 4 Центр', shortName: 'Б4', type: 'trampoline' },
+  { id: 4, name: 'Батут 5 Вход', shortName: 'Б5', type: 'trampoline' },
+  { id: 5, name: 'Батут 6 Яма', shortName: 'Б6', type: 'trampoline' },
+  { id: 6, name: 'Батут 7 Акро', shortName: 'Б7', type: 'trampoline' },
+  { id: 7, name: 'Мягкий зал 1', shortName: 'З1', type: 'softRoom' },
+  { id: 8, name: 'Мягкий зал 2', shortName: 'З2', type: 'softRoom' },
 ]
 
 export const trainers = [
