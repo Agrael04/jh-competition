@@ -121,15 +121,15 @@ const SchedulePage = () => {
                       }
                       {
                         !trainings.loading && activeResources
-                        .map(r => resources.find(res => res.id === r)!)
-                        .map((r, resourseIndex) => (
-                          <TrainingCell
-                            resource={r.id}
-                            time={time.id}
-                            key={r.id}
-                            className={clsx(resourseIndex === 0 && classes.firstResourceTd)}
-                          />
-                        ))
+                          .map(r => resources.find(res => res.id === r)!)
+                          .map((r, resourseIndex) => (
+                            <TrainingCell
+                              resource={r.id}
+                              time={time.id}
+                              key={r.id}
+                              className={clsx(resourseIndex === 0 && classes.firstResourceTd)}
+                            />
+                          ))
                       }
                     </TableRow>
                   )
