@@ -1,3 +1,5 @@
+import ITrainer from './trainer'
+
 export interface ITrainingRecord {
   _id?: string
   trainee: {
@@ -26,7 +28,7 @@ export default interface ITraining {
   endTime: number | null
   resource: number | undefined
 
-  trainer?: number | undefined
+  trainer?: string | ITrainer | undefined
   name?: string
   type?: string
   markPrice?: number | null

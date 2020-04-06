@@ -10,7 +10,13 @@ export const CREATE_TRAINING = gql`
     insertOneTraining(data: $training) {
       _id
       resource
-      trainer
+      trainer {
+        _id
+        firstName
+        lastName
+        color
+        avatarSrc
+      }
       startTime
       endTime
     }
@@ -23,9 +29,10 @@ const useCreateTraining = () => {
   const mutate = React.useCallback(
     (training: ITraining) => {
       const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date), gym: training.gym } }
+      const mappedTraining = ({ ...training, trainer: { link: training.trainer } })
 
       return createTraining({
-        variables: { training },
+        variables: { training: mappedTraining },
         update: (cache, { data }) => {
           const queryData = cache.readQuery<IGetTrainingsResponse>(trainingsQuery)
           cache.writeQuery({

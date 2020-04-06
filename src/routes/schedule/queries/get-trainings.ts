@@ -6,7 +6,13 @@ export interface IGetTrainingsResponse {
   trainings: Array<{
     _id: string
     resource: number
-    trainer: number
+    trainer: {
+      _id: string
+      firstName: string
+      lastName: string
+      color: number
+      avatarSrc: string
+    }
     startTime: number
     endTime: number
     __typename: string
@@ -18,7 +24,13 @@ export const GET_TRAININGS = gql`
     trainings(query: { date: $date, gym: $gym }) {
       _id
       resource
-      trainer
+      trainer {
+        _id
+        firstName
+        lastName
+        color
+        avatarSrc
+      }
       startTime
       endTime
     }

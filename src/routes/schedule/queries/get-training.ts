@@ -11,7 +11,14 @@ export interface IGetTrainingResponse {
     name: string
     note: string
     resource: number
-    trainer: number
+    trainer: {
+      _id: string
+      firstName: string
+      lastName: string
+      color: number
+      avatarSrc: string
+      __typename: string
+    }
     type: string
     startTime: number
     endTime: number
@@ -42,7 +49,13 @@ export const GET_TRAINING = gql`
       name
       note
       resource
-      trainer
+      trainer {
+        _id
+        firstName
+        lastName
+        color
+        avatarSrc
+      }
       type
       startTime
       endTime

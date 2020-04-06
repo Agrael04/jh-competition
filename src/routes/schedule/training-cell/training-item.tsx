@@ -14,7 +14,7 @@ import Divider from '@material-ui/core/Divider'
 import FaceIcon from '@material-ui/icons/Face'
 
 import useGetTrainingQuery from '../queries/get-training'
-import { trainers, times } from '../data'
+import { times } from '../data'
 
 import useStyles from './styles'
 
@@ -43,7 +43,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const records = data?.trainingRecords
 
   const trainer = React.useMemo(
-    () => trainers.find(tr => tr.id === training?.trainer),
+    () => training?.trainer,
     [training]
   )
 
@@ -69,7 +69,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
         return getColorPallete(undefined)
       }
 
-      return getColorPallete(training.trainer)
+      return getColorPallete(training.trainer.color)
     },
     [loading, training]
   )

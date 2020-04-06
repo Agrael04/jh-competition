@@ -10,11 +10,13 @@ import TrainerAvatar from './trainer-avatar'
 
 import { useSelector } from 'store'
 
+import ITrainer from 'interfaces/trainer'
+
 import useStyles from './styles'
 
 interface IProps {
   time: number
-  trainers: number[]
+  trainers: ITrainer[]
   className?: string
 }
 
@@ -32,14 +34,14 @@ const TrainerBodyCell = ({ time, trainers, className }: IProps) => {
               ? (
                 <TrainerAvatar
                   time={time}
-                  id={tr}
+                  trainer={tr}
                   key={tr}
                   showBadge={openedTrainers}
                   className={index > 0 ? clsx(classes.trainerAvatar, openedTrainers && classes.openedTrainerAvatar) : undefined}
                 />
               )
               : (
-                <div className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)} key={tr} />
+                <div className={clsx(index === 0 ? classes.firstEmptyTrainerAvatar : classes.emptyTrainerAvatar, openedTrainers && classes.openedTrainerAvatar)} key={tr._id} />
               )
           ))
         }

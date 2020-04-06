@@ -17,7 +17,7 @@ interface IProps {
 
 export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
   const startTime = useSelector(fieldSelector('startTime')) as number
-  const trainer = useSelector(fieldSelector('trainer')) as number
+  const trainer = useSelector(fieldSelector('trainer')) as string
   const gym = useSelector(fieldSelector('gym')) as number
   const date = useSelector(fieldSelector('date')) as Date
   const { data } = useGetSchedulesQuery(date)
@@ -29,7 +29,7 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
       }
 
       const schedules = data?.trainerSchedules.filter(ts =>
-        ts.trainer === trainer && ts.gym === gym
+        ts.trainer._id === trainer && ts.gym === gym
       ) || []
 
       return schedules

@@ -28,8 +28,6 @@ export default function SelectContainer({ name, onChange, fieldSelector, childre
     }, [value]
   )
 
-  console.log(v)
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(name, e.target.value)

@@ -7,7 +7,13 @@ export interface IGetSchedulesResponse {
     _id: string
     date: number
     time: number
-    trainer: number
+    trainer: {
+      _id: string
+      avatarSrc: string
+      color: number
+      firstName: string
+      lastName: string
+    }
     gym: number
     __typename: string
   }>
@@ -19,7 +25,13 @@ export const GET_SCHEDULES = gql`
       _id
       date
       time
-      trainer
+      trainer{
+        _id
+        avatarSrc
+        color
+        firstName
+        lastName
+      }
       gym
     }
   }

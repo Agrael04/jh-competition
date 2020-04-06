@@ -19,9 +19,10 @@ const useCreateTrainerSchedules = () => {
   const mutate = React.useCallback(
     (schedules: ITrainerSchedule[]) => {
       const schedulesQuery = { query: GET_SCHEDULES, variables: { date: new Date(schedules[0].date) } }
+      const mappedSchedules = schedules.map(sh => ({ ...sh, trainer: { link: sh.trainer } }))
 
       return createTrainingRecords({
-        variables: { schedules },
+        variables: { schedules: mappedSchedules },
         update: (cache, { data }) => {
           const queryData = cache.readQuery<IGetSchedulesResponse>(schedulesQuery)
 

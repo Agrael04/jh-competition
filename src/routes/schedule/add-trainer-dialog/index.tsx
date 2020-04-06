@@ -23,7 +23,7 @@ import TimeframesBlock from './timeframes-block'
 import SubmitButton from './submit-button'
 
 import useGetSchedulesQuery from '../queries/get-schedules'
-import { trainers } from '../data'
+import useGetTrainersQuery from '../queries/get-trainers'
 
 type FieldName = keyof IStoreState['schedule']['addTrainerDialog']['form']
 
@@ -33,11 +33,12 @@ export default function TrainingDialog() {
   const classes = useStyles()
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
   const actions = useActions()
-  const { data } = useGetSchedulesQuery()
+  const schedulesQuery = useGetSchedulesQuery()
+  const trainersQuery = useGetTrainersQuery()
 
   const filteredTrainers = React.useMemo(
-    () => trainers.filter(trainer => !data?.trainerSchedules.find(s => s.trainer === trainer.id)),
-    [data]
+    () => trainersQuery?.data?.trainers?.filter(trainer => !schedulesQuery.data?.trainerSchedules.find(s => s.trainer._id === trainer._id)) || [],
+    [trainersQuery, schedulesQuery]
   )
 
   const close = React.useCallback(
@@ -88,7 +89,7 @@ export default function TrainingDialog() {
                 >
                   {
                     filteredTrainers.map(trainer => (
-                      <MenuItem value={trainer.id} key={trainer.id}>
+                      <MenuItem value={trainer._id} key={trainer._id}>
                         {trainer.firstName} {trainer.lastName}
                       </MenuItem>
                     ))

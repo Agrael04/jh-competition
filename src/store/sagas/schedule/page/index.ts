@@ -5,6 +5,7 @@ import { actions } from 'store/actions/schedule'
 import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
+import ITrainer from 'interfaces/trainer'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
@@ -30,6 +31,7 @@ export function* openUpdateTrainingDialog(action: ReturnType<typeof actions.page
   try {
     const training = action.payload.training
     delete training.__typename
+    training.trainer = (training?.trainer as ITrainer)?._id
     const records = action.payload.records
     records.forEach((r: any) => delete r.__typename)
     yield put(actions.trainingDialog.open('update', training, records))

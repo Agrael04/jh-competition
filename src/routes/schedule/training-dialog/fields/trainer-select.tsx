@@ -6,8 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from 'containers/select'
 import useGetSchedulesQuery from '../../queries/get-schedules'
 
-import { trainers } from '../../data'
-
 interface IProps {
   name: string
   label: string
@@ -20,45 +18,47 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
   const endTime = useSelector(fieldSelector('endTime')) as number
   const gym = useSelector(fieldSelector('gym')) as number
   const date = useSelector(fieldSelector('date')) as Date
-  const trainer = useSelector(fieldSelector('trainer')) as number
+  const trainer = useSelector(fieldSelector('trainer')) as string
   const { data, loading } = useGetSchedulesQuery(date)
 
-  const filteredTrainers = React.useMemo(
-    () => trainers.filter(trainer => {
-      const schedules = data?.trainerSchedules.filter(ts => ts.trainer === trainer.id && ts.gym === gym) || []
+  const trainers = React.useMemo(
+    () => {
+      const schedules = data?.trainerSchedules
+        .filter(ts => {
+          if (ts.gym !== gym) {
+            return false
+          }
 
-      if (schedules.length === 0) {
-        return false
-      }
+          if (startTime && ts.time < startTime) {
+            return false
+          }
 
-      if (!startTime && !endTime) {
-        return true
-      }
+          if (endTime && ts.time >= endTime) {
+            return false
+          }
 
-      if (startTime && endTime) {
-        return schedules.filter(s => s.time >= startTime && s.time < endTime).length === (endTime - startTime)
-      }
+          return true
+        })
+        .filter((ts, index, arr) => {
+          return arr.filter(t => t.trainer._id === ts.trainer._id).length === (endTime - startTime)
+        })
 
-      if (startTime) {
-        return schedules.find(s => s.time === startTime)
-      }
+      const trainers = schedules?.map(sh => sh.trainer).filter((tr, index, arr) => {
+        return arr.findIndex(item => item._id === tr._id) === index
+      })
 
-      if (endTime) {
-        return schedules.find(s => s.time === endTime - 1)
-      }
-
-      return true
-    }),
+      return trainers
+    },
     [data, startTime, endTime, gym]
   )
 
   React.useEffect(
     () => {
-      if (!loading && !filteredTrainers.find(ft => ft.id === trainer)) {
+      if (!loading && !trainers?.find(ft => ft._id === trainer)) {
         onChange('trainer', undefined)
       }
     },
-    [loading, filteredTrainers, onChange, trainer]
+    [loading, trainers, onChange, trainer]
   )
 
   return (
@@ -71,8 +71,8 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
       variant='outlined'
     >
       {
-        filteredTrainers.map(trainer => (
-          <MenuItem value={trainer.id} key={trainer.id}>
+        trainers?.map(trainer => (
+          <MenuItem value={trainer._id} key={trainer._id}>
             {trainer.firstName} {trainer.lastName}
           </MenuItem>
         ))

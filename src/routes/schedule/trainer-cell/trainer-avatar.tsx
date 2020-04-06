@@ -11,7 +11,6 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import getColorPallete from 'utils/get-color-pallete'
 
 import useGetTrainingsQuery from '../queries/get-trainings'
-import { trainers } from '../data'
 
 const useStyles = (color: any) => makeStyles((theme: Theme) => ({
   badgeBackground: {
@@ -33,10 +32,9 @@ export const useBadgeBackground = (id: number) => {
   return classes
 }
 
-const TrainerAvatar = ({ time, id, showBadge, className }: any) => {
-  const classes = useBadgeBackground(id)()
+const TrainerAvatar = ({ time, trainer, showBadge, className }: any) => {
+  const classes = useBadgeBackground(trainer.color)()
   const { data } = useGetTrainingsQuery()
-  const trainer = trainers.find(tr => tr.id === id)!
 
   const count = React.useMemo(
     () => {
