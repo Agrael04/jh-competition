@@ -22,7 +22,7 @@ import getColorPallete from 'utils/get-color-pallete'
 
 interface IProps {
   time: number
-  resource: number
+  resource: string
   id: string | undefined
 }
 
@@ -58,7 +58,11 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleUpdateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openUpdateTrainingDialog(training!, records!)
+      actions.schedule.page.openUpdateTrainingDialog({
+        ...training!,
+        gym: training?.gym?._id,
+        resource: training?.resource?._id,
+      }, records!)
     },
     [training, records, actions]
   )
@@ -97,7 +101,9 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   if (!training) {
     return (
       <Zoom in={true}>
-        <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined} />
+        <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
+          {' '}
+        </Button>
       </Zoom>
     )
   }

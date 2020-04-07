@@ -15,7 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
-import { gyms, resources } from './data'
+import useGetGymsQuery from './queries/get-gyms'
 
 const activeDateSelector = () => (state: IStoreState) => state.schedule.page.activeDate
 const activeGymSelector = () => (state: IStoreState) => state.schedule.page.activeGym
@@ -24,13 +24,16 @@ const activeResourcesSelector = () => (state: IStoreState) => state.schedule.pag
 const ToolbarContainer = () => {
   const actions = useActions()
   const activeDate = useSelector(activeDateSelector())
+  const activeGym = useSelector(activeGymSelector())
+
+  const gyms = useGetGymsQuery()
 
   const handleDateChange = (name: string, value: any) => {
     actions.schedule.page.setActiveDate(value.toDate())
   }
 
   const handleGymChange = (name: string, value: any) => {
-    actions.schedule.page.setActiveGym(value)
+    actions.schedule.page.setActiveGym(value, gyms.data?.resources.filter(r => r.gym._id === value).map(r => r._id) || [])
   }
 
   const handleResourcesChange = (name: string, value: any) => {
@@ -46,6 +49,22 @@ const ToolbarContainer = () => {
     const d = moment(activeDate).add(1, 'days')
     actions.schedule.page.setActiveDate(d.toDate())
   }
+
+  React.useEffect(
+    () => {
+      if (!gyms.loading) {
+        const _id = gyms.data?.gyms[0]._id!
+        actions.schedule.page.setActiveGym(_id, gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || [])
+      }
+    }, [gyms, actions]
+  )
+
+  const resources = React.useMemo(
+    () => {
+      return gyms.data?.resources.filter(r => r.gym._id === activeGym) || []
+    },
+    [gyms, activeGym]
+  )
 
   return (
     <Toolbar>
@@ -68,54 +87,60 @@ const ToolbarContainer = () => {
             </IconButton>
           </Grid>
         </Box>
-        <Box marginY={1}>
-          <Grid container={true} wrap='nowrap'>
-            <Select
-              name='gym'
-              onChange={handleGymChange}
-              fieldSelector={activeGymSelector}
-              label={'Зал'}
-              fullWidth={true}
-              variant='outlined'
-            >
-              {
-                gyms.map(gym => (
-                  <MenuItem value={gym.id} key={gym.id}>
-                    {gym.text}
-                  </MenuItem>
-                ))
-              }
-            </Select>
-            <Box marginLeft={1} maxWidth={240}>
-              <Select
-                name='resources'
-                onChange={handleResourcesChange}
-                fieldSelector={activeResourcesSelector}
-                label={'Ресурсы'}
-                fullWidth={true}
-                variant='outlined'
-                multiple={true}
-              >
-                <ListSubheader>Батуты</ListSubheader>
-                {
-                  resources.filter(r => r.type === 'trampoline').map(r => (
-                    <MenuItem value={r.id} key={r.id}>
-                      {r.name}
-                    </MenuItem>
-                  ))
-                }
-                <ListSubheader>Другое</ListSubheader>
-                {
-                  resources.filter(r => r.type === 'softRoom').map(r => (
-                    <MenuItem value={r.id} key={r.id}>
-                      {r.name}
-                    </MenuItem>
-                  ))
-                }
-              </Select>
+        {
+          !gyms.loading && (
+            <Box marginY={1}>
+              <Grid container={true} wrap='nowrap'>
+                <Box maxWidth={240} minWidth={240}>
+                  <Select
+                    name='gym'
+                    onChange={handleGymChange}
+                    fieldSelector={activeGymSelector}
+                    label={'Зал'}
+                    fullWidth={true}
+                    variant='outlined'
+                  >
+                    {
+                      gyms.data?.gyms.map(gym => (
+                        <MenuItem value={gym._id} key={gym._id}>
+                          {gym.name}
+                        </MenuItem>
+                      ))
+                    }
+                  </Select>
+                </Box>
+                <Box marginLeft={1} maxWidth={240} minWidth={240}>
+                  <Select
+                    name='resources'
+                    onChange={handleResourcesChange}
+                    fieldSelector={activeResourcesSelector}
+                    label={'Ресурсы'}
+                    fullWidth={true}
+                    variant='outlined'
+                    multiple={true}
+                  >
+                    <ListSubheader>Батуты</ListSubheader>
+                    {
+                      resources.filter(r => r.type === 'trampoline').map(r => (
+                        <MenuItem value={r._id} key={r._id}>
+                          {r.name}
+                        </MenuItem>
+                      ))
+                    }
+                    <ListSubheader>Другое</ListSubheader>
+                    {
+                      resources.filter(r => r.type === 'other').map(r => (
+                        <MenuItem value={r._id} key={r._id}>
+                          {r.name}
+                        </MenuItem>
+                      ))
+                    }
+                  </Select>
+                </Box>
+              </Grid>
             </Box>
-          </Grid>
-        </Box>
+          )
+        }
       </Grid>
     </Toolbar>
   )

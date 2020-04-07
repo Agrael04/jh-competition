@@ -5,24 +5,24 @@ import removeTimeFromDate from 'utils/remove-time-from-date'
 interface ITimeFrame {
   from: number | undefined
   to: number | undefined
-  gym: number
+  gym: string
 }
 
 interface IForm {
   date: Date
-  trainer: number | undefined
+  trainer: string | undefined
 }
 
 export interface IState {
   opened: boolean
-  gym: number
+  gym: string
   form: IForm
   timeFrames: ITimeFrame[]
 }
 
 const initialState: IState = {
   opened: false,
-  gym: 0,
+  gym: '',
   form: {
     date: new Date(),
     trainer: undefined,

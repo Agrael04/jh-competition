@@ -6,6 +6,8 @@ export interface IGetTrainersResponse {
     _id: string
     firstName: string
     lastName: string
+    avatarSrc: string
+    color: number
     __typename: string
   }>
 }
@@ -16,6 +18,8 @@ export const GET_TRAINERS = gql`
       _id
       firstName
       lastName
+      color
+      avatarSrc
     }
   }
 `

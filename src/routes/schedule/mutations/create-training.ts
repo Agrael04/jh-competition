@@ -9,7 +9,9 @@ export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
     insertOneTraining(data: $training) {
       _id
-      resource
+      resource {
+        _id
+      }
       trainer {
         _id
         firstName
@@ -28,8 +30,13 @@ const useCreateTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITraining) => {
-      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date), gym: training.gym } }
-      const mappedTraining = ({ ...training, trainer: { link: training.trainer } })
+      const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
+      const mappedTraining = ({
+        ...training,
+        trainer: training.trainer ? { link: training.trainer } : undefined,
+        gym: { link: training.gym },
+        resource: { link: training.resource },
+      })
 
       return createTraining({
         variables: { training: mappedTraining },

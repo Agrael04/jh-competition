@@ -5,7 +5,9 @@ import { useSelector } from 'store'
 export interface IGetTrainingsResponse {
   trainings: Array<{
     _id: string
-    resource: number
+    resource: {
+      _id: string
+    }
     trainer: {
       _id: string
       firstName: string
@@ -20,10 +22,12 @@ export interface IGetTrainingsResponse {
 }
 
 export const GET_TRAININGS = gql`
-  query getTrainings($date: DateTime, $gym: Int){
-    trainings(query: { date: $date, gym: $gym }) {
+  query getTrainings($date: DateTime){
+    trainings(query: { date: $date }) {
       _id
-      resource
+      resource {
+        _id
+      }
       trainer {
         _id
         firstName
@@ -39,10 +43,9 @@ export const GET_TRAININGS = gql`
 
 export const useGetTrainingsQuery = () => {
   const date = useSelector(state => state.schedule.page.activeDate)
-  const gym = useSelector(state => state.schedule.page.activeGym)
 
   const result = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
-    variables: { date, gym },
+    variables: { date },
   })
 
   return result

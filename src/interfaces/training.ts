@@ -16,17 +16,17 @@ export interface ITrainingId {
   /* gym */
   /* date */
   time: string
-  resource: number
+  resource: string
 }
 
 export default interface ITraining {
   _id: string
 
-  gym: number | undefined
+  gym: string | undefined
   date: Date
   startTime: number | null
   endTime: number | null
-  resource: number | undefined
+  resource: string | undefined
 
   trainer?: string | ITrainer | undefined
   name?: string

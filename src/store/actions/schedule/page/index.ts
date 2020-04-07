@@ -6,7 +6,7 @@ interface IApolloTraining extends ITraining {
   __typename?: string
 }
 
-export const openCreateTrainingDialog = (resource: number, time: number) => ({
+export const openCreateTrainingDialog = (resource: string, time: number) => ({
   type: constants.OPEN_CREATE_TRAINING_DIALOG,
   payload: { resource, time },
 })
@@ -25,12 +25,12 @@ export const setActiveDate = (date: Date) => ({
   payload: { date },
 })
 
-export const setActiveGym = (gym: number) => ({
+export const setActiveGym = (gym: string, resources: string[]) => ({
   type: constants.SET_ACTIVE_GYM,
-  payload: { gym },
+  payload: { gym, resources },
 })
 
-export const setActiveResources = (resources: number[]) => ({
+export const setActiveResources = (resources: string[]) => ({
   type: constants.SET_ACTIVE_RESOURCES,
   payload: { resources },
 })

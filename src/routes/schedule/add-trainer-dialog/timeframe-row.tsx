@@ -11,11 +11,14 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import Select from 'containers/select'
 
-import { gyms, times } from '../data'
+import useGetGymsQuery from '../queries/get-gyms'
+import { times } from '../data'
 
 type FieldName = keyof IStoreState['schedule']['addTrainerDialog']['timeFrames'][0]
 
 export default function TimeframeRow({ index }: { index: number }) {
+  const gyms = useGetGymsQuery()
+
   const fieldSelector = React.useCallback(
     (name: FieldName) => (state: IStoreState) => {
       const tf = state.schedule.addTrainerDialog.timeFrames.find((item, id) => id === index)
@@ -83,9 +86,9 @@ export default function TimeframeRow({ index }: { index: number }) {
           variant='outlined'
         >
           {
-            gyms.map(gym => (
-              <MenuItem value={gym.id} key={gym.id}>
-                {gym.text}
+            gyms.data?.gyms.map(gym => (
+              <MenuItem value={gym._id} key={gym._id}>
+                {gym.name}
               </MenuItem>
             ))
           }

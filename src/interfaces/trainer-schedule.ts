@@ -1,7 +1,7 @@
 export interface ITrainerSchedule {
   _id?: string
-  trainer: number
-  gym: number
+  trainer: string
+  gym: string
   date: Date
   time: number
 }

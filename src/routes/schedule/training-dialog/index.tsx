@@ -19,11 +19,12 @@ import Select from 'containers/select'
 import EndTimeSelect from './fields/end-time-select'
 import StartTimeSelect from './fields/start-time-select'
 import TrainerSelect from './fields/trainer-select'
+import ResourceSelect from './fields/resource-select'
+import GymSelect from './fields/gym-select'
+
 import TraineesBlock from './trainees-block'
 import SubmitButton from './submit-button'
 import DeleteButton from './delete-button'
-
-import { resources } from '../data'
 
 const translations = {
   'date': 'Дата',
@@ -48,13 +49,6 @@ const trainingTypes = [
   'RENT',
   'RENT_WITH_TRAINER',
   'EVENT',
-]
-
-const gyms = [
-  { id: 1, text: 'Берестейська' },
-  { id: 2, text: 'Харькiвське шосе' },
-  { id: 3, text: 'Почайна' },
-  { id: 4, text: 'Парк дружбы народов' },
 ]
 
 type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
@@ -103,22 +97,12 @@ export default function TrainingDialog() {
           <Grid item={true} container={true} spacing={3} justify='space-around'>
             <Grid item={true} container={true} lg={4} spacing={2}>
               <Grid item={true} lg={6}>
-                <Select
+                <GymSelect
                   name='gym'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.gym}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    gyms.map(gym => (
-                      <MenuItem value={gym.id} key={gym.id}>
-                        {gym.text}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
+                />
               </Grid>
               <Grid item={true} lg={6}>
                 <DatePicker
@@ -133,22 +117,12 @@ export default function TrainingDialog() {
                 />
               </Grid>
               <Grid item={true} lg={12}>
-                <Select
+                <ResourceSelect
                   name='resource'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.trampolines}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    resources.map(r => (
-                      <MenuItem value={r.id} key={r.id}>
-                        {r.name}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
+                />
               </Grid>
               <Grid item={true} lg={6}>
                 <StartTimeSelect

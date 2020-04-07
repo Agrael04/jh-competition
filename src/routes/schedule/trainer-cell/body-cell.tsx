@@ -35,7 +35,7 @@ const TrainerBodyCell = ({ time, trainers, className }: IProps) => {
                 <TrainerAvatar
                   time={time}
                   trainer={tr}
-                  key={tr}
+                  key={tr._id}
                   showBadge={openedTrainers}
                   className={index > 0 ? clsx(classes.trainerAvatar, openedTrainers && classes.openedTrainerAvatar) : undefined}
                 />

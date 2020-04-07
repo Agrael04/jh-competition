@@ -29,22 +29,3 @@ export const times = [
   { id: 28, label: '21:30' },
   { id: 29, label: '22:00' },
 ]
-
-export const gyms = [
-  { id: 1, text: 'Берестейська' },
-  { id: 2, text: 'Харькiвське шосе' },
-  { id: 3, text: 'Почайна' },
-  { id: 4, text: 'Парк дружбы народов' },
-]
-
-export const resources = [
-  { id: 0, name: 'Батут 1 Сцена', shortName: 'Б1', type: 'trampoline' },
-  { id: 1, name: 'Батут 2 Фал', shortName: 'Б2', type: 'trampoline' },
-  { id: 2, name: 'Батут 3 Сцена', shortName: 'Б3', type: 'trampoline' },
-  { id: 3, name: 'Батут 4 Центр', shortName: 'Б4', type: 'trampoline' },
-  { id: 4, name: 'Батут 5 Вход', shortName: 'Б5', type: 'trampoline' },
-  { id: 5, name: 'Батут 6 Яма', shortName: 'Б6', type: 'trampoline' },
-  { id: 6, name: 'Батут 7 Акро', shortName: 'Б7', type: 'trampoline' },
-  { id: 7, name: 'Мягкий зал 1', shortName: 'З1', type: 'softRoom' },
-  { id: 8, name: 'Мягкий зал 2', shortName: 'З2', type: 'softRoom' },
-]

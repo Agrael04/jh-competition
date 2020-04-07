@@ -11,7 +11,7 @@ import useStyles from './styles'
 
 interface IProps {
   time: number
-  resource: number
+  resource: string
   className?: string
 }
 
@@ -21,7 +21,7 @@ const TrainingCell = ({ time, resource, className }: IProps) => {
   const { data } = useGetTrainingsQuery()
 
   const training = React.useMemo(
-    () => data?.trainings.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource === resource),
+    () => data?.trainings.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource._id === resource),
     [data, time, resource]
   )
 

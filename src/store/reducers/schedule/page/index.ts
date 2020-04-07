@@ -4,16 +4,16 @@ import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   activeDate: Date
-  activeGym: number
-  activeResources: number[]
+  activeGym: string
+  activeResources: string[]
   openedTrainers: boolean
 }
 
 const initialState: IState = {
   activeDate: removeTimeFromDate(new Date())!,
-  activeGym: 1,
+  activeGym: '',
   openedTrainers: false,
-  activeResources: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  activeResources: [],
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -29,6 +29,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         activeGym: payload.gym,
+        activeResources: payload.resources,
       }
     }
 

@@ -14,13 +14,15 @@ export interface IGetSchedulesResponse {
       firstName: string
       lastName: string
     }
-    gym: number
+    gym: {
+      _id: string
+    }
     __typename: string
   }>
 }
 
 export const GET_SCHEDULES = gql`
-  query getTrainings($date: DateTime){
+  query getSchedules($date: DateTime){
     trainerSchedules(query: { date: $date }) {
       _id
       date
@@ -32,7 +34,9 @@ export const GET_SCHEDULES = gql`
         firstName
         lastName
       }
-      gym
+      gym{
+        _id
+      }
     }
   }
 `

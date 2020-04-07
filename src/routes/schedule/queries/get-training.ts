@@ -5,12 +5,16 @@ export interface IGetTrainingResponse {
   training: {
     _id: string
     date: Date
-    gym: number
+    gym: {
+      _id: string
+    }
     markPrice: number
     moneyPrice: number
     name: string
     note: string
-    resource: number
+    resource: {
+      _id: string
+    }
     trainer: {
       _id: string
       firstName: string
@@ -43,12 +47,16 @@ export const GET_TRAINING = gql`
     training(query: { _id: $id }) {
       _id
       date
-      gym
+      gym {
+        _id
+      }
       markPrice
       moneyPrice
       name
       note
-      resource
+      resource {
+        _id
+      }
       trainer {
         _id
         firstName

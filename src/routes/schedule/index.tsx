@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography'
 
 import Tooltip from 'components/multiline-tooltip'
 
-import { times, resources } from './data'
+import { times } from './data'
 
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
@@ -26,6 +26,7 @@ import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 
 import useGetTrainingsQuery from './queries/get-trainings'
 import useGetSchedulesQuery from './queries/get-schedules'
+import useGetGymsQuery from './queries/get-gyms'
 
 import { useSelector } from 'store'
 
@@ -36,6 +37,7 @@ const SchedulePage = () => {
 
   const trainings = useGetTrainingsQuery()
   const schedules = useGetSchedulesQuery()
+  const gyms = useGetGymsQuery()
   const activeResources = useSelector(state => state.schedule.page.activeResources)
 
   /* another graphql request */
@@ -44,6 +46,13 @@ const SchedulePage = () => {
       return schedules?.data?.trainerSchedules.map(t => t.trainer).filter((tr, index, arr) => arr.indexOf(tr) === index) || []
     },
     [schedules]
+  )
+
+  const resources = React.useMemo(
+    () => {
+      return activeResources
+        .map(r => gyms.data?.resources.find(res => res._id === r)!)
+    }, [gyms, activeResources]
   )
 
   return (
@@ -60,10 +69,9 @@ const SchedulePage = () => {
             </TableCell>
             <TrainerHeaderCell className={classes.headerTd} />
             {
-              activeResources
-                .map(r => resources.find(res => res.id === r)!)
+              resources
                 .map((r, resourseIndex) => (
-                  <TableCell key={r.id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
+                  <TableCell key={r._id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
                     <Button>
                       <Tooltip rows={[r.name]}>
                         <Avatar className={classes.avatarBackground}>
@@ -120,13 +128,12 @@ const SchedulePage = () => {
                         ) : null
                       }
                       {
-                        !trainings.loading && activeResources
-                          .map(r => resources.find(res => res.id === r)!)
+                        !trainings.loading && resources
                           .map((r, resourseIndex) => (
                             <TrainingCell
-                              resource={r.id}
+                              resource={r._id}
                               time={time.id}
-                              key={r.id}
+                              key={r._id}
                               className={clsx(resourseIndex === 0 && classes.firstResourceTd)}
                             />
                           ))
