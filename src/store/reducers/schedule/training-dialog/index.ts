@@ -1,13 +1,13 @@
 import constants from 'store/constants/schedule/training-dialog'
 
-import ITraining, { ITrainingRecord } from 'interfaces/training'
+import { ITrainingRecord, ITrainingForm } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   opened: boolean
   mode: 'create' | 'update' | null
-  trainingForm: ITraining
+  trainingForm: ITrainingForm
   recordsForm: ITrainingRecord[]
 }
 
@@ -17,17 +17,15 @@ const initialState: IState = {
   trainingForm: {
     _id: '',
 
-    startTime: null,
-    endTime: null,
-    resource: undefined,
-    trainer: undefined,
-    gym: undefined,
+    startTime: 0,
+    endTime: 0,
+    resource: { link: '' },
+    gym: { link: '' },
+    trainer: { link: undefined },
     date: removeTimeFromDate(new Date())!,
 
     name: '',
     type: '',
-    markPrice: null,
-    moneyPrice: null,
     note: '',
   },
   recordsForm: [],

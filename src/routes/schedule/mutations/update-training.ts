@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAINING } from '../queries/get-training'
-import ITraining from 'interfaces/training'
+import { ITrainingForm } from 'interfaces/training'
 
 export const UPDATE_TRAINING = gql`
   mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!) {
@@ -13,8 +13,6 @@ export const UPDATE_TRAINING = gql`
       gym {
         _id
       }
-      markPrice
-      moneyPrice
       name
       note
       resource {
@@ -41,17 +39,11 @@ const useUpdateTraining = () => {
   const [updateTraining] = useMutation(UPDATE_TRAINING)
 
   const mutate = React.useCallback(
-    (training: ITraining) => {
+    (training: ITrainingForm) => {
       const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
-      const mappedTraining = ({
-        ...training,
-        trainer: training.trainer ? { link: training.trainer } : undefined,
-        gym: { link: training.gym },
-        resource: { link: training.resource },
-      })
 
       return updateTraining({
-        variables: { _id: training._id, training: mappedTraining },
+        variables: { _id: training._id, training },
         update: (cache, { data }) => {
           cache.writeQuery({
             ...trainingQuery,

@@ -26,8 +26,8 @@ export default function SubmitButton() {
           .filter(t => t >= tf.from!)
           .map(t => ({
             time: t,
-            gym: tf.gym,
-            trainer: form.trainer!,
+            gym: { link: tf.gym },
+            trainer: { link: form.trainer! },
             date: form.date,
           }))
       )

@@ -1,12 +1,8 @@
 import constants from 'store/constants/schedule/training-dialog'
 
-import ITraining, { ITrainingRecord } from 'interfaces/training'
+import { ITrainingRecord, ITrainingForm } from 'interfaces/training'
 
-interface IApolloTraining extends ITraining {
-  __typename?: string
-}
-
-export const open = (mode: string, training: Partial<IApolloTraining>, records: ITrainingRecord[]) => ({
+export const open = (mode: string, training: Partial<ITrainingForm>, records: ITrainingRecord[]) => ({
   type: constants.OPEN,
   payload: { mode, training, records },
 })

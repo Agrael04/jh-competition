@@ -58,11 +58,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleUpdateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openUpdateTrainingDialog({
-        ...training!,
-        gym: training?.gym?._id,
-        resource: training?.resource?._id,
-      }, records!)
+      actions.schedule.page.openUpdateTrainingDialog(training!, records!)
     },
     [training, records, actions]
   )

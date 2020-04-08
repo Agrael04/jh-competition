@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector } from 'store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -9,12 +9,15 @@ import useGetGymsQuery from '../../queries/get-gyms'
 interface IProps {
   name: string
   label: string
-  fieldSelector: (name: any) => (state: IStoreState) => any
-  onChange: (name: any, value: any) => void
 }
 
-export default function ResourceSelect({ name, label, onChange, fieldSelector }: IProps) {
-  const gym = useSelector(fieldSelector('gym')) as string
+const selector = () => (state: IStoreState) => state.schedule.trainingDialog.trainingForm.resource.link
+
+export default function ResourceSelect({ name, label }: IProps) {
+  const actions = useActions()
+  const { gym } = useSelector(state => ({
+    gym: state.schedule.trainingDialog.trainingForm.gym.link,
+  }))
   const gyms = useGetGymsQuery()
 
   const resources = React.useMemo(
@@ -23,11 +26,18 @@ export default function ResourceSelect({ name, label, onChange, fieldSelector }:
     }, [gyms, gym]
   )
 
+  const handleChange = React.useCallback(
+    (name, link) => {
+      actions.schedule.trainingDialog.updateField(name, { link })
+    },
+    [actions]
+  )
+
   return (
     <Select
       name={name}
-      onChange={onChange}
-      fieldSelector={fieldSelector}
+      onChange={handleChange}
+      fieldSelector={selector}
       label={label}
       fullWidth={true}
       variant='outlined'

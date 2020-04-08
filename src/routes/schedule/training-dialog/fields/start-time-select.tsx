@@ -16,10 +16,12 @@ interface IProps {
 }
 
 export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
-  const endTime = useSelector(fieldSelector('endTime')) as number
-  const trainer = useSelector(fieldSelector('trainer')) as string
-  const gym = useSelector(fieldSelector('gym')) as string
-  const date = useSelector(fieldSelector('date')) as Date
+  const { date, gym, endTime, trainer } = useSelector(state => ({
+    date: state.schedule.trainingDialog.trainingForm.date,
+    endTime: state.schedule.trainingDialog.trainingForm.endTime,
+    gym: state.schedule.trainingDialog.trainingForm.gym.link,
+    trainer: state.schedule.trainingDialog.trainingForm.trainer.link,
+  }))
   const { data } = useGetSchedulesQuery(date)
 
   const filteredTimes = React.useMemo(

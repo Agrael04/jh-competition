@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector } from 'store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -9,16 +9,19 @@ import useGetSchedulesQuery from '../../queries/get-schedules'
 interface IProps {
   name: string
   label: string
-  fieldSelector: (name: any) => (state: IStoreState) => any
-  onChange: (name: any, value: any) => void
 }
 
-export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
-  const startTime = useSelector(fieldSelector('startTime')) as number
-  const endTime = useSelector(fieldSelector('endTime')) as number
-  const gym = useSelector(fieldSelector('gym')) as string
-  const date = useSelector(fieldSelector('date')) as Date
-  const trainer = useSelector(fieldSelector('trainer')) as string
+const selector = () => (state: IStoreState) => state.schedule.trainingDialog.trainingForm.trainer.link
+
+export default function TrainerSelect({ name, label }: IProps) {
+  const actions = useActions()
+  const { date, gym, endTime, startTime, trainer } = useSelector(state => ({
+    date: state.schedule.trainingDialog.trainingForm.date,
+    startTime: state.schedule.trainingDialog.trainingForm.startTime,
+    endTime: state.schedule.trainingDialog.trainingForm.endTime,
+    gym: state.schedule.trainingDialog.trainingForm.gym.link,
+    trainer: state.schedule.trainingDialog.trainingForm.trainer.link,
+  }))
   const { data, loading } = useGetSchedulesQuery(date)
 
   const trainers = React.useMemo(
@@ -52,20 +55,27 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
     [data, startTime, endTime, gym]
   )
 
+  const handleChange = React.useCallback(
+    (name, link) => {
+      actions.schedule.trainingDialog.updateField(name, { link })
+    },
+    [actions]
+  )
+
   React.useEffect(
     () => {
       if (!loading && !trainers?.find(ft => ft._id === trainer)) {
-        onChange('trainer', undefined)
+        handleChange('trainer', undefined)
       }
     },
-    [loading, trainers, onChange, trainer]
+    [loading, trainers, handleChange, trainer]
   )
 
   return (
     <Select
       name={name}
-      onChange={onChange}
-      fieldSelector={fieldSelector}
+      onChange={handleChange}
+      fieldSelector={selector}
       label={label}
       fullWidth={true}
       variant='outlined'

@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAININGS, IGetTrainingsResponse } from '../queries/get-trainings'
-import ITraining from 'interfaces/training'
+import { ITrainingForm } from 'interfaces/training'
 
 export const DELETE_TRAINING = gql`
   mutation deleteTraining ($_id: ObjectId!) {
@@ -20,7 +20,7 @@ const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
 
   const mutate = React.useCallback(
-    (training: ITraining) => {
+    (training: ITrainingForm) => {
       const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
 
       return deleteTraining({

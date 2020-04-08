@@ -5,7 +5,6 @@ import { actions } from 'store/actions/schedule'
 import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
-import ITrainer from 'interfaces/trainer'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
@@ -16,9 +15,9 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
       _id: new BSON.ObjectID(),
       startTime: action.payload.time,
       endTime: action.payload.time + 2,
-      resource: action.payload.resource,
+      resource: { link: action.payload.resource },
       date,
-      gym,
+      gym: { link: gym },
     }
 
     yield put(actions.trainingDialog.open('create', training, []))
@@ -29,9 +28,22 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
 
 export function* openUpdateTrainingDialog(action: ReturnType<typeof actions.page.openUpdateTrainingDialog>) {
   try {
-    const training = action.payload.training
-    delete training.__typename
-    training.trainer = (training?.trainer as ITrainer)?._id
+    const training = {
+      _id: action.payload.training._id,
+
+      gym: { link: action.payload.training.gym._id },
+      resource: { link: action.payload.training.resource._id },
+      trainer: { link: action.payload.training.trainer._id },
+
+      date: action.payload.training.date,
+      startTime: action.payload.training.startTime,
+      endTime: action.payload.training.endTime,
+
+      name: action.payload.training.name,
+      type: action.payload.training.type,
+      note: action.payload.training.note,
+    }
+
     const records = action.payload.records
     records.forEach((r: any) => delete r.__typename)
     yield put(actions.trainingDialog.open('update', training, records))

@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAININGS, IGetTrainingsResponse } from '../queries/get-trainings'
-import ITraining from 'interfaces/training'
+import { ITrainingForm } from 'interfaces/training'
 
 export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
@@ -29,17 +29,11 @@ const useCreateTraining = () => {
   const [createTraining] = useMutation(CREATE_TRAINING)
 
   const mutate = React.useCallback(
-    (training: ITraining) => {
+    (training: ITrainingForm) => {
       const trainingsQuery = { query: GET_TRAININGS, variables: { date: new Date(training.date) } }
-      const mappedTraining = ({
-        ...training,
-        trainer: training.trainer ? { link: training.trainer } : undefined,
-        gym: { link: training.gym },
-        resource: { link: training.resource },
-      })
 
       return createTraining({
-        variables: { training: mappedTraining },
+        variables: { training },
         update: (cache, { data }) => {
           const queryData = cache.readQuery<IGetTrainingsResponse>(trainingsQuery)
           cache.writeQuery({

@@ -1,5 +1,3 @@
-import ITrainer from './trainer'
-
 export interface ITrainingRecord {
   _id?: string
   trainee: {
@@ -19,19 +17,24 @@ export interface ITrainingId {
   resource: string
 }
 
-export default interface ITraining {
+export interface ITrainingForm {
   _id: string
 
-  gym: string | undefined
-  date: Date
-  startTime: number | null
-  endTime: number | null
-  resource: string | undefined
+  gym: {
+    link: string
+  }
+  resource: {
+    link: string
+  }
+  trainer: {
+    link: string | undefined
+  }
 
-  trainer?: string | ITrainer | undefined
+  date: Date
+  startTime: number
+  endTime: number
+
   name?: string
   type?: string
-  markPrice?: number | null
-  moneyPrice?: number | null
   note?: string
 }

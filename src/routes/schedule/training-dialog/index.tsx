@@ -99,8 +99,6 @@ export default function TrainingDialog() {
               <Grid item={true} lg={6}>
                 <GymSelect
                   name='gym'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
                   label={translations.gym}
                 />
               </Grid>
@@ -119,8 +117,6 @@ export default function TrainingDialog() {
               <Grid item={true} lg={12}>
                 <ResourceSelect
                   name='resource'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
                   label={translations.trampolines}
                 />
               </Grid>
@@ -156,8 +152,6 @@ export default function TrainingDialog() {
                 <TrainerSelect
                   name='trainer'
                   label='Тренер'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
                 />
               </Grid>
               <Grid item={true} lg={12}>

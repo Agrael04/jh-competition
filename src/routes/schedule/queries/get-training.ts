@@ -8,8 +8,6 @@ export interface IGetTrainingResponse {
     gym: {
       _id: string
     }
-    markPrice: number
-    moneyPrice: number
     name: string
     note: string
     resource: {
