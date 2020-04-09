@@ -24,6 +24,7 @@ interface IProps {
 const TrainerBodyCell = ({ time, trainers, primaryRow, activeRow }: IProps) => {
   const classes = useStyles()
   const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
+  const activeGym = useSelector(state => state.schedule.page.activeGym)
   const { data } = useGetSchedulesQuery()
 
   return (
@@ -31,7 +32,9 @@ const TrainerBodyCell = ({ time, trainers, primaryRow, activeRow }: IProps) => {
       <Grid container={true} wrap='nowrap'>
         {
           trainers.map((tr, index) => (
-            data?.trainerSchedules.find(s => s.time === time && s.trainer === tr)
+            data?.trainerSchedules
+              .filter(s => s.gym._id === activeGym)
+              .find(s => s.time === time && s.trainer === tr)
               ? (
                 <TrainerAvatar
                   time={time}
