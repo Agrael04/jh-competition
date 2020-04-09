@@ -1,22 +1,24 @@
 import React from 'react'
-import clsx from 'clsx'
 
-import TableCell from '@material-ui/core/TableCell'
+import TableCell from '../table-cell'
 
 import useGetTrainingsQuery from '../queries/get-trainings'
 
 import TrainingItem from './training-item'
+
+import { useSelector } from 'store'
 
 import useStyles from './styles'
 
 interface IProps {
   time: number
   resource: string
-  className?: string
+  secondaryRow?: boolean
 }
 
-const TrainingCell = ({ time, resource, className }: IProps) => {
+const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
   const classes = useStyles()
+  const activeTime = useSelector(state => state.schedule.page.activeTime)
 
   const { data } = useGetTrainingsQuery()
 
@@ -45,7 +47,16 @@ const TrainingCell = ({ time, resource, className }: IProps) => {
   }
 
   return (
-    <TableCell align='center' padding='none' className={clsx(classes.resourceTd, (time + duration) % 2 && classes.secondaryTd, className)} rowSpan={duration}>
+    <TableCell
+      align='center'
+      padding='none'
+      className={classes.resourceTd}
+      rowSpan={duration}
+      primaryCol={!secondaryRow}
+      secondaryCol={secondaryRow}
+      primaryRow={!!((time + duration) % 2)}
+      activeRow={((time + duration) === activeTime)}
+    >
       <div className={classes.cellWrap}>
         <TrainingItem time={time} resource={resource} id={training?._id} />
       </div>

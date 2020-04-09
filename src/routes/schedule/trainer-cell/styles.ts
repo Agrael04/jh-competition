@@ -4,7 +4,6 @@ export default makeStyles((theme: Theme) => ({
   trainersTd: {
     width: theme.spacing(21),
     height: theme.spacing(4.5),
-    // position: 'relative',
     willChange: 'width',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.easeOut,

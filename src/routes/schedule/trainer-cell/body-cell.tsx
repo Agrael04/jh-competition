@@ -2,8 +2,8 @@ import React from 'react'
 import clsx from 'clsx'
 
 import Grid from '@material-ui/core/Grid'
-import TableCell from '@material-ui/core/TableCell'
 
+import TableCell from '../table-cell'
 import useGetSchedulesQuery from '../queries/get-schedules'
 
 import TrainerAvatar from './trainer-avatar'
@@ -17,16 +17,17 @@ import useStyles from './styles'
 interface IProps {
   time: number
   trainers: ITrainer[]
-  className?: string
+  primaryRow?: boolean
+  activeRow?: boolean
 }
 
-const TrainerBodyCell = ({ time, trainers, className }: IProps) => {
+const TrainerBodyCell = ({ time, trainers, primaryRow, activeRow }: IProps) => {
   const classes = useStyles()
   const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
   const { data } = useGetSchedulesQuery()
 
   return (
-    <TableCell padding='none' className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift, className)}>
+    <TableCell padding='none' className={clsx(classes.trainersTd, openedTrainers && classes.trainersColumnShift)} primaryRow={primaryRow} activeRow={activeRow}>
       <Grid container={true} wrap='nowrap'>
         {
           trainers.map((tr, index) => (

@@ -38,7 +38,7 @@ const TrainerAvatar = ({ time, trainer, showBadge, className }: any) => {
 
   const count = React.useMemo(
     () => {
-      return data?.trainings.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer === trainer.id).length
+      return data?.trainings.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer?._id === trainer._id).length
     },
     [data, time, trainer]
   )

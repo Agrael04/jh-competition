@@ -1,10 +1,11 @@
-import { all, put, takeLatest, select } from 'redux-saga/effects'
+import { all, put, takeLatest, select, delay } from 'redux-saga/effects'
 import { BSON } from 'mongodb-stitch-browser-sdk'
 
 import { actions } from 'store/actions/schedule'
 import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
+import times from 'data/times'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
@@ -63,6 +64,29 @@ export function* openAddTrainerDialog(action: ReturnType<typeof actions.page.ope
   }
 }
 
+export function* checkActiveTime(action: ReturnType<typeof actions.page.checkActiveTime>) {
+  try {
+    const activeTime = yield select((state: IStoreState) => state.schedule.page.activeTime)
+
+    const date = new Date()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const timeFrame = `${hours}:${minutes < 30 ? '00' : '30'}`
+
+    const time = times.find(t => t.label === timeFrame)
+
+    if (time?.id !== activeTime) {
+      yield put(actions.page.setActiveTime(time?.id))
+    }
+
+    yield delay(60000)
+
+    yield put(actions.page.checkActiveTime())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 function* watchOpenCreateTrainingDialog() {
   yield takeLatest(constants.page.OPEN_CREATE_TRAINING_DIALOG, openCreateTrainingDialog)
 }
@@ -75,10 +99,15 @@ function* watchOpenAddTrainerDialog() {
   yield takeLatest(constants.page.OPEN_ADD_TRAINER_DIALOG, openAddTrainerDialog)
 }
 
+function* watchCheckActiveTime() {
+  yield takeLatest(constants.page.CHECK_ACTIVE_TIME, checkActiveTime)
+}
+
 export default function* root() {
   yield all([
     watchOpenCreateTrainingDialog(),
     watchOpenUpdateTrainingDialog(),
     watchOpenAddTrainerDialog(),
+    watchCheckActiveTime(),
   ])
 }

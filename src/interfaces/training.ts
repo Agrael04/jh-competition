@@ -27,8 +27,8 @@ export interface ITrainingForm {
     link: string
   }
   trainer: {
-    link: string | undefined
-  }
+    link: string
+  } | undefined
 
   date: Date
   startTime: number

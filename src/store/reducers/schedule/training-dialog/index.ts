@@ -17,11 +17,11 @@ const initialState: IState = {
   trainingForm: {
     _id: '',
 
-    startTime: 0,
-    endTime: 0,
+    startTime: 1,
+    endTime: 29,
     resource: { link: '' },
     gym: { link: '' },
-    trainer: { link: undefined },
+    trainer: undefined,
     date: removeTimeFromDate(new Date())!,
 
     name: '',

@@ -3,9 +3,12 @@ export const OPEN_UPDATE_TRAINING_DIALOG = 'schedule/page/OPEN_UPDATE_TRAINING_D
 
 export const OPEN_ADD_TRAINER_DIALOG = 'schedule/page/OPEN_ADD_TRAINER_DIALOG'
 
+export const CHECK_ACTIVE_TIME = 'schedule/page/CHECK_ACTIVE_TIME'
+
 export const SET_ACTIVE_DATE = 'schedule/page/SET_ACTIVE_DATE'
 export const SET_ACTIVE_GYM = 'schedule/page/SET_ACTIVE_GYM'
 export const SET_ACTIVE_RESOURCES = 'schedule/page/SET_ACTIVE_RESOURCES'
+export const SET_ACTIVE_TIME = 'schedule/page/SET_ACTIVE_TIME'
 export const TOGGLE_OPENED_TRAINERS = 'schedule/page/TOGGLE_OPENED_TRAINERS'
 
 export default {
@@ -14,8 +17,11 @@ export default {
 
   OPEN_ADD_TRAINER_DIALOG,
 
+  CHECK_ACTIVE_TIME,
+
   SET_ACTIVE_DATE,
   SET_ACTIVE_GYM,
   SET_ACTIVE_RESOURCES,
+  SET_ACTIVE_TIME,
   TOGGLE_OPENED_TRAINERS,
 }

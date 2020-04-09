@@ -13,9 +13,11 @@ export interface IGetSchedulesResponse {
       color: number
       firstName: string
       lastName: string
+      __typename: string
     }
     gym: {
       _id: string
+      __typename: string
     }
     __typename: string
   }>

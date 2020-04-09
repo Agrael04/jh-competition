@@ -6,14 +6,16 @@ export interface IState {
   activeDate: Date
   activeGym: string
   activeResources: string[]
+  activeTime: number
   openedTrainers: boolean
 }
 
 const initialState: IState = {
   activeDate: removeTimeFromDate(new Date())!,
   activeGym: '',
-  openedTrainers: false,
   activeResources: [],
+  activeTime: 0,
+  openedTrainers: false,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -37,6 +39,13 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         activeResources: payload.resources.sort((a: number, b: number) => a - b),
+      }
+    }
+
+    case constants.SET_ACTIVE_TIME: {
+      return {
+        ...state,
+        activeTime: payload.time,
       }
     }
 

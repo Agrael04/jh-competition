@@ -11,7 +11,7 @@ interface IProps {
   label: string
 }
 
-const selector = () => (state: IStoreState) => state.schedule.trainingDialog.trainingForm.trainer.link
+const selector = () => (state: IStoreState) => state.schedule.trainingDialog.trainingForm.trainer?.link
 
 export default function TrainerSelect({ name, label }: IProps) {
   const actions = useActions()
@@ -20,12 +20,13 @@ export default function TrainerSelect({ name, label }: IProps) {
     startTime: state.schedule.trainingDialog.trainingForm.startTime,
     endTime: state.schedule.trainingDialog.trainingForm.endTime,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    trainer: state.schedule.trainingDialog.trainingForm.trainer.link,
+    trainer: state.schedule.trainingDialog.trainingForm.trainer?.link,
   }))
   const { data, loading } = useGetSchedulesQuery(date)
 
   const trainers = React.useMemo(
     () => {
+      console.log(data?.trainerSchedules)
       const schedules = data?.trainerSchedules
         .filter(ts => {
           if (ts.gym._id !== gym) {
@@ -57,7 +58,9 @@ export default function TrainerSelect({ name, label }: IProps) {
 
   const handleChange = React.useCallback(
     (name, link) => {
-      actions.schedule.trainingDialog.updateField(name, { link })
+      if (link) {
+        actions.schedule.trainingDialog.updateField(name, { link })
+      }
     },
     [actions]
   )

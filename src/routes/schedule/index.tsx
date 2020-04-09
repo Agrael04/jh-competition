@@ -1,10 +1,8 @@
 import React from 'react'
-import clsx from 'clsx'
 
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Divider from '@material-ui/core/Divider'
@@ -15,7 +13,7 @@ import Typography from '@material-ui/core/Typography'
 
 import Tooltip from 'components/multiline-tooltip'
 
-import { times } from './data'
+import times from 'data/times'
 
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
@@ -23,22 +21,25 @@ import TrainingDialog from './training-dialog'
 import Toolbar from './toolbar'
 import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
+import TableCell from './table-cell'
 
 import useGetTrainingsQuery from './queries/get-trainings'
 import useGetSchedulesQuery from './queries/get-schedules'
 import useGetGymsQuery from './queries/get-gyms'
 
-import { useSelector } from 'store'
+import { useSelector, useActions } from 'store'
 
 import useStyles from './styles'
 
 const SchedulePage = () => {
   const classes = useStyles()
+  const actions = useActions()
 
   const trainings = useGetTrainingsQuery()
   const schedules = useGetSchedulesQuery()
   const gyms = useGetGymsQuery()
   const activeResources = useSelector(state => state.schedule.page.activeResources)
+  const activeTime = useSelector(state => state.schedule.page.activeTime)
 
   /* another graphql request */
   const trainers = React.useMemo(
@@ -55,6 +56,13 @@ const SchedulePage = () => {
     }, [gyms, activeResources]
   )
 
+  React.useEffect(
+    () => {
+      actions.schedule.page.checkActiveTime()
+    },
+    [actions]
+  )
+
   return (
     <Paper className={classes.rootPaper}>
       <Toolbar />
@@ -62,16 +70,16 @@ const SchedulePage = () => {
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
-            <TableCell className={clsx(classes.timeTd, classes.headerTd)}>
+            <TableCell className={classes.timeTd} secondaryRow={true}>
               <Typography>
                 {'Время'}
               </Typography>
             </TableCell>
-            <TrainerHeaderCell className={classes.headerTd} />
+            <TrainerHeaderCell />
             {
               resources
                 .map((r, resourseIndex) => (
-                  <TableCell key={r._id} align='center' padding='none' className={clsx(resourseIndex === 0 ? classes.firstResourceTd : classes.resourceTd, classes.headerTd)}>
+                  <TableCell key={r._id} align='center' padding='none' secondaryRow={true} secondaryCol={resourseIndex === 0} primaryCol={resourseIndex > 0}>
                     <Button>
                       <Tooltip rows={[r.name]}>
                         <Avatar className={classes.avatarBackground}>
@@ -82,6 +90,7 @@ const SchedulePage = () => {
                   </TableCell>
                 ))
             }
+            {resources.length === 0 && <TableCell secondaryRow={true} secondaryCol={true} />}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -101,7 +110,7 @@ const SchedulePage = () => {
                     <TableRow key={time.id}>
                       {
                         index % 2 === 0 && (
-                          <TableCell className={clsx(classes.timeTd, classes.secondaryTd)} rowSpan={2}>
+                          <TableCell className={classes.timeTd} rowSpan={2} primaryRow={true} activeRow={time.id === activeTime - 2}>
                             <Typography>
                               {time.label}
                             </Typography>
@@ -117,12 +126,12 @@ const SchedulePage = () => {
                       }
 
                       {
-                        !schedules.loading && <TrainerBodyCell key={time.id} time={time.id} trainers={trainers} className={clsx(index % 2 && classes.secondaryTd)} />
+                        !schedules.loading && <TrainerBodyCell key={time.id} time={time.id} trainers={trainers} primaryRow={!!(index % 2)} activeRow={time.id === activeTime - 1} />
                       }
 
                       {
                         trainings.loading && index === 0 ? (
-                          <TableCell align='center' padding='none' colSpan={activeResources.length} rowSpan={times.length} className={classes.firstResourceTd}>
+                          <TableCell align='center' padding='none' colSpan={activeResources.length} rowSpan={times.length} secondaryCol={true}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
@@ -134,7 +143,7 @@ const SchedulePage = () => {
                               resource={r._id}
                               time={time.id}
                               key={r._id}
-                              className={clsx(resourseIndex === 0 && classes.firstResourceTd)}
+                              secondaryRow={resourseIndex === 0}
                             />
                           ))
                       }

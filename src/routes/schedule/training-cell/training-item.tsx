@@ -14,11 +14,11 @@ import Divider from '@material-ui/core/Divider'
 import FaceIcon from '@material-ui/icons/Face'
 
 import useGetTrainingQuery from '../queries/get-training'
-import { times } from '../data'
+
+import times from 'data/times'
+import getColorPallete from 'utils/get-color-pallete'
 
 import useStyles from './styles'
-
-import getColorPallete from 'utils/get-color-pallete'
 
 interface IProps {
   time: number

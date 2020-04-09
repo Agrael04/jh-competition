@@ -29,3 +29,5 @@ export const times = [
   { id: 28, label: '21:30' },
   { id: 29, label: '22:00' },
 ]
+
+export default times

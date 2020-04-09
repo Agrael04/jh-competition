@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from 'containers/select'
 import useGetSchedulesQuery from '../../queries/get-schedules'
 
-import { times } from '../../data'
+import times from 'data/times'
 
 interface IProps {
   name: string
@@ -21,7 +21,7 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
     startTime: state.schedule.trainingDialog.trainingForm.startTime,
     endTime: state.schedule.trainingDialog.trainingForm.endTime,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    trainer: state.schedule.trainingDialog.trainingForm.trainer.link,
+    trainer: state.schedule.trainingDialog.trainingForm.trainer?.link,
   }))
   const { data } = useGetSchedulesQuery(date)
 

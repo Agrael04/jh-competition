@@ -34,7 +34,7 @@ const useCreateTrainerSchedules = () => {
             __typename: 'TrainerSchedule',
             trainer: trainersData?.trainers.find(tr => tr._id === s.trainer.link),
             gym: {
-              _id: s.gym,
+              _id: s.gym.link,
               __typename: 'Gym',
             },
           }))

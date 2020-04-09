@@ -10,9 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import Select from 'containers/select'
+import times from 'data/times'
 
 import useGetGymsQuery from '../queries/get-gyms'
-import { times } from '../data'
 
 type FieldName = keyof IStoreState['schedule']['addTrainerDialog']['timeFrames'][0]
 
