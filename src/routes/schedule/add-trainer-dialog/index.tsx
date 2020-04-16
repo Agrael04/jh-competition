@@ -34,7 +34,7 @@ export default function TrainingDialog() {
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
   const actions = useActions()
   const schedulesQuery = useGetSchedulesQuery()
-  const trainersQuery = useGetTrainersQuery()
+  const trainersQuery = useGetTrainersQuery(!opened)
 
   const filteredTrainers = React.useMemo(
     () => trainersQuery?.data?.trainers?.filter(trainer => !schedulesQuery.data?.trainerSchedules.find(s => s.trainer._id === trainer._id)) || [],

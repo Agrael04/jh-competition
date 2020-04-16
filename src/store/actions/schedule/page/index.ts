@@ -1,15 +1,13 @@
 import constants from 'store/constants/schedule/page'
 
-import { ITrainingRecord } from 'interfaces/training'
-
 export const openCreateTrainingDialog = (resource: string, time: number) => ({
   type: constants.OPEN_CREATE_TRAINING_DIALOG,
   payload: { resource, time },
 })
 
-export const openUpdateTrainingDialog = (training: any, records: ITrainingRecord[]) => ({
+export const openUpdateTrainingDialog = (_id: string) => ({
   type: constants.OPEN_UPDATE_TRAINING_DIALOG,
-  payload: { training, records },
+  payload: { _id },
 })
 
 export const openAddTrainerDialog = () => ({

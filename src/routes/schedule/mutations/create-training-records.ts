@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
+// import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training-resource'
 import { ITrainingRecord } from 'interfaces/training'
 
 export const CREATE_TRAINING_RECORDS = gql`
@@ -18,24 +18,24 @@ const useCreateTrainingRecords = () => {
 
   const mutate = React.useCallback(
     (trainingId: string, records: ITrainingRecord[]) => {
-      const trainingQuery = { query: GET_TRAINING, variables: { id: trainingId } }
+      // const trainingQuery = { query: GET_TRAINING, variables: { id: trainingId } }
       const mappedRecords = records.map(r => ({ ...r, trainee: { link: r.trainee._id } }))
 
       return createTrainingRecords({
         variables: { records: mappedRecords },
-        update: cache => {
-          const queryData = cache.readQuery<IGetTrainingResponse>(trainingQuery)
-          cache.writeQuery({
-            ...trainingQuery,
-            data: {
-              training: {
-                ...queryData?.training,
-                __typename: 'Training',
-              },
-              trainingRecords: records.map(r => ({ ...r, __typename: 'TrainingRecord' })),
-            },
-          })
-        },
+        // update: cache => {
+        //   const queryData = cache.readQuery<IGetTrainingResponse>(trainingQuery)
+        //   cache.writeQuery({
+        //     ...trainingQuery,
+        //     data: {
+        //       training: {
+        //         ...queryData?.training,
+        //         __typename: 'Training',
+        //       },
+        //       trainingRecords: records.map(r => ({ ...r, __typename: 'TrainingRecord' })),
+        //     },
+        //   })
+        // },
       })
     },
     [createTrainingRecords]

@@ -18,10 +18,9 @@ interface IProps {
 export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
   const { date, gym, startTime, trainer } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
-    startTime: state.schedule.trainingDialog.trainingForm.startTime,
-    endTime: state.schedule.trainingDialog.trainingForm.endTime,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    trainer: state.schedule.trainingDialog.trainingForm.trainer?.link,
+    startTime: state.schedule.trainingDialog.resourceForm?.startTime,
+    trainer: state.schedule.trainingDialog.resourceForm?.trainer?.link,
   }))
   const { data } = useGetSchedulesQuery(date)
 

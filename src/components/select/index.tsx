@@ -2,6 +2,7 @@ import React from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import InputLabel from '@material-ui/core/InputLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 interface IProps {
   value: any
@@ -18,7 +19,7 @@ interface IProps {
   multiple?: boolean
 }
 
-export default ({ value, onChange, label, name, variant, disabled, multiple, fullWidth, children }: IProps) => {
+export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children }: IProps) => {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
   const [labelWidth, setLabelWidth] = React.useState(0)
   React.useEffect(() => {
@@ -38,6 +39,7 @@ export default ({ value, onChange, label, name, variant, disabled, multiple, ful
       >
         {children}
       </Select>
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   )
 }

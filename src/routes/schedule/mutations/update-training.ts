@@ -6,31 +6,24 @@ import { GET_TRAINING } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
 
 export const UPDATE_TRAINING = gql`
-  mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!) {
+  mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!, $date: DateTime!) {
+    updateManyTrainingResources(query: { training: { _id: $_id } }, set: { date: $date }) {
+      modifiedCount
+      matchedCount
+    }
     updateOneTraining(query: { _id: $_id }, set: $training) {
       _id
       date
+      startTime
+      endTime
       gym {
         _id
       }
+
       name
       note
-      resource {
-        _id
-      }
-      trainer {
-        _id
-        firstName
-        lastName
-        color
-        avatarSrc
-      }
       type
-      startTime
-      endTime
-    }
-    deleteManyTrainingRecords(query: { training: $_id }) {
-      deletedCount
+      traineesCount
     }
   }
 `
@@ -43,16 +36,8 @@ const useUpdateTraining = () => {
       const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
 
       return updateTraining({
-        variables: { _id: training._id, training },
-        update: (cache, { data }) => {
-          cache.writeQuery({
-            ...trainingQuery,
-            data: {
-              training: data?.updateOneTraining,
-              trainingRecords: [],
-            },
-          })
-        },
+        variables: { _id: training._id, date: training.date, training },
+        refetchQueries: [trainingQuery],
       })
     },
     [updateTraining]

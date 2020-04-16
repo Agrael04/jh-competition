@@ -16,15 +16,17 @@ import TextField from 'containers/text-field'
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
-import EndTimeSelect from './fields/end-time-select'
-import StartTimeSelect from './fields/start-time-select'
-import TrainerSelect from './fields/trainer-select'
-import ResourceSelect from './fields/resource-select'
 import GymSelect from './fields/gym-select'
 
-import TraineesBlock from './trainees-block'
+import ResourcesBlock from './resources-block'
+
+// import TraineesBlock from './trainees-block'
 import SubmitButton from './submit-button'
+import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
+
+import useGetTrainingResourcesQuery, { convertResourcesToInput } from '../queries/get-training-resources'
+import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
 
 const translations = {
   'date': 'Дата',
@@ -56,7 +58,15 @@ type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
 
 export default function TrainingDialog() {
-  const opened = useSelector(state => state.schedule.trainingDialog.opened)
+  const { opened, mode, _id } = useSelector(state => ({
+    opened: state.schedule.trainingDialog.opened,
+    mode: state.schedule.trainingDialog.mode,
+    _id: state.schedule.trainingDialog._id,
+  }))
+
+  const trainingResourcesQuery = useGetTrainingResourcesQuery()
+  const trainingQuery = useGetTrainingQuery(_id!)
+
   const actions = useActions()
 
   const close = React.useCallback(
@@ -80,6 +90,17 @@ export default function TrainingDialog() {
     [actions]
   )
 
+  React.useEffect(
+    () => {
+      if (trainingQuery.data?.training) {
+        const resources = convertResourcesToInput(trainingResourcesQuery.data?.trainingResources.filter(tr => tr.training?._id === _id) || [])
+        const training = convertTrainingToInput(trainingQuery.data.training)
+
+        actions.schedule.trainingDialog.initialize(training, [], resources)
+      }
+    }, [actions, trainingQuery, trainingResourcesQuery, _id]
+  )
+
   return (
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
@@ -96,13 +117,13 @@ export default function TrainingDialog() {
         <Grid container={true} direction='column' justify='space-around'>
           <Grid item={true} container={true} spacing={3} justify='space-around'>
             <Grid item={true} container={true} lg={4} spacing={2}>
-              <Grid item={true} lg={6}>
+              <Grid item={true} lg={12}>
                 <GymSelect
                   name='gym'
                   label={translations.gym}
                 />
               </Grid>
-              <Grid item={true} lg={6}>
+              <Grid item={true} lg={12}>
                 <DatePicker
                   name='date'
                   onChange={handleChange}
@@ -112,28 +133,6 @@ export default function TrainingDialog() {
                   inputVariant='outlined'
                   disableToolbar={true}
                   variant='inline'
-                />
-              </Grid>
-              <Grid item={true} lg={12}>
-                <ResourceSelect
-                  name='resource'
-                  label={translations.trampolines}
-                />
-              </Grid>
-              <Grid item={true} lg={6}>
-                <StartTimeSelect
-                  name='startTime'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.startTime}
-                />
-              </Grid>
-              <Grid item={true} lg={6}>
-                <EndTimeSelect
-                  name='endTime'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.startTime}
                 />
               </Grid>
             </Grid>
@@ -148,18 +147,30 @@ export default function TrainingDialog() {
                   variant='outlined'
                 />
               </Grid>
-              <Grid item={true} lg={12}>
-                <TrainerSelect
-                  name='trainer'
-                  label='Тренер'
-                />
-              </Grid>
-              <Grid item={true} lg={12}>
+              <Grid item={true} lg={8}>
                 <Select
                   name='type'
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.trainingType}
+                  fullWidth={true}
+                  variant='outlined'
+                >
+                  {
+                    trainingTypes.map(type => (
+                      <MenuItem value={type} key={type}>
+                        {translations[`types.${type}`]}
+                      </MenuItem>
+                    ))
+                  }
+                </Select>
+              </Grid>
+              <Grid item={true} lg={4}>
+                <Select
+                  name='type'
+                  onChange={handleChange}
+                  fieldSelector={fieldSelector}
+                  label={'Кол-во'}
                   fullWidth={true}
                   variant='outlined'
                 >
@@ -180,21 +191,43 @@ export default function TrainingDialog() {
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.notes}
-                  rows={9}
+                  rows={5}
                   fullWidth={true}
                   variant='outlined'
                   multiline={true}
                 />
               </Grid>
             </Grid>
-            <TraineesBlock />
-          </Grid>
-          <Box marginTop={1}>
-            <Grid item={true} container={true} justify='space-between'>
-              <DeleteButton />
-              <SubmitButton />
+            {
+              mode === 'update' && (
+                <Grid item={true} lg={12} container={true} justify='space-between'>
+                  <DeleteButton />
+                  <SubmitUpdateButton />
+                </Grid>
+              )
+            }
+            <Grid item={true} lg={12}>
+              <Box color='primary.main' borderBottom={2} />
             </Grid>
-          </Box>
+            <ResourcesBlock />
+            {/* <Grid item={true} lg={12}>
+              <Box color='primary.main' borderBottom={2} />
+            </Grid>
+            <TraineesBlock /> */}
+            {
+              mode === 'create' && (
+                <>
+                  <Grid item={true} lg={12}>
+                    <Box color='primary.main' borderBottom={2} />
+                  </Grid>
+                  <Grid item={true} container={true} justify='flex-end'>
+                    {/* <DeleteButton /> */}
+                    <SubmitButton />
+                  </Grid>
+                </>
+              )
+            }
+          </Grid>
         </Grid>
       </Box>
     </Dialog>

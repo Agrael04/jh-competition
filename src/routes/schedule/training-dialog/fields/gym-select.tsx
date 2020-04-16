@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useActions } from 'store'
+import { IStoreState, useActions, useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -16,6 +16,7 @@ const selector = () => (state: IStoreState) => state.schedule.trainingDialog.tra
 export default function GymSelect({ name, label }: IProps) {
   const actions = useActions()
   const gyms = useGetGymsQuery()
+  const trainingResources = useSelector(state => state.schedule.trainingDialog.resources)
 
   const handleChange = React.useCallback(
     (name, link) => {
@@ -32,6 +33,8 @@ export default function GymSelect({ name, label }: IProps) {
       label={label}
       fullWidth={true}
       variant='outlined'
+      disabled={trainingResources.length > 0}
+      helperText='Нельзя сменить зал при активных ресурсах'
     >
       {
         gyms.data?.gyms.map(gym => (

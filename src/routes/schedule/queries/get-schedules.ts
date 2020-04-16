@@ -2,6 +2,13 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'store'
 
+interface IQueryFilters {
+  startTime?: number
+  endTime?: number
+  trainer?: string
+  gym?: string
+}
+
 export interface IGetSchedulesResponse {
   trainerSchedules: Array<{
     _id: string
@@ -24,8 +31,14 @@ export interface IGetSchedulesResponse {
 }
 
 export const GET_SCHEDULES = gql`
-  query getSchedules($date: DateTime){
-    trainerSchedules(query: { date: $date }) {
+  query getSchedules($date: DateTime!, $startTime: Int, $endTime: Int, $trainer: ObjectId, $gym: ObjectId){
+    trainerSchedules(query: {
+      date: $date,
+      time_gte: $startTime,
+      time_lt: $endTime,
+      trainer: { _id: $trainer },
+      gym: { _id: $gym }
+    }) {
       _id
       date
       time
@@ -43,14 +56,17 @@ export const GET_SCHEDULES = gql`
   }
 `
 
-export const useGetTrainingsQuery = (date?: Date) => {
+export const useGetSchedulesQuery = (date?: Date, filters?: IQueryFilters) => {
   const activeDate = useSelector(state => state.schedule.page.activeDate)
 
   const result = useQuery<IGetSchedulesResponse>(GET_SCHEDULES, {
-    variables: { date: date || activeDate },
+    variables: {
+      date: date || activeDate,
+      ...filters,
+    },
   })
 
   return result
 }
 
-export default useGetTrainingsQuery
+export default useGetSchedulesQuery

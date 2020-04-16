@@ -24,10 +24,10 @@ export const GET_TRAINERS = gql`
   }
 `
 
-export const useGetTrainingsQuery = () => {
-  const result = useQuery<IGetTrainersResponse>(GET_TRAINERS)
+export const useGetTrainersQuery = (skip: boolean) => {
+  const result = useQuery<IGetTrainersResponse>(GET_TRAINERS, { skip })
 
   return result
 }
 
-export default useGetTrainingsQuery
+export default useGetTrainersQuery

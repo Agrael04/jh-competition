@@ -1,7 +1,6 @@
 import React from 'react'
 import { useActions } from 'store'
 
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Button from '@material-ui/core/Button'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
@@ -13,7 +12,7 @@ import Divider from '@material-ui/core/Divider'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import useGetTrainingQuery from '../queries/get-training'
+import useGetTrainingResourcesQuery from '../queries/get-training-resources'
 
 import times from 'data/times'
 import getColorPallete from 'utils/get-color-pallete'
@@ -24,6 +23,7 @@ interface IProps {
   time: number
   resource: string
   id: string | undefined
+  trainingId: string | undefined
 }
 
 const trainingTexts = {
@@ -33,18 +33,17 @@ const trainingTexts = {
   'EVENT': 'Событие',
 }
 
-const TrainingCell = ({ time, resource, id }: IProps) => {
+const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
-  const { data, loading } = useGetTrainingQuery(id)
+  const trainingResourceRes = useGetTrainingResourcesQuery()
 
-  const training = data?.training
-  const records = data?.trainingRecords
+  const tResource = trainingResourceRes.data?.trainingResources.find(tr => tr._id === id)
 
   const trainer = React.useMemo(
-    () => training?.trainer,
-    [training]
+    () => tResource?.trainer,
+    [tResource]
   )
 
   const handleCreateClick = React.useCallback(
@@ -58,20 +57,16 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const handleUpdateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openUpdateTrainingDialog(training!, records!)
+      actions.schedule.trainingDialog.open('update', trainingId!)
     },
-    [training, records, actions]
+    [actions, trainingId]
   )
 
   const color = React.useMemo(
     () => {
-      if (loading || training?.trainer === null || training?.trainer === undefined) {
-        return getColorPallete(undefined)
-      }
-
-      return getColorPallete(training.trainer.color)
+      return getColorPallete(trainer?.color)
     },
-    [loading, training]
+    [trainer]
   )
 
   const backgroundStyle = React.useMemo(
@@ -84,17 +79,9 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
     [color]
   )
 
-  const isOccupied = !loading && !!training
+  const isOccupied = !!tResource
 
-  if (loading) {
-    return (
-      <Button className={classes.button}>
-        <CircularProgress />
-      </Button>
-    )
-  }
-
-  if (!training) {
+  if (!tResource) {
     return (
       <Zoom in={true}>
         <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
@@ -115,11 +102,11 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
             <Box margin='auto'>
               <Typography color='inherit' variant='caption'>
-                {times.find(t => t.id === training?.startTime)?.label} - {times.find(t => t.id === training?.endTime)?.label}
+                {times.find(t => t.id === tResource?.startTime)?.label} - {times.find(t => t.id === tResource?.endTime)?.label}
               </Typography>
               <br />
               <Typography color='inherit' variant='caption'>
-                {(trainingTexts as any)[training.type]}
+                {(trainingTexts as any)[tResource.training?.type!]}
               </Typography>
             </Box>
           </Grid>

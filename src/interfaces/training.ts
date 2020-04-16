@@ -23,18 +23,39 @@ export interface ITrainingForm {
   gym: {
     link: string
   }
-  resource: {
+
+  date: Date
+
+  name?: string
+  type?: string
+  traineesCount?: number
+  note?: string
+}
+
+export interface ITraining {
+  _id: string
+
+  gym: {
     link: string
   }
-  trainer: {
-    link: string
-  } | undefined
-
   date: Date
   startTime: number
   endTime: number
 
   name?: string
   type?: string
+  count?: number
   note?: string
+}
+
+export interface ITrainingResourceForm {
+  _id?: string
+  resource: {
+    link: string
+  }
+  trainer: {
+    link: string
+  }
+  startTime: number
+  endTime: number
 }

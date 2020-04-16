@@ -1,34 +1,42 @@
 import constants from 'store/constants/schedule/training-dialog'
 
-import { ITrainingRecord, ITrainingForm } from 'interfaces/training'
+import { ITrainingRecord, ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   opened: boolean
   mode: 'create' | 'update' | null
+  _id: string | null
+
   trainingForm: ITrainingForm
   recordsForm: ITrainingRecord[]
+
+  resources: ITrainingResourceForm[]
+  resourceForm: ITrainingResourceForm | null
+  resourceMode: 'create' | 'update' | null
 }
 
 const initialState: IState = {
   opened: false,
   mode: null,
+  _id: null,
   trainingForm: {
     _id: '',
 
-    startTime: 1,
-    endTime: 29,
-    resource: { link: '' },
     gym: { link: '' },
-    trainer: undefined,
     date: removeTimeFromDate(new Date())!,
 
     name: '',
     type: '',
+    traineesCount: 1,
     note: '',
   },
   recordsForm: [],
+
+  resources: [],
+  resourceForm: null,
+  resourceMode: null,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -36,13 +44,37 @@ export default (state = initialState, { type, payload }: { type: string, payload
     case constants.OPEN: {
       return {
         ...state,
-        mode: payload.mode,
         opened: true,
+        mode: payload.mode,
+        _id: payload._id,
+      }
+    }
+
+    case constants.INITIALIZE: {
+      return {
+        ...state,
+
         trainingForm: {
           ...initialState.trainingForm,
           ...payload.training,
         },
         recordsForm: payload.records,
+
+        resources: payload.resources,
+        resourceForm: null,
+      }
+    }
+
+    case constants.CLOSE: {
+      return {
+        ...state,
+        mode: null,
+        _id: null,
+        opened: false,
+        trainingForm: initialState.trainingForm,
+        resources: initialState.resources,
+        resourceForm: initialState.resourceForm,
+        recordsForm: initialState.recordsForm,
       }
     }
 
@@ -100,13 +132,55 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.CLOSE: {
+    case constants.SET_RESOURCE: {
       return {
         ...state,
-        mode: null,
-        opened: false,
-        trainingForm: initialState.trainingForm,
-        recordsForm: initialState.recordsForm,
+        resourceForm: payload.resource,
+        resourceMode: payload.mode,
+      }
+    }
+
+    case constants.UPDATE_RESOURCE_FIELD: {
+      return {
+        ...state,
+        resourceForm: {
+          ...state.resourceForm,
+          [payload.field]: payload.value,
+        } as ITrainingResourceForm,
+      }
+    }
+
+    case constants.SAVE_RESOURCE: {
+      if (state.resourceMode === 'create') {
+        return {
+          ...state,
+          resources: [
+            ...state.resources,
+            state.resourceForm!,
+          ],
+          resourceForm: null,
+          resourceMode: null,
+        }
+      }
+
+      return {
+        ...state,
+        resources: state.resources.map(item => {
+          if (item._id === state.resourceForm?._id) {
+            return state.resourceForm!
+          }
+
+          return item
+        }),
+        resourceForm: null,
+        resourceMode: null,
+      }
+    }
+
+    case constants.REMOVE_RESOURCE: {
+      return {
+        ...state,
+        resources: state.resources.filter(item => item._id !== payload._id),
       }
     }
 

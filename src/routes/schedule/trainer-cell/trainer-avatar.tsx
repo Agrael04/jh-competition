@@ -10,7 +10,7 @@ import Tooltip from 'components/multiline-tooltip'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import getColorPallete from 'utils/get-color-pallete'
 
-import useGetTrainingsQuery from '../queries/get-trainings'
+import useGetTrainingsQuery from '../queries/get-training-resources'
 
 const useStyles = (color: any) => makeStyles((theme: Theme) => ({
   badgeBackground: {
@@ -38,7 +38,7 @@ const TrainerAvatar = ({ time, trainer, showBadge, className }: any) => {
 
   const count = React.useMemo(
     () => {
-      return data?.trainings.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer?._id === trainer._id).length
+      return data?.trainingResources.filter(tr => time >= tr?.startTime && time < tr?.endTime && tr?.trainer?._id === trainer._id).length
     },
     [data, time, trainer]
   )

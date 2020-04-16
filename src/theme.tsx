@@ -16,6 +16,11 @@ export default createMuiTheme({
       'dark': green[700],
       'contrastText': '#fff',
     },
-    secondary: amber,
+    secondary: {
+      'light': amber[100],
+      'main': amber[500],
+      'dark': amber[700],
+      'contrastText': '#fff',
+    },
   },
 })

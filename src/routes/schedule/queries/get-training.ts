@@ -5,39 +5,30 @@ export interface IGetTrainingResponse {
   training: {
     _id: string
     date: Date
+    startTime: number
+    endTime: number
     gym: {
       _id: string
     }
+
     name: string
-    note: string
-    resource: {
-      _id: string
-    }
-    trainer: {
-      _id: string
-      firstName: string
-      lastName: string
-      color: number
-      avatarSrc: string
-      __typename: string
-    }
     type: string
-    startTime: number
-    endTime: number
+    traineesCount: number
+    note: string
     __typename: string
   }
-  trainingRecords: Array<{
-    seasonPass: string
-    trainee: {
-      _id: string
-      fullName: string
-      __typename: string
-    }
-    note: string
-    status: string
-    training: string
-    __typename: string
-  }>
+  // trainingRecords: Array<{
+  //   seasonPass: string
+  //   trainee: {
+  //     _id: string
+  //     fullName: string
+  //     __typename: string
+  //   }
+  //   note: string
+  //   status: string
+  //   training: string
+  //   __typename: string
+  // }>
 }
 
 export const GET_TRAINING = gql`
@@ -45,42 +36,30 @@ export const GET_TRAINING = gql`
     training(query: { _id: $id }) {
       _id
       date
+      startTime
+      endTime
       gym {
         _id
       }
-      markPrice
-      moneyPrice
       name
-      note
-      resource {
-        _id
-      }
-      trainer {
-        _id
-        firstName
-        lastName
-        color
-        avatarSrc
-      }
       type
-      startTime
-      endTime
-    }
-    trainingRecords(query: { training: $id }) {
-      seasonPass
-      trainee {
-        _id
-        fullName
-      }
+      traineesCount
       note
-      status
-      training
     }
+    # trainingRecords(query: { training: $id }) {
+    #   seasonPass
+    #   trainee {
+    #     _id
+    #     fullName
+    #   }
+    #   note
+    #   status
+    #   training
+    # }
   }
 `
 
-export const useGetTrainingQuery = (id: string | undefined) => {
-
+export const useGetTrainingQuery = (id: string | null | undefined) => {
   const result = useQuery<IGetTrainingResponse>(GET_TRAINING, {
     variables: { id },
     skip: !id,
@@ -88,5 +67,19 @@ export const useGetTrainingQuery = (id: string | undefined) => {
 
   return result
 }
+
+export const convertTrainingToInput = (training: IGetTrainingResponse['training']) => ({
+  _id: training._id,
+
+  gym: { link: training.gym._id },
+  date: training.date,
+  startTime: training.startTime,
+  endTime: training.endTime,
+
+  name: training.name,
+  type: training.type,
+  traineesCount: training.traineesCount,
+  note: training.note,
+})
 
 export default useGetTrainingQuery

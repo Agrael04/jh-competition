@@ -36,10 +36,10 @@ export const GET_GYMS = gql`
   }
 `
 
-export const useGetTrainingsQuery = () => {
+export const useGetGymsQuery = () => {
   const result = useQuery<IGetGymsResponse>(GET_GYMS)
 
   return result
 }
 
-export default useGetTrainingsQuery
+export default useGetGymsQuery
