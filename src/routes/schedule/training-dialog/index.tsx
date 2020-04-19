@@ -20,7 +20,7 @@ import GymSelect from './fields/gym-select'
 
 import ResourcesBlock from './resources-block'
 
-// import TraineesBlock from './trainees-block'
+import TraineesBlock from './trainees-block'
 import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
@@ -210,10 +210,10 @@ export default function TrainingDialog() {
               <Box color='primary.main' borderBottom={2} />
             </Grid>
             <ResourcesBlock />
-            {/* <Grid item={true} lg={12}>
+            <Grid item={true} lg={12}>
               <Box color='primary.main' borderBottom={2} />
             </Grid>
-            <TraineesBlock /> */}
+            <TraineesBlock />
             {
               mode === 'create' && (
                 <>

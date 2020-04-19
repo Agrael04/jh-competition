@@ -4,19 +4,26 @@ import { useSelector, useActions } from 'store'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
 
+import SaveIcon from '@material-ui/icons/CheckCircle'
+
 import times from 'data/times'
 import useGetGymsQuery from '../../queries/get-gyms'
 
+import useUpdateTrainingResource from '../../mutations/update-training-resource'
 import useDeleteTrainingResource from '../../mutations/delete-training-resource'
 
 export default function ResourceChip({ id }: any) {
   const actions = useActions()
-  const tr = useSelector(state => state.schedule.trainingDialog.resources.find(r => r._id === id)!)
-  const isActive = useSelector(state => state.schedule.trainingDialog.resourceForm?._id === id)
-  const mode = useSelector(state => state.schedule.trainingDialog.mode)
-  const date = useSelector(state => state.schedule.trainingDialog.trainingForm.date)
+  const { resourceForm, trainingForm, mode, isActive, resource } = useSelector(state => ({
+    resourceForm: state.schedule.trainingDialog.resourceForm,
+    trainingForm: state.schedule.trainingDialog.trainingForm,
+    mode: state.schedule.trainingDialog.mode,
+    isActive: state.schedule.trainingDialog.resourceForm?._id === id,
+    resource: state.schedule.trainingDialog.resources.find(r => r._id === id)!,
+  }))
   const { data } = useGetGymsQuery()
 
+  const updateTrainingResource = useUpdateTrainingResource()
   const deleteTrainingResource = useDeleteTrainingResource()
 
   const activate = React.useCallback(
@@ -24,38 +31,52 @@ export default function ResourceChip({ id }: any) {
     [actions, id]
   )
 
+  const save = React.useCallback(
+    async () => {
+      if (mode === 'update') {
+        await updateTrainingResource(trainingForm!, resourceForm!)
+      }
+
+      actions.schedule.trainingDialog.saveResource()
+    },
+    [actions, updateTrainingResource, resourceForm, mode, trainingForm]
+  )
+
   const remove = React.useCallback(
     async () => {
       if (mode === 'update') {
-        await deleteTrainingResource(date, id)
+        await deleteTrainingResource(trainingForm, id)
       }
 
       actions.schedule.trainingDialog.removeResource(id)
     },
-    [actions, id, deleteTrainingResource, mode, date]
+    [actions, id, deleteTrainingResource, mode, trainingForm]
   )
 
   const label = React.useMemo(
-    () => `${times.find(t => t.id === tr.startTime)?.label} - ${times.find(t => t.id === tr.endTime)?.label}`,
-    [tr]
+    () => `${times.find(t => t.id === resource.startTime)?.label} - ${times.find(t => t.id === resource.endTime)?.label}`,
+    [resource]
   )
 
   const shortName = React.useMemo(
-    () => data?.resources.find(r => r._id === tr.resource.link)?.shortName,
-    [tr, data]
+    () => data?.resources.find(r => r._id === resource.resource.link)?.shortName,
+    [resource, data]
   )
 
   return (
     <Chip
-      avatar={(
-        <Avatar>
-          {shortName}
-        </Avatar>
-      )}
+      avatar={<Avatar>{shortName}</Avatar>}
       label={label}
-      onDelete={remove}
+      onDelete={!isActive ? remove : save}
       color={!isActive ? 'primary' : 'secondary'}
-      onClick={activate}
+      onClick={
+        isActive
+          ? save
+          : !resourceForm
+            ? activate
+            : undefined
+      }
+      deleteIcon={isActive ? <SaveIcon /> : undefined}
     />
   )
 }
