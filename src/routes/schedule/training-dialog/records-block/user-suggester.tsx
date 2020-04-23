@@ -34,11 +34,14 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
 )
 
 export default function TraineeSuggester({ name, onChange, fieldSelector, label }: IProps) {
-  const { options, loading } = useSelector(state => state.schedule.clientSuggester)
+  const { options, loading } = useSelector(state => ({
+    loading: state.schedule.clientSuggester.loading,
+    options: state.schedule.clientSuggester.options,
+  }))
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
-    onChange(name, { ...option, __typename: 'User' } || { fullName: '', _id: '' })
+    onChange(name, { fullName: option?.fullName, link: option?._id })
   }
 
   const actions = useActions()
@@ -84,7 +87,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label 
       value={value}
       options={options}
       onInputChange={handleInputChange}
-      inputValue={filter}
+      inputValue={filter || ''}
       getOptionLabel={mapOptionLabel}
       loading={loading}
       // freeSolo={true}

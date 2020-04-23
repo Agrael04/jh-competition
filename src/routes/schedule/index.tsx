@@ -23,7 +23,7 @@ import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 import TableCell from './table-cell'
 
-import useGetTrainingsQuery from './queries/get-training-resources'
+import useGetTrainingsQuery from './queries/get-trainings'
 import useGetSchedulesQuery from './queries/get-schedules'
 import useGetGymsQuery from './queries/get-gyms'
 

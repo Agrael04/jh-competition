@@ -18,6 +18,8 @@ import './index.css'
 
 import Routes from './routes'
 
+(window as any).apollo = client
+
 if (client) {
   ReactDOM.render((
     <DndProvider backend={Backend}>

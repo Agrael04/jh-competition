@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 export interface IGetTrainingResponse {
   training: {
     _id: string
+    __typename: string
     date: Date
     startTime: number
     endTime: number
@@ -15,20 +16,44 @@ export interface IGetTrainingResponse {
     type: string
     traineesCount: number
     note: string
-    __typename: string
+
+    resources: Array<{
+      _id: string
+      __typename: string
+
+      startTime: number
+      endTime: number
+      resource: {
+        _id: string
+        __typename: string
+      }
+      trainer: {
+        _id: string
+        color: number
+        avatarSrc: string
+        __typename: string
+      }
+      records: Array<{
+        _id: string
+        __typename: string
+      }>
+    }>
+    records: Array<{
+      _id: string
+      contact: {
+        _id: string
+        fullName: string
+        __typename: string
+      }
+      attendant: {
+        _id: string
+        fullName: string
+        __typename: string
+      }
+      status: string
+      __typename: string
+    }>
   }
-  // trainingRecords: Array<{
-  //   seasonPass: string
-  //   trainee: {
-  //     _id: string
-  //     fullName: string
-  //     __typename: string
-  //   }
-  //   note: string
-  //   status: string
-  //   training: string
-  //   __typename: string
-  // }>
 }
 
 export const GET_TRAINING = gql`
@@ -45,24 +70,42 @@ export const GET_TRAINING = gql`
       type
       traineesCount
       note
+      resources {
+        _id
+        startTime
+        endTime
+        resource {
+          _id
+        }
+        trainer {
+          _id
+          color
+          avatarSrc
+        }
+        records {
+          _id
+        }
+      }
+      records {
+        _id
+        contact {
+          _id
+          fullName
+        }
+        attendant {
+          _id
+          fullName
+        }
+        status
+      }
     }
-    # trainingRecords(query: { training: $id }) {
-    #   seasonPass
-    #   trainee {
-    #     _id
-    #     fullName
-    #   }
-    #   note
-    #   status
-    #   training
-    # }
   }
 `
 
-export const useGetTrainingQuery = (id: string | null | undefined) => {
+export const useGetTrainingQuery = (id: string | null | undefined, skip: boolean) => {
   const result = useQuery<IGetTrainingResponse>(GET_TRAINING, {
     variables: { id },
-    skip: !id,
+    skip: !id || skip,
   })
 
   return result
@@ -80,6 +123,28 @@ export const convertTrainingToInput = (training: IGetTrainingResponse['training'
   type: training.type,
   traineesCount: training.traineesCount,
   note: training.note,
+
+  resources: training.resources.map(r => ({
+    _id: r._id,
+    resource: { link: r.resource._id },
+    trainer: r.trainer ? { link: r.trainer._id } : undefined,
+    startTime: r.startTime,
+    endTime: r.endTime,
+    records: { link: r.records?.map(rec => rec._id) || [] },
+  })),
+
+  records: training.records.map(record => ({
+    _id: record._id,
+    status: record.status,
+    contact: record.contact ? {
+      link: record.contact._id,
+      fullName: record.contact.fullName,
+    } : undefined,
+    attendant: record.attendant ? {
+      link: record.attendant._id,
+      fullName: record.attendant.fullName,
+    } : undefined,
+  })),
 })
 
 export default useGetTrainingQuery

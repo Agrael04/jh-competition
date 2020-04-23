@@ -29,6 +29,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
         endTime: action.payload.time + 2,
         resource: { link: action.payload.resource },
         trainer: undefined,
+        records: { link: [] },
       },
     ]
 

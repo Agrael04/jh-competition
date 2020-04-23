@@ -43,7 +43,11 @@ export default function TrainerSelect({ name, label }: IProps) {
           return true
         })
         .filter((ts, index, arr) => {
-          return arr.filter(t => t.trainer._id === ts.trainer._id).length === ((endTime || 0) - (startTime || 0))
+          if (!endTime || !startTime) {
+            return true
+          }
+
+          return arr.filter(t => t.trainer._id === ts.trainer._id).length === (endTime - startTime)
         })
 
       const trainers = schedules?.map(sh => sh.trainer).filter((tr, index, arr) => {

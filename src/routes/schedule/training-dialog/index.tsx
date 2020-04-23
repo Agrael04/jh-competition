@@ -19,13 +19,12 @@ import Select from 'containers/select'
 import GymSelect from './fields/gym-select'
 
 import ResourcesBlock from './resources-block'
+import RecordsBlock from './records-block'
 
-import TraineesBlock from './trainees-block'
 import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
 
-import useGetTrainingResourcesQuery, { convertResourcesToInput } from '../queries/get-training-resources'
 import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
 
 const translations = {
@@ -64,8 +63,7 @@ export default function TrainingDialog() {
     _id: state.schedule.trainingDialog._id,
   }))
 
-  const trainingResourcesQuery = useGetTrainingResourcesQuery()
-  const trainingQuery = useGetTrainingQuery(_id!)
+  const trainingQuery = useGetTrainingQuery(_id!, mode === 'create')
 
   const actions = useActions()
 
@@ -93,12 +91,11 @@ export default function TrainingDialog() {
   React.useEffect(
     () => {
       if (trainingQuery.data?.training) {
-        const resources = convertResourcesToInput(trainingResourcesQuery.data?.trainingResources.filter(tr => tr.training?._id === _id) || [])
         const training = convertTrainingToInput(trainingQuery.data.training)
 
-        actions.schedule.trainingDialog.initialize(training, [], resources)
+        actions.schedule.trainingDialog.initialize(training, training.records, training.resources)
       }
-    }, [actions, trainingQuery, trainingResourcesQuery, _id]
+    }, [actions, trainingQuery, _id]
   )
 
   return (
@@ -146,6 +143,7 @@ export default function TrainingDialog() {
                   fullWidth={true}
                   variant='outlined'
                 />
+                <Box marginBottom={3} />
               </Grid>
               <Grid item={true} lg={8}>
                 <Select
@@ -191,7 +189,7 @@ export default function TrainingDialog() {
                   onChange={handleChange}
                   fieldSelector={fieldSelector}
                   label={translations.notes}
-                  rows={5}
+                  rows={6}
                   fullWidth={true}
                   variant='outlined'
                   multiline={true}
@@ -206,14 +204,8 @@ export default function TrainingDialog() {
                 </Grid>
               )
             }
-            <Grid item={true} lg={12}>
-              <Box color='primary.main' borderBottom={2} />
-            </Grid>
             <ResourcesBlock />
-            <Grid item={true} lg={12}>
-              <Box color='primary.main' borderBottom={2} />
-            </Grid>
-            <TraineesBlock />
+            <RecordsBlock />
             {
               mode === 'create' && (
                 <>
@@ -221,7 +213,6 @@ export default function TrainingDialog() {
                     <Box color='primary.main' borderBottom={2} />
                   </Grid>
                   <Grid item={true} container={true} justify='flex-end'>
-                    {/* <DeleteButton /> */}
                     <SubmitButton />
                   </Grid>
                 </>

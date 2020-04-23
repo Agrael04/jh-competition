@@ -1,6 +1,6 @@
 import constants from 'store/constants/schedule/training-dialog'
 
-import { ITrainingRecord, ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
+import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
@@ -10,11 +10,14 @@ export interface IState {
   _id: string | null
 
   trainingForm: ITrainingForm
-  recordsForm: ITrainingRecord[]
 
   resources: ITrainingResourceForm[]
   resourceForm: ITrainingResourceForm | null
   resourceMode: 'create' | 'update' | null
+
+  records: ITrainingRecordForm[]
+  recordForm: ITrainingRecordForm | null
+  recordMode: 'create' | 'update' | null
 }
 
 const initialState: IState = {
@@ -32,11 +35,15 @@ const initialState: IState = {
     traineesCount: 1,
     note: '',
   },
-  recordsForm: [],
+  // recordsForm: [],
 
   resources: [],
   resourceForm: null,
   resourceMode: null,
+
+  records: [],
+  recordForm: null,
+  recordMode: null,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -55,26 +62,30 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
 
         trainingForm: {
-          ...initialState.trainingForm,
-          ...payload.training,
+          _id: payload.training._id,
+
+          gym: payload.training.gym,
+          date: payload.training.date,
+
+          name: payload.training.name,
+          type: payload.training.type,
+          traineesCount: payload.training.traineesCount,
+          note: payload.training.note,
         },
-        recordsForm: payload.records,
 
         resources: payload.resources,
+        records: payload.records,
         resourceForm: null,
+        resourceMode: null,
+        recordForm: null,
+        recordMode: null,
       }
     }
 
     case constants.CLOSE: {
       return {
         ...state,
-        mode: null,
-        _id: null,
-        opened: false,
-        trainingForm: initialState.trainingForm,
-        resources: initialState.resources,
-        resourceForm: initialState.resourceForm,
-        recordsForm: initialState.recordsForm,
+        ...initialState,
       }
     }
 
@@ -87,48 +98,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
           ...state.trainingForm,
           [payload.field]: value,
         },
-      }
-    }
-
-    case constants.ADD_RECORD: {
-      return {
-        ...state,
-        recordsForm: state.recordsForm.length < 3 ? [
-          ...state.recordsForm,
-          {
-            trainee: {
-              fullName: '',
-              _id: '',
-            },
-            seasonPass: '',
-            status: '',
-            note: '',
-            training: state.trainingForm._id,
-          },
-        ] : state.recordsForm,
-      }
-    }
-
-    case constants.UPDATE_RECORD_FIELD: {
-      return {
-        ...state,
-        recordsForm: state.recordsForm.map((item, index) => {
-          if (index !== payload.index) {
-            return item
-          }
-
-          return {
-            ...item,
-            [payload.field]: payload.value,
-          }
-        }),
-      }
-    }
-
-    case constants.REMOVE_RECORD: {
-      return {
-        ...state,
-        recordsForm: state.recordsForm.filter((item, index) => index !== payload.index),
       }
     }
 
@@ -181,6 +150,58 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         resources: state.resources.filter(item => item._id !== payload._id),
+      }
+    }
+
+    case constants.SET_RECORD: {
+      return {
+        ...state,
+        recordForm: payload.record,
+        recordMode: payload.mode,
+      }
+    }
+
+    case constants.UPDATE_RECORD_FIELD: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          [payload.field]: payload.value,
+        } as ITrainingRecordForm,
+      }
+    }
+
+    case constants.SAVE_RECORD: {
+      if (state.recordMode === 'create') {
+        return {
+          ...state,
+          records: [
+            ...state.records,
+            state.recordForm!,
+          ],
+          recordForm: null,
+          recordMode: null,
+        }
+      }
+
+      return {
+        ...state,
+        records: state.records.map(item => {
+          if (item._id === state.recordForm?._id) {
+            return state.recordForm!
+          }
+
+          return item
+        }),
+        recordForm: null,
+        recordMode: null,
+      }
+    }
+
+    case constants.REMOVE_RECORD: {
+      return {
+        ...state,
+        records: state.records.filter(item => item._id !== payload._id),
       }
     }
 

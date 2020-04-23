@@ -30,6 +30,7 @@ export function* openResource(action: ReturnType<typeof actions.trainingDialog.o
         date,
         startTime,
         endTime,
+        records: { link: [] },
       }
       mode = 'create'
     }
@@ -40,12 +41,41 @@ export function* openResource(action: ReturnType<typeof actions.trainingDialog.o
   }
 }
 
+export function* openRecord(action: ReturnType<typeof actions.trainingDialog.openRecord>) {
+  try {
+    let record
+    let mode: 'create' | 'update' | null = null
+
+    if (action.payload._id) {
+      record = yield select((state: IStoreState) => state.schedule.trainingDialog.records.find(r => r._id === action.payload._id))
+      mode = 'update'
+    } else {
+      record = {
+        _id: new BSON.ObjectID(),
+        contact: null,
+        attendant: null,
+        status: '',
+      }
+      mode = 'create'
+    }
+
+    yield put(actions.trainingDialog.setRecord(record, mode))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 function* watchOpenResource() {
   yield takeLatest(constants.trainingDialog.OPEN_RESOURCE, openResource)
+}
+
+function* watchOpenRecord() {
+  yield takeLatest(constants.trainingDialog.OPEN_RECORD, openRecord)
 }
 
 export default function* root() {
   yield all([
     watchOpenResource(),
+    watchOpenRecord(),
   ])
 }

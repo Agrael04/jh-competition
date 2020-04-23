@@ -10,12 +10,14 @@ export default function TrainingDialog() {
   const [sent, setSent] = React.useState(false)
 
   const actions = useActions()
-  const { trainingForm, resources, resourceForm } = useSelector(state => ({
+  const { trainingForm, resources, resourceForm, records, recordForm } = useSelector(state => ({
     mode: state.schedule.trainingDialog.mode,
     trainingForm: state.schedule.trainingDialog.trainingForm,
     resources: state.schedule.trainingDialog.resources,
     resourceForm: state.schedule.trainingDialog.resourceForm,
-    recordsForm: state.schedule.trainingDialog.recordsForm,
+    records: state.schedule.trainingDialog.records,
+    recordForm: state.schedule.trainingDialog.recordForm,
+    recordsForm: [],
   }))
 
   const handleSave = React.useCallback(
@@ -23,6 +25,7 @@ export default function TrainingDialog() {
       if (!sent) {
         setSent(true)
         actions.schedule.trainingDialog.saveResource()
+        actions.schedule.trainingDialog.saveRecord()
       }
     },
     [actions, setSent, sent]
@@ -30,21 +33,21 @@ export default function TrainingDialog() {
 
   const save = React.useCallback(
     async () => {
-      await createTraining(trainingForm, resources)
+      await createTraining(trainingForm, resources, records)
 
       setSent(false)
       actions.schedule.trainingDialog.close()
     },
-    [actions, trainingForm, resources, createTraining, setSent]
+    [actions, trainingForm, resources, records, createTraining, setSent]
   )
 
   React.useEffect(
     () => {
-      if (sent && resourceForm === null) {
+      if (sent && resourceForm === null && recordForm === null) {
         save()
       }
     },
-    [sent, resourceForm, trainingForm, save]
+    [sent, resourceForm, recordForm, trainingForm, save]
   )
 
   return (

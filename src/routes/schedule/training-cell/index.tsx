@@ -2,7 +2,7 @@ import React from 'react'
 
 import TableCell from '../table-cell'
 
-import useGetTrainingsQuery from '../queries/get-training-resources'
+import useGetTrainingsQuery from '../queries/get-trainings'
 
 import TrainingItem from './training-item'
 
@@ -22,9 +22,19 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
 
   const { data } = useGetTrainingsQuery()
 
-  const trainingResource = React.useMemo(
-    () => data?.trainingResources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource._id === resource),
+  const training = React.useMemo(
+    () => {
+      const trainings = data?.trainings || []
+      return trainings.find(tr => tr.resources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource._id === resource))
+    },
     [data, time, resource]
+  )
+
+  const trainingResource = React.useMemo(
+    () => {
+      return training?.resources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource._id === resource)
+    },
+    [training, time, resource]
   )
 
   const duration = React.useMemo(
@@ -58,7 +68,7 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
       activeRow={((time + duration) === activeTime)}
     >
       <div className={classes.cellWrap}>
-        <TrainingItem time={time} resource={resource} id={trainingResource?._id} trainingId={trainingResource?.training?._id} />
+        <TrainingItem time={time} resource={resource} id={trainingResource?._id} trainingId={training?._id} />
       </div>
     </TableCell>
   )

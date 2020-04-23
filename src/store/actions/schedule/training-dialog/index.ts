@@ -1,13 +1,13 @@
 import constants from 'store/constants/schedule/training-dialog'
 
-import { ITrainingRecord, ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
+import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
 
 export const open = (mode: string, _id: string) => ({
   type: constants.OPEN,
   payload: { mode, _id },
 })
 
-export const initialize = (training: Partial<ITrainingForm>, records: ITrainingRecord[], resources: Array<Partial<ITrainingResourceForm>>) => ({
+export const initialize = (training: Partial<ITrainingForm>, records: Array<Partial<ITrainingRecordForm>>, resources: Array<Partial<ITrainingResourceForm>>) => ({
   type: constants.INITIALIZE,
   payload: { training, records, resources },
 })
@@ -20,20 +20,6 @@ export const close = () => ({
 export const updateField = (field: string, value: any) => ({
   type: constants.UPDATE_FIELD,
   payload: { field, value },
-})
-
-export const addRecord = () => ({
-  type: constants.ADD_RECORD,
-})
-
-export const updateRecordField = (index: number, field: string, value: any) => ({
-  type: constants.UPDATE_RECORD_FIELD,
-  payload: { index, field, value },
-})
-
-export const removeRecord = (index: number) => ({
-  type: constants.REMOVE_RECORD,
-  payload: { index },
 })
 
 export const openResource = (_id?: string) => ({
@@ -60,6 +46,30 @@ export const removeResource = (_id: number) => ({
   payload: { _id },
 })
 
+export const openRecord = (_id?: string) => ({
+  type: constants.OPEN_RECORD,
+  payload: { _id },
+})
+
+export const setRecord = (record: ITrainingRecordForm | null, mode: 'create' | 'update' | null) => ({
+  type: constants.SET_RECORD,
+  payload: { record, mode },
+})
+
+export const updateRecordField = (field: string, value: any) => ({
+  type: constants.UPDATE_RECORD_FIELD,
+  payload: { field, value },
+})
+
+export const saveRecord = () => ({
+  type: constants.SAVE_RECORD,
+})
+
+export const removeRecord = (_id: number) => ({
+  type: constants.REMOVE_RECORD,
+  payload: { _id },
+})
+
 export const actions = {
   open,
   initialize,
@@ -67,15 +77,17 @@ export const actions = {
 
   updateField,
 
-  addRecord,
-  updateRecordField,
-  removeRecord,
-
   openResource,
   setResource,
   updateResourceField,
   saveResource,
   removeResource,
+
+  openRecord,
+  setRecord,
+  updateRecordField,
+  saveRecord,
+  removeRecord,
 }
 
 export default actions

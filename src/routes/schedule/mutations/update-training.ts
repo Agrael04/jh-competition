@@ -2,15 +2,10 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { GET_TRAINING } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
 
 export const UPDATE_TRAINING = gql`
-  mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!, $date: DateTime!) {
-    updateManyTrainingResources(query: { training: { _id: $_id } }, set: { date: $date }) {
-      modifiedCount
-      matchedCount
-    }
+  mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!) {
     updateOneTraining(query: { _id: $_id }, set: $training) {
       _id
       date
@@ -19,11 +14,38 @@ export const UPDATE_TRAINING = gql`
       gym {
         _id
       }
-
       name
-      note
       type
       traineesCount
+      note
+      resources {
+        _id
+        startTime
+        endTime
+        resource {
+          _id
+        }
+        trainer {
+          _id
+          color
+          avatarSrc
+        }
+        records {
+          _id
+        }
+      }
+      records {
+        _id
+        contact {
+          _id
+          fullName
+        }
+        attendant {
+          _id
+          fullName
+        }
+        status
+      }
     }
   }
 `
@@ -33,11 +55,8 @@ const useUpdateTraining = () => {
 
   const mutate = React.useCallback(
     (training: ITrainingForm) => {
-      const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
-
       return updateTraining({
-        variables: { _id: training._id, date: training.date, training },
-        refetchQueries: [trainingQuery],
+        variables: { _id: training._id, training },
       })
     },
     [updateTraining]

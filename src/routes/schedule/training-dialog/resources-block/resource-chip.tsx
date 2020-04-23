@@ -34,12 +34,12 @@ export default function ResourceChip({ id }: any) {
   const save = React.useCallback(
     async () => {
       if (mode === 'update') {
-        await updateTrainingResource(trainingForm!, resourceForm!)
+        await updateTrainingResource(resourceForm!)
       }
 
       actions.schedule.trainingDialog.saveResource()
     },
-    [actions, updateTrainingResource, resourceForm, mode, trainingForm]
+    [actions, updateTrainingResource, resourceForm, mode]
   )
 
   const remove = React.useCallback(

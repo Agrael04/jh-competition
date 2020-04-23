@@ -20,11 +20,10 @@ export interface ITrainingId {
 export interface ITrainingForm {
   _id: string
 
+  date: Date
   gym: {
     link: string
   }
-
-  date: Date
 
   name?: string
   type?: string
@@ -58,4 +57,20 @@ export interface ITrainingResourceForm {
   }
   startTime: number
   endTime: number
+  records: {
+    link: string[]
+  }
+}
+
+export interface ITrainingRecordForm {
+  _id?: string
+  contact: {
+    link: string
+    fullName: string
+  }
+  attendant?: {
+    link: string
+    fullName: string
+  }
+  status?: string
 }

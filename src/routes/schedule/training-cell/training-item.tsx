@@ -12,7 +12,8 @@ import Divider from '@material-ui/core/Divider'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import useGetTrainingResourcesQuery from '../queries/get-training-resources'
+import useGetTrainingsQuery from '../queries/get-trainings'
+import useGetTrainingResourceQuery from '../queries/get-training-resource'
 
 import times from 'data/times'
 import getColorPallete from 'utils/get-color-pallete'
@@ -37,12 +38,23 @@ const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
-  const trainingResourceRes = useGetTrainingResourcesQuery()
+  const trainings = useGetTrainingsQuery()
+  const trainingResourceRes = useGetTrainingResourceQuery(id)
 
-  const tResource = trainingResourceRes.data?.trainingResources.find(tr => tr._id === id)
+  const tResource = trainingResourceRes.data?.trainingResource
+
+  const type = React.useMemo(
+    () => trainings.data?.trainings.find(tr => tr.resources.find(r => r._id === id))?.type,
+    [trainings, id]
+  )
 
   const trainer = React.useMemo(
     () => tResource?.trainer,
+    [tResource]
+  )
+
+  const records = React.useMemo(
+    () => tResource?.records,
     [tResource]
   )
 
@@ -106,13 +118,20 @@ const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
               </Typography>
               <br />
               <Typography color='inherit' variant='caption'>
-                {(trainingTexts as any)[tResource.training?.type!]}
+                {(trainingTexts as any)[type!]}
               </Typography>
             </Box>
           </Grid>
           <Box marginY={0.5}>
             <Divider className={classes.divider} />
           </Box>
+          {
+            records?.map(r => (
+              <div key={r._id}>
+                {r.contact.fullName}
+              </div>
+            ))
+          }
         </Box>
       </ButtonBase>
     </Zoom>
