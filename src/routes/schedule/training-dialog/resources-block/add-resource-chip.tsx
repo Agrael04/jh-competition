@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add'
 
 import useCreateTrainingResource from '../../mutations/create-training-resource'
 
-export default function ResourceBlock() {
+export default function AddResourceChip() {
   const actions = useActions()
   const { trainingForm, mode, resourceForm, resourceMode } = useSelector(state => ({
     trainingForm: state.schedule.trainingDialog.trainingForm,
@@ -40,8 +40,8 @@ export default function ResourceBlock() {
   return (
     <Chip
       avatar={<Avatar><AddIcon /></Avatar>}
-      label={'Добавить'}
-      color={resourceMode === 'create' ? 'secondary' : 'primary'}
+      label={'Добавить ресурс'}
+      color={'primary'}
       variant={resourceMode === 'create' ? undefined : 'outlined'}
       onClick={
         resourceMode === 'create'

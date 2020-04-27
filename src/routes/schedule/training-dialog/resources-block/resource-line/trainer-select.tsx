@@ -4,7 +4,7 @@ import { IStoreState, useSelector, useActions } from 'store'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
-import useGetSchedulesQuery from '../../queries/get-schedules'
+import useGetSchedulesQuery from '../../../queries/get-schedules'
 
 interface IProps {
   name: string

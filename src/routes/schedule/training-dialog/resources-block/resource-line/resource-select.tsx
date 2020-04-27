@@ -4,7 +4,7 @@ import { IStoreState, useSelector, useActions } from 'store'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
-import useGetGymsQuery from '../../queries/get-gyms'
+import useGetGymsQuery from '../../../queries/get-gyms'
 
 interface IProps {
   name: string

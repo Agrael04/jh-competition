@@ -4,7 +4,7 @@ import { IStoreState, useSelector } from 'store'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
-import useGetSchedulesQuery from '../../queries/get-schedules'
+import useGetSchedulesQuery from '../../../queries/get-schedules'
 
 import times from 'data/times'
 
@@ -16,10 +16,10 @@ interface IProps {
 }
 
 export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
-  const { date, gym, startTime, trainer } = useSelector(state => ({
+  const { date, gym, endTime, trainer } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    startTime: state.schedule.trainingDialog.resourceForm?.startTime,
+    endTime: state.schedule.trainingDialog.resourceForm?.endTime,
     trainer: state.schedule.trainingDialog.resourceForm?.trainer?.link,
   }))
   const { data } = useGetSchedulesQuery(date)
@@ -27,7 +27,7 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
   const filteredTimes = React.useMemo(
     () => {
       if (!trainer) {
-        return times.filter(t => !startTime || t.id > startTime)
+        return times.filter(t => !endTime || t.id < endTime)
       }
 
       const schedules = data?.trainerSchedules.filter(ts =>
@@ -35,10 +35,10 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
       ) || []
 
       return schedules
-        .filter(s => !startTime || s.time >= startTime)
-        .map(s => times.find(t => t.id === s.time + 1)!)
+        .filter(s => !endTime || s.time < endTime)
+        .map(s => times.find(t => t.id === s.time)!)
     },
-    [data, startTime, trainer, gym]
+    [data, endTime, trainer, gym]
   )
 
   return (

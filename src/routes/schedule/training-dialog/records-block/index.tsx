@@ -42,7 +42,7 @@ export default function RecordsBlock() {
 
   return (
     <SecondaryBlock title='Записи'>
-      <Grid item={true} lg={12} container={true} spacing={1}>
+      {/* <Grid item={true} lg={12} container={true} spacing={1}>
         <Grid item={true}>
           <AddChip />
         </Grid>
@@ -53,7 +53,7 @@ export default function RecordsBlock() {
             </Grid>
           ))
         }
-      </Grid>
+      </Grid> */}
       {
         isFormActive && (
           <Grid item={true} lg={12} container={true} spacing={3}>

@@ -19,7 +19,6 @@ import Select from 'containers/select'
 import GymSelect from './fields/gym-select'
 
 import ResourcesBlock from './resources-block'
-import RecordsBlock from './records-block'
 
 import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
@@ -205,7 +204,6 @@ export default function TrainingDialog() {
               )
             }
             <ResourcesBlock />
-            <RecordsBlock />
             {
               mode === 'create' && (
                 <>
