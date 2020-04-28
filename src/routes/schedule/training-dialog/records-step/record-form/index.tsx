@@ -4,14 +4,15 @@ import { IStoreState, useSelector, useActions } from 'store'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import MenuItem from '@material-ui/core/MenuItem'
-import IconButton from '@material-ui/core/IconButton'
-
-import ReceiptIcon from '@material-ui/icons/Receipt'
+import Button from '@material-ui/core/Button'
 
 import TextField from 'containers/text-field'
 import Select from 'containers/select'
 
 import UserSuggester from './user-suggester'
+import ResourceSelect from './resource-select'
+
+import SaveButton from './save-button'
 
 const statuses = ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
 
@@ -40,8 +41,8 @@ export default function RecordsBlock() {
   }
 
   return (
-    <Grid item={true} lg={12} container={true} spacing={3}>
-      <Grid item={true} lg={3}>
+    <Grid item={true} lg={8} container={true} spacing={3}>
+      <Grid item={true} lg={9}>
         <UserSuggester
           name='contact'
           label='Контактное лицо'
@@ -49,7 +50,14 @@ export default function RecordsBlock() {
           fieldSelector={fieldSelector}
         />
       </Grid>
-      <Grid item={true} lg={3}>
+      <Grid item={true} lg={3} container={true}>
+        <Box margin='auto' marginRight={0}>
+          <Button color='primary' variant='contained'>
+            Расчитать
+          </Button>
+        </Box>
+      </Grid>
+      <Grid item={true} lg={5}>
         <UserSuggester
           name='attendant'
           label='Физическое лицо'
@@ -57,7 +65,7 @@ export default function RecordsBlock() {
           fieldSelector={fieldSelector}
         />
       </Grid>
-      <Grid item={true} lg={2}>
+      <Grid item={true} lg={3}>
         <Select
           name='status'
           onChange={handleChange}
@@ -75,7 +83,7 @@ export default function RecordsBlock() {
           }
         </Select>
       </Grid>
-      <Grid item={true} lg={3}>
+      <Grid item={true} lg={4}>
         <TextField
           name='note'
           onChange={handleChange}
@@ -85,12 +93,17 @@ export default function RecordsBlock() {
           variant='outlined'
         />
       </Grid>
-      <Grid item={true} lg={1} container={true} justify='flex-end'>
-        <Box marginY='auto'>
-          <IconButton>
-            <ReceiptIcon color='primary' />
-          </IconButton>
-        </Box>
+      <Grid item={true} lg={12}>
+        <ResourceSelect
+          name='resource'
+          label='Ресурс'
+        />
+      </Grid>
+      <Grid item={true} lg={12} container={true} justify='space-between'>
+        <Button color='primary'>
+          Отменить
+        </Button>
+        <SaveButton />
       </Grid>
     </Grid>
   )

@@ -73,4 +73,7 @@ export interface ITrainingRecordForm {
     fullName: string
   }
   status?: string
+  resource: {
+    link: string
+  }
 }

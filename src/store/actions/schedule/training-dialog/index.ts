@@ -41,7 +41,7 @@ export const saveResource = () => ({
   type: constants.SAVE_RESOURCE,
 })
 
-export const removeResource = (_id: number) => ({
+export const removeResource = (_id: string) => ({
   type: constants.REMOVE_RESOURCE,
   payload: { _id },
 })

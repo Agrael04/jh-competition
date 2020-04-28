@@ -2,10 +2,17 @@ import React from 'react'
 import { IStoreState, useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import Button from '@material-ui/core/Button'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepButton from '@material-ui/core/StepButton'
+import Divider from '@material-ui/core/Divider'
+
 import CloseIcon from '@material-ui/icons/Close'
 
 import Grid from '@material-ui/core/Grid'
@@ -19,12 +26,15 @@ import Select from 'containers/select'
 import GymSelect from './fields/gym-select'
 
 import ResourcesBlock from './resources-block'
+import RecordsStep from './records-step'
 
 import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
 
 import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
+
+const LAST_STEP = 2
 
 const translations = {
   'date': 'Дата',
@@ -62,6 +72,9 @@ export default function TrainingDialog() {
     _id: state.schedule.trainingDialog._id,
   }))
 
+  const [activeStep, setActiveStep] = React.useState(0)
+  const steps = ['Тренировка', 'Ресурсы', 'Записи']
+
   const trainingQuery = useGetTrainingQuery(_id!, mode === 'create')
 
   const actions = useActions()
@@ -97,6 +110,8 @@ export default function TrainingDialog() {
     }, [actions, trainingQuery, _id]
   )
 
+  const activateStep = (index: number) => () => setActiveStep(index)
+
   return (
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
@@ -109,116 +124,155 @@ export default function TrainingDialog() {
           </Typography>
         </Toolbar>
       </AppBar>
+      <Stepper activeStep={activeStep} nonLinear={mode === 'update'}>
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepButton onClick={activateStep(index)}>{label}</StepButton>
+          </Step>
+        ))}
+      </Stepper>
+      {/* <Box paddingX={3} paddingY={1}>
+        <Typography>
+          Берейтейская 28.04, группа.
+        </Typography>
+      </Box> */}
+      <Divider />
       <Box padding={3}>
         <Grid container={true} direction='column' justify='space-around'>
           <Grid item={true} container={true} spacing={3} justify='space-around'>
-            <Grid item={true} container={true} lg={4} spacing={2}>
-              <Grid item={true} lg={12}>
-                <GymSelect
-                  name='gym'
-                  label={translations.gym}
-                />
-              </Grid>
-              <Grid item={true} lg={12}>
-                <DatePicker
-                  name='date'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.date}
-                  fullWidth={true}
-                  inputVariant='outlined'
-                  disableToolbar={true}
-                  variant='inline'
-                />
-              </Grid>
-            </Grid>
-            <Grid item={true} container={true} lg={4} spacing={2}>
-              <Grid item={true} lg={12}>
-                <TextField
-                  name='name'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.trainingName}
-                  fullWidth={true}
-                  variant='outlined'
-                />
-                <Box marginBottom={3} />
-              </Grid>
-              <Grid item={true} lg={8}>
-                <Select
-                  name='type'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.trainingType}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    trainingTypes.map(type => (
-                      <MenuItem value={type} key={type}>
-                        {translations[`types.${type}`]}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
-              </Grid>
-              <Grid item={true} lg={4}>
-                <Select
-                  name='type'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={'Кол-во'}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    trainingTypes.map(type => (
-                      <MenuItem value={type} key={type}>
-                        {translations[`types.${type}`]}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
-              </Grid>
-            </Grid>
-            <Grid item={true} container={true} lg={4} spacing={2}>
-              <Grid item={true} lg={12}>
-                <TextField
-                  name='note'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={translations.notes}
-                  rows={6}
-                  fullWidth={true}
-                  variant='outlined'
-                  multiline={true}
-                />
-              </Grid>
-            </Grid>
+
             {
-              mode === 'update' && (
-                <Grid item={true} lg={12} container={true} justify='space-between'>
-                  <DeleteButton />
-                  <SubmitUpdateButton />
-                </Grid>
+              activeStep === 0 && (
+                <>
+                  <Grid item={true} container={true} lg={4} spacing={2}>
+                    <Grid item={true} lg={12}>
+                      <GymSelect
+                        name='gym'
+                        label={translations.gym}
+                      />
+                    </Grid>
+                    <Grid item={true} lg={12}>
+                      <DatePicker
+                        name='date'
+                        onChange={handleChange}
+                        fieldSelector={fieldSelector}
+                        label={translations.date}
+                        fullWidth={true}
+                        inputVariant='outlined'
+                        disableToolbar={true}
+                        variant='inline'
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item={true} container={true} lg={4} spacing={2}>
+                    <Grid item={true} lg={12}>
+                      <TextField
+                        name='name'
+                        onChange={handleChange}
+                        fieldSelector={fieldSelector}
+                        label={translations.trainingName}
+                        fullWidth={true}
+                        variant='outlined'
+                      />
+                      <Box marginBottom={3} />
+                    </Grid>
+                    <Grid item={true} lg={8}>
+                      <Select
+                        name='type'
+                        onChange={handleChange}
+                        fieldSelector={fieldSelector}
+                        label={translations.trainingType}
+                        fullWidth={true}
+                        variant='outlined'
+                      >
+                        {
+                          trainingTypes.map(type => (
+                            <MenuItem value={type} key={type}>
+                              {translations[`types.${type}`]}
+                            </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </Grid>
+                    <Grid item={true} lg={4}>
+                      <Select
+                        name='type'
+                        onChange={handleChange}
+                        fieldSelector={fieldSelector}
+                        label={'Кол-во'}
+                        fullWidth={true}
+                        variant='outlined'
+                      >
+                        {
+                          trainingTypes.map(type => (
+                            <MenuItem value={type} key={type}>
+                              {translations[`types.${type}`]}
+                            </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </Grid>
+                  </Grid>
+                  <Grid item={true} container={true} lg={4} spacing={2}>
+                    <Grid item={true} lg={12}>
+                      <TextField
+                        name='note'
+                        onChange={handleChange}
+                        fieldSelector={fieldSelector}
+                        label={translations.notes}
+                        rows={6}
+                        fullWidth={true}
+                        variant='outlined'
+                        multiline={true}
+                      />
+                    </Grid>
+                  </Grid>
+                  {
+                    mode === 'update' && (
+                      <Grid item={true} lg={12} container={true} justify='space-between'>
+                        <DeleteButton />
+                        <SubmitUpdateButton />
+                      </Grid>
+                    )
+                  }
+                </>
               )
             }
-            <ResourcesBlock />
             {
-              mode === 'create' && (
-                <>
-                  <Grid item={true} lg={12}>
-                    <Box color='primary.main' borderBottom={2} />
-                  </Grid>
-                  <Grid item={true} container={true} justify='flex-end'>
-                    <SubmitButton />
-                  </Grid>
-                </>
+              activeStep === 1 && (
+                <ResourcesBlock />
+              )
+            }
+            {
+              activeStep === 2 && (
+                <RecordsStep />
               )
             }
           </Grid>
         </Grid>
       </Box>
+      <Divider />
+      <DialogActions>
+        {
+          activeStep > 0 && (
+            <Button color='primary' onClick={activateStep(activeStep - 1)}>
+              Назад
+            </Button>
+          )
+        }
+        {
+          activeStep < LAST_STEP && (
+            <Button color='primary' onClick={activateStep(activeStep + 1)}>
+              Далее
+            </Button>
+          )
+        }
+        {
+          activeStep === LAST_STEP && mode === 'create' && (
+            <SubmitButton />
+          )
+        }
+      </DialogActions>
     </Dialog>
   )
 }

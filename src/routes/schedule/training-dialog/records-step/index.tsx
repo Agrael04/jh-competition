@@ -11,19 +11,19 @@ import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
 
-import ResourceItem from './resource-item'
-import ResourceForm from './resource-form'
+import RecordItem from './record-item'
+import RecordForm from './record-form'
 
 import useStyles from './styles'
 
 export default function ResourcesBlock() {
   const classes = useStyles()
   const actions = useActions()
-  const trainingResources = useSelector(state => state.schedule.trainingDialog.resources)
+  const records = useSelector(state => state.schedule.trainingDialog.records)
 
   const activate = React.useCallback(
     async () => {
-      actions.schedule.trainingDialog.openResource()
+      actions.schedule.trainingDialog.openRecord()
     },
     [actions]
   )
@@ -43,13 +43,33 @@ export default function ResourcesBlock() {
             />
           </ListItem>
           {
-            trainingResources.map(tr => (
-              <ResourceItem key={tr._id} id={tr._id!} />
+            records.map(r => (
+              <RecordItem key={r._id} id={r._id!} />
             ))
           }
         </List>
       </Grid>
-      <ResourceForm />
+      <RecordForm />
+      {/* {
+        trainingResources.map(resource => (
+          <Grid item={true} lg={12} container={true} spacing={1} key={resource._id}>
+            <Grid item={true}>
+              <ResourceChip id={resource._id} />
+            </Grid>
+            {
+              resource.records.link.map(r => (
+                <Grid item={true} key={r}>
+                  <RecordChip id={r} />
+                </Grid>
+              ))
+            }
+            <Grid item={true}>
+              <AddRecordChip />
+            </Grid>
+          </Grid>
+        ))
+      }
+      <ResourceLine /> */}
     </Grid>
   )
 }

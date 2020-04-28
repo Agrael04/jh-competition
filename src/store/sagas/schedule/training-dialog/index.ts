@@ -54,6 +54,7 @@ export function* openRecord(action: ReturnType<typeof actions.trainingDialog.ope
         _id: new BSON.ObjectID(),
         contact: null,
         attendant: null,
+        resource: null,
         status: '',
       }
       mode = 'create'
