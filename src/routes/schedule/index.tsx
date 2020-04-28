@@ -23,7 +23,7 @@ import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 import TableCell from './table-cell'
 
-import useGetTrainingsQuery from './queries/get-trainings'
+import useGetTrainingResourcesQuery from './queries/get-training-resources'
 import useGetSchedulesQuery from './queries/get-schedules'
 import useGetGymsQuery from './queries/get-gyms'
 
@@ -35,7 +35,7 @@ const SchedulePage = () => {
   const classes = useStyles()
   const actions = useActions()
 
-  const trainings = useGetTrainingsQuery()
+  const trainingResources = useGetTrainingResourcesQuery()
   const schedules = useGetSchedulesQuery()
   const gyms = useGetGymsQuery()
   const activeResources = useSelector(state => state.schedule.page.activeResources)
@@ -130,14 +130,14 @@ const SchedulePage = () => {
                       }
 
                       {
-                        trainings.loading && index === 0 ? (
+                        trainingResources.loading && index === 0 ? (
                           <TableCell align='center' padding='none' colSpan={activeResources.length} rowSpan={times.length} secondaryCol={true}>
                             <CircularProgress />
                           </TableCell>
                         ) : null
                       }
                       {
-                        !trainings.loading && resources
+                        !trainingResources.loading && resources
                           .map((r, resourseIndex) => (
                             <TrainingCell
                               resource={r._id}

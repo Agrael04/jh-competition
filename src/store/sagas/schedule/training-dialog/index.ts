@@ -8,7 +8,8 @@ import { IStoreState } from 'store'
 
 export function* openResource(action: ReturnType<typeof actions.trainingDialog.openResource>) {
   try {
-    const { date, startTime, endTime } = yield select((state: IStoreState) => ({
+    const { trainingId, date, startTime, endTime } = yield select((state: IStoreState) => ({
+      trainingId: state.schedule.trainingDialog.trainingForm._id,
       date: state.schedule.trainingDialog.trainingForm.date,
       startTime: state.schedule.trainingDialog.resourceForm?.startTime,
       endTime: state.schedule.trainingDialog.resourceForm?.endTime,
@@ -31,6 +32,7 @@ export function* openResource(action: ReturnType<typeof actions.trainingDialog.o
         startTime,
         endTime,
         records: { link: [] },
+        training: { link: trainingId },
       }
       mode = 'create'
     }
@@ -43,6 +45,9 @@ export function* openResource(action: ReturnType<typeof actions.trainingDialog.o
 
 export function* openRecord(action: ReturnType<typeof actions.trainingDialog.openRecord>) {
   try {
+    const { trainingId } = yield select((state: IStoreState) => ({
+      trainingId: state.schedule.trainingDialog.trainingForm._id,
+    }))
     let record
     let mode: 'create' | 'update' | null = null
 
@@ -56,6 +61,7 @@ export function* openRecord(action: ReturnType<typeof actions.trainingDialog.ope
         attendant: null,
         resource: null,
         status: '',
+        training: { link: trainingId },
       }
       mode = 'create'
     }

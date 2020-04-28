@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import PersonIcon from '@material-ui/icons/Person'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import useDeleteTrainingResource from '../../mutations/delete-training-resource'
+import useDeleteTrainingRecord from '../../mutations/delete-training-record'
 
 import useStyles from './styles'
 
@@ -23,14 +23,13 @@ export default function RecordItem({ id }: IProps) {
   const classes = useStyles()
 
   const actions = useActions()
-  const { isActive, trainingForm, mode, record } = useSelector(state => ({
-    trainingForm: state.schedule.trainingDialog.trainingForm,
+  const { isActive, mode, record } = useSelector(state => ({
     mode: state.schedule.trainingDialog.mode,
     isActive: state.schedule.trainingDialog.recordForm?._id === id,
     record: state.schedule.trainingDialog.records.find(r => r._id === id)!,
   }))
 
-  const deleteTrainingResource = useDeleteTrainingResource()
+  const deleteTrainingRecord = useDeleteTrainingRecord()
 
   const activate = React.useCallback(
     () => actions.schedule.trainingDialog.openRecord(id),
@@ -40,12 +39,12 @@ export default function RecordItem({ id }: IProps) {
   const remove = React.useCallback(
     async () => {
       if (mode === 'update') {
-        await deleteTrainingResource(trainingForm, id)
+        await deleteTrainingRecord(record)
       }
 
-      actions.schedule.trainingDialog.removeResource(id)
+      actions.schedule.trainingDialog.removeRecord(id)
     },
-    [actions, id, deleteTrainingResource, mode, trainingForm]
+    [actions, record, id, deleteTrainingRecord, mode]
   )
 
   return (
@@ -56,7 +55,7 @@ export default function RecordItem({ id }: IProps) {
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={record.contact.fullName}
+        primary={record.contact?.fullName}
         secondary={record.attendant?.fullName}
       />
       <ListItemSecondaryAction>

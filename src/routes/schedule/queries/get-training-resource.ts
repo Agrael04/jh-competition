@@ -17,21 +17,26 @@ export interface IGetTrainingResourceResponse {
       color: number
       avatarSrc: string
     }
-    records: Array<{
+    training: {
       _id: string
       __typename: string
-      contact: {
-        _id: string
-        __typename: string
-        fullName: string
-      }
-    }>
+      type: string
+    }
   }
+  trainingRecords: Array<{
+    _id: string
+    __typename: string
+    contact: {
+      _id: string
+      __typename: string
+      fullName: string
+    }
+  }>
 }
 
 export const GET_TRAINING_RESOURCE = gql`
-  query getTrainingResource($_id: ObjectId){
-    trainingResource(query: { _id: $_id }) {
+  query getTrainingResource($id: ObjectId){
+    trainingResource(query: { _id: $id }) {
       _id
       startTime
       endTime
@@ -43,32 +48,28 @@ export const GET_TRAINING_RESOURCE = gql`
         color
         avatarSrc
       }
-      records {
+      training {
         _id
-        contact {
-          fullName
-        }
+        type
+      }
+    }
+    trainingRecords(query: { resource: { _id: $id }}) {
+      _id
+      contact {
+        _id
+        fullName
       }
     }
   }
 `
 
-export const useGetTrainingResourceQuery = (_id: string | undefined | null) => {
+export const useGetTrainingResourceQuery = (id: string | undefined | null) => {
   const result = useQuery<IGetTrainingResourceResponse>(GET_TRAINING_RESOURCE, {
-    variables: { _id },
-    skip: !_id,
+    variables: { id },
+    skip: !id,
   })
 
   return result
 }
-
-export const convertResourcesToInput = (r: IGetTrainingResourceResponse['trainingResource']) => ({
-  _id: r._id,
-
-  resource: { link: r.resource._id },
-  trainer: r.trainer ? { link: r.trainer._id } : undefined,
-  startTime: r.startTime,
-  endTime: r.endTime,
-})
 
 export default useGetTrainingResourceQuery

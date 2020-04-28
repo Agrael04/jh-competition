@@ -65,7 +65,7 @@ export const saveRecord = () => ({
   type: constants.SAVE_RECORD,
 })
 
-export const removeRecord = (_id: number) => ({
+export const removeRecord = (_id: string) => ({
   type: constants.REMOVE_RECORD,
   payload: { _id },
 })

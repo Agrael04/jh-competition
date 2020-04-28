@@ -18,7 +18,7 @@ export default function TrainingDialog() {
 
   const remove = React.useCallback(
     async () => {
-      await deleteTraining(trainingForm, resources, records)
+      await deleteTraining(trainingForm)
 
       actions.schedule.trainingDialog.close()
     },

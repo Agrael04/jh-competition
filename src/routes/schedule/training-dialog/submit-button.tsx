@@ -3,7 +3,7 @@ import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
-import useCreateTraining from '../mutations/create-training'
+import useCreateTraining from '../mutations/create-training-new'
 
 export default function TrainingDialog() {
   const createTraining = useCreateTraining()

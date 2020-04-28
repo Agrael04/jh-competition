@@ -2,36 +2,14 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { ITrainingForm, ITrainingRecordForm, ITrainingResourceForm } from 'interfaces/training'
+import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
+import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
+import { ITrainingRecordForm } from 'interfaces/training'
 
 export const DELETE_TRAINING_RECORD = gql`
-  mutation deleteTrainingRecord ($trainingId: ObjectId, $trainingRecords: [ObjectId], $resourceId: ObjectId, $resourceRecords: [ObjectId], $_id: ObjectId!) {
+  mutation deleteTrainingRecord ($_id: ObjectId!) {
     deleteOneTrainingRecord(query: { _id: $_id }) {
       _id
-    }
-    updateOneTrainingResource(query: { _id: $resourceId }, set: { records: { link: $resourceRecords } }) {
-      _id
-      records {
-        _id
-        contact {
-          fullName
-        }
-      }
-    }
-    updateOneTraining(query: { _id: $trainingId }, set: { records: { link: $trainingRecords } }) {
-      _id
-      records {
-        _id
-        contact {
-          _id
-          fullName
-        }
-        attendant {
-          _id
-          fullName
-        }
-        status
-      }
     }
   }
 `
@@ -40,16 +18,37 @@ const useDeleteTrainingRecord = () => {
   const [deleteOneTrainingRecord] = useMutation(DELETE_TRAINING_RECORD)
 
   const mutate = React.useCallback(
-    (training: ITrainingForm, resources: ITrainingResourceForm[], records: ITrainingRecordForm[], _id: string) => {
-      const resource = resources.find(r => r.records.link.find(rec => rec === _id))
-
+    (record: ITrainingRecordForm) => {
       return deleteOneTrainingRecord({
-        variables: {
-          trainingId: training._id,
-          trainingRecords: records.map(r => r._id).filter(r => r !== _id),
-          resourceId: resource?._id || undefined,
-          resourceRecords: resource?.records.link.filter(r => r !== _id) || [],
-          _id,
+        variables: { _id: record._id },
+        update: (client, { data }) => {
+          const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: record.resource.link } }
+
+          const resourceData = client.readQuery<IGetTrainingResourceResponse>(resourceQuery)
+
+          if (resourceData) {
+            const trainingRecords = resourceData.trainingRecords
+              .filter(tr => tr._id !== data.deleteOneTrainingRecord._id)
+
+            client.writeQuery({
+              ...resourceQuery,
+              data: { ...resourceData, trainingRecords },
+            })
+          }
+
+          const trainingQuery = { query: GET_TRAINING, variables: { id: record.training.link } }
+
+          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
+
+          if (trainingData) {
+            const trainingRecords = trainingData.trainingRecords
+              .filter(tr => tr._id !== data.deleteOneTrainingRecord._id)
+
+            client.writeQuery({
+              ...trainingQuery,
+              data: { ...trainingData, trainingRecords },
+            })
+          }
         },
       })
     },

@@ -7,42 +7,22 @@ export interface IGetTrainingResourcesResponse {
     _id: string
     startTime: number
     endTime: number
+    __typename: string
     resource: {
       _id: string
       __typename: string
     }
-    trainer: {
-      _id: string
-      color: number
-      avatarSrc: string
-      __typename: string
-    }
-    training: {
-      _id: string
-      type: string
-      __typename: string
-    }
-    __typename: string
   }>
 }
 
 export const GET_TRAINING_RESOURCES = gql`
   query getTrainingResources($date: DateTime){
-    trainingResources(query: { date: $date }) {
+    trainingResources(query: { training: { date: $date } }) {
       _id
       startTime
       endTime
       resource {
         _id
-      }
-      trainer {
-        _id
-        color
-        avatarSrc
-      }
-      training {
-        _id
-        type
       }
     }
   }
@@ -57,14 +37,5 @@ export const useGetTrainingResourcesQuery = () => {
 
   return result
 }
-
-export const convertResourcesToInput = (resources: IGetTrainingResourcesResponse['trainingResources']) => resources.map(r => ({
-  _id: r._id,
-
-  resource: { link: r.resource._id },
-  trainer: r.trainer ? { link: r.trainer._id } : undefined,
-  startTime: r.startTime,
-  endTime: r.endTime,
-}))
 
 export default useGetTrainingResourcesQuery

@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import useGetTrainingsQuery from '../queries/get-trainings'
 import useGetTrainingResourceQuery from '../queries/get-training-resource'
 
 import times from 'data/times'
@@ -24,7 +23,6 @@ interface IProps {
   time: number
   resource: string
   id: string | undefined
-  trainingId: string | undefined
 }
 
 const trainingTexts = {
@@ -34,18 +32,18 @@ const trainingTexts = {
   'EVENT': 'Событие',
 }
 
-const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
+const TrainingCell = ({ time, resource, id }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
-  const trainings = useGetTrainingsQuery()
   const trainingResourceRes = useGetTrainingResourceQuery(id)
 
   const tResource = trainingResourceRes.data?.trainingResource
+  const records = trainingResourceRes.data?.trainingRecords
 
   const type = React.useMemo(
-    () => trainings.data?.trainings.find(tr => tr.resources.find(r => r._id === id))?.type,
-    [trainings, id]
+    () => tResource?.training.type,
+    [tResource]
   )
 
   const trainer = React.useMemo(
@@ -53,10 +51,10 @@ const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
     [tResource]
   )
 
-  const records = React.useMemo(
-    () => tResource?.records,
-    [tResource]
-  )
+  // const records = React.useMemo(
+  //   () => tResource?.records,
+  //   [tResource]
+  // )
 
   const handleCreateClick = React.useCallback(
     e => {
@@ -69,9 +67,9 @@ const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
   const handleUpdateClick = React.useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.trainingDialog.open('update', trainingId!)
+      actions.schedule.trainingDialog.open('update', tResource?.training._id!)
     },
-    [actions, trainingId]
+    [actions, tResource]
   )
 
   const color = React.useMemo(
@@ -128,7 +126,7 @@ const TrainingCell = ({ time, resource, id, trainingId }: IProps) => {
           {
             records?.map(r => (
               <div key={r._id}>
-                {r.contact.fullName}
+                {r.contact?.fullName}
               </div>
             ))
           }

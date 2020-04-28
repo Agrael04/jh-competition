@@ -32,7 +32,7 @@ import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
 
-import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
+import useGetTrainingQuery, { convertTrainingToInput, convertTrainingResourcesToInput, convertTrainingRecordsToInput } from '../queries/get-training'
 
 const LAST_STEP = 2
 
@@ -104,8 +104,10 @@ export default function TrainingDialog() {
     () => {
       if (trainingQuery.data?.training) {
         const training = convertTrainingToInput(trainingQuery.data.training)
+        const resources = convertTrainingResourcesToInput(trainingQuery.data.trainingResources)
+        const records = convertTrainingRecordsToInput(trainingQuery.data.trainingRecords)
 
-        actions.schedule.trainingDialog.initialize(training, training.records, training.resources)
+        actions.schedule.trainingDialog.initialize(training, records, resources)
       }
     }, [actions, trainingQuery, _id]
   )

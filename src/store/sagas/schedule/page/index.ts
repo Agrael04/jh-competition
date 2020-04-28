@@ -24,12 +24,13 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
 
     const resources = [
       {
-        _id: new BSON.ObjectID(),
+        _id: new BSON.ObjectID().toString(),
         startTime: action.payload.time,
         endTime: action.payload.time + 2,
         resource: { link: action.payload.resource },
         trainer: undefined,
         records: { link: [] },
+        training: { link: _id },
       },
     ]
 

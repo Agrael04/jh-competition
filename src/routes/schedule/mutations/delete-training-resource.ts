@@ -2,60 +2,57 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import useGetTrainingsQuery from '../queries/get-trainings'
-import { GET_TRAINING_RESOURCE } from '../queries/get-training-resource'
-import { ITrainingForm } from 'interfaces/training'
+import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
+import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
+import { ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
 
 export const DELETE_TRAINING_RESOURCE = gql`
-  mutation deleteTrainingResource ($trainingId: ObjectId, $links: [ObjectId], $_id: ObjectId!) {
+  mutation deleteTrainingResource ($_id: ObjectId!) {
     deleteOneTrainingResource(query: { _id: $_id }) {
       _id
-    }
-    updateOneTraining(query: { _id: $trainingId }, set: { resources: { link: $links } }) {
-      _id
-      resources {
-        _id
-        startTime
-        endTime
-        resource {
-          _id
-        }
-        trainer {
-          _id
-          color
-          avatarSrc
-        }
-        records {
-          _id
-        }
-      }
     }
   }
 `
 
 const useDeleteTrainingResource = () => {
-  const trainings = useGetTrainingsQuery()
   const [deleteOneTrainingResource] = useMutation(DELETE_TRAINING_RESOURCE)
 
   const mutate = React.useCallback(
-    (training: ITrainingForm, _id: string) => {
-      const tr = trainings.data?.trainings.find(tr => tr._id === training._id)
-      const links = tr?.resources.map(r => r._id).filter(l => l !== _id) || []
-
+    (training: ITrainingForm, resource: ITrainingResourceForm) => {
       return deleteOneTrainingResource({
-        variables: { trainingId: tr?._id, links, _id },
+        variables: { _id: resource._id },
         update: (client, { data }) => {
-          client.writeQuery({
-            query: GET_TRAINING_RESOURCE,
-            variables: {
-              _id: data.deleteOneTrainingResource._id,
-            },
-            data: null,
-          })
+          const resourcesQuery = { query: GET_TRAINING_RESOURCES, variables: { date: new Date(training.date) } }
+
+          const resourcesData = client.readQuery<IGetTrainingResourcesResponse>(resourcesQuery)
+
+          if (resourcesData) {
+            const trainingResources = resourcesData.trainingResources
+              .filter(tr => tr._id !== data.deleteOneTrainingResource._id)
+
+            client.writeQuery({
+              ...resourcesQuery,
+              data: { ...resourcesData, trainingResources },
+            })
+          }
+
+          const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
+
+          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
+
+          if (trainingData) {
+            const trainingResources = trainingData.trainingResources
+              .filter(tr => tr._id !== data.deleteOneTrainingResource._id)
+
+            client.writeQuery({
+              ...trainingQuery,
+              data: { ...trainingData, trainingResources },
+            })
+          }
         },
       })
     },
-    [deleteOneTrainingResource, trainings]
+    [deleteOneTrainingResource]
   )
 
   return mutate

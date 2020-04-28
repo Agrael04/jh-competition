@@ -16,44 +16,52 @@ export interface IGetTrainingResponse {
     type: string
     traineesCount: number
     note: string
-
-    resources: Array<{
-      _id: string
-      __typename: string
-
-      startTime: number
-      endTime: number
-      resource: {
-        _id: string
-        __typename: string
-      }
-      trainer: {
-        _id: string
-        color: number
-        avatarSrc: string
-        __typename: string
-      }
-      records: Array<{
-        _id: string
-        __typename: string
-      }>
-    }>
-    records: Array<{
-      _id: string
-      contact: {
-        _id: string
-        fullName: string
-        __typename: string
-      }
-      attendant: {
-        _id: string
-        fullName: string
-        __typename: string
-      }
-      status: string
-      __typename: string
-    }>
   }
+  trainingRecords: Array<{
+    _id: string
+    contact: {
+      _id: string
+      fullName: string
+      __typename: string
+    }
+    attendant: {
+      _id: string
+      fullName: string
+      __typename: string
+    }
+    resource: {
+      _id: string
+      __typename: string
+    }
+    training: {
+      _id: string
+      fullName: string
+      __typename: string
+    }
+    status: string
+    __typename: string
+  }>
+  trainingResources: Array<{
+    _id: string
+    __typename: string
+
+    startTime: number
+    endTime: number
+    resource: {
+      _id: string
+      __typename: string
+    }
+    trainer: {
+      _id: string
+      color: number
+      avatarSrc: string
+      __typename: string
+    }
+    training: {
+      _id: string
+      __typename: string
+    }
+  }>
 }
 
 export const GET_TRAINING = gql`
@@ -70,34 +78,40 @@ export const GET_TRAINING = gql`
       type
       traineesCount
       note
-      resources {
+    }
+    trainingResources(query: { training: { _id: $id }}) {
+      _id
+      startTime
+      endTime
+      resource {
         _id
-        startTime
-        endTime
-        resource {
-          _id
-        }
-        trainer {
-          _id
-          color
-          avatarSrc
-        }
-        records {
-          _id
-        }
       }
-      records {
+      trainer {
         _id
-        contact {
-          _id
-          fullName
-        }
-        attendant {
-          _id
-          fullName
-        }
-        status
+        color
+        avatarSrc
       }
+      training {
+        _id
+      }
+    }
+    trainingRecords(query: { training: { _id: $id }}) {
+      _id
+      contact {
+        _id
+        fullName
+      }
+      attendant {
+        _id
+        fullName
+      }
+      training {
+        _id
+      }
+      resource {
+        _id
+      }
+      status
     }
   }
 `
@@ -123,28 +137,31 @@ export const convertTrainingToInput = (training: IGetTrainingResponse['training'
   type: training.type,
   traineesCount: training.traineesCount,
   note: training.note,
-
-  resources: training.resources.map(r => ({
-    _id: r._id,
-    resource: { link: r.resource._id },
-    trainer: r.trainer ? { link: r.trainer._id } : undefined,
-    startTime: r.startTime,
-    endTime: r.endTime,
-    records: { link: r.records?.map(rec => rec._id) || [] },
-  })),
-
-  records: training.records.map(record => ({
-    _id: record._id,
-    status: record.status,
-    contact: record.contact ? {
-      link: record.contact._id,
-      fullName: record.contact.fullName,
-    } : undefined,
-    attendant: record.attendant ? {
-      link: record.attendant._id,
-      fullName: record.attendant.fullName,
-    } : undefined,
-  })),
 })
+
+export const convertTrainingResourcesToInput = (resources: IGetTrainingResponse['trainingResources']) => resources.map(r => ({
+  _id: r._id,
+  resource: { link: r.resource._id },
+  trainer: r.trainer ? { link: r.trainer._id } : undefined,
+  training: { link: r.training._id },
+  startTime: r.startTime,
+  endTime: r.endTime,
+  records: { link: [] },
+}))
+
+export const convertTrainingRecordsToInput = (resources: IGetTrainingResponse['trainingRecords']) => resources.map(r => ({
+  _id: r._id,
+  resource: { link: r.resource._id },
+  training: { link: r.training._id },
+  status: r.status,
+  contact: r.contact ? {
+    link: r.contact._id,
+    fullName: r.contact.fullName,
+  } : undefined,
+  attendant: r.attendant ? {
+    link: r.attendant._id,
+    fullName: r.attendant.fullName,
+  } : undefined,
+}))
 
 export default useGetTrainingQuery

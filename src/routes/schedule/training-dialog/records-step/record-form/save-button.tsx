@@ -8,9 +8,8 @@ import useCreateTrainingRecord from '../../../mutations/create-training-record'
 
 export default function ResourcesBlock() {
   const actions = useActions()
-  const { recordForm, trainingForm, records, mode, recordMode } = useSelector(state => ({
+  const { recordForm, records, mode, recordMode } = useSelector(state => ({
     recordForm: state.schedule.trainingDialog.recordForm,
-    trainingForm: state.schedule.trainingDialog.trainingForm,
     recordMode: state.schedule.trainingDialog.recordMode,
     mode: state.schedule.trainingDialog.mode,
     records: state.schedule.trainingDialog.records,
@@ -23,17 +22,18 @@ export default function ResourcesBlock() {
     async () => {
       if (mode === 'update') {
         if (recordMode === 'update') {
-          await updateTrainingRecord(recordForm!)
+          const r = records.find(record => record._id === recordForm?._id)
+          await updateTrainingRecord(recordForm!, r?.resource.link)
         }
 
         if (recordMode === 'create') {
-          await createTrainingRecord(trainingForm!, records!, recordForm!)
+          await createTrainingRecord(recordForm!)
         }
       }
 
-      actions.schedule.trainingDialog.saveResource()
+      actions.schedule.trainingDialog.saveRecord()
     },
-    [actions, createTrainingRecord, updateTrainingRecord, trainingForm, recordForm, mode, recordMode, records]
+    [actions, createTrainingRecord, updateTrainingRecord, recordForm, mode, recordMode, records]
   )
 
   return (

@@ -60,6 +60,9 @@ export interface ITrainingResourceForm {
   records: {
     link: string[]
   }
+  training: {
+    link: string
+  }
 }
 
 export interface ITrainingRecordForm {
@@ -74,6 +77,9 @@ export interface ITrainingRecordForm {
   }
   status?: string
   resource: {
+    link: string
+  }
+  training: {
     link: string
   }
 }

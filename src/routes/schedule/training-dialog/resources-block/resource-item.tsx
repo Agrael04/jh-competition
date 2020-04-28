@@ -44,12 +44,12 @@ export default function ResourceItem({ id }: IProps) {
   const remove = React.useCallback(
     async () => {
       if (mode === 'update') {
-        await deleteTrainingResource(trainingForm, id)
+        await deleteTrainingResource(trainingForm, resource)
       }
 
       actions.schedule.trainingDialog.removeResource(id)
     },
-    [actions, id, deleteTrainingResource, mode, trainingForm]
+    [actions, resource, id, deleteTrainingResource, mode, trainingForm]
   )
 
   const label = React.useMemo(
