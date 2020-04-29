@@ -17,8 +17,9 @@ const selector = () => (state: IStoreState) => state.schedule.trainingDialog.rec
 
 export default function RecordSelect({ name, label }: IProps) {
   const actions = useActions()
-  const { resources } = useSelector(state => ({
+  const { resources, records } = useSelector(state => ({
     resources: state.schedule.trainingDialog.resources,
+    records: state.schedule.trainingDialog.records,
   }))
   const { data } = useGetGymsQuery()
 
@@ -34,11 +35,11 @@ export default function RecordSelect({ name, label }: IProps) {
       const name = data?.resources.find(r => r._id === resource.resource.link)?.name
       const st = times.find(t => t.id === resource.startTime)?.label
       const et = times.find(t => t.id === resource.endTime)?.label
-      const recordsLength = resource.records.link.length
+      const recordsLength = records.filter(r => r.resource.link === resource._id).length
 
       return `${name}, ${st} - ${et}, ${recordsLength} записей`
     },
-    [data]
+    [data, records]
   )
 
   return (
