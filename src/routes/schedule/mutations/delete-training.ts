@@ -3,9 +3,9 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAINING } from '../queries/get-training'
-import { GET_TRAININGS, IGetTrainingsResponse } from '../queries/get-trainings'
+import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
 import { GET_TRAINING_RESOURCE } from '../queries/get-training-resource'
-import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
+import { ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
 
 export const DELETE_TRAINING = gql`
   mutation deleteTraining ($_id: ObjectId!) {
@@ -25,10 +25,48 @@ const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
 
   const mutate = React.useCallback(
-    (training: ITrainingForm) => {
+    (training: ITrainingForm, resources: ITrainingResourceForm[]) => {
       return deleteTraining({
         variables: {
           _id: training._id,
+        },
+        update: (client, { data }) => {
+          const trainingQuery = { query: GET_TRAINING, variables: { id: data.deleteOneTraining._id } }
+
+          client.writeQuery({
+            ...trainingQuery,
+            data: {
+              training: null,
+              trainingRecords: [],
+              trainingResources: [],
+            },
+          })
+
+          const resourcesQuery = { query: GET_TRAINING_RESOURCES, variables: { date: new Date(training.date) } }
+
+          const resourcesData = client.readQuery<IGetTrainingResourcesResponse>(resourcesQuery)
+
+          if (resourcesData) {
+            const trainingResources = resourcesData.trainingResources
+              .filter(tr => !resources.find(r => r._id === tr._id))
+
+            client.writeQuery({
+              ...resourcesQuery,
+              data: { ...resourcesData, trainingResources },
+            })
+          }
+
+          resources.forEach(resource => {
+            const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: resource._id } }
+
+            client.writeQuery({
+              ...resourceQuery,
+              data: {
+                trainingRecords: [],
+                trainingResource: null,
+              },
+            })
+          })
         },
       })
     },
