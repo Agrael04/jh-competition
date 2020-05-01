@@ -66,11 +66,9 @@ export interface ITrainingRecordForm {
   _id?: string
   contact: {
     link: string
-    fullName: string
   }
   attendant?: {
     link: string
-    fullName: string
   }
   status?: string
   resource: {

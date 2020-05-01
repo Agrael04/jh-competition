@@ -13,6 +13,7 @@ interface IProps {
   fieldSelector: (name: any) => (state: IStoreState) => any
   [x: string]: any
   label: string
+  initialFilter?: string
 }
 
 const renderInput = (loading: boolean, label: string) => (params: any) => (
@@ -33,7 +34,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
   />
 )
 
-export default function TraineeSuggester({ name, onChange, fieldSelector, label }: IProps) {
+export default function TraineeSuggester({ name, onChange, fieldSelector, label, initialFilter }: IProps) {
   const { options, loading } = useSelector(state => ({
     loading: state.schedule.clientSuggester.loading,
     options: state.schedule.clientSuggester.options,
@@ -41,13 +42,14 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label 
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (target: any, option: ISearchedTrainee | null) => {
-    onChange(name, { fullName: option?.fullName, link: option?._id })
+    onChange(name, { link: option?._id })
+    setFilter(option?.fullName || '')
   }
 
   const actions = useActions()
 
   const [opened, setOpened] = React.useState(false)
-  const [filter, setFilter] = React.useState<string>('')
+  const [filter, setFilter] = React.useState<string>(initialFilter || '')
 
   const handleInputChange = (e: any) => {
     if (e) {
@@ -66,9 +68,9 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label 
 
   React.useEffect(
     () => {
-      if (value) {
-        setFilter(value.fullName)
-      }
+      // if (value) {
+      //   setFilter(value.fullName)
+      // }
     },
     [value]
   )

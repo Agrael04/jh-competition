@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button'
 import TextField from 'containers/text-field'
 import Select from 'containers/select'
 
+import useGetTrainingQuery from '../../../queries/get-training'
+
 import UserSuggester from './user-suggester'
 import ResourceSelect from './resource-select'
 
@@ -28,6 +30,11 @@ const fieldSelector = (name: any) => (state: IStoreState) => {
 export default function RecordsBlock() {
   const actions = useActions()
   const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm)
+  const { _id, recordId } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+    recordId: state.schedule.trainingDialog.recordForm?._id,
+  }))
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const handleChange = React.useCallback(
     (name, value) => {
@@ -37,6 +44,12 @@ export default function RecordsBlock() {
   )
 
   const resetRecord = actions.schedule.trainingDialog.resetRecord
+
+  const record = React.useMemo(
+    () => {
+      return trainingQuery.data?.trainingRecords.find(tr => tr._id === recordId)
+    }, [trainingQuery, recordId]
+  )
 
   if (!isFormActive) {
     return null
@@ -50,6 +63,7 @@ export default function RecordsBlock() {
           label='Контактное лицо'
           onChange={handleChange}
           fieldSelector={fieldSelector}
+          initialFilter={record?.contact?.fullName}
         />
       </Grid>
       <Grid item={true} lg={3} container={true}>
@@ -65,6 +79,7 @@ export default function RecordsBlock() {
           label='Физическое лицо'
           onChange={handleChange}
           fieldSelector={fieldSelector}
+          initialFilter={record?.attendant?.fullName}
         />
       </Grid>
       <Grid item={true} lg={3}>

@@ -157,11 +157,9 @@ export const convertTrainingRecordToInput = (r: IGetTrainingResponse['trainingRe
   status: r.status,
   contact: r.contact ? {
     link: r.contact._id,
-    fullName: r.contact.fullName,
   } : undefined,
   attendant: r.attendant ? {
     link: r.attendant._id,
-    fullName: r.attendant.fullName,
   } : undefined,
 })
 
