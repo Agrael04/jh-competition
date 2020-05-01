@@ -76,7 +76,10 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
   )
 
   const open = () => setOpened(true)
-  const close = () => setOpened(false)
+  const close = () => {
+    setFilter(initialFilter || '')
+    setOpened(false)
+  }
 
   const mapOptionLabel = (option: ISearchedTrainee) => option.fullName
 
