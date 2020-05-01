@@ -7,9 +7,9 @@ export const open = (mode: string, _id: string) => ({
   payload: { mode, _id },
 })
 
-export const initialize = (training: Partial<ITrainingForm>, records: Array<Partial<ITrainingRecordForm>>, resources: Array<Partial<ITrainingResourceForm>>) => ({
+export const initialize = (training: Partial<ITrainingForm>, resource?: Partial<ITrainingResourceForm>) => ({
   type: constants.INITIALIZE,
-  payload: { training, records, resources },
+  payload: { training, resource },
 })
 
 export const close = () => ({
@@ -22,9 +22,9 @@ export const updateField = (field: string, value: any) => ({
   payload: { field, value },
 })
 
-export const openResource = (_id?: string) => ({
+export const openResource = (resource?: Partial<ITrainingResourceForm>) => ({
   type: constants.OPEN_RESOURCE,
-  payload: { _id },
+  payload: { resource },
 })
 
 export const setResource = (resource: ITrainingResourceForm | null, mode: 'create' | 'update' | null) => ({
@@ -32,23 +32,18 @@ export const setResource = (resource: ITrainingResourceForm | null, mode: 'creat
   payload: { resource, mode },
 })
 
+export const resetResource = () => ({
+  type: constants.RESET_RESOURCE,
+})
+
 export const updateResourceField = (field: string, value: any) => ({
   type: constants.UPDATE_RESOURCE_FIELD,
   payload: { field, value },
 })
 
-export const saveResource = () => ({
-  type: constants.SAVE_RESOURCE,
-})
-
-export const removeResource = (_id: string) => ({
-  type: constants.REMOVE_RESOURCE,
-  payload: { _id },
-})
-
-export const openRecord = (_id?: string) => ({
+export const openRecord = (record?: Partial<ITrainingRecordForm>) => ({
   type: constants.OPEN_RECORD,
-  payload: { _id },
+  payload: { record },
 })
 
 export const setRecord = (record: ITrainingRecordForm | null, mode: 'create' | 'update' | null) => ({
@@ -56,18 +51,18 @@ export const setRecord = (record: ITrainingRecordForm | null, mode: 'create' | '
   payload: { record, mode },
 })
 
+export const resetRecord = () => ({
+  type: constants.RESET_RECORD,
+})
+
 export const updateRecordField = (field: string, value: any) => ({
   type: constants.UPDATE_RECORD_FIELD,
   payload: { field, value },
 })
 
-export const saveRecord = () => ({
-  type: constants.SAVE_RECORD,
-})
-
-export const removeRecord = (_id: string) => ({
-  type: constants.REMOVE_RECORD,
-  payload: { _id },
+export const setStep = (step: number) => ({
+  type: constants.SET_STEP,
+  payload: { step },
 })
 
 export const actions = {
@@ -79,15 +74,15 @@ export const actions = {
 
   openResource,
   setResource,
+  resetResource,
   updateResourceField,
-  saveResource,
-  removeResource,
 
   openRecord,
   setRecord,
+  resetRecord,
   updateRecordField,
-  saveRecord,
-  removeRecord,
+
+  setStep,
 }
 
 export default actions

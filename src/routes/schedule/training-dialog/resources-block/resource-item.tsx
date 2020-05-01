@@ -12,7 +12,7 @@ import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import times from 'data/times'
-import useGetGymsQuery from '../../queries/get-gyms'
+import useGetTrainingQuery, { convertTrainingResourceToInput } from '../../queries/get-training'
 
 import useDeleteTrainingResource from '../../mutations/delete-training-resource'
 
@@ -26,45 +26,40 @@ export default function ResourceItem({ id }: IProps) {
   const classes = useStyles()
 
   const actions = useActions()
-  const { isActive, trainingForm, mode, resource } = useSelector(state => ({
+  const { isActive, trainingForm } = useSelector(state => ({
     trainingForm: state.schedule.trainingDialog.trainingForm,
-    mode: state.schedule.trainingDialog.mode,
     isActive: state.schedule.trainingDialog.resourceForm?._id === id,
-    resource: state.schedule.trainingDialog.resources.find(r => r._id === id)!,
   }))
-  const { data } = useGetGymsQuery()
+  const trainingQuery = useGetTrainingQuery(trainingForm._id)
+
+  const resource = trainingQuery?.data?.trainingResources.find(r => r._id === id)
 
   const deleteTrainingResource = useDeleteTrainingResource()
 
   const activate = React.useCallback(
-    () => actions.schedule.trainingDialog.openResource(id),
-    [actions, id]
+    () => actions.schedule.trainingDialog.openResource(
+      convertTrainingResourceToInput(resource!)
+    ),
+    [actions, resource]
   )
 
   const remove = React.useCallback(
     async () => {
-      if (mode === 'update') {
-        await deleteTrainingResource(trainingForm, resource)
-      }
-
-      actions.schedule.trainingDialog.removeResource(id)
+      await deleteTrainingResource(trainingForm, id)
     },
-    [actions, resource, id, deleteTrainingResource, mode, trainingForm]
+    [deleteTrainingResource, trainingForm, id]
   )
 
   const label = React.useMemo(
     () => {
-      const st = times.find(t => t.id === resource.startTime)?.label
-      const et = times.find(t => t.id === resource.endTime)?.label
+      const st = times.find(t => t.id === resource?.startTime)?.label
+      const et = times.find(t => t.id === resource?.endTime)?.label
+      const trainer = resource?.trainer
+      const trainerLabel = trainer ? `${trainer.firstName} ${trainer.lastName},` : ''
 
-      return `${st} - ${et}, ${resource.records.link.length} записей`
+      return `${trainerLabel} ${st} - ${et}`
     },
     [resource]
-  )
-
-  const name = React.useMemo(
-    () => data?.resources.find(r => r._id === resource.resource.link)?.name,
-    [resource, data]
   )
 
   return (
@@ -75,7 +70,7 @@ export default function ResourceItem({ id }: IProps) {
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={name}
+        primary={resource?.resource.name}
         secondary={label}
       />
       <ListItemSecondaryAction>

@@ -11,7 +11,7 @@ interface IProps {
   label: string
 }
 
-const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.resource.link
+const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.resource?.link
 
 export default function ResourceSelect({ name, label }: IProps) {
   const actions = useActions()

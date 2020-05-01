@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
-import { ITrainingRecordForm } from 'interfaces/training'
 
 export const DELETE_TRAINING_RECORD = gql`
   mutation deleteTrainingRecord ($_id: ObjectId!) {
@@ -18,7 +17,7 @@ const useDeleteTrainingRecord = () => {
   const [deleteOneTrainingRecord] = useMutation(DELETE_TRAINING_RECORD)
 
   const mutate = React.useCallback(
-    (record: ITrainingRecordForm) => {
+    (record: any) => {
       return deleteOneTrainingRecord({
         variables: { _id: record._id },
         update: (client, { data }) => {

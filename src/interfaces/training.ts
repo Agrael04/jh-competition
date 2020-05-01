@@ -57,9 +57,6 @@ export interface ITrainingResourceForm {
   }
   startTime: number
   endTime: number
-  records: {
-    link: string[]
-  }
   training: {
     link: string
   }

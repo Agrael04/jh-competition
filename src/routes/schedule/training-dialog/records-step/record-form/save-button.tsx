@@ -6,34 +6,37 @@ import Button from '@material-ui/core/Button'
 import useUpdateTrainingRecord from '../../../mutations/update-training-record'
 import useCreateTrainingRecord from '../../../mutations/create-training-record'
 
+import useGetTrainingQuery from '../../../queries/get-training'
+
 export default function ResourcesBlock() {
   const actions = useActions()
-  const { recordForm, records, mode, recordMode } = useSelector(state => ({
+  const { recordForm, recordMode } = useSelector(state => ({
     recordForm: state.schedule.trainingDialog.recordForm,
     recordMode: state.schedule.trainingDialog.recordMode,
-    mode: state.schedule.trainingDialog.mode,
-    records: state.schedule.trainingDialog.records,
   }))
+
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+  }))
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const updateTrainingRecord = useUpdateTrainingRecord()
   const createTrainingRecord = useCreateTrainingRecord()
 
   const save = React.useCallback(
     async () => {
-      if (mode === 'update') {
-        if (recordMode === 'update') {
-          const r = records.find(record => record._id === recordForm?._id)
-          await updateTrainingRecord(recordForm!, r?.resource.link)
-        }
-
-        if (recordMode === 'create') {
-          await createTrainingRecord(recordForm!)
-        }
+      if (recordMode === 'update') {
+        const r = trainingQuery.data?.trainingRecords.find(record => record._id === recordForm?._id)
+        await updateTrainingRecord(recordForm!, r?.resource._id)
       }
 
-      actions.schedule.trainingDialog.saveRecord()
+      if (recordMode === 'create') {
+        await createTrainingRecord(recordForm!)
+      }
+
+      actions.schedule.trainingDialog.resetRecord()
     },
-    [actions, createTrainingRecord, updateTrainingRecord, recordForm, mode, recordMode, records]
+    [actions, createTrainingRecord, updateTrainingRecord, recordForm, recordMode, trainingQuery]
   )
 
   return (

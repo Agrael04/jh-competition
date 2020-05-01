@@ -6,10 +6,9 @@ import Button from '@material-ui/core/Button'
 import useDeleteTraining from '../mutations/delete-training'
 
 export default function TrainingDialog() {
-  const { mode, trainingForm, resources } = useSelector(state => ({
+  const { mode, trainingForm } = useSelector(state => ({
     mode: state.schedule.trainingDialog.mode,
     trainingForm: state.schedule.trainingDialog.trainingForm,
-    resources: state.schedule.trainingDialog.resources,
   }))
 
   const actions = useActions()
@@ -17,11 +16,11 @@ export default function TrainingDialog() {
 
   const remove = React.useCallback(
     async () => {
-      await deleteTraining(trainingForm, resources)
+      await deleteTraining(trainingForm)
 
       actions.schedule.trainingDialog.close()
     },
-    [actions, trainingForm, resources, deleteTraining]
+    [actions, trainingForm, deleteTraining]
   )
 
   if (mode === 'create') {

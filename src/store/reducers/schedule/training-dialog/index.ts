@@ -6,18 +6,20 @@ import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   opened: boolean
-  mode: 'create' | 'update' | null
   _id: string | null
 
   trainingForm: ITrainingForm
+  mode: 'create' | 'update' | null
 
-  resources: ITrainingResourceForm[]
+  // resources: ITrainingResourceForm[]
   resourceForm: ITrainingResourceForm | null
   resourceMode: 'create' | 'update' | null
 
-  records: ITrainingRecordForm[]
+  // records: ITrainingRecordForm[]
   recordForm: ITrainingRecordForm | null
   recordMode: 'create' | 'update' | null
+
+  step: number
 }
 
 const initialState: IState = {
@@ -35,15 +37,14 @@ const initialState: IState = {
     traineesCount: 1,
     note: '',
   },
-  // recordsForm: [],
 
-  resources: [],
   resourceForm: null,
   resourceMode: null,
 
-  records: [],
   recordForm: null,
   recordMode: null,
+
+  step: 0,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -54,6 +55,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
         opened: true,
         mode: payload.mode,
         _id: payload._id,
+        step: 0,
       }
     }
 
@@ -73,10 +75,8 @@ export default (state = initialState, { type, payload }: { type: string, payload
           note: payload.training.note,
         },
 
-        resources: payload.resources,
-        records: payload.records,
-        resourceForm: null,
-        resourceMode: null,
+        resourceForm: payload.resource,
+        resourceMode: 'create',
         recordForm: null,
         recordMode: null,
       }
@@ -109,6 +109,14 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
+    case constants.RESET_RESOURCE: {
+      return {
+        ...state,
+        resourceForm: null,
+        resourceMode: null,
+      }
+    }
+
     case constants.UPDATE_RESOURCE_FIELD: {
       return {
         ...state,
@@ -119,45 +127,19 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.SAVE_RESOURCE: {
-      if (state.resourceMode === 'create') {
-        return {
-          ...state,
-          resources: [
-            ...state.resources,
-            state.resourceForm!,
-          ],
-          resourceForm: null,
-          resourceMode: null,
-        }
-      }
-
-      return {
-        ...state,
-        resources: state.resources.map(item => {
-          if (item._id === state.resourceForm?._id) {
-            return state.resourceForm!
-          }
-
-          return item
-        }),
-        resourceForm: null,
-        resourceMode: null,
-      }
-    }
-
-    case constants.REMOVE_RESOURCE: {
-      return {
-        ...state,
-        resources: state.resources.filter(item => item._id !== payload._id),
-      }
-    }
-
     case constants.SET_RECORD: {
       return {
         ...state,
         recordForm: payload.record,
         recordMode: payload.mode,
+      }
+    }
+
+    case constants.RESET_RECORD: {
+      return {
+        ...state,
+        recordForm: null,
+        recordMode: null,
       }
     }
 
@@ -171,37 +153,10 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.SAVE_RECORD: {
-      if (state.recordMode === 'create') {
-        return {
-          ...state,
-          records: [
-            ...state.records,
-            state.recordForm!,
-          ],
-          recordForm: null,
-          recordMode: null,
-        }
-      }
-
+    case constants.SET_STEP: {
       return {
         ...state,
-        records: state.records.map(item => {
-          if (item._id === state.recordForm?._id) {
-            return state.recordForm!
-          }
-
-          return item
-        }),
-        recordForm: null,
-        recordMode: null,
-      }
-    }
-
-    case constants.REMOVE_RECORD: {
-      return {
-        ...state,
-        records: state.records.filter(item => item._id !== payload._id),
+        step: payload.step,
       }
     }
 

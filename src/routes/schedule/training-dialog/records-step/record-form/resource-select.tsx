@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from 'containers/select'
 
 import times from 'data/times'
-import useGetGymsQuery from '../../../queries/get-gyms'
+import useGetTrainingQuery from '../../../queries/get-training'
 
 interface IProps {
   name: string
@@ -17,11 +17,10 @@ const selector = () => (state: IStoreState) => state.schedule.trainingDialog.rec
 
 export default function RecordSelect({ name, label }: IProps) {
   const actions = useActions()
-  const { resources, records } = useSelector(state => ({
-    resources: state.schedule.trainingDialog.resources,
-    records: state.schedule.trainingDialog.records,
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
   }))
-  const { data } = useGetGymsQuery()
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const handleChange = React.useCallback(
     (name, link: string) => {
@@ -32,14 +31,14 @@ export default function RecordSelect({ name, label }: IProps) {
 
   const getResouceLabel = React.useCallback(
     resource => {
-      const name = data?.resources.find(r => r._id === resource.resource.link)?.name
+      const name = resource?.resource?.name
       const st = times.find(t => t.id === resource.startTime)?.label
       const et = times.find(t => t.id === resource.endTime)?.label
-      const recordsLength = records.filter(r => r.resource.link === resource._id).length
+      const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource._id === resource._id).length
 
       return `${name}, ${st} - ${et}, ${recordsLength} записей`
     },
-    [data, records]
+    [trainingQuery]
   )
 
   return (
@@ -52,7 +51,7 @@ export default function RecordSelect({ name, label }: IProps) {
       variant='outlined'
     >
       {
-        resources.map(r => (
+        trainingQuery.data?.trainingResources.map(r => (
           <MenuItem value={r._id} key={r._id}>
             {getResouceLabel(r)}
           </MenuItem>

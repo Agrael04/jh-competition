@@ -22,19 +22,17 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
       date,
     }
 
-    const resources = [
-      {
-        _id: new BSON.ObjectID().toString(),
-        startTime: action.payload.time,
-        endTime: action.payload.time + 2,
-        resource: { link: action.payload.resource },
-        trainer: undefined,
-        records: { link: [] },
-        training: { link: _id },
-      },
-    ]
+    const resource = {
+      _id: new BSON.ObjectID().toString(),
+      startTime: action.payload.time,
+      endTime: action.payload.time + 2,
+      resource: { link: action.payload.resource },
+      trainer: undefined,
+      records: { link: [] },
+      training: { link: _id },
+    }
 
-    yield put(actions.trainingDialog.initialize(training, [], resources))
+    yield put(actions.trainingDialog.initialize(training, resource))
   } catch (error) {
     console.log(error)
   }

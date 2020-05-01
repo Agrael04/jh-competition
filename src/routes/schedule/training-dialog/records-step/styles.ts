@@ -7,4 +7,8 @@ export default makeStyles((theme: Theme) => ({
   avatar: {
     background: theme.palette.primary.main,
   },
+  list: {
+    maxHeight: theme.spacing(40),
+    overflowY: 'auto',
+  },
 }))

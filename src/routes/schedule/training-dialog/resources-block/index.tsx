@@ -14,12 +14,17 @@ import AddOutlined from '@material-ui/icons/AddOutlined'
 import ResourceItem from './resource-item'
 import ResourceForm from './resource-form'
 
+import useGetTrainingQuery from '../../queries/get-training'
+
 import useStyles from './styles'
 
 export default function ResourcesBlock() {
   const classes = useStyles()
   const actions = useActions()
-  const trainingResources = useSelector(state => state.schedule.trainingDialog.resources)
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+  }))
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const activate = React.useCallback(
     async () => {
@@ -43,7 +48,7 @@ export default function ResourcesBlock() {
             />
           </ListItem>
           {
-            trainingResources.map(tr => (
+            trainingQuery.data?.trainingResources.map(tr => (
               <ResourceItem key={tr._id} id={tr._id!} />
             ))
           }

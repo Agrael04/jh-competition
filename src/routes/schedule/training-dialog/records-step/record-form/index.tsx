@@ -36,6 +36,8 @@ export default function RecordsBlock() {
     [actions]
   )
 
+  const resetRecord = actions.schedule.trainingDialog.resetRecord
+
   if (!isFormActive) {
     return null
   }
@@ -100,7 +102,7 @@ export default function RecordsBlock() {
         />
       </Grid>
       <Grid item={true} lg={12} container={true} justify='space-between'>
-        <Button color='primary'>
+        <Button color='primary' onClick={resetRecord}>
           Отменить
         </Button>
         <SaveButton />

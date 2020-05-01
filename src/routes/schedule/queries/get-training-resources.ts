@@ -12,6 +12,10 @@ export interface IGetTrainingResourcesResponse {
       _id: string
       __typename: string
     }
+    trainer: {
+      _id: string
+      __typename: string
+    }
   }>
 }
 
@@ -22,6 +26,9 @@ export const GET_TRAINING_RESOURCES = gql`
       startTime
       endTime
       resource {
+        _id
+      }
+      trainer {
         _id
       }
     }

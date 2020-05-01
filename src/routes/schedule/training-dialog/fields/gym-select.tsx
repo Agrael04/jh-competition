@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
 import useGetGymsQuery from '../../queries/get-gyms'
+import useGetTrainingQuery from '../../queries/get-training'
 
 interface IProps {
   name: string
@@ -16,7 +17,10 @@ const selector = () => (state: IStoreState) => state.schedule.trainingDialog.tra
 export default function GymSelect({ name, label }: IProps) {
   const actions = useActions()
   const gyms = useGetGymsQuery()
-  const trainingResources = useSelector(state => state.schedule.trainingDialog.resources)
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+  }))
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const handleChange = React.useCallback(
     (name, link) => {
@@ -33,7 +37,7 @@ export default function GymSelect({ name, label }: IProps) {
       label={label}
       fullWidth={true}
       variant='outlined'
-      disabled={trainingResources.length > 0}
+      disabled={trainingQuery.data?.trainingResources.length! > 0}
       helperText='Нельзя сменить зал при активных ресурсах'
     >
       {

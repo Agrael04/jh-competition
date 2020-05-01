@@ -2,10 +2,10 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { GET_TRAINING } from '../queries/get-training'
+import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
 import { GET_TRAINING_RESOURCE } from '../queries/get-training-resource'
-import { ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
+import { ITrainingForm } from 'interfaces/training'
 
 export const DELETE_TRAINING = gql`
   mutation deleteTraining ($_id: ObjectId!) {
@@ -25,13 +25,15 @@ const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
 
   const mutate = React.useCallback(
-    (training: ITrainingForm, resources: ITrainingResourceForm[]) => {
+    (training: ITrainingForm) => {
       return deleteTraining({
         variables: {
           _id: training._id,
         },
         update: (client, { data }) => {
           const trainingQuery = { query: GET_TRAINING, variables: { id: data.deleteOneTraining._id } }
+
+          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
 
           client.writeQuery({
             ...trainingQuery,
@@ -48,7 +50,7 @@ const useDeleteTraining = () => {
 
           if (resourcesData) {
             const trainingResources = resourcesData.trainingResources
-              .filter(tr => !resources.find(r => r._id === tr._id))
+              .filter(tr => !trainingData?.trainingResources.find(r => r._id === tr._id))
 
             client.writeQuery({
               ...resourcesQuery,
@@ -56,7 +58,7 @@ const useDeleteTraining = () => {
             })
           }
 
-          resources.forEach(resource => {
+          trainingData?.trainingResources.forEach(resource => {
             const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: resource._id } }
 
             client.writeQuery({

@@ -31,6 +31,8 @@ export default function ResourcesBlock() {
     [actions]
   )
 
+  const resetResource = actions.schedule.trainingDialog.resetResource
+
   if (!isFormActive) {
     return null
   }
@@ -66,7 +68,7 @@ export default function ResourcesBlock() {
         />
       </Grid>
       <Grid item={true} lg={12} container={true} justify='space-between'>
-        <Button color='primary'>
+        <Button color='primary' onClick={resetResource}>
           Отменить
         </Button>
         <SaveButton />

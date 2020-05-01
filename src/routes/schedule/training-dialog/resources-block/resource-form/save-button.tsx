@@ -8,11 +8,10 @@ import useCreateTrainingResource from '../../../mutations/create-training-resour
 
 export default function ResourcesBlock() {
   const actions = useActions()
-  const { resourceForm, trainingForm, mode, resourceMode } = useSelector(state => ({
+  const { resourceForm, trainingForm, resourceMode } = useSelector(state => ({
     resourceForm: state.schedule.trainingDialog.resourceForm,
     trainingForm: state.schedule.trainingDialog.trainingForm,
     resourceMode: state.schedule.trainingDialog.resourceMode,
-    mode: state.schedule.trainingDialog.mode,
   }))
 
   const updateTrainingResource = useUpdateTrainingResource()
@@ -20,19 +19,17 @@ export default function ResourcesBlock() {
 
   const save = React.useCallback(
     async () => {
-      if (mode === 'update') {
-        if (resourceMode === 'update') {
-          await updateTrainingResource(resourceForm!)
-        }
-
-        if (resourceMode === 'create') {
-          await createTrainingResource(trainingForm!, resourceForm!)
-        }
+      if (resourceMode === 'update') {
+        await updateTrainingResource(resourceForm!)
       }
 
-      actions.schedule.trainingDialog.saveResource()
+      if (resourceMode === 'create') {
+        await createTrainingResource(trainingForm!, resourceForm!)
+      }
+
+      actions.schedule.trainingDialog.resetResource()
     },
-    [actions, createTrainingResource, updateTrainingResource, trainingForm, resourceForm, mode, resourceMode]
+    [actions, createTrainingResource, updateTrainingResource, trainingForm, resourceForm, resourceMode]
   )
 
   return (

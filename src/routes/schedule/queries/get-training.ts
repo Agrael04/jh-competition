@@ -49,12 +49,13 @@ export interface IGetTrainingResponse {
     endTime: number
     resource: {
       _id: string
+      name: string
       __typename: string
     }
     trainer: {
       _id: string
-      color: number
-      avatarSrc: string
+      firstName: string
+      lastName: string
       __typename: string
     }
     training: {
@@ -85,11 +86,12 @@ export const GET_TRAINING = gql`
       endTime
       resource {
         _id
+        name
       }
       trainer {
         _id
-        color
-        avatarSrc
+        firstName
+        lastName
       }
       training {
         _id
@@ -116,7 +118,7 @@ export const GET_TRAINING = gql`
   }
 `
 
-export const useGetTrainingQuery = (id: string | null | undefined, skip: boolean) => {
+export const useGetTrainingQuery = (id: string | null | undefined, skip?: boolean) => {
   const result = useQuery<IGetTrainingResponse>(GET_TRAINING, {
     variables: { id },
     skip: !id || skip,
@@ -139,17 +141,16 @@ export const convertTrainingToInput = (training: IGetTrainingResponse['training'
   note: training.note,
 })
 
-export const convertTrainingResourcesToInput = (resources: IGetTrainingResponse['trainingResources']) => resources.map(r => ({
+export const convertTrainingResourceToInput = (r: IGetTrainingResponse['trainingResources'][0]) => ({
   _id: r._id,
   resource: { link: r.resource._id },
   trainer: r.trainer ? { link: r.trainer._id } : undefined,
   training: { link: r.training._id },
   startTime: r.startTime,
   endTime: r.endTime,
-  records: { link: [] },
-}))
+})
 
-export const convertTrainingRecordsToInput = (resources: IGetTrainingResponse['trainingRecords']) => resources.map(r => ({
+export const convertTrainingRecordToInput = (r: IGetTrainingResponse['trainingRecords'][0]) => ({
   _id: r._id,
   resource: { link: r.resource._id },
   training: { link: r.training._id },
@@ -162,6 +163,6 @@ export const convertTrainingRecordsToInput = (resources: IGetTrainingResponse['t
     link: r.attendant._id,
     fullName: r.attendant.fullName,
   } : undefined,
-}))
+})
 
 export default useGetTrainingQuery

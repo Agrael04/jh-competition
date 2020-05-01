@@ -32,7 +32,7 @@ import SubmitButton from './submit-button'
 import SubmitUpdateButton from './submit-update-button'
 import DeleteButton from './delete-button'
 
-import useGetTrainingQuery, { convertTrainingToInput, convertTrainingResourcesToInput, convertTrainingRecordsToInput } from '../queries/get-training'
+import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
 
 const LAST_STEP = 2
 
@@ -66,13 +66,13 @@ type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
 
 export default function TrainingDialog() {
-  const { opened, mode, _id } = useSelector(state => ({
+  const { opened, mode, _id, step } = useSelector(state => ({
     opened: state.schedule.trainingDialog.opened,
     mode: state.schedule.trainingDialog.mode,
     _id: state.schedule.trainingDialog._id,
+    step: state.schedule.trainingDialog.step,
   }))
 
-  const [activeStep, setActiveStep] = React.useState(0)
   const steps = ['Тренировка', 'Ресурсы', 'Записи']
 
   const trainingQuery = useGetTrainingQuery(_id!, mode === 'create')
@@ -104,15 +104,15 @@ export default function TrainingDialog() {
     () => {
       if (trainingQuery.data?.training) {
         const training = convertTrainingToInput(trainingQuery.data.training)
-        const resources = convertTrainingResourcesToInput(trainingQuery.data.trainingResources)
-        const records = convertTrainingRecordsToInput(trainingQuery.data.trainingRecords)
 
-        actions.schedule.trainingDialog.initialize(training, records, resources)
+        actions.schedule.trainingDialog.initialize(training)
       }
     }, [actions, trainingQuery, _id]
   )
 
-  const activateStep = (index: number) => () => setActiveStep(index)
+  const activateStep = (index: number) => () => {
+    actions.schedule.trainingDialog.setStep(index)
+  }
 
   return (
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
@@ -126,7 +126,7 @@ export default function TrainingDialog() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Stepper activeStep={activeStep} nonLinear={mode === 'update'}>
+      <Stepper activeStep={step} nonLinear={mode === 'update'}>
         {steps.map((label, index) => (
           <Step key={label}>
             <StepButton onClick={activateStep(index)}>{label}</StepButton>
@@ -144,7 +144,7 @@ export default function TrainingDialog() {
           <Grid item={true} container={true} spacing={3} justify='space-around'>
 
             {
-              activeStep === 0 && (
+              step === 0 && (
                 <>
                   <Grid item={true} container={true} lg={4} spacing={2}>
                     <Grid item={true} lg={12}>
@@ -241,12 +241,12 @@ export default function TrainingDialog() {
               )
             }
             {
-              activeStep === 1 && (
+              step === 1 && (
                 <ResourcesBlock />
               )
             }
             {
-              activeStep === 2 && (
+              step === 2 && (
                 <RecordsStep />
               )
             }
@@ -256,21 +256,28 @@ export default function TrainingDialog() {
       <Divider />
       <DialogActions>
         {
-          activeStep > 0 && (
-            <Button color='primary' onClick={activateStep(activeStep - 1)}>
+          step > 0 && (
+            <Button color='primary' onClick={activateStep(step - 1)}>
               Назад
             </Button>
           )
         }
         {
-          activeStep < LAST_STEP && (
-            <Button color='primary' onClick={activateStep(activeStep + 1)}>
+          step > 0 && step < LAST_STEP && (
+            <Button color='primary' onClick={activateStep(step + 1)}>
               Далее
             </Button>
           )
         }
         {
-          activeStep === LAST_STEP && mode === 'create' && (
+          step === 0 && mode === 'update' && (
+            <Button color='primary' onClick={activateStep(step + 1)}>
+              Далее
+            </Button>
+          )
+        }
+        {
+          step === 0 && mode === 'create' && (
             <SubmitButton />
           )
         }

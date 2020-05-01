@@ -8,30 +8,23 @@ import { IStoreState } from 'store'
 
 export function* openResource(action: ReturnType<typeof actions.trainingDialog.openResource>) {
   try {
-    const { trainingId, date, startTime, endTime } = yield select((state: IStoreState) => ({
+    const { trainingId } = yield select((state: IStoreState) => ({
       trainingId: state.schedule.trainingDialog.trainingForm._id,
-      date: state.schedule.trainingDialog.trainingForm.date,
-      startTime: state.schedule.trainingDialog.resourceForm?.startTime,
-      endTime: state.schedule.trainingDialog.resourceForm?.endTime,
     }))
 
-    let resource
+    let resource: any
     let mode: 'create' | 'update' | null = null
 
-    if (action.payload._id) {
-      resource = yield select((state: IStoreState) => state.schedule.trainingDialog.resources.find(r => r._id === action.payload._id))
+    if (action.payload.resource) {
+      resource = action.payload.resource
       mode = 'update'
     } else {
       resource = {
         _id: new BSON.ObjectID(),
-        resource: {
-          link: '',
-        },
+        resource: null,
         trainer: null,
-        date,
-        startTime,
-        endTime,
-        records: { link: [] },
+        startTime: undefined,
+        endTime: undefined,
         training: { link: trainingId },
       }
       mode = 'create'
@@ -48,11 +41,12 @@ export function* openRecord(action: ReturnType<typeof actions.trainingDialog.ope
     const { trainingId } = yield select((state: IStoreState) => ({
       trainingId: state.schedule.trainingDialog.trainingForm._id,
     }))
-    let record
+
+    let record: any = null
     let mode: 'create' | 'update' | null = null
 
-    if (action.payload._id) {
-      record = yield select((state: IStoreState) => state.schedule.trainingDialog.records.find(r => r._id === action.payload._id))
+    if (action.payload.record) {
+      record = action.payload.record
       mode = 'update'
     } else {
       record = {
