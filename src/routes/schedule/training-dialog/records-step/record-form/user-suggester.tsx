@@ -41,7 +41,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
   }))
   const value = useSelector(fieldSelector(name))
 
-  const handleChange = (target: any, option: ISearchedTrainee | null) => {
+  const handleChange = (e: any, option: ISearchedTrainee | null) => {
     onChange(name, { link: option?._id })
     setFilter(option?.fullName || '')
   }
@@ -66,22 +66,10 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
     [opened, filter, actions]
   )
 
-  React.useEffect(
-    () => {
-      // if (value) {
-      //   setFilter(value.fullName)
-      // }
-    },
-    [value]
-  )
-
   const open = () => setOpened(true)
-  const close = () => {
-    setFilter(initialFilter || '')
-    setOpened(false)
-  }
+  const close = () => setOpened(false)
 
-  const mapOptionLabel = (option: ISearchedTrainee) => option.fullName
+  const mapOptionLabel = (option: ISearchedTrainee) => option.fullName || ''
 
   return (
     <Autocomplete
@@ -95,7 +83,6 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
       inputValue={filter || ''}
       getOptionLabel={mapOptionLabel}
       loading={loading}
-      // freeSolo={true}
       renderInput={renderInput(loading && opened, label)}
     />
   )
