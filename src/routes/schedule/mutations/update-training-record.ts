@@ -5,6 +5,9 @@ import { useMutation } from '@apollo/react-hooks'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 import { ITrainingRecordForm } from 'interfaces/training'
 
+import { updateCachedQuery } from './cache-updaters'
+import { addRecordUpdater, removeRecordUpdater } from './cache-updaters/training-record'
+
 export const UPDATE_TRAINING_RECORD = gql`
   mutation updateTrainingRecord ($_id: ObjectId!, $record: TrainingRecordUpdateInput!) {
     updateOneTrainingRecord(query: { _id: $_id }, set: $record) {
@@ -16,6 +19,12 @@ export const UPDATE_TRAINING_RECORD = gql`
       attendant {
         _id
         fullName
+      }
+      training {
+        _id
+      }
+      resource {
+        _id
       }
       status
     }
@@ -40,35 +49,21 @@ const useUpdateTrainingRecord = () => {
             return
           }
 
-          const oldResourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: prevResource } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const addUpdater = addRecordUpdater(data.updateOneTrainingRecord)
+          const removeUpdater = removeRecordUpdater(data.updateOneTrainingRecord._id)
 
-          const oldResourceData = client.readQuery<IGetTrainingResourceResponse>(oldResourceQuery)
+          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+            query: GET_TRAINING_RESOURCE,
+            variables: { id: prevResource },
+            updater: removeUpdater,
+          })
 
-          if (oldResourceData) {
-            const trainingRecords = oldResourceData.trainingRecords
-              .filter(tr => tr._id !== data.updateOneTrainingRecord._id)
-
-            client.writeQuery({
-              ...oldResourceQuery,
-              data: { ...oldResourceData, trainingRecords },
-            })
-          }
-
-          const newResourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: record.resource.link } }
-
-          const newResourceData = client.readQuery<IGetTrainingResourceResponse>(newResourceQuery)
-
-          if (newResourceData) {
-            const trainingRecords = [
-              ...newResourceData.trainingRecords,
-              data.updateOneTrainingRecord,
-            ]
-
-            client.writeQuery({
-              ...newResourceQuery,
-              data: { ...newResourceData, trainingRecords },
-            })
-          }
+          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+            query: GET_TRAINING_RESOURCE,
+            variables: { id: record.resource.link },
+            updater: addUpdater,
+          })
         },
       })
     },

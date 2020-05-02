@@ -5,6 +5,9 @@ import { useMutation } from '@apollo/react-hooks'
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 
+import { updateCachedQuery } from './cache-updaters'
+import { removeRecordUpdater } from './cache-updaters/training-record'
+
 export const DELETE_TRAINING_RECORD = gql`
   mutation deleteTrainingRecord ($_id: ObjectId!) {
     deleteOneTrainingRecord(query: { _id: $_id }) {
@@ -21,33 +24,20 @@ const useDeleteTrainingRecord = () => {
       return deleteOneTrainingRecord({
         variables: { _id: record._id },
         update: (client, { data }) => {
-          const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: record.resource.link } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = removeRecordUpdater(data.deleteOneTrainingRecord._id)
 
-          const resourceData = client.readQuery<IGetTrainingResourceResponse>(resourceQuery)
+          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+            query: GET_TRAINING_RESOURCE,
+            variables: { id: record.resource._id },
+            updater,
+          })
 
-          if (resourceData) {
-            const trainingRecords = resourceData.trainingRecords
-              .filter(tr => tr._id !== data.deleteOneTrainingRecord._id)
-
-            client.writeQuery({
-              ...resourceQuery,
-              data: { ...resourceData, trainingRecords },
-            })
-          }
-
-          const trainingQuery = { query: GET_TRAINING, variables: { id: record.training.link } }
-
-          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
-
-          if (trainingData) {
-            const trainingRecords = trainingData.trainingRecords
-              .filter(tr => tr._id !== data.deleteOneTrainingRecord._id)
-
-            client.writeQuery({
-              ...trainingQuery,
-              data: { ...trainingData, trainingRecords },
-            })
-          }
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: record.training._id },
+            updater,
+          })
         },
       })
     },

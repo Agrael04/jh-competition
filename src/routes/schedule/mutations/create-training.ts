@@ -2,8 +2,10 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { GET_TRAINING } from '../queries/get-training'
+import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
+
+import { updateCachedQuery } from './cache-updaters'
 
 export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
@@ -31,15 +33,17 @@ const useCreateTraining = () => {
       return createTraining({
         variables: { training },
         update: (client, { data }) => {
-          const trainingQuery = { query: GET_TRAINING, variables: { id: data.insertOneTraining._id } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = () => ({
+            training: data.insertOneTraining,
+            trainingRecords: [],
+            trainingResources: [],
+          })
 
-          client.writeQuery({
-            ...trainingQuery,
-            data: {
-              training: data.insertOneTraining,
-              trainingRecords: [],
-              trainingResources: [],
-            },
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: training._id },
+            updater,
           })
         },
       })

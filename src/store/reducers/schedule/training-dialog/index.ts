@@ -11,11 +11,9 @@ export interface IState {
   trainingForm: ITrainingForm
   mode: 'create' | 'update' | null
 
-  // resources: ITrainingResourceForm[]
   resourceForm: ITrainingResourceForm | null
   resourceMode: 'create' | 'update' | null
 
-  // records: ITrainingRecordForm[]
   recordForm: ITrainingRecordForm | null
   recordMode: 'create' | 'update' | null
 

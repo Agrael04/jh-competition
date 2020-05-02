@@ -6,6 +6,9 @@ import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 import { ITrainingRecordForm } from 'interfaces/training'
 
+import { updateCachedQuery } from './cache-updaters'
+import { addRecordUpdater } from './cache-updaters/training-record'
+
 export const CREATE_TRAINING_RECORD = gql`
   mutation createTrainingRecord ($record: TrainingRecordInsertInput!) {
     insertOneTrainingRecord(data: $record) {
@@ -45,37 +48,20 @@ const useCreateTrainingRecord = () => {
       return createTrainingRecord({
         variables: { record },
         update: (client, { data }) => {
-          const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: record.resource.link } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = addRecordUpdater(data.insertOneTrainingRecord)
 
-          const resourceData = client.readQuery<IGetTrainingResourceResponse>(resourceQuery)
+          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+            query: GET_TRAINING_RESOURCE,
+            variables: { id: record.resource.link },
+            updater,
+          })
 
-          if (resourceData) {
-            const trainingRecords = [
-              ...resourceData.trainingRecords,
-              data.insertOneTrainingRecord,
-            ]
-
-            client.writeQuery({
-              ...resourceQuery,
-              data: { ...resourceData, trainingRecords },
-            })
-          }
-
-          const trainingQuery = { query: GET_TRAINING, variables: { id: record.training.link } }
-
-          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
-
-          if (trainingData) {
-            const trainingRecords = [
-              ...trainingData.trainingRecords,
-              data.insertOneTrainingRecord,
-            ]
-
-            client.writeQuery({
-              ...trainingQuery,
-              data: { ...trainingData, trainingRecords },
-            })
-          }
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: record.training.link },
+            updater,
+          })
         },
       })
     },

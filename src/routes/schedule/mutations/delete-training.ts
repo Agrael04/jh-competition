@@ -4,8 +4,10 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
-import { GET_TRAINING_RESOURCE } from '../queries/get-training-resource'
 import { ITrainingForm } from 'interfaces/training'
+
+import { updateCachedQuery } from './cache-updaters'
+import { removeResourceUpdater } from './cache-updaters/training-resource'
 
 export const DELETE_TRAINING = gql`
   mutation deleteTraining ($_id: ObjectId!) {
@@ -32,42 +34,15 @@ const useDeleteTraining = () => {
         },
         update: (client, { data }) => {
           const trainingQuery = { query: GET_TRAINING, variables: { id: data.deleteOneTraining._id } }
-
           const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
 
-          client.writeQuery({
-            ...trainingQuery,
-            data: {
-              training: null,
-              trainingRecords: [],
-              trainingResources: [],
-            },
-          })
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = removeResourceUpdater(...trainingData?.trainingResources.map(r => r._id)!)
 
-          const resourcesQuery = { query: GET_TRAINING_RESOURCES, variables: { date: new Date(training.date) } }
-
-          const resourcesData = client.readQuery<IGetTrainingResourcesResponse>(resourcesQuery)
-
-          if (resourcesData) {
-            const trainingResources = resourcesData.trainingResources
-              .filter(tr => !trainingData?.trainingResources.find(r => r._id === tr._id))
-
-            client.writeQuery({
-              ...resourcesQuery,
-              data: { ...resourcesData, trainingResources },
-            })
-          }
-
-          trainingData?.trainingResources.forEach(resource => {
-            const resourceQuery = { query: GET_TRAINING_RESOURCE, variables: { id: resource._id } }
-
-            client.writeQuery({
-              ...resourceQuery,
-              data: {
-                trainingRecords: [],
-                trainingResource: null,
-              },
-            })
+          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
+            query: GET_TRAINING_RESOURCES,
+            variables: { date: new Date(training.date) },
+            updater,
           })
         },
       })

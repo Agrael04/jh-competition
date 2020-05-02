@@ -6,6 +6,9 @@ import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../querie
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
 
+import { updateCachedQuery } from './cache-updaters'
+import { removeResourceUpdater } from './cache-updaters/training-resource'
+
 export const DELETE_TRAINING_RESOURCE = gql`
   mutation deleteTrainingResource ($_id: ObjectId!) {
     deleteOneTrainingResource(query: { _id: $_id }) {
@@ -22,33 +25,20 @@ const useDeleteTrainingResource = () => {
       return deleteOneTrainingResource({
         variables: { _id: resourceId },
         update: (client, { data }) => {
-          const resourcesQuery = { query: GET_TRAINING_RESOURCES, variables: { date: new Date(training.date) } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = removeResourceUpdater(data.deleteOneTrainingResource._id)
 
-          const resourcesData = client.readQuery<IGetTrainingResourcesResponse>(resourcesQuery)
+          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
+            query: GET_TRAINING_RESOURCES,
+            variables: { date: new Date(training.date) },
+            updater,
+          })
 
-          if (resourcesData) {
-            const trainingResources = resourcesData.trainingResources
-              .filter(tr => tr._id !== data.deleteOneTrainingResource._id)
-
-            client.writeQuery({
-              ...resourcesQuery,
-              data: { ...resourcesData, trainingResources },
-            })
-          }
-
-          const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
-
-          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
-
-          if (trainingData) {
-            const trainingResources = trainingData.trainingResources
-              .filter(tr => tr._id !== data.deleteOneTrainingResource._id)
-
-            client.writeQuery({
-              ...trainingQuery,
-              data: { ...trainingData, trainingResources },
-            })
-          }
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: training._id },
+            updater,
+          })
         },
       })
     },

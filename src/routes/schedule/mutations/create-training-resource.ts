@@ -6,6 +6,9 @@ import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../querie
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { ITrainingForm, ITrainingResourceForm } from 'interfaces/training'
 
+import { updateCachedQuery } from './cache-updaters'
+import { addResourceUpdater } from './cache-updaters/training-resource'
+
 export const CREATE_TRAINING_RESOURCE = gql`
   mutation createTrainingResource ($resource: TrainingResourceInsertInput!) {
     insertOneTrainingResource(data: $resource) {
@@ -14,6 +17,7 @@ export const CREATE_TRAINING_RESOURCE = gql`
       endTime
       resource {
         _id
+        name
       }
       training {
         _id
@@ -35,37 +39,20 @@ const useCreateTrainingResource = () => {
       return createTrainingResource({
         variables: { resource },
         update: (client, { data }) => {
-          const resourcesQuery = { query: GET_TRAINING_RESOURCES, variables: { date: new Date(training.date) } }
+          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const updater = addResourceUpdater(data.insertOneTrainingResource)
 
-          const resourcesData = client.readQuery<IGetTrainingResourcesResponse>(resourcesQuery)
+          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
+            query: GET_TRAINING_RESOURCES,
+            variables: { date: new Date(training.date) },
+            updater,
+          })
 
-          if (resourcesData) {
-            const trainingResources = [
-              ...resourcesData.trainingResources,
-              data.insertOneTrainingResource,
-            ]
-
-            client.writeQuery({
-              ...resourcesQuery,
-              data: { ...resourcesData, trainingResources },
-            })
-          }
-
-          const trainingQuery = { query: GET_TRAINING, variables: { id: training._id } }
-
-          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
-
-          if (trainingData) {
-            const trainingResources = [
-              ...trainingData.trainingResources,
-              data.insertOneTrainingResource,
-            ]
-
-            client.writeQuery({
-              ...trainingQuery,
-              data: { ...trainingData, trainingResources },
-            })
-          }
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: training._id },
+            updater,
+          })
         },
       })
     },
