@@ -8,7 +8,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 
-import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import times from 'data/times'
@@ -50,14 +49,22 @@ export default function ResourceItem({ id }: IProps) {
     [deleteTrainingResource, trainingForm, id]
   )
 
-  const label = React.useMemo(
+  const primaryLabel = React.useMemo(
     () => {
       const st = times.find(t => t.id === resource?.startTime)?.label
       const et = times.find(t => t.id === resource?.endTime)?.label
-      const trainer = resource?.trainer
-      const trainerLabel = trainer ? `${trainer.firstName} ${trainer.lastName},` : ''
 
-      return `${trainerLabel} ${st} - ${et}`
+      return `${resource?.resource.name}, ${st} - ${et}`
+    },
+    [resource]
+  )
+
+  const secondaryLabel = React.useMemo(
+    () => {
+      const trainer = resource?.trainer
+      const trainerLabel = trainer ? `${trainer.firstName} ${trainer.lastName}` : ''
+
+      return `${trainerLabel}`
     },
     [resource]
   )
@@ -66,12 +73,12 @@ export default function ResourceItem({ id }: IProps) {
     <ListItem button={true} onClick={activate} selected={isActive}>
       <ListItemAvatar>
         <Avatar className={classes.avatar}>
-          <FitnessCenterIcon />
+          {trainingQuery?.data?.trainingRecords.filter(record => record.resource?._id === id).length}
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={resource?.resource.name}
-        secondary={label}
+        primary={primaryLabel}
+        secondary={secondaryLabel}
       />
       <ListItemSecondaryAction>
         <IconButton onClick={remove}>

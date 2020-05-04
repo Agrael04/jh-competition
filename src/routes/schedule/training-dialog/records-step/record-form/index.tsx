@@ -16,7 +16,7 @@ import ResourceSelect from './resource-select'
 
 import SaveButton from './save-button'
 
-const statuses = ['SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
+const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
 
 const fieldSelector = (name: any) => (state: IStoreState) => {
   const form: any = state.schedule.trainingDialog.recordForm

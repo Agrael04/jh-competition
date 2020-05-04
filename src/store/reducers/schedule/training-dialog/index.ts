@@ -104,6 +104,9 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         resourceForm: payload.resource,
         resourceMode: payload.mode,
+        recordForm: null,
+        recordMode: null,
+        step: 1,
       }
     }
 
@@ -130,6 +133,9 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         recordForm: payload.record,
         recordMode: payload.mode,
+        resourceForm: null,
+        resourceMode: null,
+        step: 2,
       }
     }
 

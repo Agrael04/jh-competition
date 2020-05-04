@@ -34,7 +34,7 @@ export default function RecordSelect({ name, label }: IProps) {
       const name = resource?.resource?.name
       const st = times.find(t => t.id === resource.startTime)?.label
       const et = times.find(t => t.id === resource.endTime)?.label
-      const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource._id === resource._id).length
+      const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource?._id === resource._id).length
 
       return `${name}, ${st} - ${et}, ${recordsLength} записей`
     },
