@@ -22,6 +22,7 @@ export const useActions = () => {
         page: bindActionCreators(schedule.page, dispatch),
         addTrainerDialog: bindActionCreators(schedule.addTrainerDialog, dispatch),
         trainingDialog: bindActionCreators(schedule.trainingDialog, dispatch),
+        checkDialog: bindActionCreators(schedule.checkDialog, dispatch),
       },
     }),
     [dispatch]

@@ -13,11 +13,13 @@ interface IProps {
   onChange?: (e: any) => void
   className?: string
   rootClassName?: string
-  children: any
+  children?: any
   variant?: 'filled' | 'outlined' | 'standard'
   fullWidth?: boolean
   multiple?: boolean
 }
+
+const heightStyle = { height: '56px' }
 
 export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children }: IProps) => {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
@@ -27,7 +29,7 @@ export default ({ value, onChange, label, helperText, name, variant, disabled, m
   }, [])
 
   return (
-    <FormControl variant={variant} fullWidth={fullWidth}>
+    <FormControl variant={variant} fullWidth={fullWidth} style={heightStyle}>
       <InputLabel ref={inputLabel}>{label}</InputLabel>
       <Select
         value={value}

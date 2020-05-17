@@ -66,6 +66,19 @@ export function* openRecord(action: ReturnType<typeof actions.trainingDialog.ope
   }
 }
 
+export function* openCheckDialog(action: ReturnType<typeof actions.trainingDialog.openCheckDialog>) {
+  try {
+    const { contact } = yield select((state: IStoreState) => ({
+      contact: state.schedule.trainingDialog.recordForm?.contact.link,
+    }))
+
+    yield put(actions.trainingDialog.close())
+    yield put(actions.checkDialog.open(contact))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 function* watchOpenResource() {
   yield takeLatest(constants.trainingDialog.OPEN_RESOURCE, openResource)
 }
@@ -74,9 +87,14 @@ function* watchOpenRecord() {
   yield takeLatest(constants.trainingDialog.OPEN_RECORD, openRecord)
 }
 
+function* watchOpenCheckDialog() {
+  yield takeLatest(constants.trainingDialog.OPEN_CHECK_DIALOG, openCheckDialog)
+}
+
 export default function* root() {
   yield all([
     watchOpenResource(),
     watchOpenRecord(),
+    watchOpenCheckDialog(),
   ])
 }

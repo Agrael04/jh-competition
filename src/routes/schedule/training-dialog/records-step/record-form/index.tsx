@@ -44,6 +44,7 @@ export default function RecordsBlock() {
   )
 
   const resetRecord = actions.schedule.trainingDialog.resetRecord
+  const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
 
   const record = React.useMemo(
     () => {
@@ -68,7 +69,7 @@ export default function RecordsBlock() {
       </Grid>
       <Grid item={true} lg={3} container={true}>
         <Box margin='auto' marginRight={0}>
-          <Button color='primary' variant='contained'>
+          <Button color='primary' variant='contained' onClick={openCheckDialog}>
             Расчитать
           </Button>
         </Box>

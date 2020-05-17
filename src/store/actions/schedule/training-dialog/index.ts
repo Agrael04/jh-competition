@@ -65,6 +65,10 @@ export const setStep = (step: number) => ({
   payload: { step },
 })
 
+export const openCheckDialog = () => ({
+  type: constants.OPEN_CHECK_DIALOG,
+})
+
 export const actions = {
   open,
   initialize,
@@ -83,6 +87,7 @@ export const actions = {
   updateRecordField,
 
   setStep,
+  openCheckDialog,
 }
 
 export default actions

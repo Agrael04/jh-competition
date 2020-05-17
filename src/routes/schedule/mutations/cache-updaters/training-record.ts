@@ -11,8 +11,6 @@ export const addRecordUpdater = (record: any) => <T extends { trainingRecords: a
 }
 
 export const removeRecordUpdater = (...ids: string[]) => <T extends { trainingRecords: any[] }>(queryData: T): T => {
-  console.log(queryData)
-
   const trainingRecords = queryData.trainingRecords
     .filter((tr: any) => !ids.find(_id => tr._id === _id))
 

@@ -17,6 +17,7 @@ import times from 'data/times'
 
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
+import CheckDialog from './check-dialog'
 
 import Toolbar from './toolbar'
 import TrainingCell from './training-cell'
@@ -154,6 +155,7 @@ const SchedulePage = () => {
         </TableBody>
       </Table>
       <TrainingDialog />
+      <CheckDialog />
       <AddTrainerDialog />
     </Paper>
   )

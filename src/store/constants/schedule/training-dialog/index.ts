@@ -15,6 +15,7 @@ export const RESET_RESOURCE = 'schedule/trainingDialog/RESET_RESOURCE'
 export const UPDATE_RESOURCE_FIELD = 'schedule/trainingDialog/UPDATE_RESOURCE_FIELD'
 
 export const SET_STEP = 'schedule/trainingDialog/SET_STEP'
+export const OPEN_CHECK_DIALOG = 'schedule/trainingDialog/OPEN_CHECK_DIALOG'
 
 export default {
   OPEN,
@@ -34,4 +35,5 @@ export default {
   UPDATE_RECORD_FIELD,
 
   SET_STEP,
+  OPEN_CHECK_DIALOG,
 }

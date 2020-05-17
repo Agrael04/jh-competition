@@ -21,7 +21,7 @@ export default function DatePickerContainer({ name, onChange, fieldSelector, ...
 
   return (
     <DatePicker
-      value={new Date(value)}
+      value={value ? new Date(value) : null}
       onChange={handleChange}
       format='Do MMMM, dddd'
       {...rest}
