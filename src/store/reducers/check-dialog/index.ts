@@ -1,23 +1,30 @@
-import constants from 'store/constants/schedule/check-dialog'
+import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
+import { IContactPaymentForm } from 'interfaces/contact-payment'
 
 // import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   opened: boolean
-  contact: string
+  contact: string | null
 
   passForm: ITrainingPassForm | null
   passMode: 'create' | 'update' | null
+
+  paymentForm: IContactPaymentForm | null
+  paymentMode: 'create' | 'update' | null
 }
 
 const initialState: IState = {
   opened: false,
-  contact: '5e400c4118499b40fc0ec63a',
+  contact: null,
 
   passForm: null,
   passMode: null,
+
+  paymentForm: null,
+  paymentMode: null,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -68,6 +75,32 @@ export default (state = initialState, { type, payload }: { type: string, payload
         passForm: {
           ...state.passForm,
           ...payload.pass,
+        },
+      }
+    }
+
+    case constants.SET_PAYMENT: {
+      return {
+        ...state,
+        paymentForm: payload.payment,
+        paymentMode: payload.mode,
+      }
+    }
+
+    case constants.RESET_PAYMENT: {
+      return {
+        ...state,
+        paymentForm: null,
+        paymentMode: null,
+      }
+    }
+
+    case constants.UPDATE_PAYMENT: {
+      return {
+        ...state,
+        paymentForm: {
+          ...state.paymentForm,
+          ...payload.payment,
         },
       }
     }

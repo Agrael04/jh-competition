@@ -3,11 +3,11 @@ export interface ITrainingPassForm {
   contact: {
     link: string
   }
-  type: 'universal' | 'no_trainer' | 'child_sport' | 'adult_sport' | 'open'
+  type: 'universal' | 'no_trainer' | 'child_sport' | 'adult_sport' | 'open' | null
   size: string | null
   capacity: number | null
   createdAt: Date
   activatedAt: Date | null
-  activatesIn: Date
-  expiresIn: Date
+  activatesIn: Date | null
+  expiresIn: Date | null
 }

@@ -17,3 +17,8 @@ export const noTrainerSizes = [
   { text: '30', value: '30', capacity: 60 },
   { text: '40', value: '40', capacity: 80 },
 ]
+
+export const paymentTypes = [
+  { text: 'Деньги', value: 'money' },
+  { text: 'Абонимент', value: 'pass' },
+]

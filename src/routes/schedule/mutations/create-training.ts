@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
 
-import { updateCachedQuery } from './cache-updaters'
+import { updateQuery } from 'utils/apollo-cache-updater'
 
 export const CREATE_TRAINING = gql`
   mutation createTraining ($training: TrainingInsertInput!) {
@@ -33,7 +33,7 @@ const useCreateTraining = () => {
       return createTraining({
         variables: { training },
         update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateCachedQuery(client)
+          const boundUpdateCachedQuery = updateQuery(client)
           const updater = () => ({
             training: data.insertOneTraining,
             trainingRecords: [],

@@ -14,21 +14,21 @@ import SaveButton from './save-button'
 
 import DatePicker from 'containers/date-picker'
 
-import useGetContactDetailsQuery from '../../queries/get-contact-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
-const selector = (name: any) => (state: IStoreState) => (state.schedule.checkDialog.passForm! as any)[name]
+const selector = (name: any) => (state: IStoreState) => (state.checkDialog.passForm! as any)[name]
 
 export default function PassForm() {
   const actions = useActions()
-  const isFormActive = useSelector(state => !!state.schedule.checkDialog.passForm)
+  const isFormActive = useSelector(state => !!state.checkDialog.passForm)
   const { activeDate, activeGym, contact } = useSelector(state => ({
     activeDate: state.schedule.page.activeDate,
     activeGym: state.schedule.page.activeGym,
-    contact: state.schedule.checkDialog.contact,
+    contact: state.checkDialog.contact,
   }))
   const { data } = useGetContactDetailsQuery(activeDate, activeGym, contact)
 
-  const close = actions.schedule.checkDialog.resetPass
+  const close = actions.checkDialog.resetPass
 
   if (!isFormActive) {
     return null

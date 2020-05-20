@@ -4,9 +4,8 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
-import { updateCachedQuery } from './cache-updaters'
-import { addTrainingPassUpdater } from './cache-updaters/training-pass'
-import { GET_CONTACT_RECORDS, IGetContactRecords } from '../queries/get-contact-details'
+import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
+import { GET_CONTACT_PASSES, IGetContactPasses } from './get-contact-passes'
 
 export const CREATE_TRAINING_PASS = gql`
   mutation createTrainingPass ($pass: TrainingPassInsertInput!) {
@@ -31,7 +30,7 @@ const useCreateTrainingPass = () => {
   const { date, gym, _id } = useSelector(state => ({
     date: state.schedule.page.activeDate,
     gym: state.schedule.page.activeGym,
-    _id: state.schedule.checkDialog.contact,
+    _id: state.checkDialog.contact,
   }))
 
   const mutate = React.useCallback(
@@ -49,11 +48,11 @@ const useCreateTrainingPass = () => {
       return createTrainingPass({
         variables: { pass },
         update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateCachedQuery(client)
-          const updater = addTrainingPassUpdater(data.insertOneTrainingPass)
+          const boundUpdateCachedQuery = updateQuery(client)
+          const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
 
-          boundUpdateCachedQuery<IGetContactRecords>({
-            query: GET_CONTACT_RECORDS,
+          boundUpdateCachedQuery<IGetContactPasses>({
+            query: GET_CONTACT_PASSES,
             variables: { date, gym, _id },
             updater,
           })

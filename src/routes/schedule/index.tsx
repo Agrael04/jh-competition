@@ -15,9 +15,10 @@ import Tooltip from 'components/multiline-tooltip'
 
 import times from 'data/times'
 
+import CheckDialog from 'containers/check-dialog'
+
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
-import CheckDialog from './check-dialog'
 
 import Toolbar from './toolbar'
 import TrainingCell from './training-cell'

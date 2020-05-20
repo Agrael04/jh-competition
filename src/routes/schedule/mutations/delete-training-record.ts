@@ -5,8 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 
-import { updateCachedQuery } from './cache-updaters'
-import { removeRecordUpdater } from './cache-updaters/training-record'
+import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
 
 export const DELETE_TRAINING_RECORD = gql`
   mutation deleteTrainingRecord ($_id: ObjectId!) {
@@ -24,8 +23,8 @@ const useDeleteTrainingRecord = () => {
       return deleteOneTrainingRecord({
         variables: { _id: record._id },
         update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateCachedQuery(client)
-          const updater = removeRecordUpdater(data.deleteOneTrainingRecord._id)
+          const boundUpdateCachedQuery = updateQuery(client)
+          const updater = removeUpdater('trainingRecords', data.deleteOneTrainingRecord._id)
 
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,

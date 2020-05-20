@@ -12,10 +12,10 @@ interface IProps {
   label: string
 }
 
-const selector = () => (state: IStoreState) => state.schedule.checkDialog.passForm?.type
+const selector = () => (state: IStoreState) => state.checkDialog.passForm?.type
 
-export default function ResourceSelect({ name, label }: IProps) {
-  const createdAt = useSelector(state => state.schedule.checkDialog.passForm?.createdAt)
+export default function TypeSelect({ name, label }: IProps) {
+  const createdAt = useSelector(state => state.checkDialog.passForm?.createdAt)
   const actions = useActions()
 
   const handleChange = React.useCallback(
@@ -64,7 +64,7 @@ export default function ResourceSelect({ name, label }: IProps) {
           expiresIn,
         }
       }
-      actions.schedule.checkDialog.updatePass(pass)
+      actions.checkDialog.updatePass(pass)
     },
     [actions, createdAt]
   )

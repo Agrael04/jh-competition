@@ -19,60 +19,28 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
-import useGetContactDetailsQuery from '../queries/get-contact-details'
+import useGetContactDetailsQuery from './graphql/get-contact-details'
 
 import RecordForm from './record-form'
-import PaymentForm from './payment-form'
 import PassForm from './pass-form'
-
-const payments = [
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 2,
-    paymentMethod: 'units',
-    _id: 'Transaction 123312',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 2,
-    paymentMethod: 'money',
-    _id: 'Transaction 123312',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 3,
-    paymentMethod: 'units',
-    _id: 'Transaction 123312',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 600,
-    priceUnits: 2,
-    paymentMethod: 'money',
-    _id: 'Transaction 123312',
-  },
-]
+import PaymentBlock from './payment-block'
 
 export default function TrainingDialog() {
   const { activeDate, activeGym, opened, contact } = useSelector(state => ({
     activeDate: state.schedule.page.activeDate,
     activeGym: state.schedule.page.activeGym,
-    opened: state.schedule.checkDialog.opened,
-    contact: state.schedule.checkDialog.contact,
+    opened: state.checkDialog.opened,
+    contact: state.checkDialog.contact,
   }))
 
   const { data } = useGetContactDetailsQuery(activeDate, activeGym, contact)
 
   const [openedRecordForm, setOpenedRecordForm] = React.useState(false)
-  const [openedTransactionForm, setOpenedTransactionForm] = React.useState(false)
 
   const actions = useActions()
 
   const close = React.useCallback(
-    () => actions.schedule.checkDialog.close(),
+    () => actions.checkDialog.close(),
     [actions]
   )
 
@@ -82,14 +50,6 @@ export default function TrainingDialog() {
 
   const closeRecordForm = () => {
     setOpenedRecordForm(false)
-  }
-
-  const openTransactionForm = () => {
-    setOpenedTransactionForm(true)
-  }
-
-  const closeTransactionForm = () => {
-    setOpenedTransactionForm(false)
   }
 
   return (
@@ -134,31 +94,8 @@ export default function TrainingDialog() {
                 )
             }
           </Grid>
-          <Grid item={true} lg={4}>
-            {
-              openedTransactionForm
-                ? (
-                  <PaymentForm cancel={closeTransactionForm} />
-                ) : (
-                  <List>
-                    {
-                      payments.map((payment, index) => (
-                        <ListItem button={true} key={payment._id} onClick={openTransactionForm}>
-                          <ListItemAvatar>
-                            <Avatar>
-                              {index + 1}
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={`${payment.paymentMethod === 'units' ? `${payment.priceUnits} АБ` : `${payment.priceMoney} грн`}, ${payment.paymentDate.toDateString()}`}
-                            secondary={payment._id}
-                          />
-                        </ListItem>
-                      ))
-                    }
-                  </List>
-                )
-            }
+          <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
+            <PaymentBlock />
           </Grid>
           <Grid item={true} lg={4}>
             <PassForm />
@@ -212,9 +149,14 @@ export default function TrainingDialog() {
             </Grid>
             <Grid item={true} container={true}>
               <Box marginTop={3} width={1}>
-                <Button color='primary' variant='contained' fullWidth={true}>
-                  Закрыть чек
-                </Button>
+                <Grid container={true} justify='space-around'>
+                  <Button color='secondary' variant='contained'>
+                    Закрыть в долг
+                  </Button>
+                  <Button color='primary' variant='contained' disabled={true}>
+                    Закрыть чек
+                  </Button>
+                </Grid>
               </Box>
             </Grid>
           </Grid>

@@ -3,13 +3,13 @@ import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
-import useCreateTrainingPass from '../../mutations/create-training-pass'
+import useCreateTrainingPass from '../graphql/create-training-pass'
 
-export default function ResourcesBlock() {
+export default function SaveButton() {
   const actions = useActions()
   const { passMode, passForm } = useSelector(state => ({
-    passForm: state.schedule.checkDialog.passForm,
-    passMode: state.schedule.checkDialog.passMode,
+    passForm: state.checkDialog.passForm,
+    passMode: state.checkDialog.passMode,
   }))
 
   const createTrainingPass = useCreateTrainingPass()
@@ -20,7 +20,7 @@ export default function ResourcesBlock() {
         await createTrainingPass(passForm!)
       }
 
-      actions.schedule.checkDialog.resetPass()
+      actions.checkDialog.resetPass()
     },
     [actions, createTrainingPass, passForm, passMode]
   )

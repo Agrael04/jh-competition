@@ -8,15 +8,15 @@ interface IProps {
   label: string
 }
 
-const selector = () => (state: IStoreState) => state.schedule.checkDialog.passForm?.capacity
+const selector = () => (state: IStoreState) => state.checkDialog.passForm?.capacity
 
-export default function ResourceSelect({ name, label }: IProps) {
-  const type = useSelector(state => state.schedule.checkDialog.passForm?.type)
+export default function CapacityInput({ name, label }: IProps) {
+  const type = useSelector(state => state.checkDialog.passForm?.type)
   const actions = useActions()
 
   const handleChange = React.useCallback(
     (name, capacity) => {
-      actions.schedule.checkDialog.updatePass({
+      actions.checkDialog.updatePass({
         capacity: +capacity,
       })
     },

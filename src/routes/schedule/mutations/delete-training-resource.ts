@@ -6,8 +6,7 @@ import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../querie
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { ITrainingForm } from 'interfaces/training'
 
-import { updateCachedQuery } from './cache-updaters'
-import { removeResourceUpdater } from './cache-updaters/training-resource'
+import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
 
 export const DELETE_TRAINING_RESOURCE = gql`
   mutation deleteTrainingResource ($_id: ObjectId!) {
@@ -25,8 +24,8 @@ const useDeleteTrainingResource = () => {
       return deleteOneTrainingResource({
         variables: { _id: resourceId },
         update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateCachedQuery(client)
-          const updater = removeResourceUpdater(data.deleteOneTrainingResource._id)
+          const boundUpdateCachedQuery = updateQuery(client)
+          const updater = removeUpdater('trainingResources', data.deleteOneTrainingResource._id)
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,

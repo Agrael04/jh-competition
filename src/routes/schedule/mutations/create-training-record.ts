@@ -6,8 +6,7 @@ import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 import { ITrainingRecordForm } from 'interfaces/training'
 
-import { updateCachedQuery } from './cache-updaters'
-import { addRecordUpdater } from './cache-updaters/training-record'
+import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 export const CREATE_TRAINING_RECORD = gql`
   mutation createTrainingRecord ($record: TrainingRecordInsertInput!) {
@@ -48,8 +47,8 @@ const useCreateTrainingRecord = () => {
       return createTrainingRecord({
         variables: { record },
         update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateCachedQuery(client)
-          const updater = addRecordUpdater(data.insertOneTrainingRecord)
+          const boundUpdateCachedQuery = updateQuery(client)
+          const updater = createUpdater('trainingRecords', data.insertOneTrainingRecord)
 
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,

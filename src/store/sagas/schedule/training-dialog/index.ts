@@ -1,12 +1,12 @@
 import { all, put, takeLatest, select } from 'redux-saga/effects'
 import { BSON } from 'mongodb-stitch-browser-sdk'
 
-import { actions } from 'store/actions/schedule'
+import actions from 'store/actions'
 import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
 
-export function* openResource(action: ReturnType<typeof actions.trainingDialog.openResource>) {
+export function* openResource(action: ReturnType<typeof actions.schedule.trainingDialog.openResource>) {
   try {
     const { trainingId } = yield select((state: IStoreState) => ({
       trainingId: state.schedule.trainingDialog.trainingForm._id,
@@ -30,13 +30,13 @@ export function* openResource(action: ReturnType<typeof actions.trainingDialog.o
       mode = 'create'
     }
 
-    yield put(actions.trainingDialog.setResource(resource, mode))
+    yield put(actions.schedule.trainingDialog.setResource(resource, mode))
   } catch (error) {
     console.log(error)
   }
 }
 
-export function* openRecord(action: ReturnType<typeof actions.trainingDialog.openRecord>) {
+export function* openRecord(action: ReturnType<typeof actions.schedule.trainingDialog.openRecord>) {
   try {
     const { trainingId } = yield select((state: IStoreState) => ({
       trainingId: state.schedule.trainingDialog.trainingForm._id,
@@ -60,19 +60,19 @@ export function* openRecord(action: ReturnType<typeof actions.trainingDialog.ope
       mode = 'create'
     }
 
-    yield put(actions.trainingDialog.setRecord(record, mode))
+    yield put(actions.schedule.trainingDialog.setRecord(record, mode))
   } catch (error) {
     console.log(error)
   }
 }
 
-export function* openCheckDialog(action: ReturnType<typeof actions.trainingDialog.openCheckDialog>) {
+export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trainingDialog.openCheckDialog>) {
   try {
     const { contact } = yield select((state: IStoreState) => ({
       contact: state.schedule.trainingDialog.recordForm?.contact.link,
     }))
 
-    yield put(actions.trainingDialog.close())
+    yield put(actions.schedule.trainingDialog.close())
     yield put(actions.checkDialog.open(contact))
   } catch (error) {
     console.log(error)

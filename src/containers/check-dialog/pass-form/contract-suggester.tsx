@@ -34,7 +34,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
   />
 )
 
-export default function TraineeSuggester({ name, onChange, fieldSelector, label, initialFilter, disabled }: IProps) {
+export default function ContractSuggester({ name, onChange, fieldSelector, label, initialFilter, disabled }: IProps) {
   const { options, loading } = useSelector(state => ({
     loading: state.schedule.clientSuggester.loading,
     options: state.schedule.clientSuggester.options,

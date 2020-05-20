@@ -1,6 +1,7 @@
-import constants from 'store/constants/schedule/check-dialog'
+import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
+import { IContactPaymentForm } from 'interfaces/contact-payment'
 
 export const open = (contact: string) => ({
   type: constants.OPEN,
@@ -22,7 +23,7 @@ export const openPass = (pass?: Partial<ITrainingPassForm>) => ({
   payload: { pass },
 })
 
-export const setPass = (pass: ITrainingPassForm | null, mode: 'create' | 'update' | null) => ({
+export const setPass = (pass: Partial<ITrainingPassForm> | null, mode: 'create' | 'update' | null) => ({
   type: constants.SET_PASS,
   payload: { pass, mode },
 })
@@ -36,6 +37,25 @@ export const updatePass = (pass: Partial<ITrainingPassForm>) => ({
   payload: { pass },
 })
 
+export const openPayment = (payment?: Partial<IContactPaymentForm>) => ({
+  type: constants.OPEN_PAYMENT,
+  payload: { payment },
+})
+
+export const setPayment = (payment: Partial<IContactPaymentForm> | null, mode: 'create' | 'update' | null) => ({
+  type: constants.SET_PAYMENT,
+  payload: { payment, mode },
+})
+
+export const resetPayment = () => ({
+  type: constants.RESET_PAYMENT,
+})
+
+export const updatePayment = (payment: Partial<IContactPaymentForm>) => ({
+  type: constants.UPDATE_PAYMENT,
+  payload: { payment },
+})
+
 export const actions = {
   open,
   initialize,
@@ -45,6 +65,11 @@ export const actions = {
   setPass,
   resetPass,
   updatePass,
+
+  openPayment,
+  setPayment,
+  resetPayment,
+  updatePayment,
 }
 
 export default actions
