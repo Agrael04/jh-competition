@@ -1,0 +1,7 @@
+#import "../payments-block/payment-form/pass-select/pass.gql"
+
+mutation createTrainingPass ($pass: TrainingPassInsertInput!) {
+  insertOneTrainingPass(data: $pass) {
+    ...paymentPass
+  }
+}

@@ -3,39 +3,20 @@ import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 import Button from '@material-ui/core/Button'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-
-import CloseIcon from '@material-ui/icons/Close'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
-import Avatar from '@material-ui/core/Avatar'
-
-import useGetContactDetailsQuery from './graphql/get-contact-details'
-
-import RecordForm from './record-form'
+import Header from './header'
 import PassForm from './pass-form'
-import PaymentBlock from './payment-block'
+import PaymentsBlock from './payments-block'
+import RecordsBlock from './records-block'
 
 export default function TrainingDialog() {
-  const { activeDate, activeGym, opened, contact } = useSelector(state => ({
-    activeDate: state.schedule.page.activeDate,
-    activeGym: state.schedule.page.activeGym,
+  const { opened } = useSelector(state => ({
     opened: state.checkDialog.opened,
-    contact: state.checkDialog.contact,
   }))
-
-  const { data } = useGetContactDetailsQuery(activeDate, activeGym, contact)
-
-  const [openedRecordForm, setOpenedRecordForm] = React.useState(false)
 
   const actions = useActions()
 
@@ -44,58 +25,16 @@ export default function TrainingDialog() {
     [actions]
   )
 
-  const openRecordForm = () => {
-    setOpenedRecordForm(true)
-  }
-
-  const closeRecordForm = () => {
-    setOpenedRecordForm(false)
-  }
-
   return (
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
-      <AppBar position='relative'>
-        <Toolbar>
-          <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
-            <CloseIcon />
-          </IconButton>
-          <Typography variant='h6'>
-            Чек: {data?.user.fullName}
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <Box padding={3}>
         <Grid container={true} spacing={3}>
           <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-            {
-              openedRecordForm
-                ? (
-                  <RecordForm cancel={closeRecordForm} />
-                ) : (
-                  <div>
-                    <List>
-                      {
-                        data?.trainingRecords.map((record, index) => (
-                          <ListItem button={true} key={record._id} onClick={openRecordForm}>
-                            <ListItemAvatar>
-                              <Avatar>
-                                {index + 1}
-                              </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                              primary={`${record.training.type} (${record.training.name}), 8:00 - 9:00`}
-                              secondary={index % 2 === 0 ? `600 грн` : '3АБ'}
-                            />
-                          </ListItem>
-                        ))
-                      }
-                    </List>
-                  </div>
-                )
-            }
+            <RecordsBlock />
           </Grid>
           <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-            <PaymentBlock />
+            <PaymentsBlock />
           </Grid>
           <Grid item={true} lg={4}>
             <PassForm />

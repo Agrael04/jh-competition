@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
-import ContactSuggester from './contract-suggester'
+import ContactSuggester from './contact-suggester'
 import TypeSelect from './type-select'
 import SizeSelect from './size-select'
 import CapacityInput from './capacity-input'
@@ -21,12 +21,7 @@ const selector = (name: any) => (state: IStoreState) => (state.checkDialog.passF
 export default function PassForm() {
   const actions = useActions()
   const isFormActive = useSelector(state => !!state.checkDialog.passForm)
-  const { activeDate, activeGym, contact } = useSelector(state => ({
-    activeDate: state.schedule.page.activeDate,
-    activeGym: state.schedule.page.activeGym,
-    contact: state.checkDialog.contact,
-  }))
-  const { data } = useGetContactDetailsQuery(activeDate, activeGym, contact)
+  const { data } = useGetContactDetailsQuery()
 
   const close = actions.checkDialog.resetPass
 

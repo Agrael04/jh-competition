@@ -1,0 +1,7 @@
+  fragment paymentPass on TrainingPass {
+    _id
+    type
+    size
+    capacity
+    expiresIn
+  }

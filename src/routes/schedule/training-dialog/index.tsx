@@ -25,7 +25,7 @@ import Select from 'containers/select'
 
 import GymSelect from './fields/gym-select'
 
-import ResourcesBlock from './resources-block'
+import ResourcesStep from './resources-step'
 import RecordsStep from './records-step'
 
 import SubmitButton from './submit-button'
@@ -242,7 +242,7 @@ export default function TrainingDialog() {
             }
             {
               step === 1 && (
-                <ResourcesBlock />
+                <ResourcesStep />
               )
             }
             {

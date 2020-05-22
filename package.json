@@ -21,6 +21,7 @@
     "firebase": "^7.5.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
+    "graphql.macro": "^1.4.2",
     "moment": "^2.24.0",
     "mongodb-stitch-browser-sdk": "^4.8.0",
     "react": "^16.12.0",

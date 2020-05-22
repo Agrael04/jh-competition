@@ -1,0 +1,13 @@
+  fragment checkRecord on TrainingRecord {
+    _id
+    resource {
+      _id
+      startTime
+      endTime
+    }
+    training {
+      _id
+      type
+      name
+    }
+  }

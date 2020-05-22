@@ -1,0 +1,4 @@
+fragment headerContact on User {
+  _id
+  fullName
+}

@@ -1,25 +1,20 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
 
-import useGetContactPassesQuery from '../../graphql/get-contact-passes'
+import useGetContactDetailsQuery from '../../../graphql/get-contact-details'
 
-import { universalSizes, noTrainerSizes, passTypes } from '../../data'
+import { universalSizes, noTrainerSizes, passTypes } from '../../../data'
 
 const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.pass?.link
 
 export default function PassSelect() {
-  const { activeDate, activeGym, contact } = useSelector(state => ({
-    activeDate: state.schedule.page.activeDate,
-    activeGym: state.schedule.page.activeGym,
-    contact: state.checkDialog.contact,
-  }))
   const actions = useActions()
 
-  const { data } = useGetContactPassesQuery(activeDate, activeGym, contact)
+  const { data } = useGetContactDetailsQuery()
 
   const handleChange = React.useCallback(
     (name, pass) => {

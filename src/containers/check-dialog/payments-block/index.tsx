@@ -43,14 +43,9 @@ const payments = [
 ]
 
 export default function PaymentBlock() {
-  const { activeDate, activeGym, contact } = useSelector(state => ({
-    activeDate: state.schedule.page.activeDate,
-    activeGym: state.schedule.page.activeGym,
-    contact: state.checkDialog.contact,
-  }))
   const isFormActive = useSelector(state => !!state.checkDialog.paymentForm)
 
-  const { data } = useGetContactDetailsQuery(activeDate, activeGym, contact)
+  const { data } = useGetContactDetailsQuery()
 
   const actions = useActions()
 
