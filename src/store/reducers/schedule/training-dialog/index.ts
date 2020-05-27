@@ -32,7 +32,7 @@ const initialState: IState = {
 
     name: '',
     type: '',
-    traineesCount: 1,
+    traineesAmount: undefined,
     note: '',
   },
 
@@ -69,7 +69,7 @@ export default (state = initialState, { type, payload }: { type: string, payload
 
           name: payload.training.name,
           type: payload.training.type,
-          traineesCount: payload.training.traineesCount,
+          traineesAmount: payload.training.traineesAmount,
           note: payload.training.note,
         },
 
@@ -128,6 +128,16 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
+    case constants.UPDATE_RESOURCE: {
+      return {
+        ...state,
+        resourceForm: {
+          ...state.resourceForm,
+          ...payload.resource,
+        },
+      }
+    }
+
     case constants.SET_RECORD: {
       return {
         ...state,
@@ -154,6 +164,16 @@ export default (state = initialState, { type, payload }: { type: string, payload
           ...state.recordForm,
           [payload.field]: payload.value,
         } as ITrainingRecordForm,
+      }
+    }
+
+    case constants.UPDATE_RECORD: {
+      return {
+        ...state,
+        recordForm: {
+          ...state.recordForm,
+          ...payload.record,
+        },
       }
     }
 

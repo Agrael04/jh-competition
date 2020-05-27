@@ -43,6 +43,16 @@ export default function RecordsBlock() {
     [actions]
   )
 
+  const handleContractChange = React.useCallback(
+    (name, value) => {
+      actions.schedule.trainingDialog.updateRecord({
+        contact: value,
+        attendant: value,
+      })
+    },
+    [actions]
+  )
+
   const resetRecord = actions.schedule.trainingDialog.resetRecord
   const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
 
@@ -62,7 +72,7 @@ export default function RecordsBlock() {
         <UserSuggester
           name='contact'
           label='Контактное лицо'
-          onChange={handleChange}
+          onChange={handleContractChange}
           fieldSelector={fieldSelector}
           initialFilter={record?.contact?.fullName}
         />

@@ -14,7 +14,7 @@ export interface IGetTrainingResponse {
 
     name: string
     type: string
-    traineesCount: number
+    traineesAmount: number
     note: string
   }
   trainingRecords: Array<{
@@ -77,7 +77,7 @@ export const GET_TRAINING = gql`
       }
       name
       type
-      traineesCount
+      traineesAmount
       note
     }
     trainingResources(query: { training: { _id: $id }}) {
@@ -137,7 +137,7 @@ export const convertTrainingToInput = (training: IGetTrainingResponse['training'
 
   name: training.name,
   type: training.type,
-  traineesCount: training.traineesCount,
+  traineesAmount: training.traineesAmount,
   note: training.note,
 })
 

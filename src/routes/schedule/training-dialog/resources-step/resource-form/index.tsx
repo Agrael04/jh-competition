@@ -32,13 +32,6 @@ export default function ResourcesBlock() {
   }))
   const trainingQuery = useGetTrainingQuery(trainingForm._id)
 
-  const handleChange = React.useCallback(
-    (name, value) => {
-      actions.schedule.trainingDialog.updateResourceField(name, value)
-    },
-    [actions]
-  )
-
   const activate = React.useCallback(
     (id: string) => () => {
       const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
@@ -72,18 +65,12 @@ export default function ResourcesBlock() {
       </Grid>
       <Grid item={true} lg={6}>
         <StartTimeSelect
-          name='startTime'
-          onChange={handleChange}
           fieldSelector={fieldSelector}
-          label={'Время начала'}
         />
       </Grid>
       <Grid item={true} lg={6}>
         <EndTimeSelect
-          name='endTime'
-          onChange={handleChange}
           fieldSelector={fieldSelector}
-          label={'Время конца'}
         />
       </Grid>
       <Grid item={true} lg={12} spacing={1} container={true}>

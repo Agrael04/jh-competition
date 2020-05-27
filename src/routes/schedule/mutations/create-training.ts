@@ -19,7 +19,7 @@ export const CREATE_TRAINING = gql`
       }
       name
       type
-      traineesCount
+      traineesAmount
       note
     }
   }

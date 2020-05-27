@@ -152,6 +152,7 @@ export default function TrainingDialog() {
                         name='gym'
                         label={translations.gym}
                       />
+                      <Box marginBottom={2.5} />
                     </Grid>
                     <Grid item={true} lg={12}>
                       <DatePicker
@@ -176,7 +177,7 @@ export default function TrainingDialog() {
                         fullWidth={true}
                         variant='outlined'
                       />
-                      <Box marginBottom={3} />
+                      <Box marginBottom={2.5} />
                     </Grid>
                     <Grid item={true} lg={8}>
                       <Select
@@ -197,22 +198,15 @@ export default function TrainingDialog() {
                       </Select>
                     </Grid>
                     <Grid item={true} lg={4}>
-                      <Select
-                        name='type'
+                      <TextField
+                        name='traineesAmount'
                         onChange={handleChange}
                         fieldSelector={fieldSelector}
                         label={'Кол-во'}
                         fullWidth={true}
                         variant='outlined'
-                      >
-                        {
-                          trainingTypes.map(type => (
-                            <MenuItem value={type} key={type}>
-                              {translations[`types.${type}`]}
-                            </MenuItem>
-                          ))
-                        }
-                      </Select>
+                        type='number'
+                      />
                     </Grid>
                   </Grid>
                   <Grid item={true} container={true} lg={4} spacing={2}>

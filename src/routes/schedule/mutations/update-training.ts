@@ -16,7 +16,7 @@ export const UPDATE_TRAINING = gql`
       }
       name
       type
-      traineesCount
+      traineesAmount
       note
       resources {
         _id

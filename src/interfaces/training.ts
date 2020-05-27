@@ -27,7 +27,7 @@ export interface ITrainingForm {
 
   name?: string
   type?: string
-  traineesCount?: number
+  traineesAmount?: number
   note?: string
 }
 

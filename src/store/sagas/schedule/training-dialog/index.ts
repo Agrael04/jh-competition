@@ -26,6 +26,7 @@ export function* openResource(action: ReturnType<typeof actions.schedule.trainin
         startTime: undefined,
         endTime: undefined,
         training: { link: trainingId },
+        traineesAmount: undefined,
       }
       mode = 'create'
     }

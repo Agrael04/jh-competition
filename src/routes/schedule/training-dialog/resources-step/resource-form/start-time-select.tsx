@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector } from 'store'
+import { IStoreState, useSelector, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -9,13 +9,11 @@ import useGetSchedulesQuery from '../../../queries/get-schedules'
 import times from 'data/times'
 
 interface IProps {
-  name: string
-  label: string
   fieldSelector: (name: any) => (state: IStoreState) => any
-  onChange: (name: any, value: any) => void
 }
 
-export default function TrainerSelect({ name, label, onChange, fieldSelector }: IProps) {
+export default function TrainerSelect({ fieldSelector }: IProps) {
+  const actions = useActions()
   const { date, gym, endTime, trainer } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
@@ -41,12 +39,22 @@ export default function TrainerSelect({ name, label, onChange, fieldSelector }: 
     [data, endTime, trainer, gym]
   )
 
+  const handleChange = React.useCallback(
+    (name, startTime) => {
+      actions.schedule.trainingDialog.updateResource({
+        startTime,
+        endTime: endTime || (startTime < 27 ? startTime + 2 : endTime),
+      })
+    },
+    [actions, endTime]
+  )
+
   return (
     <Select
-      name={name}
-      onChange={onChange}
+      name='startTime'
+      onChange={handleChange}
       fieldSelector={fieldSelector}
-      label={label}
+      label={'Время начала'}
       fullWidth={true}
       variant='outlined'
     >

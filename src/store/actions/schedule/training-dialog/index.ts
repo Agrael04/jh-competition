@@ -41,6 +41,11 @@ export const updateResourceField = (field: string, value: any) => ({
   payload: { field, value },
 })
 
+export const updateResource = (resource: Partial<ITrainingResourceForm>) => ({
+  type: constants.UPDATE_RESOURCE,
+  payload: { resource },
+})
+
 export const openRecord = (record?: Partial<ITrainingRecordForm>) => ({
   type: constants.OPEN_RECORD,
   payload: { record },
@@ -58,6 +63,11 @@ export const resetRecord = () => ({
 export const updateRecordField = (field: string, value: any) => ({
   type: constants.UPDATE_RECORD_FIELD,
   payload: { field, value },
+})
+
+export const updateRecord = (record: Partial<ITrainingRecordForm>) => ({
+  type: constants.UPDATE_RECORD,
+  payload: { record },
 })
 
 export const setStep = (step: number) => ({
@@ -80,11 +90,13 @@ export const actions = {
   setResource,
   resetResource,
   updateResourceField,
+  updateResource,
 
   openRecord,
   setRecord,
   resetRecord,
   updateRecordField,
+  updateRecord,
 
   setStep,
   openCheckDialog,
