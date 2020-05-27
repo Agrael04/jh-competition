@@ -8,8 +8,9 @@ import useUpdatePayment from '../../graphql/update-payment'
 
 export default function SaveButton() {
   const actions = useActions()
-  const { mode } = useSelector(state => ({
+  const { mode, payment } = useSelector(state => ({
     mode: state.checkDialog.paymentMode,
+    payment: state.checkDialog.paymentForm,
   }))
 
   const createPayment = useCreatePayment()
@@ -30,8 +31,34 @@ export default function SaveButton() {
     [actions, createPayment, updatePayment, mode]
   )
 
+  const disabled = React.useMemo(
+    () => {
+      if (!payment?.amount) {
+        return true
+      }
+
+      if (payment.isDebt) {
+        return false
+      }
+
+      if (payment?.type === 'units' && !payment.pass) {
+        return true
+      }
+
+      if (payment?.type === 'money' && !payment.transaction) {
+        return true
+      }
+
+      if (payment?.type === 'money' && !payment.destination) {
+        return true
+      }
+
+      return false
+    }, [payment]
+  )
+
   return (
-    <Button color='primary' variant='contained' onClick={save}>
+    <Button color='primary' variant='contained' onClick={save} disabled={disabled}>
       Сохранить
     </Button>
   )
