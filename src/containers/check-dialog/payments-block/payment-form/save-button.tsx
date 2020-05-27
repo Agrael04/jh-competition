@@ -33,7 +33,11 @@ export default function SaveButton() {
 
   const disabled = React.useMemo(
     () => {
-      if (!payment?.amount) {
+      if (!payment) {
+        return true
+      }
+
+      if (!payment.amount) {
         return true
       }
 
@@ -41,15 +45,15 @@ export default function SaveButton() {
         return false
       }
 
-      if (payment?.type === 'units' && !payment.pass) {
+      if (payment.type === 'units' && !payment.pass) {
         return true
       }
 
-      if (payment?.type === 'money' && !payment.transaction) {
+      if (payment.type === 'money' && !payment.transaction) {
         return true
       }
 
-      if (payment?.type === 'money' && !payment.destination) {
+      if (payment.type === 'money' && !payment.destination) {
         return true
       }
 
