@@ -12,6 +12,7 @@ import Header from './header'
 import PassForm from './pass-form'
 import PaymentsBlock from './payments-block'
 import RecordsBlock from './records-block'
+import TotalPaymentsBlock from './total-payments-block'
 
 export default function TrainingDialog() {
   const { opened } = useSelector(state => ({
@@ -58,19 +59,7 @@ export default function TrainingDialog() {
             </Grid>
           </Grid>
           <Grid item={true} lg={4} container={true} direction='column' justify='space-between'>
-            <Grid item={true}>
-              <Box margin='auto' width='fit-content'>
-                <Typography variant='h5' color='primary' align='center'>
-                  Всего поступило
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  +1000 грн
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  +5 АБ
-                </Typography>
-              </Box>
-            </Grid>
+            <TotalPaymentsBlock />
           </Grid>
           <Grid item={true} lg={4} container={true} direction='column' justify='space-between'>
             <Grid item={true}>
@@ -88,14 +77,9 @@ export default function TrainingDialog() {
             </Grid>
             <Grid item={true} container={true}>
               <Box marginTop={3} width={1}>
-                <Grid container={true} justify='space-around'>
-                  <Button color='secondary' variant='contained'>
-                    Закрыть в долг
-                  </Button>
-                  <Button color='primary' variant='contained' disabled={true}>
-                    Закрыть чек
-                  </Button>
-                </Grid>
+                <Button color='primary' variant='contained' disabled={true} fullWidth={true}>
+                  Закрыть чек
+                </Button>
               </Box>
             </Grid>
           </Grid>

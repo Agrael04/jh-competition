@@ -1,0 +1,15 @@
+mutation createTrainingPass ($data: TrainingPassInsertInput!) {
+  insertOneTrainingPass(data: $data) {
+    _id
+    contact {
+      _id
+    }
+    type
+    size
+    capacity
+    createdAt
+    expiresIn
+    activatesIn
+    expiresIn
+  }
+}

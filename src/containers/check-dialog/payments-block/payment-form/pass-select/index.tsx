@@ -1,11 +1,11 @@
 import React from 'react'
-import { IStoreState, useActions } from 'store'
+import { useSelector, IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
 
-import useGetContactDetailsQuery from '../../../graphql/get-contact-details'
+import useGetContactDetailsQuery from '../../../graphql/get-contract-details'
 
 import { universalSizes, noTrainerSizes, passTypes } from '../../../data'
 
@@ -13,6 +13,7 @@ const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.pa
 
 export default function PassSelect() {
   const actions = useActions()
+  const isDebt = useSelector(state => state.checkDialog.paymentForm?.isDebt)
 
   const { data } = useGetContactDetailsQuery()
 
@@ -31,6 +32,7 @@ export default function PassSelect() {
       fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
+      disabled={isDebt}
     >
       {
         data?.trainingPasss.map(pass => (

@@ -1,0 +1,12 @@
+fragment checkPaymentItem on Payment {
+  _id
+  type
+  pass {
+    _id
+  }
+  createdAt
+  amount
+  destination
+  transaction
+  isDebt
+}

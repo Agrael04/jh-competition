@@ -1,7 +1,7 @@
 import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
-import { IContactPaymentForm } from 'interfaces/contact-payment'
+import { IPaymentForm } from 'interfaces/payment'
 
 // import removeTimeFromDate from 'utils/remove-time-from-date'
 
@@ -12,7 +12,7 @@ export interface IState {
   passForm: ITrainingPassForm | null
   passMode: 'create' | 'update' | null
 
-  paymentForm: IContactPaymentForm | null
+  paymentForm: IPaymentForm | null
   paymentMode: 'create' | 'update' | null
 }
 

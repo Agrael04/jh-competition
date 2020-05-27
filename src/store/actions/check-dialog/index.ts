@@ -1,7 +1,7 @@
 import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
-import { IContactPaymentForm } from 'interfaces/contact-payment'
+import { IPaymentForm } from 'interfaces/payment'
 
 export const open = (contact: string) => ({
   type: constants.OPEN,
@@ -37,12 +37,12 @@ export const updatePass = (pass: Partial<ITrainingPassForm>) => ({
   payload: { pass },
 })
 
-export const openPayment = (payment?: Partial<IContactPaymentForm>) => ({
+export const openPayment = (payment?: Partial<IPaymentForm>) => ({
   type: constants.OPEN_PAYMENT,
   payload: { payment },
 })
 
-export const setPayment = (payment: Partial<IContactPaymentForm> | null, mode: 'create' | 'update' | null) => ({
+export const setPayment = (payment: Partial<IPaymentForm> | null, mode: 'create' | 'update' | null) => ({
   type: constants.SET_PAYMENT,
   payload: { payment, mode },
 })
@@ -51,7 +51,7 @@ export const resetPayment = () => ({
   type: constants.RESET_PAYMENT,
 })
 
-export const updatePayment = (payment: Partial<IContactPaymentForm>) => ({
+export const updatePayment = (payment: Partial<IPaymentForm>) => ({
   type: constants.UPDATE_PAYMENT,
   payload: { payment },
 })

@@ -1,0 +1,21 @@
+mutation createPayment ($data: PaymentInsertInput!) {
+  insertOnePayment(data: $data) {
+    _id
+    contact {
+      _id
+    }
+    gym {
+      _id
+    }
+    date
+    createdAt
+    type
+    pass {
+      _id
+    }
+    isDebt
+    amount
+    destination
+    transaction
+  }
+}

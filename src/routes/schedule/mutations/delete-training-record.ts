@@ -24,7 +24,7 @@ const useDeleteTrainingRecord = () => {
         variables: { _id: record._id },
         update: (client, { data }) => {
           const boundUpdateCachedQuery = updateQuery(client)
-          const updater = removeUpdater('trainingRecords', data.deleteOneTrainingRecord._id)
+          const updater = removeUpdater('trainingRecords', data.deleteOneTrainingRecord)
 
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,

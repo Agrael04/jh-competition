@@ -1,0 +1,5 @@
+fragment totalCheckPayment on Payment {
+  _id
+  type
+  amount
+}

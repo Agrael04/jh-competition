@@ -7,49 +7,24 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
-import useGetContactDetailsQuery from '../graphql/get-contact-details'
+import AddOutlined from '@material-ui/icons/AddOutlined'
+
+import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 import PaymentForm from './payment-form'
+import PaymentItem from './payment-item'
 
-const payments = [
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 2,
-    paymentMethod: 'units',
-    _id: 'Transaction 123312',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 2,
-    paymentMethod: 'money',
-    _id: 'Transaction 12331212',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 400,
-    priceUnits: 3,
-    paymentMethod: 'units',
-    _id: 'Transaction 1233124',
-  },
-  {
-    paymentDate: new Date(),
-    priceMoney: 600,
-    priceUnits: 2,
-    paymentMethod: 'money',
-    _id: 'Transaction 1233123',
-  },
-]
+import useStyles from './styles'
 
 export default function PaymentBlock() {
+  const classes = useStyles()
   const isFormActive = useSelector(state => !!state.checkDialog.paymentForm)
 
   const { data } = useGetContactDetailsQuery()
 
   const actions = useActions()
 
-  const openAddPassForm = React.useCallback(
+  const openAddForm = React.useCallback(
     () => actions.checkDialog.openPayment(),
     [actions]
   )
@@ -61,21 +36,30 @@ export default function PaymentBlock() {
   }
 
   return (
-    <List>
+    <List className={classes.list}>
+      <ListItem button={true} onClick={openAddForm}>
+        <ListItemAvatar>
+          <Avatar className={classes.avatar}>
+            <AddOutlined />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={`Добавить оплату`}
+        />
+      </ListItem>
       {
-        payments.map((payment, index) => (
-          <ListItem button={true} key={payment._id} onClick={openAddPassForm}>
-            <ListItemAvatar>
-              <Avatar>
-                {index + 1}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={`${payment.paymentMethod === 'units' ? `${payment.priceUnits} АБ` : `${payment.priceMoney} грн`}, ${payment.paymentDate.toDateString()}`}
-              secondary={payment._id}
-            />
-          </ListItem>
-        ))
+        data?.payments
+          .filter(payment => payment.isDebt)
+          .map((payment, index) => (
+            <PaymentItem payment={payment} index={index} key={payment._id} />
+          ))
+      }
+      {
+        data?.payments
+          .filter(payment => !payment.isDebt)
+          .map((payment, index) => (
+            <PaymentItem payment={payment} index={index} key={payment._id} />
+          ))
       }
     </List>
   )

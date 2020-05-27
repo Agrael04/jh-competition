@@ -14,7 +14,7 @@ import SaveButton from './save-button'
 
 import DatePicker from 'containers/date-picker'
 
-import useGetContactDetailsQuery from '../graphql/get-contact-details'
+import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 const selector = (name: any) => (state: IStoreState) => (state.checkDialog.passForm! as any)[name]
 

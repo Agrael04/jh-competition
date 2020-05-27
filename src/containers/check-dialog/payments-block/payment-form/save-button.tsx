@@ -3,27 +3,31 @@ import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
-// import useCreateTrainingPass from '../graphql/create-training-pass'
+import useCreatePayment from '../../graphql/create-payment'
+import useUpdatePayment from '../../graphql/update-payment'
 
 export default function SaveButton() {
   const actions = useActions()
-  const { payment, mode } = useSelector(state => ({
-    payment: state.checkDialog.paymentForm,
+  const { mode } = useSelector(state => ({
     mode: state.checkDialog.paymentMode,
   }))
 
-  // const createTrainingPass = useCreateTrainingPass()
+  const createPayment = useCreatePayment()
+  const updatePayment = useUpdatePayment()
 
   const save = React.useCallback(
     async () => {
-      console.log(payment, mode)
-      // if (passMode === 'create') {
-      //   await createTrainingPass(passForm!)
-      // }
+      if (mode === 'create') {
+        await createPayment()
+      }
 
-      actions.checkDialog.resetPass()
+      if (mode === 'update') {
+        await updatePayment()
+      }
+
+      actions.checkDialog.resetPayment()
     },
-    [actions, payment, mode]
+    [actions, createPayment, updatePayment, mode]
   )
 
   return (

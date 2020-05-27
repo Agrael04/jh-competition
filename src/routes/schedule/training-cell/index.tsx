@@ -24,7 +24,7 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
 
   const trainingResource = React.useMemo(
     () => {
-      return data?.trainingResources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource._id === resource)
+      return data?.trainingResources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource?._id === resource)
     },
     [data, time, resource]
   )

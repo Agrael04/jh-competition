@@ -50,7 +50,7 @@ const useUpdateTrainingRecord = () => {
 
           const boundUpdateCachedQuery = updateQuery(client)
           const boundCreateUpdate = createUpdater('trainingRecords', data.updateOneTrainingRecord)
-          const boundRemoveUpdater = removeUpdater('trainingRecords', data.updateOneTrainingRecord._id)
+          const boundRemoveUpdater = removeUpdater('trainingRecords', data.updateOneTrainingRecord)
 
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,

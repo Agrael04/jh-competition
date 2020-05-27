@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { IStoreState, useActions, useSelector } from 'store'
 
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
@@ -21,9 +21,19 @@ export default function AmountInput() {
     [actions]
   )
 
+  const handleTypeChange = React.useCallback(
+    (e, type) => {
+      actions.checkDialog.updatePayment({
+        type,
+        amount: null,
+      })
+    },
+    [actions]
+  )
+
   return (
     <TextField
-      name={'price'}
+      name={'amount'}
       onChange={handleChange}
       fieldSelector={selector}
       label='Сумма'
@@ -33,12 +43,13 @@ export default function AmountInput() {
         endAdornment: (
           <ToggleButtonGroup
             exclusive={true}
-            value={type === 'pass' ? 'units' : type === 'money' ? 'money' : null}
+            value={type}
+            onChange={handleTypeChange}
           >
-            <ToggleButton value='money' disabled={true}>
+            <ToggleButton value='money'>
               Грн
             </ToggleButton>
-            <ToggleButton value='units' disabled={true}>
+            <ToggleButton value='units'>
               АБ
             </ToggleButton>
           </ToggleButtonGroup>

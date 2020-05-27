@@ -7,8 +7,7 @@ import useCreateTrainingPass from '../graphql/create-training-pass'
 
 export default function SaveButton() {
   const actions = useActions()
-  const { passMode, passForm } = useSelector(state => ({
-    passForm: state.checkDialog.passForm,
+  const { passMode } = useSelector(state => ({
     passMode: state.checkDialog.passMode,
   }))
 
@@ -17,12 +16,12 @@ export default function SaveButton() {
   const save = React.useCallback(
     async () => {
       if (passMode === 'create') {
-        await createTrainingPass(passForm!)
+        await createTrainingPass()
       }
 
       actions.checkDialog.resetPass()
     },
-    [actions, createTrainingPass, passForm, passMode]
+    [actions, createTrainingPass, passMode]
   )
 
   return (

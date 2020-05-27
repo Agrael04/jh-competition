@@ -36,7 +36,7 @@ const useDeleteTraining = () => {
           const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
 
           const boundUpdateCachedQuery = updateQuery(client)
-          const updater = removeUpdater('trainingResources', ...trainingData?.trainingResources.map(r => r._id)!)
+          const updater = removeUpdater('trainingResources', ...trainingData?.trainingResources!)
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,

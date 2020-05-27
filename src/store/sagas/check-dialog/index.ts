@@ -5,13 +5,19 @@ import { actions } from 'store/actions/check-dialog'
 import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
-import { IContactPaymentForm } from 'interfaces/contact-payment'
+import { IPaymentForm } from 'interfaces/payment'
 
 import { IStoreState } from 'store'
 
 export function* openPayment(action: ReturnType<typeof actions.openPayment>) {
   try {
-    let payment: Partial<IContactPaymentForm>
+    const { gym, activeDate, contact } = yield select((state: IStoreState) => ({
+      gym: state.schedule.page.activeGym,
+      activeDate: state.schedule.page.activeDate,
+      contact: state.checkDialog.contact,
+    }))
+
+    let payment: Partial<IPaymentForm>
     let mode: 'create' | 'update' | null = null
 
     if (action.payload.payment) {
@@ -20,7 +26,13 @@ export function* openPayment(action: ReturnType<typeof actions.openPayment>) {
     } else {
       payment = {
         _id: new BSON.ObjectID(),
-        type: 'pass',
+        contact: { link: contact },
+        gym: { link: gym },
+        date: activeDate,
+        createdAt: activeDate,
+        type: 'units',
+        amount: null,
+        isDebt: false,
       }
       mode = 'create'
     }

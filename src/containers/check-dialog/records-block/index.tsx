@@ -6,7 +6,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
-import useGetContactDetailsQuery from '../graphql/get-contact-details'
+import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 import RecordForm from './record-form'
 

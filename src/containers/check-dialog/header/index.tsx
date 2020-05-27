@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-import useGetContactDetailsQuery from '../graphql/get-contact-details'
+import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 export default function TrainingDialog() {
   const { data } = useGetContactDetailsQuery()

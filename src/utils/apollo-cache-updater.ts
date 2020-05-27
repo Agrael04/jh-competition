@@ -22,13 +22,17 @@ export const createUpdater = (key: string, ...items: any[]) => (queryData: any) 
   }
 }
 
-export const removeUpdater = (key: string, ...ids: string[]) => (queryData: any) => {
+interface IDeletedItem {
+  _id: string
+}
+
+export const removeUpdater = (key: string, ...items: IDeletedItem[]) => (queryData: any) => {
   if (!queryData || !queryData[key]) {
     return null
   }
 
   const data = queryData[key]
-    .filter((tr: any) => !ids.find(_id => tr._id === _id))
+    .filter((tr: any) => !items.map(item => item._id).find(_id => tr._id === _id))
 
   return {
     ...queryData,

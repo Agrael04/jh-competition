@@ -1,0 +1,45 @@
+#import "../../records-block/record.gql"
+#import "../../payments-block/payment-form/pass-select/pass.gql"
+#import "../../header/contact.gql"
+#import "../../pass-form/contact-suggester/contact.gql"
+#import "../../payments-block/payment-item/payment.gql"
+#import "../../total-payments-block/payment.gql"
+
+query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
+    trainingRecords(query: {
+      contact: {
+        _id: $_id
+      },
+      training: {
+        date: $date,
+        gym: {
+          _id: $gym
+        }
+      }
+    }) {
+      ...checkRecord
+    }
+    payments(query: {
+      contact: {
+        _id: $_id
+      },
+      date: $date,
+      gym: {
+        _id: $gym
+      }
+    }) {
+      ...checkPaymentItem
+      ...totalCheckPayment
+    }
+    trainingPasss(query: {
+      contact: {
+        _id: $_id
+      }
+    }) {
+      ...paymentPass
+    }
+    user(query: { _id: $_id }) {
+      ...headerContact
+      ...passFormContact
+    }
+  }

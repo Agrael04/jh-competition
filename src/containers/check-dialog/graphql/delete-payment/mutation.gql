@@ -1,0 +1,5 @@
+  mutation deletePayment ($_id: ObjectId!) {
+    deleteOnePayment(query: { _id: $_id }) {
+      _id
+    }
+  }
