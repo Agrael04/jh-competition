@@ -63,10 +63,12 @@ export function* openPass(action: ReturnType<typeof actions.openPass>) {
         type: null,
         size: null,
         capacity: null,
+        duration: null,
+        activation: null,
         createdAt: activeDate,
-        activatedAt: null,
-        activatesIn: null,
-        expiresIn: null,
+        // activatedAt: null,
+        // activatesIn: null,
+        // expiresIn: null,
       }
       mode = 'create'
     }

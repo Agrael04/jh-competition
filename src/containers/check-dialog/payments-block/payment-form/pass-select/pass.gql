@@ -3,5 +3,7 @@
     type
     size
     capacity
-    expiresIn
+    duration
+    activation
+    createdAt
   }

@@ -9,7 +9,9 @@ import Box from '@material-ui/core/Box'
 import ContactSuggester from './contact-suggester'
 import TypeSelect from './type-select'
 import SizeSelect from './size-select'
+import ActivationInput from './activation-input'
 import CapacityInput from './capacity-input'
+import DurationInput from './duration-input'
 import SaveButton from './save-button'
 
 import DatePicker from 'containers/date-picker'
@@ -41,23 +43,23 @@ export default function PassForm() {
             disabled={true}
           />
         </Grid>
-        <Grid item={true} lg={7}>
+        <Grid item={true} lg={6}>
           <TypeSelect
             name='type'
             label='Тип абонимента'
           />
         </Grid>
-        <Grid item={true} lg={5}>
+        <Grid item={true} lg={6}>
           <SizeSelect
             name='size'
             label='Размер'
           />
         </Grid>
-        <Grid item={true} lg={12}>
-          <CapacityInput
-            name='capacity'
-            label='Кол-во АБ'
-          />
+        <Grid item={true} lg={6}>
+          <CapacityInput />
+        </Grid>
+        <Grid item={true} lg={6}>
+          <DurationInput />
         </Grid>
         <Grid item={true} lg={6}>
           <DatePicker
@@ -69,31 +71,7 @@ export default function PassForm() {
           />
         </Grid>
         <Grid item={true} lg={6}>
-          <DatePicker
-            name={'activatedAt'}
-            fieldSelector={selector}
-            label='Дата активации'
-            disabled={true}
-            inputVariant='outlined'
-          />
-        </Grid>
-        <Grid item={true} lg={6}>
-          <DatePicker
-            name={'activatesIn'}
-            fieldSelector={selector}
-            label='Дата авто-активации'
-            disabled={true}
-            inputVariant='outlined'
-          />
-        </Grid>
-        <Grid item={true} lg={6}>
-          <DatePicker
-            name={'expiresIn'}
-            fieldSelector={selector}
-            label='Дата завершения'
-            disabled={true}
-            inputVariant='outlined'
-          />
+          <ActivationInput />
         </Grid>
       </Grid>
       <Box marginTop={2}>

@@ -23,45 +23,51 @@ export default function TypeSelect({ name, label }: IProps) {
       let pass = {}
 
       if (type === 'universal') {
-        const expiresIn = new Date(createdAt!)
-        const activatesIn = new Date(createdAt!)
-        expiresIn.setDate(expiresIn.getDate() + 76)
-        activatesIn.setDate(expiresIn.getDate() + 31)
+        // const expiresIn = new Date(createdAt!)
+        // const activatesIn = new Date(createdAt!)
+        // expiresIn.setDate(expiresIn.getDate() + 76)
+        // activatesIn.setDate(activatesIn.getDate() + 31)
 
         pass = {
           type,
           size: 'XL',
           capacity: 24,
+          duration: 45,
+          activation: 31,
           createdAt,
-          activatedAt: null,
-          expiresIn,
-          activatesIn,
+          // activatesIn,
+          // activatedAt: null,
+          // expiresIn,
         }
       } else if (type === 'no_trainer') {
-        const expiresIn = new Date(createdAt!)
-        expiresIn.setDate(expiresIn.getDate() + 45)
+        // const expiresIn = new Date(createdAt!)
+        // expiresIn.setDate(expiresIn.getDate() + 45)
 
         pass = {
           type,
           size: '40',
           capacity: 80,
+          duration: 45,
+          activation: 0,
           createdAt,
-          activatedAt: createdAt,
-          activatesIn: createdAt,
-          expiresIn,
+          // activatesIn: createdAt,
+          // activatedAt: createdAt,
+          // expiresIn,
         }
       } else if (type === 'child_sport' || type === 'adult_sport') {
-        const expiresIn = new Date(createdAt!)
-        expiresIn.setDate(expiresIn.getDate() + 31)
+        // const expiresIn = new Date(createdAt!)
+        // expiresIn.setDate(expiresIn.getDate() + 31)
 
         pass = {
           type,
           size: null,
           capacity: null,
+          duration: 31,
+          activation: 0,
           createdAt,
-          activatedAt: createdAt,
-          activatesIn: createdAt,
-          expiresIn,
+          // activatesIn: createdAt,
+          // activatedAt: createdAt,
+          // expiresIn,
         }
       }
       actions.checkDialog.updatePass(pass)

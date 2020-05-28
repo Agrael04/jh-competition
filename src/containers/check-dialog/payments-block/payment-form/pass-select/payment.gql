@@ -1,0 +1,8 @@
+  fragment passPayment on Payment {
+    _id
+    pass {
+      _id
+    }
+    amount
+    date
+  }

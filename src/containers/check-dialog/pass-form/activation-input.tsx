@@ -2,16 +2,17 @@ import React from 'react'
 import { IStoreState, useSelector, useActions } from 'store'
 
 import TextField from 'containers/text-field'
-const selector = () => (state: IStoreState) => state.checkDialog.passForm?.capacity
 
-export default function CapacityInput() {
+const selector = () => (state: IStoreState) => state.checkDialog.passForm?.activation
+
+export default function ActivationInput() {
   const type = useSelector(state => state.checkDialog.passForm?.type)
   const actions = useActions()
 
   const handleChange = React.useCallback(
-    (name, capacity) => {
+    (name, activation) => {
       actions.checkDialog.updatePass({
-        capacity: +capacity,
+        activation: +activation,
       })
     },
     [actions]
@@ -19,10 +20,10 @@ export default function CapacityInput() {
 
   return (
     <TextField
-      name='capacity'
+      name='duration'
       onChange={handleChange}
       fieldSelector={selector}
-      label='Кол-во АБ'
+      label='Срок активации'
       fullWidth={true}
       variant='outlined'
       disabled={(type === 'universal' || type === 'no_trainer')}

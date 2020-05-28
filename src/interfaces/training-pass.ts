@@ -6,8 +6,7 @@ export interface ITrainingPassForm {
   type: 'universal' | 'no_trainer' | 'child_sport' | 'adult_sport' | 'open' | null
   size: string | null
   capacity: number | null
+  duration: number | null
+  activation: number | null
   createdAt: Date
-  activatedAt: Date | null
-  activatesIn: Date | null
-  expiresIn: Date | null
 }

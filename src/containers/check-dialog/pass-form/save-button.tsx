@@ -7,8 +7,9 @@ import useCreateTrainingPass from '../graphql/create-training-pass'
 
 export default function SaveButton() {
   const actions = useActions()
-  const { passMode } = useSelector(state => ({
+  const { passMode, pass } = useSelector(state => ({
     passMode: state.checkDialog.passMode,
+    pass: state.checkDialog.passForm,
   }))
 
   const createTrainingPass = useCreateTrainingPass()
@@ -24,8 +25,23 @@ export default function SaveButton() {
     [actions, createTrainingPass, passMode]
   )
 
+  const disabled = React.useMemo(
+    () => {
+      return (
+        !pass ||
+        !pass.type ||
+        !pass.size ||
+        !pass.capacity ||
+        !pass.duration ||
+        !pass.activation ||
+        !pass.createdAt ||
+        !pass.contact
+      )
+    }, [pass]
+  )
+
   return (
-    <Button color='primary' variant='contained' onClick={save}>
+    <Button color='primary' variant='contained' onClick={save} disabled={disabled}>
       Сохранить
     </Button>
   )

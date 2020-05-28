@@ -21,8 +21,9 @@ import useStyles from './styles'
 export default function ResourcesBlock() {
   const classes = useStyles()
   const actions = useActions()
-  const { _id } = useSelector(state => ({
+  const { _id, traineesAmount } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
+    traineesAmount: state.schedule.trainingDialog.trainingForm?.traineesAmount,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
@@ -33,22 +34,28 @@ export default function ResourcesBlock() {
     [actions]
   )
 
+  const disabled = React.useMemo(
+    () => {
+      return (!traineesAmount || trainingQuery?.data?.trainingRecords.length! >= traineesAmount)
+    }, [trainingQuery, traineesAmount]
+  )
+
   return (
     <Grid container={true} spacing={3}>
       <Grid item={true} lg={4} className={classes.divider}>
         <List className={classes.list}>
-          <ListItem button={true} onClick={activate}>
+          <ListItem button={true} onClick={activate} disabled={disabled}>
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
                 <AddOutlined />
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={`Добавить запись`}
+              primary={`Добавить запись (${trainingQuery?.data?.trainingRecords.length}/${traineesAmount})`}
             />
           </ListItem>
           {
-            trainingQuery?.data?.trainingRecords.map(r => (
+            trainingQuery?.data?.trainingRecords.map((r, index) => (
               <RecordItem key={r._id} id={r._id!} />
             ))
           }

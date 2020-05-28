@@ -1,5 +1,4 @@
 #import "../../records-block/record.gql"
-#import "../../payments-block/payment-form/pass-select/pass.gql"
 #import "../../header/contact.gql"
 #import "../../pass-form/contact-suggester/contact.gql"
 #import "../../payments-block/payment-item/payment.gql"
@@ -30,13 +29,6 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     }) {
       ...checkPaymentItem
       ...totalCheckPayment
-    }
-    trainingPasss(query: {
-      contact: {
-        _id: $_id
-      }
-    }) {
-      ...paymentPass
     }
     user(query: { _id: $_id }) {
       ...headerContact

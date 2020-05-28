@@ -23,7 +23,13 @@ export default function TrainingDialog() {
     [actions, trainingForm, createTraining, step]
   )
 
+  const disabled = React.useMemo(
+    () => {
+      return (!trainingForm.type || !trainingForm.traineesAmount)
+    }, [trainingForm]
+  )
+
   return (
-    <Button variant='contained' color='primary' onClick={save}> Сохранить </Button>
+    <Button variant='contained' color='primary' onClick={save} disabled={disabled}> Сохранить </Button>
   )
 }

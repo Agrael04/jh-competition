@@ -32,8 +32,19 @@ export default function ResourcesBlock() {
     [actions, createTrainingResource, updateTrainingResource, trainingForm, resourceForm, resourceMode]
   )
 
+  const disabled = React.useMemo(
+    () => {
+      return (
+        !resourceForm ||
+        !resourceForm?.resource ||
+        !resourceForm?.startTime ||
+        !resourceForm?.endTime
+      )
+    }, [resourceForm]
+  )
+
   return (
-    <Button color='primary' variant='contained' onClick={save}>
+    <Button color='primary' variant='contained' onClick={save} disabled={disabled}>
       Сохранить
     </Button>
   )

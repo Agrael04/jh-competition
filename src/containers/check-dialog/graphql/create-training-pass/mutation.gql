@@ -7,9 +7,8 @@ mutation createTrainingPass ($data: TrainingPassInsertInput!) {
     type
     size
     capacity
+    duration
+    activation
     createdAt
-    expiresIn
-    activatesIn
-    expiresIn
   }
 }

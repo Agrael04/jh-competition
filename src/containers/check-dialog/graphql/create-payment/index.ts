@@ -7,6 +7,7 @@ import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 const CREATE_PAYMENT = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contract-details/query.gql')
+const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreateTrainingPass = () => {
   const [createPayment] = useMutation(CREATE_PAYMENT)
@@ -35,6 +36,12 @@ const useCreateTrainingPass = () => {
           boundUpdateCachedQuery({
             query: GET_CONTACT_DETAILS,
             variables,
+            updater,
+          })
+
+          boundUpdateCachedQuery({
+            query: GET_TRAINING_PASSES,
+            variables: { _id: variables._id },
             updater,
           })
         },

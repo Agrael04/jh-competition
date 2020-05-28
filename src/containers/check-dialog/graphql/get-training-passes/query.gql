@@ -1,0 +1,20 @@
+#import "../../payments-block/payment-form/pass-select/pass.gql"
+#import "../../payments-block/payment-form/pass-select/payment.gql"
+
+query getContactDetails($_id: ObjectId){
+  trainingPasss(query: {
+    contact: {
+      _id: $_id
+    }
+  }) {
+    ...paymentPass
+  }
+  payments(query: {
+    contact: {
+      _id: $_id
+    },
+    type: "units"
+  }) {
+    ...passPayment
+  }
+}

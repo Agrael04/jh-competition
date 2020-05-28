@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
 
-import useGetContactDetailsQuery from '../../../graphql/get-contract-details'
+import useGetTrainingPassesQuery from '../../../graphql/get-training-passes'
 
 import { universalSizes, noTrainerSizes, passTypes } from '../../../data'
 
@@ -15,7 +15,7 @@ export default function PassSelect() {
   const actions = useActions()
   const isDebt = useSelector(state => state.checkDialog.paymentForm?.isDebt)
 
-  const { data } = useGetContactDetailsQuery()
+  const { data } = useGetTrainingPassesQuery()
 
   const handleChange = React.useCallback(
     (name, pass) => {
@@ -23,6 +23,30 @@ export default function PassSelect() {
     },
     [actions]
   )
+
+  const getUsedUnits = (_id: string) => {
+    return data?.payments.filter(p => p.pass?._id === _id).reduce((res, a) => res + a.amount, 0)!
+  }
+
+  const getFirstDate = (_id: string) => {
+    return data?.payments.map(p => new Date(p.date).getDate()).sort((a, b) => a - b)[0]!
+  }
+
+  const getActivationDate = (pass: any) => {
+    const maxActivationDate = new Date(pass.createdAt).getDate() + pass.activation
+    const firstDate = getFirstDate(pass._id)
+
+    return maxActivationDate > firstDate ? firstDate : maxActivationDate
+  }
+
+  const getExpirationDate = (pass: any) => {
+    const activationDate = getActivationDate(pass)
+
+    const date = new Date()
+    date.setDate(activationDate + pass.duration)
+
+    return date
+  }
 
   return (
     <Select
@@ -55,9 +79,13 @@ export default function PassSelect() {
               )
             }
             {', '}
-            {pass.capacity} АБ
+            {
+              pass.capacity - getUsedUnits(pass._id)
+            } АБ
             {', '}
-            {new Date(pass.expiresIn).toLocaleDateString()}
+            {
+              getExpirationDate(pass).toLocaleDateString()
+            }
           </MenuItem>
         ))
       }
