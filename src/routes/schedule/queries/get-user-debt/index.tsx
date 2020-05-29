@@ -3,14 +3,14 @@ import { loader } from 'graphql.macro'
 
 const GET_USER_DEBT = loader('./query.gql')
 
-export interface IGetContactRecords {
+export interface IGetContactDebt {
   payments: Array<{
     _id: string
   }>
 }
 
 export const useGetUserDebt = (contactId?: string) => {
-  const result = useQuery<IGetContactRecords>(GET_USER_DEBT, {
+  const result = useQuery<IGetContactDebt>(GET_USER_DEBT, {
     variables: { _id: contactId },
     skip: !contactId,
     fetchPolicy: 'cache-and-network',

@@ -52,16 +52,10 @@ export default function ResourcesBlock() {
   return (
     <Grid item={true} lg={8} container={true} spacing={3}>
       <Grid item={true} lg={12}>
-        <ResourceSelect
-          name='resource'
-          label='Ресурс'
-        />
+        <ResourceSelect />
       </Grid>
       <Grid item={true} lg={12}>
-        <TrainerSelect
-          name='trainer'
-          label='Тренер'
-        />
+        <TrainerSelect />
       </Grid>
       <Grid item={true} lg={6}>
         <StartTimeSelect

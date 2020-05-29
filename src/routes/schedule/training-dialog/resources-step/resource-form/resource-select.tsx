@@ -6,14 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from 'containers/select'
 import useGetGymsQuery from '../../../queries/get-gyms'
 
-interface IProps {
-  name: string
-  label: string
-}
-
 const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.resource?.link
 
-export default function ResourceSelect({ name, label }: IProps) {
+export default function ResourceSelect() {
   const actions = useActions()
   const { gym } = useSelector(state => ({
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
@@ -28,17 +23,17 @@ export default function ResourceSelect({ name, label }: IProps) {
 
   const handleChange = React.useCallback(
     (name, link) => {
-      actions.schedule.trainingDialog.updateResourceField(name, { link })
+      actions.schedule.trainingDialog.updateResource({ resource: { link } })
     },
     [actions]
   )
 
   return (
     <Select
-      name={name}
+      name={'resource'}
       onChange={handleChange}
       fieldSelector={selector}
-      label={label}
+      label={'Ресурс'}
       fullWidth={true}
       variant='outlined'
     >

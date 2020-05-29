@@ -20,8 +20,6 @@ export default function ContactAbornment() {
     return null
   }
 
-  console.log(data?.payments.length, loading)
-
   return (
     <InputAdornment position='start'>
       {
@@ -30,12 +28,12 @@ export default function ContactAbornment() {
         )
       }
       {
-        !loading && data!.payments.length > 0 && (
+        !loading && data && data.payments?.length > 0 && (
           <Error color='error' />
         )
       }
       {
-        !loading && data!.payments.length === 0 && (
+        !loading && data && data.payments?.length === 0 && (
           <AccountCircle color='primary' />
         )
       }

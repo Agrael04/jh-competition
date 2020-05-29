@@ -118,16 +118,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.UPDATE_RESOURCE_FIELD: {
-      return {
-        ...state,
-        resourceForm: {
-          ...state.resourceForm,
-          [payload.field]: payload.value,
-        } as ITrainingResourceForm,
-      }
-    }
-
     case constants.UPDATE_RESOURCE: {
       return {
         ...state,
@@ -154,16 +144,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
         ...state,
         recordForm: null,
         recordMode: null,
-      }
-    }
-
-    case constants.UPDATE_RECORD_FIELD: {
-      return {
-        ...state,
-        recordForm: {
-          ...state.recordForm,
-          [payload.field]: payload.value,
-        } as ITrainingRecordForm,
       }
     }
 

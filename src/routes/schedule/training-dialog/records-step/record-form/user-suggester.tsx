@@ -25,7 +25,7 @@ const renderInput = (loading: boolean, label: string, startAdornment?: React.Rea
     variant='outlined'
     InputProps={{
       ...params.InputProps,
-      startAdornment,
+      startAdornment: params.inputProps.value && startAdornment,
       endAdornment: (
         <React.Fragment>
           {loading ? <CircularProgress color='inherit' size={20} /> : null}

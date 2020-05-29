@@ -6,14 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from 'containers/select'
 import useGetSchedulesQuery from '../../../queries/get-schedules'
 
-interface IProps {
-  name: string
-  label: string
-}
-
 const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.trainer?.link
 
-export default function TrainerSelect({ name, label }: IProps) {
+export default function TrainerSelect() {
   const actions = useActions()
   const { date, gym, endTime, startTime, trainer } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
@@ -62,7 +57,7 @@ export default function TrainerSelect({ name, label }: IProps) {
   const handleChange = React.useCallback(
     (name, link) => {
       if (link) {
-        actions.schedule.trainingDialog.updateResourceField(name, { link })
+        actions.schedule.trainingDialog.updateResource({ trainer: { link } })
       }
     },
     [actions]
@@ -79,10 +74,10 @@ export default function TrainerSelect({ name, label }: IProps) {
 
   return (
     <Select
-      name={name}
+      name={'trainer'}
       onChange={handleChange}
       fieldSelector={selector}
-      label={label}
+      label={'Тренер'}
       fullWidth={true}
       variant='outlined'
     >

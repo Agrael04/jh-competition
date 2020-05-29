@@ -24,7 +24,7 @@ export default function RecordSelect({ name, label }: IProps) {
 
   const handleChange = React.useCallback(
     (name, link: string) => {
-      actions.schedule.trainingDialog.updateRecordField(name, { link })
+      actions.schedule.trainingDialog.updateRecord({ [name]: { link } })
     },
     [actions]
   )

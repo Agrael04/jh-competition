@@ -39,7 +39,7 @@ export default function RecordsBlock() {
 
   const handleChange = React.useCallback(
     (name, value) => {
-      actions.schedule.trainingDialog.updateRecordField(name, value)
+      actions.schedule.trainingDialog.updateRecord({ [name]: value })
     },
     [actions]
   )
