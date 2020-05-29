@@ -51,7 +51,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
   const actions = useActions()
 
   const [opened, setOpened] = React.useState(false)
-  const [filter, setFilter] = React.useState<string>(initialFilter || '')
+  const [filter, setFilter] = React.useState<string>('')
 
   const handleInputChange = (e: any) => {
     if (e) {
@@ -66,6 +66,12 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
       }
     },
     [opened, filter, actions]
+  )
+
+  React.useEffect(
+    () => {
+      setFilter(initialFilter || '')
+    }, [initialFilter]
   )
 
   const open = () => setOpened(true)
