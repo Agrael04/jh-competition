@@ -14,9 +14,10 @@ interface IProps {
   [x: string]: any
   label: string
   initialFilter?: string
+  startAdornment?: React.ReactChild
 }
 
-const renderInput = (loading: boolean, label: string) => (params: any) => (
+const renderInput = (loading: boolean, label: string, startAdornment?: React.ReactChild) => (params: any) => (
   <TextField
     {...params}
     fullWidth={true}
@@ -24,6 +25,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
     variant='outlined'
     InputProps={{
       ...params.InputProps,
+      startAdornment,
       endAdornment: (
         <React.Fragment>
           {loading ? <CircularProgress color='inherit' size={20} /> : null}
@@ -34,7 +36,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
   />
 )
 
-export default function TraineeSuggester({ name, onChange, fieldSelector, label, initialFilter }: IProps) {
+export default function TraineeSuggester({ name, onChange, fieldSelector, label, initialFilter, startAdornment }: IProps) {
   const { options, loading } = useSelector(state => ({
     loading: state.schedule.clientSuggester.loading,
     options: state.schedule.clientSuggester.options,
@@ -83,7 +85,7 @@ export default function TraineeSuggester({ name, onChange, fieldSelector, label,
       inputValue={filter || ''}
       getOptionLabel={mapOptionLabel}
       loading={loading}
-      renderInput={renderInput(loading && opened, label)}
+      renderInput={renderInput(loading && opened, label, startAdornment)}
     />
   )
 }

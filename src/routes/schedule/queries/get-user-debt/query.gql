@@ -1,0 +1,10 @@
+query getContactDetails($_id: ObjectId){
+  payments(query: {
+    contact: {
+      _id: $_id
+    },
+    isDebt: true
+  }) {
+    _id
+  }
+}

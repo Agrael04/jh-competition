@@ -13,6 +13,7 @@ import useGetTrainingQuery from '../../../queries/get-training'
 
 import UserSuggester from './user-suggester'
 import ResourceSelect from './resource-select'
+import ContactAbornment from './contact-abornment'
 
 import SaveButton from './save-button'
 
@@ -67,7 +68,7 @@ export default function RecordsBlock() {
   }
 
   return (
-    <Grid item={true} lg={8} container={true} spacing={3}>
+    <Grid item={true} lg={8} container={true} spacing={4}>
       <Grid item={true} lg={9}>
         <UserSuggester
           name='contact'
@@ -75,6 +76,7 @@ export default function RecordsBlock() {
           onChange={handleContractChange}
           fieldSelector={fieldSelector}
           initialFilter={record?.contact?.fullName}
+          startAdornment={<ContactAbornment />}
         />
       </Grid>
       <Grid item={true} lg={3} container={true}>

@@ -8,18 +8,24 @@ import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
+import Today from '@material-ui/icons/Today'
 
 import DatePicker from 'containers/date-picker'
 import Select from 'containers/select'
 
 import useGetGymsQuery from './queries/get-gyms'
 
+import removeTimeFromDate from 'utils/remove-time-from-date'
+
 const activeDateSelector = () => (state: IStoreState) => state.schedule.page.activeDate
 const activeGymSelector = () => (state: IStoreState) => state.schedule.page.activeGym
 const activeResourcesSelector = () => (state: IStoreState) => state.schedule.page.activeResources
+
+const currentDate = removeTimeFromDate(new Date())!
 
 const ToolbarContainer = () => {
   const actions = useActions()
@@ -40,12 +46,28 @@ const ToolbarContainer = () => {
     actions.schedule.page.setActiveResources(value)
   }
 
-  const handlePrevDateClick = () => {
+  const isCurrentDate = React.useMemo(
+    () => {
+      return activeDate.getTime() === currentDate?.getTime()
+    }, [activeDate]
+  )
+
+  const handlePrevDateClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
     const d = moment(activeDate).subtract(1, 'days')
     actions.schedule.page.setActiveDate(d.toDate())
   }
 
-  const handleNextDateClick = () => {
+  const currentDateClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    if (!isCurrentDate) {
+      actions.schedule.page.setActiveDate(currentDate)
+    }
+  }
+
+  const handleNextDateClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
     const d = moment(activeDate).add(1, 'days')
     actions.schedule.page.setActiveDate(d.toDate())
   }
@@ -70,22 +92,29 @@ const ToolbarContainer = () => {
     <Toolbar>
       <Grid container={true} justify='space-between'>
         <Box marginY={1}>
-          <Grid container={true} wrap='nowrap'>
-            <IconButton onClick={handlePrevDateClick}>
-              <KeyboardArrowLeft />
-            </IconButton>
-            <DatePicker
-              name='date'
-              onChange={handleDateChange}
-              fieldSelector={activeDateSelector}
-              disableToolbar={true}
-              inputVariant='outlined'
-              fullWidth={true}
-            />
-            <IconButton onClick={handleNextDateClick}>
-              <KeyboardArrowRight />
-            </IconButton>
-          </Grid>
+          <DatePicker
+            name='date'
+            onChange={handleDateChange}
+            fieldSelector={activeDateSelector}
+            disableToolbar={true}
+            inputVariant='outlined'
+            fullWidth={true}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton onClick={handlePrevDateClick}>
+                    <KeyboardArrowLeft />
+                  </IconButton>
+                  <IconButton onClick={currentDateClick}>
+                    <Today color={isCurrentDate ? 'primary' : undefined} />
+                  </IconButton>
+                  <IconButton onClick={handleNextDateClick}>
+                    <KeyboardArrowRight />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </Box>
         {
           !gyms.loading && (

@@ -20,6 +20,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
       _id,
       gym: { link: gym },
       date,
+      traineesAmount: 1,
     }
 
     const resource = {
