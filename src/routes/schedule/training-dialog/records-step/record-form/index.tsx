@@ -31,9 +31,10 @@ const fieldSelector = (name: any) => (state: IStoreState) => {
 export default function RecordsBlock() {
   const actions = useActions()
   const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm)
-  const { _id, recordId } = useSelector(state => ({
+  const { _id, recordId, openedCheckDialog } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
     recordId: state.schedule.trainingDialog.recordForm?._id,
+    openedCheckDialog: state.checkDialog.opened,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
@@ -76,7 +77,7 @@ export default function RecordsBlock() {
           onChange={handleContactChange}
           fieldSelector={fieldSelector}
           initialFilter={record?.contact?.fullName}
-          startAdornment={<ContactAbornment />}
+          startAdornment={!openedCheckDialog ? <ContactAbornment /> : undefined}
         />
       </Grid>
       <Grid item={true} lg={3} container={true}>
