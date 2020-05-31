@@ -8,15 +8,14 @@ import blue from '@material-ui/core/colors/blue'
 import deepPurple from '@material-ui/core/colors/deepPurple'
 import cyan from '@material-ui/core/colors/cyan'
 import lightGreen from '@material-ui/core/colors/lightGreen'
-import blueGrey from '@material-ui/core/colors/blueGrey'
 
 const colors = [
-  purple, indigo, teal, orange, lightBlue, brown, blue, lightGreen, deepPurple, cyan,
+  purple, indigo, orange, lightBlue, brown, blue, lightGreen, deepPurple, cyan,
 ]
 
 export default function getColor(id?: number) {
   if (id === undefined || id === null || !colors[id]) {
-    return blueGrey
+    return teal
   }
 
   return colors[id]

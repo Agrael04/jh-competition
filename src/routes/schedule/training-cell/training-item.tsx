@@ -16,6 +16,8 @@ import useGetTrainingResourceQuery from '../queries/get-training-resource'
 
 import { getTimeLabel } from 'data/times'
 import getColorPallete from 'utils/get-color-pallete'
+import blueGrey from '@material-ui/core/colors/blueGrey'
+import red from '@material-ui/core/colors/red'
 
 import useStyles from './styles'
 
@@ -68,9 +70,17 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
   const color = React.useMemo(
     () => {
+      if (records?.filter(r => r.status === 'CLOSED_DEBT').length! > 0) {
+        return red
+      }
+
+      if (records?.filter(r => r.status === 'CLOSED').length === records?.length) {
+        return blueGrey
+      }
+
       return getColorPallete(trainer?.color)
     },
-    [trainer]
+    [trainer, records]
   )
 
   const backgroundStyle = React.useMemo(

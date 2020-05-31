@@ -17,7 +17,7 @@ import ContactAbornment from './contact-abornment'
 
 import SaveButton from './save-button'
 
-const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED']
+const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
 
 const fieldSelector = (name: any) => (state: IStoreState) => {
   const form: any = state.schedule.trainingDialog.recordForm

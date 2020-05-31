@@ -19,6 +19,7 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     }) {
       ...checkRecord
       ...totalServiceRecord
+      status
     }
     payments(query: {
       contact: {

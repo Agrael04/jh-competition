@@ -1,0 +1,15 @@
+  mutation closeTrainingRecords ($date: DateTime, $gym: ObjectId, $_id: ObjectId, $data: TrainingRecordUpdateInput!) {
+    updateManyTrainingRecords(query: {
+      contact: {
+        _id: $_id
+      },
+      training: {
+        date: $date,
+        gym: {
+          _id: $gym
+        }
+      }
+    }, set: $data) {
+      modifiedCount
+    }
+  }

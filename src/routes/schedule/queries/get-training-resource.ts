@@ -31,6 +31,7 @@ export interface IGetTrainingResourceResponse {
       __typename: string
       fullName: string
     }
+    status: string
   }>
 }
 
@@ -59,6 +60,7 @@ export const GET_TRAINING_RESOURCE = gql`
         _id
         fullName
       }
+      status
     }
   }
 `

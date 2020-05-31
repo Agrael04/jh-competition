@@ -11,7 +11,7 @@ import ITotalPayment from '../../total-block/payment'
 
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
-export interface IGetContactRecords {
+export interface IGetContactDetails {
   trainingRecords: Array<ICheckRecord & IService>
   payments: Array<IPaymentItem & ITotalPayment>
   user: IHeaderContact & IPassFormContact
@@ -24,7 +24,7 @@ export const useGetContactDetailsQuery = () => {
     _id: state.checkDialog.contact,
   }))
 
-  const result = useQuery<IGetContactRecords>(GET_CONTACT_DETAILS, {
+  const result = useQuery<IGetContactDetails>(GET_CONTACT_DETAILS, {
     variables,
     skip: !variables.gym || !variables._id,
     fetchPolicy: 'cache-and-network',
