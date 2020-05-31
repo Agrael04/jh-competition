@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import times from 'data/times'
+import { getTimeLabel } from 'data/times'
 import useGetTrainingQuery, { convertTrainingResourceToInput } from '../../queries/get-training'
 
 import useDeleteTrainingResource from '../../mutations/delete-training-resource'
@@ -51,8 +51,8 @@ export default function ResourceItem({ id }: IProps) {
 
   const primaryLabel = React.useMemo(
     () => {
-      const st = times.find(t => t.id === resource?.startTime)?.label
-      const et = times.find(t => t.id === resource?.endTime)?.label
+      const st = getTimeLabel(resource?.startTime)
+      const et = getTimeLabel(resource?.endTime)
 
       return `${resource?.resource.name}, ${st} - ${et}`
     },

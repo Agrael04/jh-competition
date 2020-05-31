@@ -1,72 +1,67 @@
 import React from 'react'
-// import { IStoreState, useSelector, useActions } from 'store'
+import { useSelector } from 'store'
 
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
-import ToggleButton from '@material-ui/lab/ToggleButton'
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import PriceAmount from './price-amount'
+import CancelButton from './cancel-button'
+import SaveButton from './save-button'
 
-export default function RecordForm({ cancel }: any) {
-  const [currency, setCurrency] = React.useState<string | undefined>('units')
+import useGetContactDetailsQuery from '../../graphql/get-contract-details'
 
-  const handleChange = (event: React.MouseEvent<HTMLElement>, newValue: string | null) => {
-    if (newValue !== null) {
-      setCurrency(newValue)
-    }
-  }
+import { getTimeLabel } from 'data/times'
+
+export default function RecordForm() {
+  const _id = useSelector(state => state.checkDialog.recordForm?._id)
+  const { data } = useGetContactDetailsQuery()
+
+  const record = data?.trainingRecords.find(tr => tr._id === _id)
 
   return (
     <>
       <div>
-        <Typography variant='h6'>
-          Груповая тренировка (Стена)
+        <Typography variant='body1'>
+          {record?.training.type} {record?.training.name}
         </Typography>
-        <Box marginTop={1}>
+        <Box marginTop={2}>
           <Typography variant='body1'>
-            Батут 1, 8:00-10:00, Хоботов Сергей
+            {record?.resource.resource.name}
+            {', '}
+            {getTimeLabel(record?.resource.startTime)}
+            {' - '}
+            {getTimeLabel(record?.resource.endTime)}
+            {
+              record?.resource.trainer && (
+                <>
+                  {', '}
+                  {record?.resource.trainer.firstName}
+                  {' '}
+                  {record?.resource.trainer.lastName}
+                </>
+              )
+            }
           </Typography>
         </Box>
-        <Box marginTop={1}>
-          <Typography variant='body1'>
-            Физ лицо 1
-          </Typography>
-        </Box>
-        <Box marginTop={6}>
-          <TextField
-            label='Цена'
-            variant='outlined'
-            fullWidth={true}
-            InputProps={{
-              endAdornment: (
-                <ToggleButtonGroup
-                  exclusive={true}
-                  value={currency}
-                  onChange={handleChange}
-                >
-                  <ToggleButton value='money'>
-                    Грн
-                  </ToggleButton>
-                  <ToggleButton value='units'>
-                    АБ
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              ),
-            }}
-          />
+        {
+          record?.attendant && (
+            <Box marginTop={2}>
+              <Typography variant='body1'>
+                {record?.attendant.fullName}
+              </Typography>
+            </Box>
+          )
+        }
+
+        <Box marginTop={4}>
+          <PriceAmount />
         </Box>
       </div>
       <Box marginTop={2}>
         <Grid container={true} justify='space-between'>
-          <Button onClick={cancel} color='primary'>
-            Отменить
-          </Button>
-          <Button color='primary' variant='contained'>
-            Сохранить
-          </Button>
+          <CancelButton />
+          <SaveButton />
         </Grid>
       </Box>
     </>

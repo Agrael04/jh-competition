@@ -1,30 +1,35 @@
 import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
+import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
-
-// import removeTimeFromDate from 'utils/remove-time-from-date'
 
 export interface IState {
   opened: boolean
   contact: string | null
 
-  passForm: ITrainingPassForm | null
-  passMode: 'create' | 'update' | null
+  recordForm: Partial<ITrainingRecordForm> | null
+  recordMode: 'update' | null
 
   paymentForm: IPaymentForm | null
   paymentMode: 'create' | 'update' | null
+
+  passForm: ITrainingPassForm | null
+  passMode: 'create' | 'update' | null
 }
 
 const initialState: IState = {
   opened: false,
   contact: null,
 
-  passForm: null,
-  passMode: null,
+  recordForm: null,
+  recordMode: null,
 
   paymentForm: null,
   paymentMode: null,
+
+  passForm: null,
+  passMode: null,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -37,15 +42,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    // case constants.INITIALIZE: {
-    //   return {
-    //     ...state,
-
-    //     passForm: payload.pass,
-    //     passMode: 'create',
-    //   }
-    // }
-
     case constants.CLOSE: {
       return {
         ...state,
@@ -53,28 +49,28 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.SET_PASS: {
+    case constants.SET_RECORD: {
       return {
         ...state,
-        passForm: payload.pass,
-        passMode: payload.mode,
+        recordForm: payload.record,
+        recordMode: payload.mode,
       }
     }
 
-    case constants.RESET_PASS: {
+    case constants.RESET_RECORD: {
       return {
         ...state,
-        passForm: null,
-        passMode: null,
+        recordForm: null,
+        recordMode: null,
       }
     }
 
-    case constants.UPDATE_PASS: {
+    case constants.UPDATE_RECORD: {
       return {
         ...state,
-        passForm: {
-          ...state.passForm,
-          ...payload.pass,
+        recordForm: {
+          ...state.recordForm,
+          ...payload.record,
         },
       }
     }
@@ -101,6 +97,32 @@ export default (state = initialState, { type, payload }: { type: string, payload
         paymentForm: {
           ...state.paymentForm,
           ...payload.payment,
+        },
+      }
+    }
+
+    case constants.SET_PASS: {
+      return {
+        ...state,
+        passForm: payload.pass,
+        passMode: payload.mode,
+      }
+    }
+
+    case constants.RESET_PASS: {
+      return {
+        ...state,
+        passForm: null,
+        passMode: null,
+      }
+    }
+
+    case constants.UPDATE_PASS: {
+      return {
+        ...state,
+        passForm: {
+          ...state.passForm,
+          ...payload.pass,
         },
       }
     }

@@ -9,6 +9,14 @@ import { IPaymentForm } from 'interfaces/payment'
 
 import { IStoreState } from 'store'
 
+export function* openRecord(action: ReturnType<typeof actions.openRecord>) {
+  try {
+    yield put(actions.setRecord(action.payload.record, 'update'))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export function* openPayment(action: ReturnType<typeof actions.openPayment>) {
   try {
     const { gym, activeDate, contact } = yield select((state: IStoreState) => ({
@@ -66,9 +74,6 @@ export function* openPass(action: ReturnType<typeof actions.openPass>) {
         duration: null,
         activation: null,
         createdAt: activeDate,
-        // activatedAt: null,
-        // activatesIn: null,
-        // expiresIn: null,
       }
       mode = 'create'
     }
@@ -77,6 +82,10 @@ export function* openPass(action: ReturnType<typeof actions.openPass>) {
   } catch (error) {
     console.log(error)
   }
+}
+
+function* watchOpenRecord() {
+  yield takeLatest(constants.OPEN_RECORD, openRecord)
 }
 
 function* watchOpenPayment() {
@@ -89,6 +98,7 @@ function* watchOpenPass() {
 
 export default function* root() {
   yield all([
+    watchOpenRecord(),
     watchOpenPayment(),
     watchOpenPass(),
   ])

@@ -21,5 +21,4 @@ export const noTrainerSizes = [
 export const paymentTypes = [
   { text: 'Деньги', value: 'money' },
   { text: 'Абонимент', value: 'units' },
-  { text: 'Долг', value: 'debt' },
 ]

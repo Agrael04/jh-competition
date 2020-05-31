@@ -2,16 +2,17 @@ import { useSelector } from 'store'
 import { useQuery } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import ICheckRecord from '../../records-block/record'
+import ICheckRecord from '../../records-block/record-item/record'
+import IService from '../../total-block/record'
 import IHeaderContact from '../../header/contract'
 import IPassFormContact from '../../pass-form/contact-suggester/contact'
 import IPaymentItem from '../../payments-block/payment-item/payment'
-import ITotalPayment from '../../total-payments-block/payment'
+import ITotalPayment from '../../total-block/payment'
 
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
 export interface IGetContactRecords {
-  trainingRecords: ICheckRecord[]
+  trainingRecords: Array<ICheckRecord & IService>
   payments: Array<IPaymentItem & ITotalPayment>
   user: IHeaderContact & IPassFormContact
 }

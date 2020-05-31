@@ -14,7 +14,7 @@ import FaceIcon from '@material-ui/icons/Face'
 
 import useGetTrainingResourceQuery from '../queries/get-training-resource'
 
-import times from 'data/times'
+import { getTimeLabel } from 'data/times'
 import getColorPallete from 'utils/get-color-pallete'
 
 import useStyles from './styles'
@@ -50,12 +50,6 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
     () => tResource?.trainer,
     [tResource]
   )
-
-  // const records = React.useMemo(
-  //   () => tResource?.records,
-  //   [tResource]
-  // )
-
   const handleCreateClick = React.useCallback(
     e => {
       e.stopPropagation()
@@ -112,7 +106,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
             <Box margin='auto'>
               <Typography color='inherit' variant='caption'>
-                {times.find(t => t.id === tResource?.startTime)?.label} - {times.find(t => t.id === tResource?.endTime)?.label}
+                {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
               </Typography>
               <br />
               <Typography color='inherit' variant='caption'>

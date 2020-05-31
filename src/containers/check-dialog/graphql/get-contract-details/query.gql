@@ -1,8 +1,9 @@
-#import "../../records-block/record.gql"
+#import "../../records-block/record-item/record.gql"
+#import "../../total-block/record.gql"
 #import "../../header/contact.gql"
 #import "../../pass-form/contact-suggester/contact.gql"
 #import "../../payments-block/payment-item/payment.gql"
-#import "../../total-payments-block/payment.gql"
+#import "../../total-block/payment.gql"
 
 query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     trainingRecords(query: {
@@ -17,6 +18,7 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
       }
     }) {
       ...checkRecord
+      ...totalServiceRecord
     }
     payments(query: {
       contact: {

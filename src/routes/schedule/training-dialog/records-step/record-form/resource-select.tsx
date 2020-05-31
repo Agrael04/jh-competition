@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'containers/select'
 
-import times from 'data/times'
+import { getTimeLabel } from 'data/times'
 import useGetTrainingQuery from '../../../queries/get-training'
 
 interface IProps {
@@ -32,8 +32,8 @@ export default function RecordSelect({ name, label }: IProps) {
   const getResouceLabel = React.useCallback(
     resource => {
       const name = resource?.resource?.name
-      const st = times.find(t => t.id === resource.startTime)?.label
-      const et = times.find(t => t.id === resource.endTime)?.label
+      const st = getTimeLabel(resource.startTime)
+      const et = getTimeLabel(resource.endTime)
       const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource?._id === resource._id).length
 
       return `${name}, ${st} - ${et}, ${recordsLength} записей`

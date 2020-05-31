@@ -2,6 +2,6 @@
 
 declare namespace NodeJS {
   export interface ProcessEnv {
-    REACT_APP_FIREBASE: string;
+    REACT_APP_MONGODB_APP_ID: string;
   }
 }

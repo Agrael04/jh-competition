@@ -1,0 +1,31 @@
+  fragment checkRecord on TrainingRecord {
+    _id
+    priceType
+    priceAmount
+    attendant {
+      _id
+      fullName
+    }
+
+    resource {
+      _id
+      startTime
+      endTime
+
+      resource {
+        _id
+        name
+      }
+      
+      trainer {
+        _id
+        firstName
+        lastName
+      }
+    }
+    training {
+      _id
+      type
+      name
+    }
+  }

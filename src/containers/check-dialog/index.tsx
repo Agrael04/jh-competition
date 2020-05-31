@@ -2,8 +2,6 @@ import React from 'react'
 import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
@@ -12,7 +10,7 @@ import Header from './header'
 import PassForm from './pass-form'
 import PaymentsBlock from './payments-block'
 import RecordsBlock from './records-block'
-import TotalPaymentsBlock from './total-payments-block'
+import TotalBlock from './total-block'
 
 export default function TrainingDialog() {
   const { opened } = useSelector(state => ({
@@ -43,46 +41,7 @@ export default function TrainingDialog() {
           <Grid item={true} lg={12}>
             <Box border={1} borderColor='primary.main' width={1} />
           </Grid>
-          <Grid item={true} lg={4} container={true} direction='column' justify='space-between'>
-            <Grid item={true}>
-              <Box margin='auto' width='fit-content'>
-                <Typography variant='h5' color='primary' align='center'>
-                  Всего заказано
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  -1200 грн
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  -6 АБ
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid item={true} lg={4} container={true} direction='column' justify='space-between'>
-            <TotalPaymentsBlock />
-          </Grid>
-          <Grid item={true} lg={4} container={true} direction='column' justify='space-between'>
-            <Grid item={true}>
-              <Box margin='auto' width='fit-content'>
-                <Typography variant='h5' color='primary' align='center'>
-                  Баланс
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  -200 грн
-                </Typography>
-                <Typography variant='h6' align='center'>
-                  -1 АБ
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item={true} container={true}>
-              <Box marginTop={3} width={1}>
-                <Button color='primary' variant='contained' disabled={true} fullWidth={true}>
-                  Закрыть чек
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          <TotalBlock />
         </Grid>
       </Box>
     </Dialog>

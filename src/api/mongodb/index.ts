@@ -2,15 +2,13 @@ import { Stitch, RemoteMongoClient, AnonymousCredential, GoogleRedirectCredentia
 
 import { ISearchedTrainee } from '../../interfaces/trainee'
 
-const APP_ID = 'mongodb-provider-gzjek'
+const APP_ID = process.env.REACT_APP_MONGODB_APP_ID
 const DATABASE = 'test-db'
 const COLLECTION = 'users'
 
 export const client = Stitch.initializeDefaultAppClient(APP_ID)
 
 export const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(DATABASE)
-
-// await db.collection(COLLECTION).updateOne({ owner_id: user.id }, { $set: { number: 42 } }, { upsert: true })
 
 const searchUsers = async (name: string) => {
   await client.auth.loginWithCredential(new AnonymousCredential())

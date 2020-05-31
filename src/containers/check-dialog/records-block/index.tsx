@@ -1,31 +1,21 @@
 import React from 'react'
+import { useSelector } from 'store'
 
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
-import Avatar from '@material-ui/core/Avatar'
 
 import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 import RecordForm from './record-form'
+import RecordItem from './record-item'
 
 export default function TrainingDialog() {
+  const isFormActive = useSelector(state => !!state.checkDialog.recordForm)
+
   const { data } = useGetContactDetailsQuery()
 
-  const [openedRecordForm, setOpenedRecordForm] = React.useState(false)
-
-  const openRecordForm = () => {
-    setOpenedRecordForm(true)
-  }
-
-  const closeRecordForm = () => {
-    setOpenedRecordForm(false)
-  }
-
-  if (openedRecordForm) {
+  if (isFormActive) {
     return (
-      <RecordForm cancel={closeRecordForm} />
+      <RecordForm />
     )
   }
 
@@ -34,17 +24,7 @@ export default function TrainingDialog() {
       <List>
         {
           data?.trainingRecords.map((record, index) => (
-            <ListItem button={true} key={record._id} onClick={openRecordForm}>
-              <ListItemAvatar>
-                <Avatar>
-                  {index + 1}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={`${record.training.type} (${record.training.name}), 8:00 - 9:00`}
-                secondary={index % 2 === 0 ? `600 грн` : '3АБ'}
-              />
-            </ListItem>
+            <RecordItem record={record} index={index} key={record._id} />
           ))
         }
       </List>

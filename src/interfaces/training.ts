@@ -1,15 +1,3 @@
-export interface ITrainingRecord {
-  _id?: string
-  trainee: {
-    _id: string
-    fullName: string
-  }
-  seasonPass?: string
-  status?: string
-  note?: string
-  training?: string
-}
-
 export interface ITrainingId {
   /* gym */
   /* date */
@@ -77,4 +65,6 @@ export interface ITrainingRecordForm {
   training: {
     link: string
   }
+  priceType: 'units' | 'money'
+  priceAmount: number
 }

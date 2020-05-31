@@ -1,0 +1,7 @@
+  mutation updateTrainingRecord ($_id: ObjectId!, $data: TrainingRecordUpdateInput!) {
+    updateOneTrainingRecord(query: { _id: $_id }, set: $data) {
+      _id
+      priceType
+      priceAmount
+    }
+  }

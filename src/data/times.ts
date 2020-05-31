@@ -30,4 +30,8 @@ export const times = [
   { id: 29, label: '22:00' },
 ]
 
+export const getTimeLabel = (id?: number) => {
+  return times.find(t => t.id === id)?.label
+}
+
 export default times
