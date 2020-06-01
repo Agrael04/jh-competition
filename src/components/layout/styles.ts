@@ -1,13 +1,12 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import background from '../../assets/background.jpg'
 
 const drawerWidth = 240
 
 export default makeStyles((theme: Theme) => ({
   app: {
-    background: `url(${background})`,
     textAlign: 'center',
     minHeight: '100vh',
+    width: '100%',
   },
   appBar: {
     backgroundColor: theme.palette.primary.main,

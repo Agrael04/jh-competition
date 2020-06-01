@@ -1,4 +1,4 @@
-import { Stitch, RemoteMongoClient, AnonymousCredential, GoogleRedirectCredential } from 'mongodb-stitch-browser-sdk'
+import { Stitch, RemoteMongoClient, AnonymousCredential, GoogleRedirectCredential, UserPasswordCredential } from 'mongodb-stitch-browser-sdk'
 
 import { ISearchedTrainee } from '../../interfaces/trainee'
 
@@ -40,6 +40,17 @@ export function loginWithGoogle() {
       return user
     })
     .catch(console.error)
+}
+
+export function loginWithPassword(username: string, password: string) {
+  // Allow users to log in anonymously
+  const credential = new UserPasswordCredential(username, password)
+
+  return client.auth
+    .loginWithCredential(credential)
+    .then(user => {
+      return user
+    })
 }
 
 export function hasLoggedInUser() {
