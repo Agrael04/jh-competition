@@ -9,7 +9,7 @@ import PassSelect from './pass-select'
 import AddPassButton from './add-pass-button'
 import AmountInput from './amount-input'
 import TransactionInput from './transaction-input'
-import DestinationInput from './destination-input'
+import DestinationSelect from './destination-select'
 import CancelButton from './cancel-button'
 import SaveButton from './save-button'
 
@@ -46,7 +46,7 @@ export default function PaymentForm() {
           type === 'money' && (
             <>
               <Grid item={true} lg={12}>
-                <DestinationInput />
+                <DestinationSelect />
               </Grid>
               <Grid item={true} lg={12}>
                 <TransactionInput />
