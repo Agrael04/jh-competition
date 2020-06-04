@@ -11,8 +11,6 @@ export const client = Stitch.initializeDefaultAppClient(APP_ID)
 export const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(DATABASE)
 
 const searchUsers = async (name: string) => {
-  await client.auth.loginWithCredential(new AnonymousCredential())
-
   const docs = await db.collection(COLLECTION).find({ fullName: { $regex: name, $options: 'i' }, surname: { $ne: '' } }, { limit: 20, sort: { surname: 1 }, projection: { fullName: 1 } }).toArray()
 
   return docs as ISearchedTrainee[]
