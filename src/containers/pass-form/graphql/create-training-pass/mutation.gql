@@ -3,6 +3,7 @@ mutation createTrainingPass ($data: TrainingPassInsertInput!) {
     _id
     contact {
       _id
+      fullName
     }
     type
     size
@@ -10,5 +11,6 @@ mutation createTrainingPass ($data: TrainingPassInsertInput!) {
     duration
     activation
     createdAt
+    price
   }
 }

@@ -1,7 +1,7 @@
 import { all, put, takeLatest, select } from 'redux-saga/effects'
 import { BSON } from 'mongodb-stitch-browser-sdk'
 
-import { actions } from 'store/actions/check-dialog'
+import { actions } from 'store/actions'
 import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
@@ -9,15 +9,15 @@ import { IPaymentForm } from 'interfaces/payment'
 
 import { IStoreState } from 'store'
 
-export function* openRecord(action: ReturnType<typeof actions.openRecord>) {
+export function* openRecord(action: ReturnType<typeof actions.checkDialog.openRecord>) {
   try {
-    yield put(actions.setRecord(action.payload.record, 'update'))
+    yield put(actions.checkDialog.setRecord(action.payload.record, 'update'))
   } catch (error) {
     console.log(error)
   }
 }
 
-export function* openPayment(action: ReturnType<typeof actions.openPayment>) {
+export function* openPayment(action: ReturnType<typeof actions.checkDialog.openPayment>) {
   try {
     const { gym, activeDate, contact } = yield select((state: IStoreState) => ({
       gym: state.schedule.page.activeGym,
@@ -45,40 +45,32 @@ export function* openPayment(action: ReturnType<typeof actions.openPayment>) {
       mode = 'create'
     }
 
-    yield put(actions.setPayment(payment, mode))
+    yield put(actions.checkDialog.setPayment(payment, mode))
   } catch (error) {
     console.log(error)
   }
 }
 
-export function* openPass(action: ReturnType<typeof actions.openPass>) {
+export function* openPass(action: ReturnType<typeof actions.checkDialog.openPass>) {
   try {
     const { contact, activeDate } = yield select((state: IStoreState) => ({
       contact: state.checkDialog.contact,
       activeDate: state.schedule.page.activeDate,
     }))
 
-    let pass: Partial<ITrainingPassForm>
-    let mode: 'create' | 'update' | null = null
-
-    if (action.payload.pass) {
-      pass = action.payload.pass
-      mode = 'update'
-    } else {
-      pass = {
-        _id: new BSON.ObjectID(),
-        contact: { link: contact },
-        type: null,
-        size: null,
-        capacity: null,
-        duration: null,
-        activation: null,
-        createdAt: activeDate,
-      }
-      mode = 'create'
+    const pass: Partial<ITrainingPassForm> = {
+      _id: new BSON.ObjectID(),
+      contact: { link: contact },
+      type: null,
+      size: null,
+      capacity: null,
+      duration: null,
+      activation: null,
+      createdAt: activeDate,
     }
+    const mode = 'create'
 
-    yield put(actions.setPass(pass, mode))
+    yield put(actions.passForm.open(mode, pass, action.payload.initialFilter))
   } catch (error) {
     console.log(error)
   }

@@ -1,17 +1,20 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import TextField from 'containers/text-field'
 
-const selector = () => (state: IStoreState) => state.checkDialog.passForm?.activation
+const selector = () => (state: IStoreState) => state.passForm.passForm?.activation
 
-export default function ActivationInput() {
-  const type = useSelector(state => state.checkDialog.passForm?.type)
+interface IProps {
+  disabled?: boolean
+}
+
+export default function ActivationInput({ disabled }: IProps) {
   const actions = useActions()
 
   const handleChange = React.useCallback(
     (name, activation) => {
-      actions.checkDialog.updatePass({
+      actions.passForm.update({
         activation: +activation,
       })
     },
@@ -26,7 +29,7 @@ export default function ActivationInput() {
       label='Срок активации'
       fullWidth={true}
       variant='outlined'
-      disabled={(type === 'universal' || type === 'no_trainer')}
+      disabled={disabled}
       type='number'
     />
   )

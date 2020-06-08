@@ -53,6 +53,10 @@ const SchedulePage = () => {
 
   const resources = React.useMemo(
     () => {
+      if (!gyms.data) {
+        return []
+      }
+
       return activeResources
         .map(r => gyms.data?.resources.find(res => res._id === r)!)
     }, [gyms, activeResources]

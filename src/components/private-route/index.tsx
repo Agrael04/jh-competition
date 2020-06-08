@@ -14,8 +14,6 @@ const GRAPHQL_URL = `https://stitch.mongodb.com/api/client/v2.0/app/${process.en
 export default function PrivateRoute({ path, exact, children }: any) {
   const [loggedIn, setLoggedIn] = React.useState(hasLoggedInUser())
 
-  console.log(loggedIn, getCurrentUser())
-
   if (!loggedIn) {
     return (
       <Redirect to='/login' />
@@ -34,7 +32,7 @@ export default function PrivateRoute({ path, exact, children }: any) {
   const httpLink = new HttpLink({ uri: GRAPHQL_URL })
 
   const errorLink = onError(({ networkError }) => {
-    if ((networkError as any).statusCode === 401) {
+    if ((networkError as any)?.statusCode === 401) {
       logoutCurrentUser().then(
         () => setLoggedIn(hasLoggedInUser())
       )

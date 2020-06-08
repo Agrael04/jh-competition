@@ -1,6 +1,5 @@
 import constants from 'store/constants/check-dialog'
 
-import { ITrainingPassForm } from 'interfaces/training-pass'
 import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
 
@@ -13,9 +12,6 @@ export interface IState {
 
   paymentForm: IPaymentForm | null
   paymentMode: 'create' | 'update' | null
-
-  passForm: ITrainingPassForm | null
-  passMode: 'create' | 'update' | null
 }
 
 const initialState: IState = {
@@ -27,9 +23,6 @@ const initialState: IState = {
 
   paymentForm: null,
   paymentMode: null,
-
-  passForm: null,
-  passMode: null,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -97,32 +90,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
         paymentForm: {
           ...state.paymentForm,
           ...payload.payment,
-        },
-      }
-    }
-
-    case constants.SET_PASS: {
-      return {
-        ...state,
-        passForm: payload.pass,
-        passMode: payload.mode,
-      }
-    }
-
-    case constants.RESET_PASS: {
-      return {
-        ...state,
-        passForm: null,
-        passMode: null,
-      }
-    }
-
-    case constants.UPDATE_PASS: {
-      return {
-        ...state,
-        passForm: {
-          ...state.passForm,
-          ...payload.pass,
         },
       }
     }

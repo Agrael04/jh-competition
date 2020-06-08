@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { useSelector, IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
@@ -7,7 +8,9 @@ import Select from 'containers/select'
 
 import useGetTrainingPassesQuery from '../../../graphql/get-training-passes'
 
-import { universalSizes, noTrainerSizes, passTypes } from '../../../data'
+import { passTypes, getSizes } from 'data/training-passes'
+
+import { getUsedUnits, getExpirationDate } from 'utils/pass'
 
 const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.pass?.link
 
@@ -24,30 +27,6 @@ export default function PassSelect() {
     [actions]
   )
 
-  const getUsedUnits = (_id: string) => {
-    return data?.payments.filter(p => p.pass?._id === _id).reduce((res, a) => res + a.amount, 0)!
-  }
-
-  const getFirstDate = (_id: string) => {
-    return data?.payments.map(p => new Date(p.date).getDate()).sort((a, b) => a - b)[0]!
-  }
-
-  const getActivationDate = (pass: any) => {
-    const maxActivationDate = new Date(pass.createdAt).getDate() + pass.activation
-    const firstDate = getFirstDate(pass._id)
-
-    return maxActivationDate > firstDate ? firstDate : maxActivationDate
-  }
-
-  const getExpirationDate = (pass: any) => {
-    const activationDate = getActivationDate(pass)
-
-    const date = new Date()
-    date.setDate(activationDate + pass.duration)
-
-    return date
-  }
-
   return (
     <Select
       name='pass'
@@ -63,28 +42,20 @@ export default function PassSelect() {
           <MenuItem value={pass._id} key={pass._id}>
             {passTypes.find(p => p.value === pass.type)?.text}
             {
-              pass.type === 'universal' && (
+              !!(getSizes(pass.type)) && (
                 <>
                   {' '}
-                  {universalSizes.find(s => s.value === pass.size)?.value}
-                </>
-              )
-            }
-            {
-              pass.type === 'no_trainer' && (
-                <>
-                  {' '}
-                  {noTrainerSizes.find(s => s.value === pass.size)?.text}
+                  {getSizes(pass.type)?.find(s => s.value === pass.size)?.text}
                 </>
               )
             }
             {', '}
             {
-              pass.capacity - getUsedUnits(pass._id)
+              pass.capacity - getUsedUnits(data?.payments, pass)
             } АБ
             {', '}
             {
-              getExpirationDate(pass).toLocaleDateString()
+              moment(getExpirationDate(data?.payments, pass)).format('D MMMM')
             }
           </MenuItem>
         ))

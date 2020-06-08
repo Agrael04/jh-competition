@@ -5,7 +5,7 @@ import { loader } from 'graphql.macro'
 import ICheckRecord from '../../records-block/record-item/record'
 import IService from '../../total-block/record'
 import IHeaderContact from '../../header/contract'
-import IPassFormContact from '../../pass-form/contact-suggester/contact'
+import IPassFormContact from '../../pass-form/contact'
 import IPaymentItem from '../../payments-block/payment-item/payment'
 import ITotalPayment from '../../total-block/payment'
 

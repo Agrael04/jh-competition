@@ -63,8 +63,7 @@ export function getCurrentUser(): any {
 
 export function logoutCurrentUser() {
   // Logout the currently logged in user
-  const user = getCurrentUser()
-  return user && client.auth.logoutUserWithId(user.id)
+  return client.auth.logout()
 }
 
 export default searchUsers

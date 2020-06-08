@@ -1,0 +1,14 @@
+  fragment passRow on TrainingPass {
+    _id
+    contact {
+    _id
+      fullName
+    }
+    type
+    size
+    capacity
+    duration
+    activation
+    createdAt
+    price    
+  }

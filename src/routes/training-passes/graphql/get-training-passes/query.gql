@@ -1,0 +1,19 @@
+#import "../../pass-row/pass.gql"
+
+query getTrainingPasses{
+  trainingPasss {
+    ...passRow
+  }
+  payments(query: { type: "units" }) {
+    _id
+    amount
+    date
+    gym {
+      _id
+      name
+    }
+    pass {
+      _id
+    }
+  }
+}

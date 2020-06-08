@@ -1,7 +1,7 @@
 #import "../../records-block/record-item/record.gql"
 #import "../../total-block/record.gql"
 #import "../../header/contact.gql"
-#import "../../pass-form/contact-suggester/contact.gql"
+#import "../../pass-form/contact.gql"
 #import "../../payments-block/payment-item/payment.gql"
 #import "../../total-block/payment.gql"
 

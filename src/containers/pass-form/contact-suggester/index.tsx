@@ -9,7 +9,6 @@ import { ISearchedTrainee } from 'interfaces/trainee'
 
 interface IProps {
   name: any
-  onChange?: (name: any, value: any) => void
   fieldSelector: (name: any) => (state: IStoreState) => any
   [x: string]: any
   label: string
@@ -34,7 +33,7 @@ const renderInput = (loading: boolean, label: string) => (params: any) => (
   />
 )
 
-export default function ContractSuggester({ name, onChange, fieldSelector, label, initialFilter, disabled }: IProps) {
+export default function ContractSuggester({ name, fieldSelector, label, initialFilter, disabled }: IProps) {
   const { options, loading } = useSelector(state => ({
     loading: state.schedule.clientSuggester.loading,
     options: state.schedule.clientSuggester.options,
@@ -42,9 +41,7 @@ export default function ContractSuggester({ name, onChange, fieldSelector, label
   const value = useSelector(fieldSelector(name))
 
   const handleChange = (e: any, option: ISearchedTrainee | null) => {
-    if (onChange) {
-      onChange(name, { link: option?._id })
-    }
+    actions.passForm.update({ [name]: { link: option?._id } })
     setFilter(option?.fullName || '')
   }
 

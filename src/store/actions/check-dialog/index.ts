@@ -57,23 +57,9 @@ export const updatePayment = (payment: Partial<IPaymentForm>) => ({
   payload: { payment },
 })
 
-export const openPass = (pass?: Partial<ITrainingPassForm>) => ({
+export const openPass = (initialFilter: string) => ({
   type: constants.OPEN_PASS,
-  payload: { pass },
-})
-
-export const setPass = (pass: Partial<ITrainingPassForm> | null, mode: 'create' | 'update' | null) => ({
-  type: constants.SET_PASS,
-  payload: { pass, mode },
-})
-
-export const resetPass = () => ({
-  type: constants.RESET_PASS,
-})
-
-export const updatePass = (pass: Partial<ITrainingPassForm>) => ({
-  type: constants.UPDATE_PASS,
-  payload: { pass },
+  payload: { initialFilter },
 })
 
 export const actions = {
@@ -92,9 +78,6 @@ export const actions = {
   updatePayment,
 
   openPass,
-  setPass,
-  resetPass,
-  updatePass,
 }
 
 export default actions

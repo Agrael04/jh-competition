@@ -1,17 +1,20 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import TextField from 'containers/text-field'
 
-const selector = () => (state: IStoreState) => state.checkDialog.passForm?.duration
+const selector = () => (state: IStoreState) => state.passForm.passForm?.duration
 
-export default function DurationInput() {
-  const type = useSelector(state => state.checkDialog.passForm?.type)
+interface IProps {
+  disabled?: boolean
+}
+
+export default function DurationInput({ disabled }: IProps) {
   const actions = useActions()
 
   const handleChange = React.useCallback(
     (name, duration) => {
-      actions.checkDialog.updatePass({
+      actions.passForm.update({
         duration: +duration,
       })
     },
@@ -26,7 +29,7 @@ export default function DurationInput() {
       label='Срок действия'
       fullWidth={true}
       variant='outlined'
-      disabled={(type === 'universal' || type === 'no_trainer')}
+      disabled={disabled}
       type='number'
     />
   )

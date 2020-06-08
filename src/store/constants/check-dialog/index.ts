@@ -13,9 +13,6 @@ export const RESET_PAYMENT = 'checkDialog/RESET_PAYMENT'
 export const UPDATE_PAYMENT = 'checkDialog/UPDATE_PAYMENT'
 
 export const OPEN_PASS = 'checkDialog/OPEN_PASS'
-export const SET_PASS = 'checkDialog/SET_PASS'
-export const RESET_PASS = 'checkDialog/RESET_PASS'
-export const UPDATE_PASS = 'checkDialog/UPDATE_PASS'
 
 export default {
   OPEN,
@@ -33,7 +30,4 @@ export default {
   UPDATE_PAYMENT,
 
   OPEN_PASS,
-  SET_PASS,
-  RESET_PASS,
-  UPDATE_PASS,
 }

@@ -19,7 +19,7 @@ export default function TextFieldContainer({ name, onChange, fieldSelector, ...r
 
   return (
     <TextField
-      value={value || ''}
+      value={(value === null || value === undefined) ? '' : value}
       onChange={handleChange}
       {...rest}
     />

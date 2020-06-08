@@ -2,6 +2,8 @@ import { DataProxy } from 'apollo-cache'
 
 type IUpdaterFunction<TData> = (data: TData) => TData
 
+export type IUpdateCacheFn = (client: DataProxy, { data }: any) => void
+
 interface IUpdateQuery<TData, TVariables> extends DataProxy.Query<TVariables> {
   updater: IUpdaterFunction<TData>
 }

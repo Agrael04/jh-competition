@@ -1,0 +1,16 @@
+mutation updateTrainingPass ($_id: ObjectId!, $data: TrainingPassUpdateInput!) {
+  updateOneTrainingPass(query: { _id: $_id }, set: $data) {
+    _id
+    contact {
+      _id
+      fullName
+    }
+    type
+    size
+    capacity
+    duration
+    activation
+    createdAt
+    price
+  }
+}
