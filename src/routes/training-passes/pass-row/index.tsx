@@ -2,7 +2,6 @@ import React from 'react'
 import moment from 'moment'
 import { useActions } from 'store'
 
-
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import Collapse from '@material-ui/core/Collapse'
@@ -24,6 +23,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import useStyles from '../styles'
 
 import useGetTrainingPassesQuery from '../graphql/get-training-passes'
+import useArchiveTrainingPass from '../graphql/archive-training-pass'
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
 
 import IPassRow from './pass'
@@ -39,6 +39,7 @@ const PassRow = ({ pass }: IProps) => {
   const [checked, setChecked] = React.useState<string[]>([])
 
   const { data } = useGetTrainingPassesQuery()
+  const archiveTrainingPass = useArchiveTrainingPass()
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value)
@@ -78,6 +79,11 @@ const PassRow = ({ pass }: IProps) => {
         createdAt: pass.createdAt,
       }, pass.contact.fullName
     )
+  }
+
+  const handleArchive = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    archiveTrainingPass(pass._id)
   }
 
   return (
@@ -135,7 +141,7 @@ const PassRow = ({ pass }: IProps) => {
                 })}
               </List>
               <Grid container={true} justify='flex-end'>
-                <Button color='secondary' variant='contained' disabled={checked.length < payments.length}>
+                <Button color='secondary' variant='contained' disabled={checked.length < payments.length} onClick={handleArchive}>
                   Заархивировать
                 </Button>
               </Grid>

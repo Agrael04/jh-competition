@@ -10,5 +10,6 @@
     duration
     activation
     createdAt
-    price    
+    price
+    isActive
   }

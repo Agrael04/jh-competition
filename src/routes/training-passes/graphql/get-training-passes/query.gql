@@ -1,10 +1,10 @@
 #import "../../pass-row/pass.gql"
 
 query getTrainingPasses{
-  trainingPasss {
+  trainingPasss(query: { isActive: true }) {
     ...passRow
   }
-  payments(query: { type: "units" }) {
+  payments(query: { type: "units", pass: { isActive: true } }) {
     _id
     amount
     date

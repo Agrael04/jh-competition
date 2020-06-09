@@ -14,6 +14,9 @@ query getContactDetails($_id: ObjectId){
     contact: {
       _id: $_id
     },
+    pass: {
+      isActive: true
+    }
     type: "units"
   }) {
     ...passPayment

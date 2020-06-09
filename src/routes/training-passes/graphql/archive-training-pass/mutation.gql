@@ -1,0 +1,6 @@
+  mutation archiveTrainingPasas ($_id: ObjectId!) {
+    updateOneTrainingPass(query: { _id: $_id }, set: { isActive: false }) {
+      _id
+      isActive
+    }
+  }
