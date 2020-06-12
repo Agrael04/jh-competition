@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -14,7 +14,6 @@ interface IProps {
 const selector = () => (state: IStoreState) => state.passForm.passForm?.type
 
 export default function TypeSelect({ disabledOpenType }: IProps) {
-  const createdAt = useSelector(state => state.passForm.passForm?.createdAt)
   const actions = useActions()
 
   const handleChange = React.useCallback(
@@ -30,12 +29,11 @@ export default function TypeSelect({ disabledOpenType }: IProps) {
         capacity: sizes ? sizes[0].capacity : null,
         price: sizes ? sizes[0].price : null,
         isActive: true,
-        createdAt,
       }
 
       actions.passForm.update(pass)
     },
-    [actions, createdAt]
+    [actions]
   )
 
   return (

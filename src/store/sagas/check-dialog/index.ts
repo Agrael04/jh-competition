@@ -6,12 +6,43 @@ import constants from 'store/constants/check-dialog'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
 import { IPaymentForm } from 'interfaces/payment'
+import { IServiceForm } from 'interfaces/service'
 
 import { IStoreState } from 'store'
 
 export function* openRecord(action: ReturnType<typeof actions.checkDialog.openRecord>) {
   try {
     yield put(actions.checkDialog.setRecord(action.payload.record, 'update'))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export function* openService(action: ReturnType<typeof actions.checkDialog.openService>) {
+  try {
+    const { contact } = yield select((state: IStoreState) => ({
+      contact: state.checkDialog.contact,
+    }))
+
+    let service: Partial<IServiceForm>
+    let mode: 'create' | 'update' | null = null
+
+    if (action.payload.service) {
+      service = action.payload.service
+      mode = 'update'
+    } else {
+      service = {
+        _id: new BSON.ObjectID(),
+        contact: { link: contact },
+        type: undefined,
+        service: undefined,
+        priceAmount: 0,
+        priceType: 'money',
+      }
+      mode = 'create'
+    }
+
+    yield put(actions.checkDialog.setService(service, mode))
   } catch (error) {
     console.log(error)
   }
@@ -80,6 +111,10 @@ function* watchOpenRecord() {
   yield takeLatest(constants.OPEN_RECORD, openRecord)
 }
 
+function* watchOpenService() {
+  yield takeLatest(constants.OPEN_SERVICE, openService)
+}
+
 function* watchOpenPayment() {
   yield takeLatest(constants.OPEN_PAYMENT, openPayment)
 }
@@ -91,6 +126,7 @@ function* watchOpenPass() {
 export default function* root() {
   yield all([
     watchOpenRecord(),
+    watchOpenService(),
     watchOpenPayment(),
     watchOpenPass(),
   ])
