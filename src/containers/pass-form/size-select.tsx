@@ -1,22 +1,17 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
-import Select from 'containers/select'
+import Select from 'components/select'
 
 import { getSizes } from 'data/training-passes'
 
-interface IProps {
-  name: string
-  label: string
-}
+import { useContext } from './context'
 
-const selector = () => (state: IStoreState) => state.passForm.passForm?.size
-
-export default function SizeSelect({ name, label }: IProps) {
-  const type = useSelector(state => state.passForm.passForm?.type)
-  const actions = useActions()
+export default function SizeSelect() {
+  const size = useContext(s => s.state.passForm?.size)
+  const type = useContext(s => s.state.passForm?.type)
+  const updateForm = useContext(s => s.updateForm)
 
   const sizes = React.useMemo(
     () => {
@@ -25,16 +20,17 @@ export default function SizeSelect({ name, label }: IProps) {
   )
 
   const handleChange = React.useCallback(
-    (name, size) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const size = e.target.value
       const s = sizes?.find(s => s.value === size)!
       const pass = {
         size,
         capacity: s.capacity,
         price: s.price,
       }
-      actions.passForm.update(pass)
+      updateForm(pass)
     },
-    [actions, sizes]
+    [updateForm, sizes]
   )
 
   if (!sizes) {
@@ -43,10 +39,10 @@ export default function SizeSelect({ name, label }: IProps) {
 
   return (
     <Select
-      name={name}
+      name={'size'}
       onChange={handleChange}
-      fieldSelector={selector}
-      label={label}
+      value={size}
+      label={'Размер'}
       fullWidth={true}
       variant='outlined'
     >

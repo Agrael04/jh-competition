@@ -37,16 +37,6 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.UPDATE: {
-      return {
-        ...state,
-        passForm: {
-          ...state.passForm,
-          ...payload.pass,
-        },
-      }
-    }
-
     default:
       return state
   }

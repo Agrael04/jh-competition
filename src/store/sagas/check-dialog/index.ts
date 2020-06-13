@@ -98,6 +98,7 @@ export function* openPass(action: ReturnType<typeof actions.checkDialog.openPass
       duration: null,
       activation: null,
       createdAt: activeDate,
+      isActive: true,
     }
     const mode = 'create'
 

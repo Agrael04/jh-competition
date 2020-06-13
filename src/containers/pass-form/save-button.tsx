@@ -7,33 +7,36 @@ import useCreateTrainingPass from './graphql/create-training-pass'
 import useUpdateTrainingPass from './graphql/update-training-pass'
 import { IUpdateCacheFn } from 'utils/apollo-cache-updater'
 
+import { useContext } from './context'
+
 interface IProps {
   updateCacheOnCreate?: IUpdateCacheFn
 }
 
 export default function SaveButton({ updateCacheOnCreate }: IProps) {
   const actions = useActions()
-  const { passMode, pass } = useSelector(state => ({
-    passMode: state.passForm.passMode,
-    pass: state.passForm.passForm,
-  }))
+  const pass = useContext(s => s.state.passForm)
+
+  const passMode = useSelector(state => state.passForm.passMode)
 
   const createTrainingPass = useCreateTrainingPass(updateCacheOnCreate)
   const updateTrainingPass = useUpdateTrainingPass()
 
+  console.log(pass)
+
   const save = React.useCallback(
     async () => {
       if (passMode === 'create') {
-        await createTrainingPass()
+        await createTrainingPass(pass!)
       }
 
       if (passMode === 'update') {
-        await updateTrainingPass()
+        await updateTrainingPass(pass!)
       }
 
       actions.passForm.close()
     },
-    [actions, createTrainingPass, updateTrainingPass, passMode]
+    [actions, createTrainingPass, updateTrainingPass, pass, passMode]
   )
 
   const disabled = React.useMemo(

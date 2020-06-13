@@ -12,15 +12,9 @@ export const close = () => ({
   payload: null,
 })
 
-export const update = (pass: Partial<ITrainingPassForm>) => ({
-  type: constants.UPDATE,
-  payload: { pass },
-})
-
 export const actions = {
   open,
   close,
-  update,
 }
 
 export default actions

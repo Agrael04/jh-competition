@@ -35,6 +35,7 @@ const SchedulePage = () => {
     e.stopPropagation()
     actions.passForm.open('create', {
       createdAt: removeTimeFromDate(new Date())!,
+      isActive: true,
     }, '')
   }
 
