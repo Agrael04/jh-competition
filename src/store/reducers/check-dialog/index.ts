@@ -16,6 +16,8 @@ export interface IState {
 
   paymentForm: IPaymentForm | null
   paymentMode: 'create' | 'update' | null
+
+  openedPassForm: boolean
 }
 
 const initialState: IState = {
@@ -30,6 +32,8 @@ const initialState: IState = {
 
   paymentForm: null,
   paymentMode: null,
+
+  openedPassForm: false,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -124,6 +128,20 @@ export default (state = initialState, { type, payload }: { type: string, payload
           ...state.paymentForm,
           ...payload.payment,
         },
+      }
+    }
+
+    case constants.OPEN_PASS: {
+      return {
+        ...state,
+        openedPassForm: true,
+      }
+    }
+
+    case constants.CLOSE_PASS: {
+      return {
+        ...state,
+        openedPassForm: false,
       }
     }
 

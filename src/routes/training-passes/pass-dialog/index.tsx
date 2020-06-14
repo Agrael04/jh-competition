@@ -4,22 +4,25 @@ import Dialog from '@material-ui/core/Dialog'
 import Box from '@material-ui/core/Box'
 import { loader } from 'graphql.macro'
 
-import { useSelector, useActions } from 'store'
-
 import PassForm from 'containers/pass-form'
 
 import { DataProxy } from 'apollo-cache'
 
 import Header from './header'
-import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
+import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
+import removeTimeFromDate from 'utils/remove-time-from-date'
+
+import useGetTrainingPassesQuery from '../graphql/get-training-passes'
 const GET_TRAINING_PASSES = loader('../graphql/get-training-passes/query.gql')
 
-export default function PassFormWrap() {
-  const actions = useActions()
-  const opened = useSelector(state => state.passForm.opened)
-  const initialFilter = useSelector(state => state.passForm.initialFilter)
+interface IProps {
+  mode: 'create' | 'update' | null
+  _id?: string
+  handleClose: () => void
+}
 
+export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
   const updateCacheOnCreate = (client: DataProxy, { data }: any) => {
     const boundUpdateCachedQuery = updateQuery(client)
     const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
@@ -30,16 +33,48 @@ export default function PassFormWrap() {
     })
   }
 
-  const close = () => {
-    actions.passForm.close()
-  }
+  const { data } = useGetTrainingPassesQuery()
+  const pass = data?.trainingPasss.find(pass => pass._id === _id)
+
+  const initialForm = React.useMemo(
+    () => {
+      if (mode === 'update' && pass) {
+        return {
+          _id: pass._id,
+          contact: {
+            link: pass.contact._id,
+          },
+          type: pass.type,
+          size: pass.size,
+          capacity: pass.capacity,
+          duration: pass.duration,
+          activation: pass.activation,
+          price: pass.price,
+          createdAt: pass.createdAt,
+        }
+      }
+
+      if (mode === 'create') {
+        return {
+          createdAt: removeTimeFromDate(new Date())!,
+          isActive: true,
+        }
+      }
+
+      return {}
+    }, [pass, mode]
+  )
 
   return (
-    <Dialog open={opened} onClose={close} maxWidth='sm' fullWidth={true}>
-      <Header />
+    <Dialog open={!!mode} onClose={handleClose} maxWidth='sm' fullWidth={true}>
+      <Header close={handleClose}/>
       <Box padding={3}>
         <PassForm
-          initialContactFilter={initialFilter}
+          mode={mode}
+          initialForm={initialForm}
+          close={handleClose}
+
+          initialContactFilter={pass?.contact.fullName || ''}
           updateCacheOnCreate={updateCacheOnCreate}
         />
       </Box>

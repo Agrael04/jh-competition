@@ -1,5 +1,4 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -8,14 +7,11 @@ import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-export default function DialogHeader() {
-  const actions = useActions()
+interface IProps {
+  close: () => void
+}
 
-  const close = React.useCallback(
-    () => actions.passForm.close(),
-    [actions]
-  )
-
+export default function DialogHeader({ close }: IProps) {
   return (
     <AppBar position='relative'>
       <Toolbar>

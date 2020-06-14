@@ -4,7 +4,6 @@ import { BSON } from 'mongodb-stitch-browser-sdk'
 import { actions } from 'store/actions'
 import constants from 'store/constants/check-dialog'
 
-import { ITrainingPassForm } from 'interfaces/training-pass'
 import { IPaymentForm } from 'interfaces/payment'
 import { IServiceForm } from 'interfaces/service'
 
@@ -82,32 +81,6 @@ export function* openPayment(action: ReturnType<typeof actions.checkDialog.openP
   }
 }
 
-export function* openPass(action: ReturnType<typeof actions.checkDialog.openPass>) {
-  try {
-    const { contact, activeDate } = yield select((state: IStoreState) => ({
-      contact: state.checkDialog.contact,
-      activeDate: state.schedule.page.activeDate,
-    }))
-
-    const pass: Partial<ITrainingPassForm> = {
-      _id: new BSON.ObjectID(),
-      contact: { link: contact },
-      type: null,
-      size: null,
-      capacity: null,
-      duration: null,
-      activation: null,
-      createdAt: activeDate,
-      isActive: true,
-    }
-    const mode = 'create'
-
-    yield put(actions.passForm.open(mode, pass, action.payload.initialFilter))
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 function* watchOpenRecord() {
   yield takeLatest(constants.OPEN_RECORD, openRecord)
 }
@@ -120,15 +93,10 @@ function* watchOpenPayment() {
   yield takeLatest(constants.OPEN_PAYMENT, openPayment)
 }
 
-function* watchOpenPass() {
-  yield takeLatest(constants.OPEN_PASS, openPass)
-}
-
 export default function* root() {
   yield all([
     watchOpenRecord(),
     watchOpenService(),
     watchOpenPayment(),
-    watchOpenPass(),
   ])
 }

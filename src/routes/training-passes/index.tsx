@@ -1,6 +1,4 @@
 import React from 'react'
-import { useActions } from 'store'
-
 
 import Paper from '@material-ui/core/Paper'
 
@@ -20,23 +18,26 @@ import useStyles from './styles'
 
 import useGetTrainingPassesQuery from './graphql/get-training-passes'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
-
 import PassDialog from './pass-dialog'
 import PassRow from './pass-row'
 
 const SchedulePage = () => {
   const classes = useStyles()
-  const actions = useActions()
 
   const { data } = useGetTrainingPassesQuery()
+  const [formProps, setFormProps] = React.useState<{ mode: 'create' | 'update', _id?: string } | null>(null)
 
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation()
-    actions.passForm.open('create', {
-      createdAt: removeTimeFromDate(new Date())!,
-      isActive: true,
-    }, '')
+    setFormProps({ mode: 'create' })
+  }
+
+  const handleEdit = (_id: string) => {
+    setFormProps({ mode: 'update', _id })
+  }
+
+  const handleClose = () => {
+    setFormProps(null)
   }
 
   return (
@@ -63,11 +64,11 @@ const SchedulePage = () => {
         </TableHead>
         <TableBody>
           {data?.trainingPasss.map(pass => (
-            <PassRow key={pass._id} pass={pass} />
+            <PassRow key={pass._id} pass={pass} handleEdit={handleEdit} />
           ))}
         </TableBody>
       </Table>
-      <PassDialog />
+      <PassDialog mode={formProps?.mode || null} _id={formProps?._id} handleClose={handleClose} />
     </Paper>
   )
 }

@@ -77,9 +77,12 @@ export const updatePayment = (payment: Partial<IPaymentForm>) => ({
   payload: { payment },
 })
 
-export const openPass = (initialFilter: string) => ({
+export const openPass = () => ({
   type: constants.OPEN_PASS,
-  payload: { initialFilter },
+})
+
+export const closePass = () => ({
+  type: constants.CLOSE_PASS,
 })
 
 export const actions = {
@@ -103,6 +106,7 @@ export const actions = {
   updatePayment,
 
   openPass,
+  closePass,
 }
 
 export default actions

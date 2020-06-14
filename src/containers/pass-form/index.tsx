@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
@@ -17,7 +16,13 @@ import SaveButton from './save-button'
 
 import { IUpdateCacheFn } from 'utils/apollo-cache-updater'
 
+import { ITrainingPassForm } from 'interfaces/training-pass'
+
 interface IProps {
+  mode: 'create' | 'update' | null
+  initialForm: Partial<ITrainingPassForm> | null
+  close: () => void
+
   disabledOpenType?: boolean
   disabledContact?: boolean
   disabledCreatedAt?: boolean
@@ -30,6 +35,10 @@ interface IProps {
 }
 
 export default function PassForm({
+  mode,
+  initialForm,
+  close,
+
   disabledOpenType,
   disabledContact,
   disabledCapacity,
@@ -39,17 +48,22 @@ export default function PassForm({
   initialContactFilter,
   updateCacheOnCreate,
 }: IProps) {
-  const actions = useActions()
-  const opened = useSelector(state => !!state.passForm.opened)
-  const passForm = useSelector(state => state.passForm.passForm)
-
   const initialState = {
-    passForm,
+    passForm: {
+      _id: initialForm?._id,
+      contact: initialForm?.contact || null,
+      type: initialForm?.type || null,
+      size: initialForm?.size || null,
+      capacity: initialForm?.capacity || null,
+      duration: initialForm?.duration || null,
+      activation: initialForm?.activation || null,
+      price: initialForm?.price || null,
+      isActive: initialForm?.isActive || null,
+      createdAt: initialForm?.createdAt || null,
+    },
   }
 
-  const close = actions.passForm.close
-
-  if (!opened) {
+  if (!mode) {
     return null
   }
 
@@ -91,7 +105,7 @@ export default function PassForm({
             <Button onClick={close} color='primary'>
               Отменить
             </Button>
-            <SaveButton updateCacheOnCreate={updateCacheOnCreate} />
+            <SaveButton updateCacheOnCreate={updateCacheOnCreate} mode={mode} close={close} />
           </Grid>
         </Box>
       </>

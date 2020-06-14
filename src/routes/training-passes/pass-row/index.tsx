@@ -1,6 +1,5 @@
 import React from 'react'
 import moment from 'moment'
-import { useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
@@ -30,11 +29,11 @@ import IPassRow from './pass'
 
 interface IProps {
   pass: IPassRow
+  handleEdit: (_id: string) => void
 }
 
-const PassRow = ({ pass }: IProps) => {
+const PassRow = ({ pass, handleEdit }: IProps) => {
   const classes = useStyles()
-  const actions = useActions()
   const [open, setOpen] = React.useState(false)
   const [checked, setChecked] = React.useState<string[]>([])
 
@@ -61,24 +60,9 @@ const PassRow = ({ pass }: IProps) => {
   const remainingCapacity = pass.capacity - getUsedUnits(payments, pass)
   const expirationDate = getExpirationDate(payments, pass)
 
-  const handleEdit = (e: React.MouseEvent) => {
+  const boundHandleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
-    actions.passForm.open(
-      'update',
-      {
-        _id: pass._id,
-        contact: {
-          link: pass.contact._id,
-        },
-        type: pass.type,
-        size: pass.size,
-        capacity: pass.capacity,
-        duration: pass.duration,
-        activation: pass.activation,
-        price: pass.price,
-        createdAt: pass.createdAt,
-      }, pass.contact.fullName
-    )
+    handleEdit(pass._id)
   }
 
   const handleArchive = (e: React.MouseEvent) => {
@@ -111,7 +95,7 @@ const PassRow = ({ pass }: IProps) => {
           {moment(expirationDate).format('D MMMM')}
         </TableCell>
         <TableCell align='right'>
-          <IconButton onClick={handleEdit}>
+          <IconButton onClick={boundHandleEdit}>
             <EditIcon />
           </IconButton>
         </TableCell>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
@@ -10,33 +9,30 @@ import { IUpdateCacheFn } from 'utils/apollo-cache-updater'
 import { useContext } from './context'
 
 interface IProps {
+  mode: 'create' | 'update' | null
   updateCacheOnCreate?: IUpdateCacheFn
+  close: () => void
 }
 
-export default function SaveButton({ updateCacheOnCreate }: IProps) {
-  const actions = useActions()
+export default function SaveButton({ updateCacheOnCreate, mode, close }: IProps) {
   const pass = useContext(s => s.state.passForm)
-
-  const passMode = useSelector(state => state.passForm.passMode)
 
   const createTrainingPass = useCreateTrainingPass(updateCacheOnCreate)
   const updateTrainingPass = useUpdateTrainingPass()
 
-  console.log(pass)
-
   const save = React.useCallback(
     async () => {
-      if (passMode === 'create') {
+      if (mode === 'create') {
         await createTrainingPass(pass!)
       }
 
-      if (passMode === 'update') {
+      if (mode === 'update') {
         await updateTrainingPass(pass!)
       }
 
-      actions.passForm.close()
+      close()
     },
-    [actions, createTrainingPass, updateTrainingPass, pass, passMode]
+    [createTrainingPass, updateTrainingPass, pass, mode, close]
   )
 
   const disabled = React.useMemo(
