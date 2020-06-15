@@ -61,8 +61,7 @@ export const products = [
       { id: 7, name: 'Без тренера 200', type: 'no_trainer', size: '200', showLink: true },
       { id: 8, name: 'СПОРТ дитячий', type: 'sport', size: 'child', showLink: true },
       { id: 9, name: 'СПОРТ дорослий', type: 'sport', size: 'adult', showLink: true },
-      { id: 10, name: 'Універсальний S', type: 'open', showLink: true },
-      { id: 11, name: 'Cертифікат на 1 годину', type: 'open', showLink: false },
+      { id: 10, name: 'Cертифікат на 1 годину', type: 'open', showLink: false },
     ],
   },
   {

@@ -11,7 +11,7 @@ import AddOutlined from '@material-ui/icons/AddOutlined'
 
 import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
-import ServiceForm from './service-form'
+import PositionForm from './position-form'
 import RecordForm from './record-form'
 import RecordItem from './record-item'
 
@@ -21,7 +21,7 @@ export default function TrainingDialog() {
   const classes = useStyles()
   const actions = useActions()
   const isRecordFormActive = useSelector(state => !!state.checkDialog.recordForm)
-  const isServiceFormActive = useSelector(state => !!state.checkDialog.serviceForm)
+  const isServiceFormActive = useSelector(state => !!state.checkDialog.positionForm)
 
   const { data } = useGetContactDetailsQuery()
 
@@ -32,7 +32,7 @@ export default function TrainingDialog() {
 
   if (isServiceFormActive) {
     return (
-      <ServiceForm />
+      <PositionForm />
     )
   }
 

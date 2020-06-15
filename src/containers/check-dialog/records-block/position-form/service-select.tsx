@@ -7,11 +7,11 @@ import Select from 'containers/select'
 
 import { products } from '../../data'
 
-const selector = () => (state: IStoreState) => state.checkDialog.serviceForm?.service
+const selector = () => (state: IStoreState) => state.checkDialog.positionForm?.service
 
 export default function ServiceSelect() {
   const actions = useActions()
-  const type = useSelector(state => state.checkDialog.serviceForm?.type)
+  const type = useSelector(state => state.checkDialog.positionForm?.type)
 
   const handleChange = React.useCallback(
     (name, service) => {
@@ -25,7 +25,7 @@ export default function ServiceSelect() {
   return (
     <Select
       name='type'
-      label='Тип услуги'
+      label='Услуги'
       onChange={handleChange}
       fieldSelector={selector}
       fullWidth={true}

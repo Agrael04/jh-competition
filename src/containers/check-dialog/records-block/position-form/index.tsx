@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box'
 
 import TypeSelect from './type-select'
 import ServiceSelect from './service-select'
+import AddPassButton from './add-pass-button'
 import PriceAmount from './price-amount'
 import CancelButton from './cancel-button'
 import SaveButton from './save-button'
@@ -19,6 +20,10 @@ export default function ServiceForm() {
 
         <Grid item={true} lg={8}>
           <ServiceSelect />
+        </Grid>
+
+        <Grid item={true} lg={4} container={true} justify='flex-end'>
+          <AddPassButton />
         </Grid>
 
         <Grid item={true} lg={12}>

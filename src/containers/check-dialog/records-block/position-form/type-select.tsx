@@ -7,7 +7,7 @@ import Select from 'containers/select'
 
 import { products } from '../../data'
 
-const selector = () => (state: IStoreState) => state.checkDialog.serviceForm?.type
+const selector = () => (state: IStoreState) => state.checkDialog.positionForm?.type
 
 export default function TypeSelect() {
   const actions = useActions()

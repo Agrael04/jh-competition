@@ -4,7 +4,7 @@ import { useActions, IStoreState } from 'store'
 import PriceType from './price-type'
 import TextField from 'containers/text-field'
 
-const selector = () => (state: IStoreState) => state.checkDialog.serviceForm?.priceAmount
+const selector = () => (state: IStoreState) => state.checkDialog.positionForm?.priceAmount
 
 export default function RecordForm() {
   const actions = useActions()

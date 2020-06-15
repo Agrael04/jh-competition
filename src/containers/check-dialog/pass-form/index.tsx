@@ -8,6 +8,9 @@ import PassForm from 'containers/pass-form'
 import { DataProxy } from 'apollo-cache'
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
+import { products } from '../data'
+import { passTypes, getSizes } from 'data/training-passes'
+
 import useGetContactDetailsQuery from '../graphql/get-contract-details'
 const GET_TRAINING_PASSES = loader('../graphql/get-training-passes/query.gql')
 
@@ -17,18 +20,49 @@ export default function PassFormWrap() {
   const variables = useSelector(state => ({
     _id: state.checkDialog.contact,
   }))
-  const opened = useSelector(state => state.checkDialog.openedPassForm)
-  const { contact, activeDate } = useSelector(state => ({
+  const { contact, activeDate, service, serviceType, opened } = useSelector(state => ({
     contact: state.checkDialog.contact,
     activeDate: state.schedule.page.activeDate,
+    serviceType: state.checkDialog.positionForm?.type,
+    service: state.checkDialog.positionForm?.service,
+    opened: state.checkDialog.openedPassForm,
   }))
 
   const mode = opened ? 'create' : null
-  const initialForm = {
-    contact: contact ? { link: contact } : null,
-    createdAt: activeDate,
-    isActive: true,
-  }
+
+  const initialForm = React.useMemo(
+    () => {
+      const form = {
+        contact: contact ? { link: contact } : null,
+        createdAt: activeDate,
+        isActive: true,
+      }
+
+      if (serviceType === 'pass' && (service || service === 0)) {
+        const p: any = products.find(p => p.id === 'pass')?.options.find(o => o.id === service)!
+
+        if (p.type === 'open') {
+          return form
+        }
+
+        const passType = passTypes.find(t => t.value === p.type)!
+        const passSize = getSizes(p.type)!.find(s => s.value === p.size)!
+
+        return ({
+          ...form,
+          type: p.type,
+          size: p.size,
+          duration: passType.duration,
+          activation: passType.activation,
+          capacity: passSize.capacity,
+          price: passSize.price,
+        })
+      }
+
+      return form
+    }, [contact, activeDate, service, serviceType]
+  )
+
   const close = () => {
     actions.checkDialog.closePass()
   }
@@ -43,6 +77,8 @@ export default function PassFormWrap() {
       updater,
     })
   }
+
+  console.log(initialForm)
 
   return (
     <PassForm

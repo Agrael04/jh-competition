@@ -2,7 +2,7 @@ import constants from 'store/constants/check-dialog'
 
 import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
-import { IServiceForm } from 'interfaces/service'
+import { ICheckPositionForm } from 'interfaces/check-position'
 
 export interface IState {
   opened: boolean
@@ -11,8 +11,8 @@ export interface IState {
   recordForm: Partial<ITrainingRecordForm> | null
   recordMode: 'update' | null
 
-  serviceForm: IServiceForm | null
-  serviceMode: 'create' | 'update' | null
+  positionForm: ICheckPositionForm | null
+  positionMode: 'create' | 'update' | null
 
   paymentForm: IPaymentForm | null
   paymentMode: 'create' | 'update' | null
@@ -27,8 +27,8 @@ const initialState: IState = {
   recordForm: null,
   recordMode: null,
 
-  serviceForm: null,
-  serviceMode: null,
+  positionForm: null,
+  positionMode: null,
 
   paymentForm: null,
   paymentMode: null,
@@ -82,24 +82,24 @@ export default (state = initialState, { type, payload }: { type: string, payload
     case constants.SET_SERVICE: {
       return {
         ...state,
-        serviceForm: payload.service,
-        serviceMode: payload.mode,
+        positionForm: payload.service,
+        positionMode: payload.mode,
       }
     }
 
     case constants.RESET_SERVICE: {
       return {
         ...state,
-        serviceForm: null,
-        serviceMode: null,
+        positionForm: null,
+        positionMode: null,
       }
     }
 
     case constants.UPDATE_SERVICE: {
       return {
         ...state,
-        serviceForm: {
-          ...state.serviceForm,
+        positionForm: {
+          ...state.positionForm,
           ...payload.service,
         },
       }

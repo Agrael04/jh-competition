@@ -1,4 +1,4 @@
-export interface IServiceForm {
+export interface ICheckPositionForm {
   _id?: string
   contact: {
     link: string
@@ -7,4 +7,5 @@ export interface IServiceForm {
   service: number
   priceType: 'units' | 'money'
   priceAmount: number
+  date: Date
 }

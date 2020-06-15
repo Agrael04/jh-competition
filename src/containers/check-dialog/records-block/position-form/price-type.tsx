@@ -6,7 +6,7 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 
 export default function RecordForm() {
   const actions = useActions()
-  const value = useSelector(state => state.checkDialog.serviceForm?.priceType)
+  const value = useSelector(state => state.checkDialog.positionForm?.priceType)
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, newValue: 'units' | 'money') => {
     actions.checkDialog.updateService({

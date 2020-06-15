@@ -5,7 +5,7 @@ import { actions } from 'store/actions'
 import constants from 'store/constants/check-dialog'
 
 import { IPaymentForm } from 'interfaces/payment'
-import { IServiceForm } from 'interfaces/service'
+import { ICheckPositionForm } from 'interfaces/check-position'
 
 import { IStoreState } from 'store'
 
@@ -19,11 +19,12 @@ export function* openRecord(action: ReturnType<typeof actions.checkDialog.openRe
 
 export function* openService(action: ReturnType<typeof actions.checkDialog.openService>) {
   try {
-    const { contact } = yield select((state: IStoreState) => ({
+    const { contact, activeDate } = yield select((state: IStoreState) => ({
       contact: state.checkDialog.contact,
+      activeDate: state.schedule.page.activeDate,
     }))
 
-    let service: Partial<IServiceForm>
+    let service: Partial<ICheckPositionForm>
     let mode: 'create' | 'update' | null = null
 
     if (action.payload.service) {
@@ -37,6 +38,7 @@ export function* openService(action: ReturnType<typeof actions.checkDialog.openS
         service: undefined,
         priceAmount: 0,
         priceType: 'money',
+        date: activeDate,
       }
       mode = 'create'
     }

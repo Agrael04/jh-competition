@@ -3,7 +3,7 @@ import constants from 'store/constants/check-dialog'
 import { ITrainingPassForm } from 'interfaces/training-pass'
 import { IPaymentForm } from 'interfaces/payment'
 import { ITrainingRecordForm } from 'interfaces/training'
-import { IServiceForm } from 'interfaces/service'
+import { ICheckPositionForm } from 'interfaces/check-position'
 
 export const open = (contact: string) => ({
   type: constants.OPEN,
@@ -39,12 +39,12 @@ export const updateRecord = (record: Partial<ITrainingRecordForm>) => ({
   payload: { record },
 })
 
-export const openService = (service?: Partial<IServiceForm>) => ({
+export const openService = (service?: Partial<ICheckPositionForm>) => ({
   type: constants.OPEN_SERVICE,
   payload: { service },
 })
 
-export const setService = (service: Partial<IServiceForm> | null, mode: 'create' | 'update' | null) => ({
+export const setService = (service: Partial<ICheckPositionForm> | null, mode: 'create' | 'update' | null) => ({
   type: constants.SET_SERVICE,
   payload: { service, mode },
 })
@@ -53,7 +53,7 @@ export const resetService = () => ({
   type: constants.RESET_SERVICE,
 })
 
-export const updateService = (service: Partial<IServiceForm>) => ({
+export const updateService = (service: Partial<ICheckPositionForm>) => ({
   type: constants.UPDATE_SERVICE,
   payload: { service },
 })

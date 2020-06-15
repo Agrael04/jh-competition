@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 interface IProps {
   [x: string]: any
   label: string
-  disabled: boolean
+  disabled?: boolean
   handleChange?: (contact: string | null) => void
   value: string | null
   initialFilter?: string
