@@ -17,21 +17,21 @@ export function* openRecord(action: ReturnType<typeof actions.checkDialog.openRe
   }
 }
 
-export function* openService(action: ReturnType<typeof actions.checkDialog.openService>) {
+export function* openPosition(action: ReturnType<typeof actions.checkDialog.openPosition>) {
   try {
     const { contact, activeDate } = yield select((state: IStoreState) => ({
       contact: state.checkDialog.contact,
       activeDate: state.schedule.page.activeDate,
     }))
 
-    let service: Partial<ICheckPositionForm>
+    let position: Partial<ICheckPositionForm>
     let mode: 'create' | 'update' | null = null
 
-    if (action.payload.service) {
-      service = action.payload.service
+    if (action.payload.position) {
+      position = action.payload.position
       mode = 'update'
     } else {
-      service = {
+      position = {
         _id: new BSON.ObjectID(),
         contact: { link: contact },
         type: undefined,
@@ -43,7 +43,7 @@ export function* openService(action: ReturnType<typeof actions.checkDialog.openS
       mode = 'create'
     }
 
-    yield put(actions.checkDialog.setService(service, mode))
+    yield put(actions.checkDialog.setPosition(position, mode))
   } catch (error) {
     console.log(error)
   }
@@ -87,8 +87,8 @@ function* watchOpenRecord() {
   yield takeLatest(constants.OPEN_RECORD, openRecord)
 }
 
-function* watchOpenService() {
-  yield takeLatest(constants.OPEN_SERVICE, openService)
+function* watchOpenPosition() {
+  yield takeLatest(constants.OPEN_POSITION, openPosition)
 }
 
 function* watchOpenPayment() {
@@ -98,7 +98,7 @@ function* watchOpenPayment() {
 export default function* root() {
   yield all([
     watchOpenRecord(),
-    watchOpenService(),
+    watchOpenPosition(),
     watchOpenPayment(),
   ])
 }

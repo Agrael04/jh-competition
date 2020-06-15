@@ -11,7 +11,7 @@ export default function RecordForm() {
 
   const handleChange = React.useCallback(
     (name, priceAmount) => {
-      actions.checkDialog.updateService({
+      actions.checkDialog.updatePosition({
         priceAmount: +priceAmount,
       })
     },

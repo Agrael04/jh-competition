@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
 import ICheckRecord from '../../records-block/record-item/record'
-import IService from '../../total-block/record'
+import IRecord from '../../total-block/record'
 import IHeaderContact from '../../header/contract'
 import IPassFormContact from '../../pass-form/contact'
 import IPaymentItem from '../../payments-block/payment-item/payment'
@@ -12,7 +12,7 @@ import ITotalPayment from '../../total-block/payment'
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
 export interface IGetContactDetails {
-  trainingRecords: Array<ICheckRecord & IService>
+  trainingRecords: Array<ICheckRecord & IRecord>
   payments: Array<IPaymentItem & ITotalPayment>
   user: IHeaderContact & IPassFormContact
 }

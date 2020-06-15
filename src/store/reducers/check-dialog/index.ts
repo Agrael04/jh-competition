@@ -79,15 +79,15 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.SET_SERVICE: {
+    case constants.SET_POSITION: {
       return {
         ...state,
-        positionForm: payload.service,
+        positionForm: payload.position,
         positionMode: payload.mode,
       }
     }
 
-    case constants.RESET_SERVICE: {
+    case constants.RESET_POSITION: {
       return {
         ...state,
         positionForm: null,
@@ -95,12 +95,12 @@ export default (state = initialState, { type, payload }: { type: string, payload
       }
     }
 
-    case constants.UPDATE_SERVICE: {
+    case constants.UPDATE_POSITION: {
       return {
         ...state,
         positionForm: {
           ...state.positionForm,
-          ...payload.service,
+          ...payload.position,
         },
       }
     }

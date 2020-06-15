@@ -14,7 +14,7 @@ export default function TypeSelect() {
 
   const handleChange = React.useCallback(
     (name, type) => {
-      actions.checkDialog.updateService({
+      actions.checkDialog.updatePosition({
         type,
         service: undefined,
       })

@@ -39,23 +39,23 @@ export const updateRecord = (record: Partial<ITrainingRecordForm>) => ({
   payload: { record },
 })
 
-export const openService = (service?: Partial<ICheckPositionForm>) => ({
-  type: constants.OPEN_SERVICE,
-  payload: { service },
+export const openPosition = (position?: Partial<ICheckPositionForm>) => ({
+  type: constants.OPEN_POSITION,
+  payload: { position },
 })
 
-export const setService = (service: Partial<ICheckPositionForm> | null, mode: 'create' | 'update' | null) => ({
-  type: constants.SET_SERVICE,
-  payload: { service, mode },
+export const setPosition = (position: Partial<ICheckPositionForm> | null, mode: 'create' | 'update' | null) => ({
+  type: constants.SET_POSITION,
+  payload: { position, mode },
 })
 
-export const resetService = () => ({
-  type: constants.RESET_SERVICE,
+export const resetPosition = () => ({
+  type: constants.RESET_POSITION,
 })
 
-export const updateService = (service: Partial<ICheckPositionForm>) => ({
-  type: constants.UPDATE_SERVICE,
-  payload: { service },
+export const updatePosition = (position: Partial<ICheckPositionForm>) => ({
+  type: constants.UPDATE_POSITION,
+  payload: { position },
 })
 
 export const openPayment = (payment?: Partial<IPaymentForm>) => ({
@@ -95,10 +95,10 @@ export const actions = {
   resetRecord,
   updateRecord,
 
-  openService,
-  setService,
-  resetService,
-  updateService,
+  openPosition,
+  setPosition,
+  resetPosition,
+  updatePosition,
 
   openPayment,
   setPayment,

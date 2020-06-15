@@ -9,7 +9,7 @@ export default function RecordForm() {
   const value = useSelector(state => state.checkDialog.positionForm?.priceType)
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, newValue: 'units' | 'money') => {
-    actions.checkDialog.updateService({
+    actions.checkDialog.updatePosition({
       priceType: newValue,
       priceAmount: undefined,
     })

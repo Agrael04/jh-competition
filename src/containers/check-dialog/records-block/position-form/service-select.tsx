@@ -15,7 +15,7 @@ export default function ServiceSelect() {
 
   const handleChange = React.useCallback(
     (name, service) => {
-      actions.checkDialog.updateService({ service })
+      actions.checkDialog.updatePosition({ service })
     },
     [actions]
   )
