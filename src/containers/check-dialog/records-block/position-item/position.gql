@@ -1,0 +1,7 @@
+fragment position on CheckPosition {
+  _id
+  type
+  service
+  priceType
+  priceAmount
+}

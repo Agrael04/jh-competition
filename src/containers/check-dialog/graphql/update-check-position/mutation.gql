@@ -1,0 +1,9 @@
+  mutation updateCheckPosition ($_id: ObjectId!, $data: CheckPositionUpdateInput!) {
+    updateOneCheckPosition(query: { _id: $_id }, set: $data) {
+      _id
+      priceType
+      priceAmount
+      type
+      service
+    }
+  }

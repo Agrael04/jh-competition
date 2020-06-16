@@ -1,0 +1,13 @@
+mutation createCheckPosition ($data: CheckPositionInsertInput!) {
+  insertOneCheckPosition(data: $data) {
+    _id
+    contact {
+      _id
+    }
+    type
+    service
+    priceType
+    priceAmount
+    date
+  }
+}

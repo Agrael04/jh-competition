@@ -12,6 +12,7 @@ import AddOutlined from '@material-ui/icons/AddOutlined'
 import useGetContactDetailsQuery from '../graphql/get-contract-details'
 
 import PositionForm from './position-form'
+import PositionItem from './position-item'
 import RecordForm from './record-form'
 import RecordItem from './record-item'
 
@@ -26,7 +27,7 @@ export default function TrainingDialog() {
   const { data } = useGetContactDetailsQuery()
 
   const openAddForm = React.useCallback(
-    () => actions.checkDialog.openService(),
+    () => actions.checkDialog.openPosition(),
     [actions]
   )
 
@@ -52,12 +53,17 @@ export default function TrainingDialog() {
             </Avatar>
           </ListItemAvatar>
           <ListItemText
-            primary={`Добавить услугу`}
+            primary={`Добавить позицию`}
           />
         </ListItem>
         {
           data?.trainingRecords.map((record, index) => (
             <RecordItem record={record} index={index} key={record._id} />
+          ))
+        }
+        {
+          data?.checkPositions.map((position, index) => (
+            <PositionItem position={position} index={index} key={position._id} />
           ))
         }
       </List>

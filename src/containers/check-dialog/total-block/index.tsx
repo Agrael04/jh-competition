@@ -18,11 +18,13 @@ export default function TrainingDialog() {
   const servicePassAmount = data?.trainingRecords.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
   const serviceMoneyAmount = data?.trainingRecords.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
 
+  const positionsMoneyAmount = data?.checkPositions.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
+
   const paymentPassAmount = data?.payments.filter(p => p.type === 'units').reduce((res, p) => res + p.amount, 0) || 0
   const paymentMoneyAmount = data?.payments.filter(p => p.type === 'money').reduce((res, p) => res + p.amount, 0) || 0
 
   const passAmount = paymentPassAmount - servicePassAmount
-  const moneyAmount = paymentMoneyAmount - serviceMoneyAmount
+  const moneyAmount = paymentMoneyAmount - serviceMoneyAmount - positionsMoneyAmount
 
   const isDebt = !!data?.payments.filter(p => p.isDebt).length
 
@@ -42,9 +44,9 @@ export default function TrainingDialog() {
               Всего заказано
             </Typography>
             {
-              serviceMoneyAmount! > 0 && (
+              (serviceMoneyAmount + positionsMoneyAmount)! > 0 && (
                 <Typography variant='h6' align='center'>
-                  -{serviceMoneyAmount} грн
+                  -{serviceMoneyAmount + positionsMoneyAmount} грн
                 </Typography>
               )
             }

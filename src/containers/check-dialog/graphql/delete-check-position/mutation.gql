@@ -1,0 +1,5 @@
+mutation deleteCheckPosition ($_id: ObjectId!) {
+  deleteOneCheckPosition(query: { _id: $_id }) {
+    _id
+  }
+}
