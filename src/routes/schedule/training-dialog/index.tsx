@@ -164,6 +164,7 @@ export default function TrainingDialog() {
                         inputVariant='outlined'
                         disableToolbar={true}
                         variant='inline'
+                        disabled={true}
                       />
                     </Grid>
                   </Grid>

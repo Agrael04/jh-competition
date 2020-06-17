@@ -15,6 +15,8 @@ import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../queries
 
 import useDeleteTrainingRecord from '../../mutations/delete-training-record'
 
+import removeTimeFromDate from 'utils/remove-time-from-date'
+
 import useStyles from './styles'
 
 interface IProps {
@@ -30,6 +32,7 @@ export default function RecordItem({ id }: IProps) {
     trainingForm: state.schedule.trainingDialog.trainingForm,
   }))
   const trainingQuery = useGetTrainingQuery(trainingForm._id)
+  const date = trainingQuery.data?.training.date!
   const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 
   const deleteTrainingRecord = useDeleteTrainingRecord()
@@ -48,6 +51,9 @@ export default function RecordItem({ id }: IProps) {
     [record, deleteTrainingRecord]
   )
 
+  const trainingDate = new Date(date)?.getTime()
+  const currentDate = removeTimeFromDate(new Date())?.getTime()!
+
   return (
     <ListItem button={true} onClick={activate} selected={isActive}>
       <ListItemAvatar>
@@ -59,11 +65,15 @@ export default function RecordItem({ id }: IProps) {
         primary={record?.contact?.fullName}
         secondary={record?.attendant?.fullName}
       />
-      <ListItemSecondaryAction>
-        <IconButton onClick={remove}>
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+      {
+        trainingDate > currentDate && (
+          <ListItemSecondaryAction>
+            <IconButton onClick={remove}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        )
+      }
     </ListItem>
   )
 }
