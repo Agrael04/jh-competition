@@ -9,7 +9,7 @@ import PriceAmount from './price-amount'
 import CancelButton from './cancel-button'
 import SaveButton from './save-button'
 
-import useGetContactDetailsQuery from '../../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../../graphql/get-contact-details'
 
 import { getTimeLabel } from 'data/times'
 

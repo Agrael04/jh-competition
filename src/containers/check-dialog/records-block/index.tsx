@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
 
-import useGetContactDetailsQuery from '../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 import PositionForm from './position-form'
 import PositionItem from './position-item'

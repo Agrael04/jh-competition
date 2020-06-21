@@ -4,9 +4,9 @@ import { loader } from 'graphql.macro'
 const GET_USER_DEBT = loader('./query.gql')
 
 export interface IGetContactDebt {
-  payments: Array<{
-    _id: string
-  }>
+  user: {
+    balance: number
+  }
 }
 
 export const useGetUserDebt = (contactId?: string) => {

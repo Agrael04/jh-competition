@@ -8,5 +8,4 @@ fragment checkPaymentItem on Payment {
   amount
   destination
   transaction
-  isDebt
 }

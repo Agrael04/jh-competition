@@ -11,7 +11,7 @@ import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 import { products } from '../data'
 import { passTypes, getSizes } from 'data/training-passes'
 
-import useGetContactDetailsQuery from '../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 const GET_TRAINING_PASSES = loader('../graphql/get-training-passes/query.gql')
 
 export default function PassFormWrap() {
@@ -77,8 +77,6 @@ export default function PassFormWrap() {
       updater,
     })
   }
-
-  console.log(initialForm)
 
   return (
     <PassForm

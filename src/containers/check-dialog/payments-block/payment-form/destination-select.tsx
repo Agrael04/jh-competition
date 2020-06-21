@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector, IStoreState, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -11,7 +11,6 @@ const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.de
 
 export default function CapacityInput() {
   const actions = useActions()
-  const isDebt = useSelector(state => state.checkDialog.paymentForm?.isDebt)
 
   const handleChange = React.useCallback(
     (name, destination) => {
@@ -28,7 +27,6 @@ export default function CapacityInput() {
       fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
-      disabled={isDebt}
     >
       {
         paymentDestinations.map(destination => (

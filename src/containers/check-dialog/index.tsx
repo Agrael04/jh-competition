@@ -12,12 +12,15 @@ import PaymentsBlock from './payments-block'
 import RecordsBlock from './records-block'
 import TotalBlock from './total-block'
 
+import useGetContactDetails from './graphql/get-contact-details'
+
 export default function TrainingDialog() {
   const { opened } = useSelector(state => ({
     opened: state.checkDialog.opened,
   }))
 
   const actions = useActions()
+  const { loading } = useGetContactDetails()
 
   const close = React.useCallback(
     () => actions.checkDialog.close(),
@@ -28,21 +31,25 @@ export default function TrainingDialog() {
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
       <Header />
       <Box padding={3}>
-        <Grid container={true} spacing={3}>
-          <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-            <RecordsBlock />
-          </Grid>
-          <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-            <PaymentsBlock />
-          </Grid>
-          <Grid item={true} lg={4}>
-            <PassForm />
-          </Grid>
-          <Grid item={true} lg={12}>
-            <Box border={1} borderColor='primary.main' width={1} />
-          </Grid>
-          <TotalBlock />
-        </Grid>
+        {
+          !loading && (
+            <Grid container={true} spacing={3}>
+              <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
+                <RecordsBlock />
+              </Grid>
+              <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
+                <PaymentsBlock />
+              </Grid>
+              <Grid item={true} lg={4}>
+                <PassForm />
+              </Grid>
+              <Grid item={true} lg={12}>
+                <Box border={1} borderColor='primary.main' width={1} />
+              </Grid>
+              <TotalBlock />
+            </Grid>
+          )
+        }
       </Box>
     </Dialog>
   )

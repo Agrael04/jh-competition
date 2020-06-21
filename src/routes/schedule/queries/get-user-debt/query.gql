@@ -1,10 +1,7 @@
 query getContactDetails($_id: ObjectId){
-  payments(query: {
-    contact: {
-      _id: $_id
-    },
-    isDebt: true
+  user(query: {
+    _id: $_id
   }) {
-    _id
+    balance
   }
 }

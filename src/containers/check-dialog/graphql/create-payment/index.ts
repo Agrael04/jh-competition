@@ -6,7 +6,7 @@ import { loader } from 'graphql.macro'
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 const CREATE_PAYMENT = loader('./mutation.gql')
-const GET_CONTACT_DETAILS = loader('../get-contract-details/query.gql')
+const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreateTrainingPass = () => {

@@ -1,0 +1,37 @@
+query getContactStatus($date: DateTime, $gym: ObjectId, $_id: ObjectId){
+  trainingRecords(query: {
+    contact: {
+      _id: $_id
+    },
+    training: {
+      date_gte: $date,
+      gym: {
+        _id: $gym
+      }
+    }
+  }) {
+    priceAmount
+    priceType
+  }
+  checkPositions(query: {
+    contact: {
+      _id: $_id
+    },
+    date_gte: $date
+  }) {
+    priceAmount
+    priceType
+  }
+  payments(query: {
+    contact: {
+      _id: $_id
+    },
+    date_gte: $date,
+    gym: {
+      _id: $gym
+    }
+  }) {
+    amount
+    type
+  }
+}

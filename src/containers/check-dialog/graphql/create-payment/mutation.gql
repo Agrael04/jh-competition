@@ -13,7 +13,6 @@ mutation createPayment ($data: PaymentInsertInput!) {
     pass {
       _id
     }
-    isDebt
     amount
     destination
     transaction

@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { useSelector, IStoreState, useActions } from 'store'
+import { IStoreState, useActions } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -16,7 +16,6 @@ const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.pa
 
 export default function PassSelect() {
   const actions = useActions()
-  const isDebt = useSelector(state => state.checkDialog.paymentForm?.isDebt)
 
   const { data } = useGetTrainingPassesQuery()
 
@@ -35,7 +34,6 @@ export default function PassSelect() {
       fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
-      disabled={isDebt}
     >
       {
         data?.trainingPasss.map(pass => (

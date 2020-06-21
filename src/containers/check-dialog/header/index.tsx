@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-import useGetContactDetailsQuery from '../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 export default function TrainingDialog() {
   const { data } = useGetContactDetailsQuery()
@@ -27,7 +27,7 @@ export default function TrainingDialog() {
           <CloseIcon />
         </IconButton>
         <Typography variant='h6'>
-          Чек: {data?.user.fullName}
+          Чек: {data?.user.fullName} ({data?.user.balance})
         </Typography>
       </Toolbar>
     </AppBar>

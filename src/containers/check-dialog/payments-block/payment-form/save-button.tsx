@@ -41,10 +41,6 @@ export default function SaveButton() {
         return true
       }
 
-      if (payment.isDebt) {
-        return false
-      }
-
       if (payment.type === 'units' && !payment.pass) {
         return true
       }

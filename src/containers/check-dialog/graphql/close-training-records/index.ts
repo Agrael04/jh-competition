@@ -5,13 +5,13 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { updateQuery } from 'utils/apollo-cache-updater'
 
-import { IGetContactDetails } from '../get-contract-details'
+import { useGetContactDetailsQuery, IGetContactDetails } from '../get-contact-details'
 
-const UPDATE_TRAINING_RECORD = loader('./mutation.gql')
-const GET_CONTRACT_DETAILS = loader('../get-contract-details/query.gql')
+const MUTATION = loader('./mutation.gql')
+const GET_CONTRACT_DETAILS = loader('../get-contact-details/query.gql')
 
-const useUpdateTrainingRecord = () => {
-  const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
+const useCloseTrainingRecords = () => {
+  const [updateTrainingRecord] = useMutation(MUTATION)
 
   const variables = useSelector(state => ({
     date: state.schedule.page.activeDate,
@@ -19,14 +19,19 @@ const useUpdateTrainingRecord = () => {
     _id: state.checkDialog.contact,
   }))
 
+  const query = useGetContactDetailsQuery()
+
   const mutate = React.useCallback(
-    (debt: boolean) => {
+    (balanceDiff: number) => {
+      const balance = (query.data?.user.balance || 0) + balanceDiff
+
       return updateTrainingRecord({
         variables: {
           ...variables,
           data: {
-            status: debt ? 'CLOSED_DEBT' : 'CLOSED',
+            status: balance < 0 ? 'CLOSED_DEBT' : 'CLOSED',
           },
+          balance,
         },
         update: (client, { data }) => {
           const boundUpdateCachedQuery = updateQuery(client)
@@ -35,8 +40,12 @@ const useUpdateTrainingRecord = () => {
               ...data,
               trainingRecords: data.trainingRecords.map(tr => ({
                 ...tr,
-                status: debt ? 'CLOSED_DEBT' : 'CLOSED',
+                status: balance < 0 ? 'CLOSED_DEBT' : 'CLOSED',
               })),
+              user: {
+                ...data.user,
+                balance,
+              },
             })
           }
 
@@ -48,10 +57,10 @@ const useUpdateTrainingRecord = () => {
         },
       })
     },
-    [updateTrainingRecord, variables]
+    [updateTrainingRecord, variables, query]
   )
 
   return mutate
 }
 
-export default useUpdateTrainingRecord
+export default useCloseTrainingRecords

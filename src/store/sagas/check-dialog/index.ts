@@ -72,7 +72,6 @@ export function* openPayment(action: ReturnType<typeof actions.checkDialog.openP
         createdAt: activeDate,
         type: 'units',
         amount: null,
-        isDebt: false,
       }
       mode = 'create'
     }

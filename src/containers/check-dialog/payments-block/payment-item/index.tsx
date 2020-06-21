@@ -35,7 +35,6 @@ export default function PaymentItem({ payment, index }: IProps) {
       amount: payment.amount,
       destination: payment.destination,
       transaction: payment.transaction,
-      isDebt: payment.isDebt,
     }),
     [actions, payment]
   )
@@ -48,7 +47,7 @@ export default function PaymentItem({ payment, index }: IProps) {
   return (
     <ListItem button={true} key={payment._id} onClick={openEditForm}>
       <ListItemAvatar>
-        <Avatar className={payment.isDebt ? classes.debtAvatar : classes.avatar}>
+        <Avatar className={classes.avatar}>
           {index + 1}
         </Avatar>
       </ListItemAvatar>

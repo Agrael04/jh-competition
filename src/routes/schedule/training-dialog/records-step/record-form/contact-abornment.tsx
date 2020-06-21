@@ -4,8 +4,9 @@ import { useSelector } from 'store'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Error from '@material-ui/icons/Error'
+import SentimentVeryDissatisfied from '@material-ui/icons/SentimentVeryDissatisfied'
+import SentimentSatisfied from '@material-ui/icons/SentimentSatisfied'
+import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied'
 
 import useGetUserDebt from '../../../queries/get-user-debt'
 
@@ -28,13 +29,18 @@ export default function ContactAbornment() {
         )
       }
       {
-        !loading && data && data.payments?.length > 0 && (
-          <Error color='error' />
+        !loading && data && data.user?.balance < 0 && (
+          <SentimentVeryDissatisfied color='error' />
         )
       }
       {
-        !loading && data && data.payments?.length === 0 && (
-          <AccountCircle color='primary' />
+        !loading && data && data.user?.balance === 0 && (
+          <SentimentSatisfied color='disabled' />
+        )
+      }
+      {
+        !loading && data && data.user?.balance > 0 && (
+          <SentimentVerySatisfied color='primary' />
         )
       }
     </InputAdornment>

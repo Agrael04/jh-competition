@@ -15,5 +15,4 @@ export interface IPaymentForm {
   amount: number | null
   destination?: string
   transaction?: string
-  isDebt: boolean
 }

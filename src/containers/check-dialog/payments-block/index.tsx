@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
 
-import useGetContactDetailsQuery from '../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 import PaymentForm from './payment-form'
 import PaymentItem from './payment-item'
@@ -49,14 +49,6 @@ export default function PaymentBlock() {
       </ListItem>
       {
         data?.payments
-          .filter(payment => payment.isDebt)
-          .map((payment, index) => (
-            <PaymentItem payment={payment} index={index} key={payment._id} />
-          ))
-      }
-      {
-        data?.payments
-          .filter(payment => !payment.isDebt)
           .map((payment, index) => (
             <PaymentItem payment={payment} index={index} key={payment._id} />
           ))

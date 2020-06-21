@@ -7,13 +7,14 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
-import useGetContactDetailsQuery from '../graphql/get-contract-details'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
 import useCloseTrainingRecords from '../graphql/close-training-records'
 
 export default function TrainingDialog() {
   const actions = useActions()
   const { data } = useGetContactDetailsQuery()
   const closeTrainingRecords = useCloseTrainingRecords()
+  const [initAmount, setInitAmount] = React.useState(0)
 
   const servicePassAmount = data?.trainingRecords.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
   const serviceMoneyAmount = data?.trainingRecords.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
@@ -26,13 +27,19 @@ export default function TrainingDialog() {
   const passAmount = paymentPassAmount - servicePassAmount
   const moneyAmount = paymentMoneyAmount - serviceMoneyAmount - positionsMoneyAmount
 
-  const isDebt = !!data?.payments.filter(p => p.isDebt).length
-
   const close = React.useCallback(
     async () => {
-      await closeTrainingRecords(isDebt)
+      await closeTrainingRecords(moneyAmount - initAmount)
       actions.checkDialog.close()
-    }, [closeTrainingRecords, isDebt, actions]
+    }, [closeTrainingRecords, moneyAmount, initAmount, actions]
+  )
+
+  React.useEffect(
+    () => {
+      if (moneyAmount && !initAmount) {
+        setInitAmount(moneyAmount)
+      }
+    }, [moneyAmount, initAmount, setInitAmount]
   )
 
   return (
@@ -102,7 +109,7 @@ export default function TrainingDialog() {
             <Button
               color='primary'
               variant='contained'
-              disabled={moneyAmount !== 0 || passAmount !== 0}
+              disabled={passAmount !== 0}
               fullWidth={true}
               onClick={close}
             >

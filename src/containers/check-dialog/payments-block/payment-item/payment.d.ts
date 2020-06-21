@@ -6,7 +6,6 @@ export default interface IPayment {
   }
   createdAt: Date
   amount: number
-  isDebt: boolean
   destination?: string
   transaction?: string
   __typename: string
