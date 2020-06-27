@@ -14,7 +14,7 @@ export default function TrainingDialog() {
   const actions = useActions()
   const { data } = useGetContactDetailsQuery()
   const closeTrainingRecords = useCloseTrainingRecords()
-  const [initAmount, setInitAmount] = React.useState(0)
+  const [initAmount, setInitAmount] = React.useState<number | null>(null)
 
   const servicePassAmount = data?.trainingRecords.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
   const serviceMoneyAmount = data?.trainingRecords.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
@@ -29,14 +29,14 @@ export default function TrainingDialog() {
 
   const close = React.useCallback(
     async () => {
-      await closeTrainingRecords(moneyAmount - initAmount)
+      await closeTrainingRecords(moneyAmount - (initAmount || 0))
       actions.checkDialog.close()
     }, [closeTrainingRecords, moneyAmount, initAmount, actions]
   )
 
   React.useEffect(
     () => {
-      if (moneyAmount && !initAmount) {
+      if ((moneyAmount || moneyAmount === 0) && initAmount === null) {
         setInitAmount(moneyAmount)
       }
     }, [moneyAmount, initAmount, setInitAmount]

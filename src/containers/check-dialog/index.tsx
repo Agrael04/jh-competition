@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
+import { useSelector } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 
@@ -19,16 +19,10 @@ export default function TrainingDialog() {
     opened: state.checkDialog.opened,
   }))
 
-  const actions = useActions()
   const { loading } = useGetContactDetails()
 
-  const close = React.useCallback(
-    () => actions.checkDialog.close(),
-    [actions]
-  )
-
   return (
-    <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
+    <Dialog open={opened} maxWidth='lg' fullWidth={true}>
       <Header />
       <Box padding={3}>
         {

@@ -28,10 +28,6 @@ export default function SaveButton() {
         return true
       }
 
-      if (!record.priceAmount) {
-        return true
-      }
-
       if (!record.priceType) {
         return true
       }

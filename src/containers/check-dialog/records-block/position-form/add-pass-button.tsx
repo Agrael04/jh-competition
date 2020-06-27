@@ -22,7 +22,7 @@ export default function PassSelect() {
     return null
   }
 
-  if (!service) {
+  if (service === undefined) {
     return null
   }
 

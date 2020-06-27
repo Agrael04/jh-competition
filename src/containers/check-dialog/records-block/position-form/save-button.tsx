@@ -36,8 +36,7 @@ export default function SaveButton() {
       if (
         !position ||
         !position.type ||
-        !position.service ||
-        !position.priceAmount ||
+        (position.service === undefined) ||
         !position.priceType
       ) {
         return true
