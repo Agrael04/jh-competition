@@ -42,6 +42,15 @@ export const toggleOpenedTrainers = () => ({
   type: constants.TOGGLE_OPENED_TRAINERS,
 })
 
+export const openCheckDialog = (contact?: string) => ({
+  type: constants.OPEN_CHECK_DIALOG,
+  payload: { contact },
+})
+
+export const closeCheckDialog = () => ({
+  type: constants.CLOSE_CHECK_DIALOG,
+})
+
 export const actions = {
   openCreateTrainingDialog,
   openUpdateTrainingDialog,
@@ -56,6 +65,8 @@ export const actions = {
   setActiveTime,
 
   toggleOpenedTrainers,
+  openCheckDialog,
+  closeCheckDialog,
 }
 
 export default actions

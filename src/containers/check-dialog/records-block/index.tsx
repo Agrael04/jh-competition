@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -16,19 +15,36 @@ import PositionItem from './position-item'
 import RecordForm from './record-form'
 import RecordItem from './record-item'
 
+import { useContext } from '../context'
+
 import useStyles from './styles'
 
 export default function TrainingDialog() {
   const classes = useStyles()
-  const actions = useActions()
-  const isRecordFormActive = useSelector(state => !!state.checkDialog.recordForm)
-  const isServiceFormActive = useSelector(state => !!state.checkDialog.positionForm)
+  const { contact, date, isServiceFormActive, isRecordFormActive, setPosition } = useContext(s => ({
+    contact: s.state?.params.contact?.link,
+    date: s.state?.params.activeDate,
+    isServiceFormActive: !!s.state.positionForm,
+    isRecordFormActive: !!s.state.recordForm,
+    setPosition: s.actions.setPosition,
+  }))
 
   const { data } = useGetContactDetailsQuery()
 
   const openAddForm = React.useCallback(
-    () => actions.checkDialog.openPosition(),
-    [actions]
+    () => {
+      const p = {
+        contact: { link: contact! },
+        type: undefined,
+        service: undefined,
+        priceAmount: 0,
+        priceType: 'money' as const,
+        date,
+      }
+
+      setPosition(p, 'create')
+    },
+    [setPosition, contact, date]
   )
 
   if (isServiceFormActive) {

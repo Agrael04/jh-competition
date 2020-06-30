@@ -6,6 +6,6 @@ export interface ICheckPositionForm {
   type: string
   service: number
   priceType: 'units' | 'money'
-  priceAmount: number
+  priceAmount: number | null
   date: Date
 }

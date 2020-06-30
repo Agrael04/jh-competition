@@ -30,7 +30,7 @@ export default function TrainingDialog() {
   const close = React.useCallback(
     async () => {
       await closeTrainingRecords(moneyAmount - (initAmount || 0))
-      actions.checkDialog.close()
+      actions.schedule.page.closeCheckDialog()
     }, [closeTrainingRecords, moneyAmount, initAmount, actions]
   )
 

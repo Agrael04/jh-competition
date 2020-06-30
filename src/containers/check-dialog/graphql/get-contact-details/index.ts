@@ -1,4 +1,3 @@
-import { useSelector } from 'store'
 import { useQuery } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
@@ -11,6 +10,8 @@ import IPaymentItem from '../../payments-block/payment-item/payment'
 import ITotalPayment from '../../total-block/payment'
 import ITotalPosition from '../../total-block/position'
 
+import { useContext } from '../../context'
+
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
 export interface IGetContactDetails {
@@ -21,10 +22,10 @@ export interface IGetContactDetails {
 }
 
 export const useGetContactDetailsQuery = () => {
-  const variables = useSelector(state => ({
-    date: state.schedule.page.activeDate,
-    gym: state.schedule.page.activeGym,
-    _id: state.checkDialog.contact,
+  const variables = useContext(s => ({
+    date: s.state?.params.activeDate,
+    gym: s.state?.params.activeGym,
+    _id: s.state?.params.contact?.link,
   }))
 
   const result = useQuery<IGetContactDetails>(GET_CONTACT_DETAILS, {

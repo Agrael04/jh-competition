@@ -1,30 +1,31 @@
 import React from 'react'
-import { IStoreState, useActions } from 'store'
 
+import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import Select from 'containers/select'
+import { useContext } from '../../context'
 
 import { paymentDestinations } from '../../data'
 
-const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.destination
-
 export default function CapacityInput() {
-  const actions = useActions()
+  const { destination, update } = useContext(s => ({
+    destination: s.state.paymentForm?.destination,
+    update: s.actions.updatePayment,
+  }))
 
   const handleChange = React.useCallback(
-    (name, destination) => {
-      actions.checkDialog.updatePayment({ destination })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ destination: e.target.value })
     },
-    [actions]
+    [update]
   )
 
   return (
     <Select
       name='destination'
       label='Кошелек'
+      value={destination}
       onChange={handleChange}
-      fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
     >

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'store'
 
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -11,10 +10,14 @@ import SaveButton from './save-button'
 
 import useGetContactDetailsQuery from '../../graphql/get-contact-details'
 
+import { useContext } from '../../context'
+
 import { getTimeLabel } from 'data/times'
 
 export default function RecordForm() {
-  const _id = useSelector(state => state.checkDialog.recordForm?._id)
+  const { _id } = useContext(s => ({
+    _id: s.state.recordForm?._id,
+  }))
   const { data } = useGetContactDetailsQuery()
 
   const record = data?.trainingRecords.find(tr => tr._id === _id)

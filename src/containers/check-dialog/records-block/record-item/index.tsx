@@ -1,5 +1,4 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -7,6 +6,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
 import IRecord from './record'
+
+import { useContext } from '../../context'
 
 import { getTimeLabel } from 'data/times'
 
@@ -16,15 +17,19 @@ interface IProps {
 }
 
 export default function PaymentItem({ record, index }: IProps) {
-  const actions = useActions()
+  const { setRecord } = useContext(s => ({
+    setRecord: s.actions.setRecord,
+  }))
 
   const openEditForm = React.useCallback(
-    () => actions.checkDialog.openRecord({
-      _id: record._id,
-      priceType: record.priceType || 'units',
-      priceAmount: record.priceAmount,
-    }),
-    [actions, record]
+    () => {
+      setRecord({
+        _id: record._id,
+        priceType: record.priceType || 'units',
+        priceAmount: record.priceAmount,
+      }, 'update')
+    },
+    [setRecord, record]
   )
 
   return (

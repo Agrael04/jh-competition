@@ -1,16 +1,17 @@
 import React from 'react'
-import { useSelector } from 'store'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
+
+import { useContext } from '../../context'
 
 const UPDATE_TRAINING_RECORD = loader('./mutation.gql')
 
 const useUpdateTrainingRecord = () => {
   const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
 
-  const { _id, data } = useSelector(state => ({
-    _id: state.checkDialog.recordForm?._id,
-    data: state.checkDialog.recordForm,
+  const { _id, data } = useContext(s => ({
+    _id: s.state.recordForm?._id,
+    data: s.state.recordForm,
   }))
 
   const mutate = React.useCallback(

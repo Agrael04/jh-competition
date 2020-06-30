@@ -1,5 +1,4 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -12,6 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import useDeleteCheckPosition from '../../graphql/delete-check-position'
 
+import { useContext } from '../../context'
+
 import IPosition from './position'
 
 import { products } from '../../data'
@@ -22,18 +23,25 @@ interface IProps {
 }
 
 export default function PaymentItem({ position, index }: IProps) {
-  const actions = useActions()
   const deleteCheckPosition = useDeleteCheckPosition()
 
+  const { setPosition } = useContext(s => ({
+    setPosition: s.actions.setPosition,
+  }))
+
   const openEditForm = React.useCallback(
-    () => actions.checkDialog.openPosition({
-      _id: position._id,
-      priceType: position.priceType || 'money',
-      priceAmount: position.priceAmount,
-      type: position.type,
-      service: position.service,
-    }),
-    [actions, position]
+    () => {
+      const p = {
+        _id: position._id,
+        priceType: position.priceType || 'money',
+        priceAmount: position.priceAmount,
+        type: position.type,
+        service: position.service,
+      }
+
+      setPosition(p, 'update')
+    },
+    [setPosition, position]
   )
 
   const product = products.find(p => p.id === position.type)

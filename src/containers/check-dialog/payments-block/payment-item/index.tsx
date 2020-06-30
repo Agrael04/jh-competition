@@ -1,5 +1,4 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import useDeletePayment from '../../graphql/delete-payment'
+
+import { useContext } from '../../context'
 
 import useStyles from '../styles'
 
@@ -24,19 +25,25 @@ interface IProps {
 export default function PaymentItem({ payment, index }: IProps) {
   const classes = useStyles()
 
-  const actions = useActions()
+  const { setPayment } = useContext(s => ({
+    setPayment: s.actions.setPayment,
+  }))
   const deletePayment = useDeletePayment()
 
   const openEditForm = React.useCallback(
-    () => actions.checkDialog.openPayment({
-      _id: payment._id,
-      type: payment.type,
-      pass: payment.pass ? { link: payment.pass._id } : undefined,
-      amount: payment.amount,
-      destination: payment.destination,
-      transaction: payment.transaction,
-    }),
-    [actions, payment]
+    () => {
+      const p = {
+        _id: payment._id,
+        type: payment.type,
+        pass: payment.pass ? { link: payment.pass._id } : undefined,
+        amount: payment.amount,
+        destination: payment.destination,
+        transaction: payment.transaction,
+      }
+
+      setPayment(p, 'update')
+    },
+    [setPayment, payment]
   )
 
   const removePayment = React.useCallback(

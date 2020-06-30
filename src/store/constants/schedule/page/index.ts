@@ -11,6 +11,9 @@ export const SET_ACTIVE_RESOURCES = 'schedule/page/SET_ACTIVE_RESOURCES'
 export const SET_ACTIVE_TIME = 'schedule/page/SET_ACTIVE_TIME'
 export const TOGGLE_OPENED_TRAINERS = 'schedule/page/TOGGLE_OPENED_TRAINERS'
 
+export const OPEN_CHECK_DIALOG = 'schedule/page/OPEN_CHECK_DIALOG'
+export const CLOSE_CHECK_DIALOG = 'schedule/page/CLOSE_CHECK_DIALOG'
+
 export default {
   OPEN_CREATE_TRAINING_DIALOG,
   OPEN_UPDATE_TRAINING_DIALOG,
@@ -24,4 +27,7 @@ export default {
   SET_ACTIVE_RESOURCES,
   SET_ACTIVE_TIME,
   TOGGLE_OPENED_TRAINERS,
+
+  OPEN_CHECK_DIALOG,
+  CLOSE_CHECK_DIALOG,
 }

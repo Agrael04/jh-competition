@@ -1,50 +1,41 @@
 import React from 'react'
-import { useSelector } from 'store'
 
-import Dialog from '@material-ui/core/Dialog'
+import Root from './root'
+import { Provider } from './context'
 
-import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
+interface IProps {
+  activeDate: Date
+  activeGym: string
+  contact: string | null
+  opened: boolean
+}
 
-import Header from './header'
-import PassForm from './pass-form'
-import PaymentsBlock from './payments-block'
-import RecordsBlock from './records-block'
-import TotalBlock from './total-block'
+export default function CheckDialogWrap({ activeDate, activeGym, contact, opened }: IProps) {
+  const initialState = {
+    params: {
+      contact: contact ? { link: contact } : null,
+      activeDate,
+      activeGym,
+    },
+    recordForm: null,
+    recordMode: null,
 
-import useGetContactDetails from './graphql/get-contact-details'
+    positionForm: null,
+    positionMode: null,
 
-export default function TrainingDialog() {
-  const { opened } = useSelector(state => ({
-    opened: state.checkDialog.opened,
-  }))
+    paymentForm: null,
+    paymentMode: null,
 
-  const { loading } = useGetContactDetails()
+    openedPassForm: false,
+  }
+
+  if (!opened) {
+    return null
+  }
 
   return (
-    <Dialog open={opened} maxWidth='lg' fullWidth={true}>
-      <Header />
-      <Box padding={3}>
-        {
-          !loading && (
-            <Grid container={true} spacing={3}>
-              <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-                <RecordsBlock />
-              </Grid>
-              <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-                <PaymentsBlock />
-              </Grid>
-              <Grid item={true} lg={4}>
-                <PassForm />
-              </Grid>
-              <Grid item={true} lg={12}>
-                <Box border={1} borderColor='primary.main' width={1} />
-              </Grid>
-              <TotalBlock />
-            </Grid>
-          )
-        }
-      </Box>
-    </Dialog>
+    <Provider initialState={initialState}>
+      <Root />
+    </Provider>
   )
 }

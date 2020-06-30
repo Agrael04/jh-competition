@@ -1,27 +1,27 @@
 import React from 'react'
-import { IStoreState, useActions } from 'store'
 
-import TextField from 'containers/text-field'
+import TextField from '@material-ui/core/TextField'
 
-const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.transaction
+import { useContext } from '../../context'
 
 export default function CapacityInput() {
-  const actions = useActions()
+  const { transaction, update } = useContext(s => ({
+    transaction: s.state.paymentForm?.transaction,
+    update: s.actions.updatePayment,
+  }))
 
   const handleChange = React.useCallback(
-    (name, transaction) => {
-      actions.checkDialog.updatePayment({
-        transaction,
-      })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ transaction: e.target.value })
     },
-    [actions]
+    [update]
   )
 
   return (
     <TextField
       name={'transaction'}
+      value={transaction}
       onChange={handleChange}
-      fieldSelector={selector}
       label={'Транзакция'}
       fullWidth={true}
       variant='outlined'

@@ -1,14 +1,16 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
+import { useContext } from '../../context'
+
 export default function CancelButton() {
-  const actions = useActions()
-  const cancel = actions.checkDialog.resetRecord
+  const { reset } = useContext(s => ({
+    reset: s.actions.resetRecord,
+  }))
 
   return (
-    <Button onClick={cancel} color='primary'>
+    <Button onClick={reset} color='primary'>
       Отменить
     </Button>
   )

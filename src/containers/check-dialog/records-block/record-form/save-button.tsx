@@ -1,14 +1,15 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
 import useUpdateTrainingRecord from '../../graphql/update-training-record'
 
+import { useContext } from '../../context'
+
 export default function SaveButton() {
-  const actions = useActions()
-  const { record } = useSelector(state => ({
-    record: state.checkDialog.recordForm,
+  const { form, reset } = useContext(s => ({
+    form: s.state.recordForm,
+    reset: s.actions.resetRecord,
   }))
 
   const updateTrainingRecord = useUpdateTrainingRecord()
@@ -17,23 +18,23 @@ export default function SaveButton() {
     async () => {
       await updateTrainingRecord()
 
-      actions.checkDialog.resetRecord()
+      reset()
     },
-    [actions, updateTrainingRecord]
+    [reset, updateTrainingRecord]
   )
 
   const disabled = React.useMemo(
     () => {
-      if (!record) {
+      if (!form) {
         return true
       }
 
-      if (!record.priceType) {
+      if (!form.priceType) {
         return true
       }
 
       return false
-    }, [record]
+    }, [form]
   )
 
   return (

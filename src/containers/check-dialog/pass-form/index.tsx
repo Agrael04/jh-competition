@@ -1,8 +1,6 @@
 import React from 'react'
 import { loader } from 'graphql.macro'
 
-import { useSelector, useActions } from 'store'
-
 import PassForm from 'containers/pass-form'
 
 import { DataProxy } from 'apollo-cache'
@@ -11,21 +9,23 @@ import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 import { products } from '../data'
 import { passTypes, getSizes } from 'data/training-passes'
 
+import { useContext } from '../context'
+
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 const GET_TRAINING_PASSES = loader('../graphql/get-training-passes/query.gql')
 
 export default function PassFormWrap() {
-  const actions = useActions()
   const { data } = useGetContactDetailsQuery()
-  const variables = useSelector(state => ({
-    _id: state.checkDialog.contact,
+  const variables = useContext(s => ({
+    _id: s.state?.params.contact?.link,
   }))
-  const { contact, activeDate, service, serviceType, opened } = useSelector(state => ({
-    contact: state.checkDialog.contact,
-    activeDate: state.schedule.page.activeDate,
-    serviceType: state.checkDialog.positionForm?.type,
-    service: state.checkDialog.positionForm?.service,
-    opened: state.checkDialog.openedPassForm,
+  const { contact, activeDate, opened, service, serviceType, close } = useContext(s => ({
+    contact: s.state?.params.contact?.link,
+    activeDate: s.state?.params.activeDate,
+    opened: s.state?.openedPassForm,
+    serviceType: s.state.positionForm?.type,
+    service: s.state.positionForm?.service,
+    close: s.actions.closePassForm,
   }))
 
   const mode = opened ? 'create' : null
@@ -62,10 +62,6 @@ export default function PassFormWrap() {
       return form
     }, [contact, activeDate, service, serviceType]
   )
-
-  const close = () => {
-    actions.checkDialog.closePass()
-  }
 
   const updateCacheOnCreate = (client: DataProxy, { data }: any) => {
     const boundUpdateCachedQuery = updateQuery(client)

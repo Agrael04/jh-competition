@@ -8,6 +8,9 @@ export interface IState {
   activeResources: string[]
   activeTime: number
   openedTrainers: boolean
+
+  activeContact: string | null
+  openedCheckDialog: boolean
 }
 
 const initialState: IState = {
@@ -16,6 +19,9 @@ const initialState: IState = {
   activeResources: [],
   activeTime: 0,
   openedTrainers: false,
+
+  activeContact: null,
+  openedCheckDialog: false,
 }
 
 export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
@@ -53,6 +59,22 @@ export default (state = initialState, { type, payload }: { type: string, payload
       return {
         ...state,
         openedTrainers: !state.openedTrainers,
+      }
+    }
+
+    case constants.OPEN_CHECK_DIALOG: {
+      return {
+        ...state,
+        openedCheckDialog: true,
+        activeContact: payload.contact,
+      }
+    }
+
+    case constants.CLOSE_CHECK_DIALOG: {
+      return {
+        ...state,
+        openedCheckDialog: false,
+        activeContact: null,
       }
     }
 

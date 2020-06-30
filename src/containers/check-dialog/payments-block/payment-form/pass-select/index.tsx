@@ -1,10 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-import { IStoreState, useActions } from 'store'
 
+import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
-
-import Select from 'containers/select'
 
 import useGetTrainingPassesQuery from '../../../graphql/get-training-passes'
 
@@ -12,26 +10,29 @@ import { passTypes, getSizes } from 'data/training-passes'
 
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
 
-const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.pass?.link
+import { useContext } from '../../../context'
 
 export default function PassSelect() {
-  const actions = useActions()
+  const { pass, update } = useContext(s => ({
+    pass: s.state.paymentForm?.pass?.link,
+    update: s.actions.updatePayment,
+  }))
 
   const { data } = useGetTrainingPassesQuery()
 
   const handleChange = React.useCallback(
-    (name, pass) => {
-      actions.checkDialog.updatePayment({ pass: { link: pass } })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ pass: { link: e.target.value } })
     },
-    [actions]
+    [update]
   )
 
   return (
     <Select
       name='pass'
       label='Абонимент'
+      value={pass}
       onChange={handleChange}
-      fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
     >

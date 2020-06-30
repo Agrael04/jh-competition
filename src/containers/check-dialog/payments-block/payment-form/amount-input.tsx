@@ -1,41 +1,37 @@
 import React from 'react'
-import { IStoreState, useActions, useSelector } from 'store'
 
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import TextField from '@material-ui/core/TextField'
 
-import TextField from 'containers/text-field'
-
-const selector = () => (state: IStoreState) => state.checkDialog.paymentForm?.amount
+import { useContext } from '../../context'
 
 export default function AmountInput() {
-  const type = useSelector(state => state.checkDialog.paymentForm?.type)
-  const actions = useActions()
+  const { type, amount, update } = useContext(s => ({
+    type: s.state.paymentForm?.type,
+    amount: s.state.paymentForm?.amount,
+    update: s.actions.updatePayment,
+  }))
 
   const handleChange = React.useCallback(
-    (name, amount) => {
-      actions.checkDialog.updatePayment({
-        amount: +amount,
-      })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ amount: +e.target.value })
     },
-    [actions]
+    [update]
   )
 
   const handleTypeChange = React.useCallback(
     (e, type) => {
-      actions.checkDialog.updatePayment({
-        type,
-        amount: null,
-      })
+      update({ type, amount: null })
     },
-    [actions]
+    [update]
   )
 
   return (
     <TextField
       name={'amount'}
+      value={amount}
       onChange={handleChange}
-      fieldSelector={selector}
       label='Сумма'
       variant='outlined'
       fullWidth={true}

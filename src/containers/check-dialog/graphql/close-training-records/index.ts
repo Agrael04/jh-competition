@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'store'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
 
@@ -7,16 +6,18 @@ import { updateQuery } from 'utils/apollo-cache-updater'
 
 import { useGetContactDetailsQuery, IGetContactDetails } from '../get-contact-details'
 
+import { useContext } from '../../context'
+
 const MUTATION = loader('./mutation.gql')
 const GET_CONTRACT_DETAILS = loader('../get-contact-details/query.gql')
 
 const useCloseTrainingRecords = () => {
   const [updateTrainingRecord] = useMutation(MUTATION)
 
-  const variables = useSelector(state => ({
-    date: state.schedule.page.activeDate,
-    gym: state.schedule.page.activeGym,
-    _id: state.checkDialog.contact,
+  const variables = useContext(s => ({
+    date: s.state?.params.activeDate,
+    gym: s.state?.params.activeGym,
+    _id: s.state?.params.contact?.link,
   }))
 
   const query = useGetContactDetailsQuery()

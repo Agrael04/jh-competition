@@ -73,8 +73,7 @@ export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trai
       contact: state.schedule.trainingDialog.recordForm?.contact.link,
     }))
 
-    // yield put(actions.schedule.trainingDialog.resetRecord())
-    yield put(actions.checkDialog.open(contact))
+    yield put(actions.schedule.page.openCheckDialog(contact))
   } catch (error) {
     console.log(error)
   }

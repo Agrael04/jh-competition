@@ -1,23 +1,23 @@
 import React from 'react'
-import { IStoreState, useActions, useSelector } from 'store'
 
+import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import Select from 'containers/select'
-
 import { products } from '../../data'
-
-const selector = () => (state: IStoreState) => state.checkDialog.positionForm?.service
+import { useContext } from '../../context'
 
 export default function ServiceSelect() {
-  const actions = useActions()
-  const type = useSelector(state => state.checkDialog.positionForm?.type)
+  const { service, type, update } = useContext(s => ({
+    service: s.state.positionForm?.service,
+    type: s.state.positionForm?.type,
+    update: s.actions.updatePosition,
+  }))
 
   const handleChange = React.useCallback(
-    (name, service) => {
-      actions.checkDialog.updatePosition({ service })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ service: +e.target.value })
     },
-    [actions]
+    [update]
   )
 
   const product = products.find(p => p.id === type)
@@ -26,8 +26,8 @@ export default function ServiceSelect() {
     <Select
       name='type'
       label='Услуги'
+      value={service}
       onChange={handleChange}
-      fieldSelector={selector}
       fullWidth={true}
       variant='outlined'
       disabled={!type}

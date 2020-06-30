@@ -1,34 +1,54 @@
 import React from 'react'
-import { useActions, IStoreState } from 'store'
 
-import PriceType from './price-type'
-import TextField from 'containers/text-field'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import TextField from '@material-ui/core/TextField'
 
-const selector = () => (state: IStoreState) => state.checkDialog.positionForm?.priceAmount
+import { useContext } from '../../context'
 
 export default function RecordForm() {
-  const actions = useActions()
+  const { priceAmount, priceType, update } = useContext(s => ({
+    priceAmount: s.state.positionForm?.priceAmount,
+    priceType: s.state.positionForm?.priceType,
+    update: s.actions.updatePosition,
+  }))
 
   const handleChange = React.useCallback(
-    (name, priceAmount) => {
-      actions.checkDialog.updatePosition({
-        priceAmount: +priceAmount,
-      })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      update({ priceAmount: +e.target.value })
     },
-    [actions]
+    [update]
+  )
+
+  const handleTypeChange = React.useCallback(
+    (e, priceType) => {
+      update({ priceType, priceAmount: null })
+    },
+    [update]
   )
 
   return (
     <TextField
       name={'priceAmount'}
+      value={priceAmount}
       onChange={handleChange}
-      fieldSelector={selector}
       label='Цена'
       variant='outlined'
       fullWidth={true}
       InputProps={{
         endAdornment: (
-          <PriceType />
+          <ToggleButtonGroup
+            exclusive={true}
+            value={priceType}
+            onChange={handleTypeChange}
+          >
+            <ToggleButton value='money' disabled={true}>
+              Грн
+            </ToggleButton>
+            <ToggleButton value='units' disabled={true}>
+              АБ
+            </ToggleButton>
+          </ToggleButtonGroup>
         ),
       }}
     />

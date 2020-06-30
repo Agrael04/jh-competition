@@ -66,5 +66,5 @@ export interface ITrainingRecordForm {
     link: string
   }
   priceType: 'units' | 'money'
-  priceAmount: number
+  priceAmount: number | null
 }

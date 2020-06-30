@@ -1,20 +1,16 @@
 import React from 'react'
-import { useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 
-export default function PassSelect() {
-  const actions = useActions()
+import { useContext } from '../../context'
 
-  const openAddPassForm = React.useCallback(
-    () => actions.checkDialog.openPass(),
-    [actions]
-  )
+export default function PassSelect() {
+  const openPassForm = useContext(s => s.actions.openPassForm)
 
   return (
     <Box marginY='auto' marginRight={0}>
-      <Button color='primary' onClick={openAddPassForm}>
+      <Button color='primary' onClick={openPassForm}>
         Добавить
       </Button>
     </Box>

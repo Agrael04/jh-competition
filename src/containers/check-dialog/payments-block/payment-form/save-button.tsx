@@ -1,16 +1,17 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
 import useCreatePayment from '../../graphql/create-payment'
 import useUpdatePayment from '../../graphql/update-payment'
 
+import { useContext } from '../../context'
+
 export default function SaveButton() {
-  const actions = useActions()
-  const { mode, payment } = useSelector(state => ({
-    mode: state.checkDialog.paymentMode,
-    payment: state.checkDialog.paymentForm,
+  const { mode, form, reset } = useContext(s => ({
+    mode: s.state.paymentMode,
+    form: s.state.paymentForm,
+    reset: s.actions.resetPayment,
   }))
 
   const createPayment = useCreatePayment()
@@ -26,35 +27,35 @@ export default function SaveButton() {
         await updatePayment()
       }
 
-      actions.checkDialog.resetPayment()
+      reset()
     },
-    [actions, createPayment, updatePayment, mode]
+    [reset, createPayment, updatePayment, mode]
   )
 
   const disabled = React.useMemo(
     () => {
-      if (!payment) {
+      if (!form) {
         return true
       }
 
-      if (!payment.amount) {
+      if (!form.amount) {
         return true
       }
 
-      if (payment.type === 'units' && !payment.pass) {
+      if (form.type === 'units' && !form.pass) {
         return true
       }
 
-      if (payment.type === 'money' && !payment.transaction) {
+      if (form.type === 'money' && !form.transaction) {
         return true
       }
 
-      if (payment.type === 'money' && !payment.destination) {
+      if (form.type === 'money' && !form.destination) {
         return true
       }
 
       return false
-    }, [payment]
+    }, [form]
   )
 
   return (

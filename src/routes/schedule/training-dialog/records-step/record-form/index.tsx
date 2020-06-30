@@ -34,7 +34,7 @@ export default function RecordsBlock() {
   const { _id, recordId, openedCheckDialog } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
     recordId: state.schedule.trainingDialog.recordForm?._id,
-    openedCheckDialog: state.checkDialog.opened,
+    openedCheckDialog: state.schedule.page.openedCheckDialog,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 

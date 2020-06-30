@@ -1,9 +1,10 @@
 import React from 'react'
-import { useSelector } from 'store'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
+
+import { useContext } from '../../context'
 
 const CREATE_PAYMENT = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
@@ -11,14 +12,14 @@ const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreateTrainingPass = () => {
   const [createPayment] = useMutation(CREATE_PAYMENT)
-  const variables = useSelector(state => ({
-    date: state.schedule.page.activeDate,
-    gym: state.schedule.page.activeGym,
-    _id: state.checkDialog.contact,
+  const variables = useContext(s => ({
+    date: s.state?.params.activeDate,
+    gym: s.state?.params.activeGym,
+    _id: s.state?.params.contact?.link,
   }))
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.paymentForm,
+  const { data } = useContext(s => ({
+    data: s.state.paymentForm,
   }))
 
   const mutate = React.useCallback(
