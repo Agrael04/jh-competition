@@ -24,6 +24,10 @@ export default makeStyles((theme: Theme) => ({
     height: '100%',
     width: '100%',
   },
+  resource: {
+    height: '100%',
+    width: '100%',
+  },
   button: {
     height: '100%',
     width: '100%',

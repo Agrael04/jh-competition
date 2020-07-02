@@ -7,6 +7,9 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import MomentUtils from '@date-io/moment'
 import 'moment/locale/uk'
 
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
 import store from './store'
 import theme from './theme'
 import * as serviceWorker from './serviceWorker'
@@ -18,9 +21,11 @@ ReactDOM.render((
   <MuiPickersUtilsProvider utils={MomentUtils} locale='uk'>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <BrowserRouter>
-          <Routes />
-        </BrowserRouter>
+        <DndProvider backend={HTML5Backend}>
+          <BrowserRouter>
+            <Routes />
+          </BrowserRouter>
+        </DndProvider>
       </Provider>
     </ThemeProvider>
   </MuiPickersUtilsProvider>

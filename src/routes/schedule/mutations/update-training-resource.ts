@@ -29,7 +29,7 @@ const useUpdateTrainingResource = () => {
   const [updateTrainingResource] = useMutation(UPDATE_TRAINING_RESOURCE)
 
   const mutate = React.useCallback(
-    (resource: ITrainingResourceForm) => {
+    (resource: Partial<ITrainingResourceForm>) => {
 
       return updateTrainingResource({
         variables: { _id: resource._id, resource },

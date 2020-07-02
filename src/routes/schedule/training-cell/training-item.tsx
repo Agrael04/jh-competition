@@ -1,7 +1,7 @@
 import React from 'react'
 import { useActions } from 'store'
+import { useDrag } from 'react-dnd'
 
-import Button from '@material-ui/core/Button'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
@@ -19,6 +19,7 @@ import getColorPallete from 'utils/get-color-pallete'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import red from '@material-ui/core/colors/red'
 
+import EmptyItem from './empty-item'
 import useStyles from './styles'
 
 interface IProps {
@@ -51,13 +52,6 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const trainer = React.useMemo(
     () => tResource?.trainer,
     [tResource]
-  )
-  const handleCreateClick = React.useCallback(
-    e => {
-      e.stopPropagation()
-      actions.schedule.page.openCreateTrainingDialog(resource, time)
-    },
-    [actions, resource, time]
   )
 
   const handleUpdateClick = React.useCallback(
@@ -95,48 +89,50 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
   const isOccupied = !!tResource
 
+  const [_, drag] = useDrag({
+    item: { type: 'TRAINING_RESOURCE_ITEM', color, _id: tResource?._id },
+  })
+
   if (!tResource) {
     return (
-      <Zoom in={true}>
-        <Button onDoubleClick={handleCreateClick} fullWidth={true} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-          {' '}
-        </Button>
-      </Zoom>
+      <EmptyItem resource={resource} time={time} />
     )
   }
 
   return (
-    <Zoom in={true}>
-      <ButtonBase onDoubleClick={handleUpdateClick} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
-        <Box height='100%' color='white'>
-          <Grid container={true} justify='space-between'>
-            <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle}>
-              <FaceIcon />
-            </Avatar>
+    <div className={classes.resource} ref={drag}>
+      <Zoom in={true}>
+        <ButtonBase onDoubleClick={handleUpdateClick} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
+          <Box height='100%' color='white'>
+            <Grid container={true} justify='space-between'>
+              <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle}>
+                <FaceIcon />
+              </Avatar>
 
-            <Box margin='auto'>
-              <Typography color='inherit' variant='caption'>
-                {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
-              </Typography>
-              <br />
-              <Typography color='inherit' variant='caption'>
-                {(trainingTexts as any)[type!]}
-              </Typography>
+              <Box margin='auto'>
+                <Typography color='inherit' variant='caption'>
+                  {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
+                </Typography>
+                <br />
+                <Typography color='inherit' variant='caption'>
+                  {(trainingTexts as any)[type!]}
+                </Typography>
+              </Box>
+            </Grid>
+            <Box marginY={0.5}>
+              <Divider className={classes.divider} />
             </Box>
-          </Grid>
-          <Box marginY={0.5}>
-            <Divider className={classes.divider} />
+            {
+              records?.map(r => (
+                <div key={r._id}>
+                  {r.contact?.fullName}
+                </div>
+              ))
+            }
           </Box>
-          {
-            records?.map(r => (
-              <div key={r._id}>
-                {r.contact?.fullName}
-              </div>
-            ))
-          }
-        </Box>
-      </ButtonBase>
-    </Zoom>
+        </ButtonBase>
+      </Zoom>
+    </div>
   )
 }
 
