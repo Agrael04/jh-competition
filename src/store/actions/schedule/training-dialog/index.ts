@@ -1,73 +1,72 @@
-import constants from 'store/constants/schedule/training-dialog'
+import { createAction } from 'typesafe-actions'
 
 import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
 
-export const open = (mode: string, _id: string) => ({
-  type: constants.OPEN,
-  payload: { mode, _id },
-})
+export const open = createAction(
+  'schedule/trainingDialog/OPEN',
+  (mode: 'create' | 'update', _id: string) => ({ mode, _id })
+)()
 
-export const initialize = (training: Partial<ITrainingForm>, resource?: Partial<ITrainingResourceForm>) => ({
-  type: constants.INITIALIZE,
-  payload: { training, resource },
-})
+export const initialize = createAction(
+  'schedule/trainingDialog/INITIALIZE',
+  (training: Partial<ITrainingForm>, resource?: ITrainingResourceForm) => ({ training, resource })
+)()
 
-export const close = () => ({
-  type: constants.CLOSE,
-  payload: null,
-})
+export const close = createAction(
+  'schedule/trainingDialog/CLOSE'
+)()
 
-export const updateField = (field: string, value: any) => ({
-  type: constants.UPDATE_FIELD,
-  payload: { field, value },
-})
+export const updateField = createAction(
+  'schedule/trainingDialog/UPDATE_FIELD',
+  (field: string, value: any) => ({ field, value })
+)()
 
-export const openResource = (resource?: Partial<ITrainingResourceForm>) => ({
-  type: constants.OPEN_RESOURCE,
-  payload: { resource },
-})
+export const openResource = createAction(
+  'schedule/trainingDialog/OPEN_RESOURCE',
+  (resource?: Partial<ITrainingResourceForm>) => ({ resource })
+)()
 
-export const setResource = (resource: ITrainingResourceForm | null, mode: 'create' | 'update' | null) => ({
-  type: constants.SET_RESOURCE,
-  payload: { resource, mode },
-})
+export const setResource = createAction(
+  'schedule/trainingDialog/SET_RESOURCE',
+  (resource: ITrainingResourceForm | null, mode: 'create' | 'update' | null) => ({ resource, mode })
+)()
 
-export const resetResource = () => ({
-  type: constants.RESET_RESOURCE,
-})
+export const resetResource = createAction(
+  'schedule/trainingDialog/RESET_RESOURCE'
+)()
 
-export const updateResource = (resource: Partial<ITrainingResourceForm>) => ({
-  type: constants.UPDATE_RESOURCE,
-  payload: { resource },
-})
+export const updateResource = createAction(
+  'schedule/trainingDialog/UPDATE_RESOURCE',
+  (resource: Partial<ITrainingResourceForm>) => ({ resource })
+)()
 
-export const openRecord = (record?: Partial<ITrainingRecordForm>) => ({
-  type: constants.OPEN_RECORD,
-  payload: { record },
-})
+export const openRecord = createAction(
+  'schedule/trainingDialog/OPEN_RECORD',
+  (record?: Partial<ITrainingRecordForm>) => ({ record })
+)()
 
-export const setRecord = (record: ITrainingRecordForm | null, mode: 'create' | 'update' | null) => ({
-  type: constants.SET_RECORD,
-  payload: { record, mode },
-})
+export const setRecord = createAction(
+  'schedule/trainingDialog/SET_RECORD',
+  (record: ITrainingRecordForm | null, mode: 'create' | 'update' | null) => ({ record, mode })
+)()
 
-export const resetRecord = () => ({
-  type: constants.RESET_RECORD,
-})
+export const resetRecord = createAction(
+  'schedule/trainingDialog/RESET_RECORD'
+)()
 
-export const updateRecord = (record: Partial<ITrainingRecordForm>) => ({
-  type: constants.UPDATE_RECORD,
-  payload: { record },
-})
+export const updateRecord = createAction(
+  'schedule/trainingDialog/UPDATE_RECORD',
+  (record: Partial<ITrainingRecordForm>) => ({ record })
+)()
 
-export const setStep = (step: number) => ({
-  type: constants.SET_STEP,
-  payload: { step },
-})
+export const setStep = createAction(
+  'schedule/trainingDialog/SET_STEP',
+  (step: number) => ({ step })
+)()
 
-export const openCheckDialog = () => ({
-  type: constants.OPEN_CHECK_DIALOG,
-})
+export const openCheckDialog = createAction(
+  'schedule/trainingDialog/OPEN_CHECK_DIALOG'
+)()
 
 export const actions = {
   open,

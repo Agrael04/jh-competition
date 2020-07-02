@@ -1,55 +1,55 @@
-import constants from 'store/constants/schedule/page'
+import { createAction } from 'typesafe-actions'
 
-export const openCreateTrainingDialog = (resource: string, time: number) => ({
-  type: constants.OPEN_CREATE_TRAINING_DIALOG,
-  payload: { resource, time },
-})
+export const openCreateTrainingDialog = createAction(
+  'schedule/page/OPEN_CREATE_TRAINING_DIALOG',
+  (resource: string, time: number) => ({ resource, time })
+)()
 
-export const openUpdateTrainingDialog = (_id: string) => ({
-  type: constants.OPEN_UPDATE_TRAINING_DIALOG,
-  payload: { _id },
-})
+export const openUpdateTrainingDialog = createAction(
+  'schedule/page/OPEN_UPDATE_TRAINING_DIALOG',
+  (_id: string) => ({ _id })
+)()
 
-export const openAddTrainerDialog = () => ({
-  type: constants.OPEN_ADD_TRAINER_DIALOG,
-})
+export const openAddTrainerDialog = createAction(
+  'schedule/page/OPEN_ADD_TRAINER_DIALOG'
+)()
 
-export const checkActiveTime = () => ({
-  type: constants.CHECK_ACTIVE_TIME,
-})
+export const checkActiveTime = createAction(
+  'schedule/page/CHECK_ACTIVE_TIME'
+)()
 
-export const setActiveDate = (date: Date) => ({
-  type: constants.SET_ACTIVE_DATE,
-  payload: { date },
-})
+export const setActiveDate = createAction(
+  'schedule/page/SET_ACTIVE_DATE',
+  (date: Date) => ({ date })
+)()
 
-export const setActiveGym = (gym: string, resources: string[]) => ({
-  type: constants.SET_ACTIVE_GYM,
-  payload: { gym, resources },
-})
+export const setActiveGym = createAction(
+  'schedule/page/SET_ACTIVE_GYM',
+  (gym: string, resources: string[]) => ({ gym, resources })
+)()
 
-export const setActiveResources = (resources: string[]) => ({
-  type: constants.SET_ACTIVE_RESOURCES,
-  payload: { resources },
-})
+export const setActiveResources = createAction(
+  'schedule/page/SET_ACTIVE_RESOURCES',
+  (resources: string[]) => ({ resources })
+)()
 
-export const setActiveTime = (time: number) => ({
-  type: constants.SET_ACTIVE_TIME,
-  payload: { time },
-})
+export const setActiveTime = createAction(
+  'schedule/page/SET_ACTIVE_TIME',
+  (time: number) => ({ time })
+)()
 
-export const toggleOpenedTrainers = () => ({
-  type: constants.TOGGLE_OPENED_TRAINERS,
-})
+export const toggleOpenedTrainers = createAction(
+  'schedule/page/TOGGLE_OPENED_TRAINERS'
+)()
 
-export const openCheckDialog = (contact?: string) => ({
-  type: constants.OPEN_CHECK_DIALOG,
-  payload: { contact },
-})
+export const openCheckDialog = createAction(
+  'schedule/page/OPEN_CHECK_DIALOG',
+  (contact?: string) => ({ contact: contact || null })
+)()
 
-export const closeCheckDialog = () => ({
-  type: constants.CLOSE_CHECK_DIALOG,
-})
+export const closeCheckDialog = createAction(
+  'schedule/page/CLOSE_CHECK_DIALOG'
+)()
 
 export const actions = {
   openCreateTrainingDialog,

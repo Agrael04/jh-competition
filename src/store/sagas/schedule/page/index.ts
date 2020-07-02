@@ -2,15 +2,14 @@ import { all, put, takeLatest, select, delay } from 'redux-saga/effects'
 import { BSON } from 'mongodb-stitch-browser-sdk'
 
 import { actions } from 'store/actions/schedule'
-import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
 import times from 'data/times'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
-    const date = yield select((state: IStoreState) => state.schedule.page.activeDate)
-    const gym = yield select((state: IStoreState) => state.schedule.page.activeGym)
+    const date: Date = yield select((state: IStoreState) => state.schedule.page.activeDate)
+    const gym: string = yield select((state: IStoreState) => state.schedule.page.activeGym)
 
     const _id = new BSON.ObjectID().toString()
 
@@ -39,10 +38,10 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
   }
 }
 
-export function* openAddTrainerDialog(action: ReturnType<typeof actions.page.openAddTrainerDialog>) {
+export function* openAddTrainerDialog() {
   try {
-    const date = yield select((state: IStoreState) => state.schedule.page.activeDate)
-    const gym = yield select((state: IStoreState) => state.schedule.page.activeGym)
+    const date: Date = yield select((state: IStoreState) => state.schedule.page.activeDate)
+    const gym: string = yield select((state: IStoreState) => state.schedule.page.activeGym)
 
     yield put(actions.addTrainerDialog.open(gym, date))
   } catch (error) {
@@ -50,16 +49,16 @@ export function* openAddTrainerDialog(action: ReturnType<typeof actions.page.ope
   }
 }
 
-export function* checkActiveTime(action: ReturnType<typeof actions.page.checkActiveTime>) {
+export function* checkActiveTime() {
   try {
-    const activeTime = yield select((state: IStoreState) => state.schedule.page.activeTime)
+    const activeTime: number = yield select((state: IStoreState) => state.schedule.page.activeTime)
 
     const date = new Date()
     const hours = date.getHours()
     const minutes = date.getMinutes()
     const timeFrame = `${hours}:${minutes < 30 ? '00' : '30'}`
 
-    const time = times.find(t => t.label === timeFrame)
+    const time = times.find(t => t.label === timeFrame)!
 
     if (time?.id !== activeTime) {
       yield put(actions.page.setActiveTime(time?.id))
@@ -74,15 +73,15 @@ export function* checkActiveTime(action: ReturnType<typeof actions.page.checkAct
 }
 
 function* watchOpenCreateTrainingDialog() {
-  yield takeLatest(constants.page.OPEN_CREATE_TRAINING_DIALOG, openCreateTrainingDialog)
+  yield takeLatest(actions.page.openCreateTrainingDialog, openCreateTrainingDialog)
 }
 
 function* watchOpenAddTrainerDialog() {
-  yield takeLatest(constants.page.OPEN_ADD_TRAINER_DIALOG, openAddTrainerDialog)
+  yield takeLatest(actions.page.openAddTrainerDialog, openAddTrainerDialog)
 }
 
 function* watchCheckActiveTime() {
-  yield takeLatest(constants.page.CHECK_ACTIVE_TIME, checkActiveTime)
+  yield takeLatest(actions.page.checkActiveTime, checkActiveTime)
 }
 
 export default function* root() {

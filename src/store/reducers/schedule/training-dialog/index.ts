@@ -1,8 +1,11 @@
-import constants from 'store/constants/schedule/training-dialog'
+import { createReducer, ActionType } from 'typesafe-actions'
 
+import actions from 'store/actions/schedule/training-dialog'
 import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
+
+type IAction = ActionType<typeof actions>
 
 export interface IState {
   opened: boolean
@@ -11,7 +14,7 @@ export interface IState {
   trainingForm: ITrainingForm
   mode: 'create' | 'update' | null
 
-  resourceForm: ITrainingResourceForm | null
+  resourceForm: ITrainingResourceForm | null | undefined
   resourceMode: 'create' | 'update' | null
 
   recordForm: ITrainingRecordForm | null
@@ -45,126 +48,86 @@ const initialState: IState = {
   step: 0,
 }
 
-export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
-  switch (type) {
-    case constants.OPEN: {
-      return {
-        ...state,
-        opened: true,
-        mode: payload.mode,
-        _id: payload._id,
-        step: 0,
-      }
-    }
+const reducer = createReducer<IState, IAction>(initialState)
+  .handleAction(actions.open, (state, { payload: { mode, _id } }) => ({
+    ...state,
+    opened: true,
+    mode,
+    _id,
+    step: 0,
+  }))
+  .handleAction(actions.initialize, (state, { payload: { training, resource } }) => ({
+    ...state,
+    trainingForm: {
+      _id: training._id!,
+      gym: training.gym!,
+      date: training.date!,
 
-    case constants.INITIALIZE: {
-      return {
-        ...state,
+      name: training.name,
+      type: training.type,
+      traineesAmount: training.traineesAmount,
+      note: training.note,
+    },
 
-        trainingForm: {
-          _id: payload.training._id,
+    resourceForm: resource,
+    resourceMode: 'create',
+    recordForm: null,
+    recordMode: null,
+  }))
+  .handleAction(actions.close, state => ({
+    ...state,
+    ...initialState,
+  }))
+  .handleAction(actions.updateField, (state, { payload: { field, value } }) => ({
+    ...state,
+    trainingForm: {
+      ...state.trainingForm,
+      [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
+    },
+  }))
+  .handleAction(actions.setResource, (state, { payload: { resource, mode } }) => ({
+    ...state,
+    resourceForm: resource,
+    resourceMode: mode,
+    recordForm: null,
+    recordMode: null,
+    step: 1,
+  }))
+  .handleAction(actions.resetResource, state => ({
+    ...state,
+    resourceForm: null,
+    resourceMode: null,
+  }))
+  .handleAction(actions.updateResource, (state, { payload: { resource } }) => ({
+    ...state,
+    resourceForm: {
+      ...state.resourceForm,
+      ...resource,
+    } as ITrainingResourceForm,
+  }))
+  .handleAction(actions.setRecord, (state, { payload: { record, mode } }) => ({
+    ...state,
+    recordForm: record,
+    recordMode: mode,
+    resourceForm: null,
+    resourceMode: null,
+    step: 2,
+  }))
+  .handleAction(actions.resetRecord, state => ({
+    ...state,
+    recordForm: null,
+    recordMode: null,
+  }))
+  .handleAction(actions.updateRecord, (state, { payload: { record } }) => ({
+    ...state,
+    recordForm: {
+      ...state.recordForm,
+      ...record,
+    } as ITrainingRecordForm,
+  }))
+  .handleAction(actions.setStep, (state, { payload: { step } }) => ({
+    ...state,
+    step,
+  }))
 
-          gym: payload.training.gym,
-          date: payload.training.date,
-
-          name: payload.training.name,
-          type: payload.training.type,
-          traineesAmount: payload.training.traineesAmount,
-          note: payload.training.note,
-        },
-
-        resourceForm: payload.resource,
-        resourceMode: 'create',
-        recordForm: null,
-        recordMode: null,
-      }
-    }
-
-    case constants.CLOSE: {
-      return {
-        ...state,
-        ...initialState,
-      }
-    }
-
-    case constants.UPDATE_FIELD: {
-      const value = payload.field === 'date' ? removeTimeFromDate(new Date(payload.value)) : payload.value
-
-      return {
-        ...state,
-        trainingForm: {
-          ...state.trainingForm,
-          [payload.field]: value,
-        },
-      }
-    }
-
-    case constants.SET_RESOURCE: {
-      return {
-        ...state,
-        resourceForm: payload.resource,
-        resourceMode: payload.mode,
-        recordForm: null,
-        recordMode: null,
-        step: 1,
-      }
-    }
-
-    case constants.RESET_RESOURCE: {
-      return {
-        ...state,
-        resourceForm: null,
-        resourceMode: null,
-      }
-    }
-
-    case constants.UPDATE_RESOURCE: {
-      return {
-        ...state,
-        resourceForm: {
-          ...state.resourceForm,
-          ...payload.resource,
-        },
-      }
-    }
-
-    case constants.SET_RECORD: {
-      return {
-        ...state,
-        recordForm: payload.record,
-        recordMode: payload.mode,
-        resourceForm: null,
-        resourceMode: null,
-        step: 2,
-      }
-    }
-
-    case constants.RESET_RECORD: {
-      return {
-        ...state,
-        recordForm: null,
-        recordMode: null,
-      }
-    }
-
-    case constants.UPDATE_RECORD: {
-      return {
-        ...state,
-        recordForm: {
-          ...state.recordForm,
-          ...payload.record,
-        },
-      }
-    }
-
-    case constants.SET_STEP: {
-      return {
-        ...state,
-        step: payload.step,
-      }
-    }
-
-    default:
-      return state
-  }
-}
+export default reducer

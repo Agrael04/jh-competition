@@ -2,7 +2,6 @@ import { all, put, takeLatest, select } from 'redux-saga/effects'
 import { BSON } from 'mongodb-stitch-browser-sdk'
 
 import actions from 'store/actions'
-import constants from 'store/constants/schedule'
 
 import { IStoreState } from 'store'
 
@@ -80,15 +79,15 @@ export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trai
 }
 
 function* watchOpenResource() {
-  yield takeLatest(constants.trainingDialog.OPEN_RESOURCE, openResource)
+  yield takeLatest(actions.schedule.trainingDialog.openResource, openResource)
 }
 
 function* watchOpenRecord() {
-  yield takeLatest(constants.trainingDialog.OPEN_RECORD, openRecord)
+  yield takeLatest(actions.schedule.trainingDialog.openRecord, openRecord)
 }
 
 function* watchOpenCheckDialog() {
-  yield takeLatest(constants.trainingDialog.OPEN_CHECK_DIALOG, openCheckDialog)
+  yield takeLatest(actions.schedule.trainingDialog.openCheckDialog, openCheckDialog)
 }
 
 export default function* root() {

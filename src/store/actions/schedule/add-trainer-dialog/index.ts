@@ -1,33 +1,32 @@
-import constants from 'store/constants/schedule/add-trainer-dialog'
+import { createAction } from 'typesafe-actions'
 
-export const open = (gym: number, date: Date) => ({
-  type: constants.OPEN,
-  payload: { gym, date },
-})
+export const open = createAction(
+  'schedule/trainerScheduleDialog/OPEN',
+  (gym: string, date: Date) => ({ gym, date })
+)()
 
-export const close = () => ({
-  type: constants.CLOSE,
-  payload: null,
-})
+export const close = createAction(
+  'schedule/trainerScheduleDialog/CLOSE'
+)()
 
-export const updateField = (field: string, value: any) => ({
-  type: constants.UPDATE_FIELD,
-  payload: { field, value },
-})
+export const updateField = createAction(
+  'schedule/trainerScheduleDialog/UPDATE_FIELD',
+  (field: string, value: any) => ({ field, value })
+)()
 
-export const addTimeFrame = () => ({
-  type: constants.ADD_TIMEFRAME,
-})
+export const addTimeFrame = createAction(
+  'schedule/trainerScheduleDialog/ADD_TIMEFRAME'
+)()
 
-export const updateTimeframeField = (index: number, field: string, value: any) => ({
-  type: constants.UPDATE_TIMEFRAME_FIELD,
-  payload: { index, field, value },
-})
+export const updateTimeframeField = createAction(
+  'schedule/trainerScheduleDialog/UPDATE_TIMEFRAME_FIELD',
+  (index: number, field: string, value: any) => ({ index, field, value })
+)()
 
-export const removeTimeFrame = (index: number) => ({
-  type: constants.REMOVE_TIMEFRAME,
-  payload: { index },
-})
+export const removeTimeFrame = createAction(
+  'schedule/trainerScheduleDialog/REMOVE_TIMEFRAME',
+  (index: number) => ({ index })
+)()
 
 export const actions = {
   open,

@@ -6,16 +6,16 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 interface IProps {
-  [x: string]: any
   label: string
   disabled?: boolean
   handleChange?: (contact: string | null) => void
   value: string | null
   initialFilter?: string
-  startAdornment?: React.ReactChild
+  initialBalance?: number
+  StartAdornment?: React.ComponentType<{ balance: number }>
 }
 
-const renderInput = (loading: boolean, label: string, startAdornment?: React.ReactChild) => (params: any) => (
+const renderInput = (loading: boolean, label: string, startAdornment?: { Component: React.ComponentType<{ balance: number }>, balance: number }) => (params: any) => (
   <TextField
     {...params}
     fullWidth={true}
@@ -23,7 +23,7 @@ const renderInput = (loading: boolean, label: string, startAdornment?: React.Rea
     variant='outlined'
     InputProps={{
       ...params.InputProps,
-      startAdornment: params.inputProps.value && startAdornment,
+      startAdornment: params.inputProps.value && startAdornment && <startAdornment.Component balance={startAdornment.balance} />,
       endAdornment: (
         <React.Fragment>
           {loading ? <CircularProgress color='inherit' size={20} /> : null}
@@ -34,21 +34,22 @@ const renderInput = (loading: boolean, label: string, startAdornment?: React.Rea
   />
 )
 
-export default function ContactSuggester({ value, handleChange, label, initialFilter, disabled, startAdornment }: IProps) {
+export default function ContactSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment }: IProps) {
   const { options, loading } = useSelector(state => ({
-    loading: state.schedule.clientSuggester.loading,
-    options: state.schedule.clientSuggester.options,
+    loading: state.clientSuggester.loading,
+    options: state.clientSuggester.options,
   }))
 
   const actions = useActions()
 
   const [opened, setOpened] = React.useState(false)
   const [filter, setFilter] = React.useState<string>(initialFilter || '')
+  const [balance, setBalance] = React.useState<number>(initialBalance || 0)
 
   React.useEffect(
     () => {
       if (opened) {
-        actions.schedule.clientSuggester.search(filter)
+        actions.clientSuggester.search(filter)
       }
     },
     [opened, filter, actions]
@@ -60,6 +61,11 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
   const mapOptionLabel = (option?: string | null) => {
     const o = options.find(o => o._id === option)
     return o?.fullName || ''
+  }
+
+  const mapOptionBalance = (option?: string | null) => {
+    const o = options.find(o => o._id === option)
+    return o?.balance || 0
   }
 
   const filterOptions = (options: any) => options
@@ -75,6 +81,7 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
       handleChange(link)
     }
     setFilter(mapOptionLabel(link))
+    setBalance(mapOptionBalance(link))
   }
 
   return (
@@ -93,7 +100,7 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
 
       inputValue={filter || ''}
       loading={loading}
-      renderInput={renderInput(loading && opened, label, startAdornment)}
+      renderInput={renderInput(loading && opened, label, StartAdornment ? { Component: StartAdornment, balance } : undefined)}
       disabled={disabled}
     />
   )

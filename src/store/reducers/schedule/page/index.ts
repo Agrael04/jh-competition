@@ -1,6 +1,10 @@
-import constants from 'store/constants/schedule/page'
+import { createReducer, ActionType } from 'typesafe-actions'
+
+import actions from 'store/actions/schedule/page'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
+
+type IAction = ActionType<typeof actions>
 
 export interface IState {
   activeDate: Date
@@ -24,61 +28,37 @@ const initialState: IState = {
   openedCheckDialog: false,
 }
 
-export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
-  switch (type) {
-    case constants.SET_ACTIVE_DATE: {
-      return {
-        ...state,
-        activeDate: removeTimeFromDate(payload.date)!,
-      }
-    }
+const reducer = createReducer<IState, IAction>(initialState)
+  .handleAction(actions.setActiveDate, (state, { payload: { date } }) => ({
+    ...state,
+    activeDate: removeTimeFromDate(date)!,
+  }))
+  .handleAction(actions.setActiveGym, (state, { payload: { gym, resources } }) => ({
+    ...state,
+    activeGym: gym,
+    activeResources: resources,
+  }))
+  .handleAction(actions.setActiveResources, (state, { payload: { resources } }) => ({
+    ...state,
+    activeResources: resources.sort((a, b) => a > b ? 1 : a < b ? -1 : 0),
+  }))
+  .handleAction(actions.setActiveTime, (state, { payload: { time } }) => ({
+    ...state,
+    activeTime: time,
+  }))
+  .handleAction(actions.openCheckDialog, (state, { payload: { contact } }) => ({
+    ...state,
+    openedCheckDialog: true,
+    activeContact: contact,
+  }))
+  .handleAction(actions.closeCheckDialog, state => ({
+    ...state,
+    openedCheckDialog: false,
+    activeContact: null,
+  }))
+  .handleAction(actions.toggleOpenedTrainers, state => ({
+    ...state,
+    openedTrainers: !state.openedTrainers,
+  }))
 
-    case constants.SET_ACTIVE_GYM: {
-      return {
-        ...state,
-        activeGym: payload.gym,
-        activeResources: payload.resources,
-      }
-    }
-
-    case constants.SET_ACTIVE_RESOURCES: {
-      return {
-        ...state,
-        activeResources: payload.resources.sort((a: number, b: number) => a - b),
-      }
-    }
-
-    case constants.SET_ACTIVE_TIME: {
-      return {
-        ...state,
-        activeTime: payload.time,
-      }
-    }
-
-    case constants.TOGGLE_OPENED_TRAINERS: {
-      return {
-        ...state,
-        openedTrainers: !state.openedTrainers,
-      }
-    }
-
-    case constants.OPEN_CHECK_DIALOG: {
-      return {
-        ...state,
-        openedCheckDialog: true,
-        activeContact: payload.contact,
-      }
-    }
-
-    case constants.CLOSE_CHECK_DIALOG: {
-      return {
-        ...state,
-        openedCheckDialog: false,
-        activeContact: null,
-      }
-    }
-
-    default:
-      return state
-  }
-}
+export default reducer

@@ -16,10 +16,7 @@ interface IProps {
   initialFilter?: string
 }
 
-const Abornment = () => {
-  const { data } = useGetContactDetailsQuery()
-  const balance = data?.user.balance || 0
-
+const Abornment = ({ balance }: { balance: number }) => {
   return (
     <InputAdornment position='start'>
       <Typography color={balance > 0 ? 'primary' : balance < 0 ? 'error' : 'textSecondary'}>
@@ -40,6 +37,7 @@ export default function ContactSuggester({ label, disabled }: IProps) {
   }
 
   const initialFilter = data?.user.fullName
+  const initialBalance = data?.user.balance || 0
 
   if (contact && !data?.user) {
     return (
@@ -58,7 +56,8 @@ export default function ContactSuggester({ label, disabled }: IProps) {
       label={label}
       disabled={disabled}
       initialFilter={initialFilter}
-      startAdornment={<Abornment />}
+      initialBalance={initialBalance}
+      StartAdornment={Abornment}
     />
   )
 }

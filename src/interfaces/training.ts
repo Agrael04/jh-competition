@@ -37,10 +37,10 @@ export interface ITraining {
 
 export interface ITrainingResourceForm {
   _id?: string
-  resource: {
+  resource?: {
     link: string
   }
-  trainer: {
+  trainer?: {
     link: string
   }
   startTime: number

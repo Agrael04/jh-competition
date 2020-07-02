@@ -1,6 +1,10 @@
-import constants from 'store/constants/schedule/add-trainer-dialog'
+import { createReducer, ActionType } from 'typesafe-actions'
+
+import actions from 'store/actions/schedule/add-trainer-dialog'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
+
+type IAction = ActionType<typeof actions>
 
 interface ITimeFrame {
   from: number | undefined
@@ -30,86 +34,58 @@ const initialState: IState = {
   timeFrames: [],
 }
 
-export default (state = initialState, { type, payload }: { type: string, payload: any }): IState => {
-  switch (type) {
-    case constants.OPEN: {
-      return {
-        ...state,
-        opened: true,
-        gym: payload.gym,
-        form: {
-          date: payload.date,
-          trainer: undefined,
-        },
-        timeFrames: [{
-          from: undefined,
-          to: undefined,
-          gym: payload.gym,
-        }],
+const reducer = createReducer<IState, IAction>(initialState)
+  .handleAction(actions.open, (state, { payload: { gym, date } }) => ({
+    ...state,
+    opened: true,
+    gym,
+    form: {
+      date,
+      trainer: undefined,
+    },
+    timeFrames: [{
+      from: undefined,
+      to: undefined,
+      gym,
+    }],
+  }))
+  .handleAction(actions.close, () => initialState)
+  .handleAction(actions.updateField, (state, { payload: { field, value } }) => ({
+    ...state,
+    form: {
+      ...state.form,
+      [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
+    },
+  }))
+  .handleAction(actions.addTimeFrame, state => ({
+    ...state,
+    timeFrames: state.timeFrames.length < 3 ? [
+      ...state.timeFrames,
+      {
+        from: undefined,
+        to: undefined,
+        gym: state.gym,
+      },
+    ] : state.timeFrames,
+  }))
+  .handleAction(actions.updateTimeframeField, (state, { payload: { index, field, value } }) => ({
+    ...state,
+    timeFrames: state.timeFrames.map((item, i) => {
+      if (i !== index) {
+        return item
       }
-    }
-
-    case constants.CLOSE: {
-      return {
-        ...state,
-        opened: false,
-        form: initialState.form,
-        timeFrames: initialState.timeFrames,
-      }
-    }
-
-    case constants.UPDATE_FIELD: {
-      const value = payload.field === 'date' ? removeTimeFromDate(new Date(payload.value)) : payload.value
 
       return {
-        ...state,
-        form: {
-          ...state.form,
-          [payload.field]: value,
-        },
+        ...item,
+        [field]: value,
       }
-    }
+    }),
+  }))
+  .handleAction(actions.removeTimeFrame, (state, { payload: { index } }) => ({
+    ...state,
+    timeFrames: state.timeFrames.length > 1
+      ? state.timeFrames.filter((item, i) => i !== index)
+      : state.timeFrames,
+  }))
 
-    case constants.ADD_TIMEFRAME: {
-      return {
-        ...state,
-        timeFrames: state.timeFrames.length < 3 ? [
-          ...state.timeFrames,
-          {
-            from: undefined,
-            to: undefined,
-            gym: state.gym,
-          },
-        ] : state.timeFrames,
-      }
-    }
-
-    case constants.UPDATE_TIMEFRAME_FIELD: {
-      return {
-        ...state,
-        timeFrames: state.timeFrames.map((item, index) => {
-          if (index !== payload.index) {
-            return item
-          }
-
-          return {
-            ...item,
-            [payload.field]: payload.value,
-          }
-        }),
-      }
-    }
-
-    case constants.REMOVE_TIMEFRAME: {
-      return {
-        ...state,
-        timeFrames: state.timeFrames.length > 1
-          ? state.timeFrames.filter((item, index) => index !== payload.index)
-          : state.timeFrames,
-      }
-    }
-
-    default:
-      return state
-  }
-}
+export default reducer

@@ -48,76 +48,76 @@ const initialState = {
 }
 
 export const reducer = createReducer<IReducerState, Action>(initialState)
-  .handleType('UPDATE_CONTACT', (state, { payload }) => ({
+  .handleAction(actions.updateContact, (state, { payload: { contact } }) => ({
     ...state,
     params: {
       ...state.params,
-      contact: payload.contact,
+      contact,
     },
   }))
-  .handleType('UPDATE_DATE', (state, { payload }) => ({
+  .handleAction(actions.updateActiveDate, (state, { payload: { activeDate } }) => ({
     ...state,
     params: {
       ...state.params,
-      activeDate: payload.date,
+      activeDate,
     },
   }))
-  .handleType('OPEN_PASS', state => ({
+  .handleAction(actions.openPassForm, state => ({
     ...state,
     openedPassForm: true,
   }))
-  .handleType('CLOSE_PASS', state => ({
+  .handleAction(actions.closePassForm, state => ({
     ...state,
     openedPassForm: false,
   }))
-  .handleType('SET_RECORD', (state, { payload }) => ({
+  .handleAction(actions.setRecord, (state, { payload: { record, mode } }) => ({
     ...state,
-    recordForm: payload.record,
-    recordMode: payload.mode,
+    recordForm: record,
+    recordMode: mode,
   }))
-  .handleType('RESET_RECORD', state => ({
+  .handleAction(actions.resetRecord, state => ({
     ...state,
     recordForm: null,
     recordMode: null,
   }))
-  .handleType('UPDATE_RECORD', (state, { payload }) => ({
+  .handleAction(actions.updateRecord, (state, { payload: { record } }) => ({
     ...state,
     recordForm: {
       ...state.recordForm,
-      ...payload.record,
+      ...record,
     },
   }))
-  .handleType('SET_POSITION', (state, { payload }) => ({
+  .handleAction(actions.setPosition, (state, { payload: { position, mode } }) => ({
     ...state,
-    positionForm: payload.position,
-    positionMode: payload.mode,
+    positionForm: position,
+    positionMode: mode,
   }))
-  .handleType('RESET_POSITION', state => ({
+  .handleAction(actions.resetPosition, state => ({
     ...state,
     positionForm: null,
     positionMode: null,
   }))
-  .handleType('UPDATE_POSITION', (state, { payload }) => ({
+  .handleAction(actions.updatePosition, (state, { payload: { position } }) => ({
     ...state,
     positionForm: {
       ...state.positionForm,
-      ...payload.position,
+      ...position,
     },
   }))
-  .handleType('SET_PAYMENT', (state, { payload }) => ({
+  .handleAction(actions.setPayment, (state, { payload: { payment, mode } }) => ({
     ...state,
-    paymentForm: payload.payment,
-    paymentMode: payload.mode,
+    paymentForm: payment,
+    paymentMode: mode,
   }))
-  .handleType('RESET_PAYMENT', state => ({
+  .handleAction(actions.resetPayment, state => ({
     ...state,
     paymentForm: null,
     paymentMode: null,
   }))
-  .handleType('UPDATE_PAYMENT', (state, { payload }) => ({
+  .handleAction(actions.updatePayment, (state, { payload: { payment } }) => ({
     ...state,
     paymentForm: {
       ...state.paymentForm,
-      ...payload.payment,
+      ...payment,
     },
   }))

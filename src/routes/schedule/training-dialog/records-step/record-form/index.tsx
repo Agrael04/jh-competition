@@ -9,11 +9,9 @@ import Button from '@material-ui/core/Button'
 import TextField from 'containers/text-field'
 import Select from 'containers/select'
 
-import useGetTrainingQuery from '../../../queries/get-training'
-
-import UserSuggester from './user-suggester'
+import ContactSuggester from './contact-suggester'
+import AttendantSuggester from './attendant-suggester'
 import ResourceSelect from './resource-select'
-import ContactAbornment from './contact-abornment'
 
 import SaveButton from './save-button'
 
@@ -31,12 +29,6 @@ const fieldSelector = (name: any) => (state: IStoreState) => {
 export default function RecordsBlock() {
   const actions = useActions()
   const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm)
-  const { _id, recordId, openedCheckDialog } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-    recordId: state.schedule.trainingDialog.recordForm?._id,
-    openedCheckDialog: state.schedule.page.openedCheckDialog,
-  }))
-  const trainingQuery = useGetTrainingQuery(_id)
 
   const handleChange = React.useCallback(
     (name, value) => {
@@ -45,24 +37,8 @@ export default function RecordsBlock() {
     [actions]
   )
 
-  const handleContactChange = React.useCallback(
-    (name, value) => {
-      actions.schedule.trainingDialog.updateRecord({
-        contact: value,
-        // attendant: value,
-      })
-    },
-    [actions]
-  )
-
   const resetRecord = actions.schedule.trainingDialog.resetRecord
   const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
-
-  const record = React.useMemo(
-    () => {
-      return trainingQuery.data?.trainingRecords.find(tr => tr._id === recordId)
-    }, [trainingQuery, recordId]
-  )
 
   if (!isFormActive) {
     return null
@@ -71,14 +47,7 @@ export default function RecordsBlock() {
   return (
     <Grid item={true} lg={8} container={true} spacing={4}>
       <Grid item={true} lg={9}>
-        <UserSuggester
-          name='contact'
-          label='Контактное лицо'
-          onChange={handleContactChange}
-          fieldSelector={fieldSelector}
-          initialFilter={record?.contact?.fullName}
-          startAdornment={!openedCheckDialog ? <ContactAbornment /> : undefined}
-        />
+        <ContactSuggester />
       </Grid>
       <Grid item={true} lg={3} container={true}>
         <Box margin='auto' marginRight={0}>
@@ -88,13 +57,7 @@ export default function RecordsBlock() {
         </Box>
       </Grid>
       <Grid item={true} lg={5}>
-        <UserSuggester
-          name='attendant'
-          label='Физическое лицо'
-          onChange={handleChange}
-          fieldSelector={fieldSelector}
-          initialFilter={record?.attendant?.fullName}
-        />
+        <AttendantSuggester />
       </Grid>
       <Grid item={true} lg={3}>
         <Select

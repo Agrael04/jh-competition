@@ -22,6 +22,7 @@ export interface IGetTrainingResponse {
     contact: {
       _id: string
       fullName: string
+      balance: number
       __typename: string
     }
     attendant: {
@@ -102,6 +103,7 @@ export const GET_TRAINING = gql`
       contact {
         _id
         fullName
+        balance
       }
       attendant {
         _id
