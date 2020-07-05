@@ -43,7 +43,8 @@ export default function ResourcesBlock() {
     () => {
       return (
         !recordForm ||
-        !recordForm?.contact
+        !recordForm?.contact ||
+        !recordForm?.resource
       )
     }, [recordForm]
   )

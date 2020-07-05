@@ -32,7 +32,8 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
       training: { link: _id },
     }
 
-    yield put(actions.trainingDialog.initialize(training, resource))
+    yield put(actions.trainingDialog.initialize(training))
+    yield put(actions.trainingDialog.setResource(resource, 'create'))
   } catch (error) {
     console.log(error)
   }

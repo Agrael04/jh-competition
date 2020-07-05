@@ -56,7 +56,7 @@ const reducer = createReducer<IState, IAction>(initialState)
     _id,
     step: 0,
   }))
-  .handleAction(actions.initialize, (state, { payload: { training, resource } }) => ({
+  .handleAction(actions.initialize, (state, { payload: { training } }) => ({
     ...state,
     trainingForm: {
       _id: training._id!,
@@ -68,11 +68,6 @@ const reducer = createReducer<IState, IAction>(initialState)
       traineesAmount: training.traineesAmount,
       note: training.note,
     },
-
-    resourceForm: resource,
-    resourceMode: 'create',
-    recordForm: null,
-    recordMode: null,
   }))
   .handleAction(actions.close, state => ({
     ...state,
@@ -91,7 +86,6 @@ const reducer = createReducer<IState, IAction>(initialState)
     resourceMode: mode,
     recordForm: null,
     recordMode: null,
-    step: 1,
   }))
   .handleAction(actions.resetResource, state => ({
     ...state,

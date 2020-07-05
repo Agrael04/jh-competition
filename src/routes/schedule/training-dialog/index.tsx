@@ -34,8 +34,6 @@ import DeleteButton from './delete-button'
 
 import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
 
-const LAST_STEP = 2
-
 const translations = {
   'date': 'Дата',
   'startTime': 'Час початку',
@@ -66,16 +64,15 @@ type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
 
 export default function TrainingDialog() {
-  const { opened, mode, _id, step } = useSelector(state => ({
+  const { opened, _id, step } = useSelector(state => ({
     opened: state.schedule.trainingDialog.opened,
-    mode: state.schedule.trainingDialog.mode,
     _id: state.schedule.trainingDialog._id,
     step: state.schedule.trainingDialog.step,
   }))
 
   const steps = ['Тренировка', 'Ресурсы', 'Записи']
 
-  const trainingQuery = useGetTrainingQuery(_id!, mode === 'create')
+  const trainingQuery = useGetTrainingQuery(_id!)
 
   const actions = useActions()
 
@@ -114,6 +111,16 @@ export default function TrainingDialog() {
     actions.schedule.trainingDialog.setStep(index)
   }
 
+  const isResourceStepAvailable = React.useMemo(
+    () => trainingQuery.data?.training,
+    [trainingQuery]
+  )
+
+  const isRecordStepAvailable = React.useMemo(
+    () => (trainingQuery.data?.trainingResources || []).length > 0,
+    [trainingQuery]
+  )
+
   return (
     <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
@@ -126,18 +133,21 @@ export default function TrainingDialog() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Stepper activeStep={step} nonLinear={mode === 'update'}>
+      <Stepper activeStep={step}>
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepButton onClick={activateStep(index)}>{label}</StepButton>
+            <StepButton
+              onClick={activateStep(index)}
+              disabled={
+                (index === 1 && !isResourceStepAvailable) ||
+                (index === 2 && !isRecordStepAvailable)
+              }
+            >
+              {label}
+            </StepButton>
           </Step>
         ))}
       </Stepper>
-      {/* <Box paddingX={3} paddingY={1}>
-        <Typography>
-          Берейтейская 28.04, группа.
-        </Typography>
-      </Box> */}
       <Divider />
       <Box padding={3}>
         <Grid container={true} direction='column' justify='space-around'>
@@ -225,7 +235,7 @@ export default function TrainingDialog() {
                     </Grid>
                   </Grid>
                   {
-                    mode === 'update' && (
+                    trainingQuery.data?.training && (
                       <Grid item={true} lg={12} container={true} justify='space-between'>
                         <DeleteButton />
                         <SubmitUpdateButton />
@@ -258,21 +268,17 @@ export default function TrainingDialog() {
           )
         }
         {
-          step > 0 && step < LAST_STEP && (
+          (
+            (step === 0 && isResourceStepAvailable) ||
+            (step === 1 && isRecordStepAvailable)
+          ) && (
             <Button color='primary' onClick={activateStep(step + 1)}>
               Далее
             </Button>
           )
         }
         {
-          step === 0 && mode === 'update' && (
-            <Button color='primary' onClick={activateStep(step + 1)}>
-              Далее
-            </Button>
-          )
-        }
-        {
-          step === 0 && mode === 'create' && (
+          step === 0 && !trainingQuery.data?.training && (
             <SubmitButton />
           )
         }

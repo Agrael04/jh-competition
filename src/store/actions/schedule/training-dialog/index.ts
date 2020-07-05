@@ -9,7 +9,7 @@ export const open = createAction(
 
 export const initialize = createAction(
   'schedule/trainingDialog/INITIALIZE',
-  (training: Partial<ITrainingForm>, resource?: ITrainingResourceForm) => ({ training, resource })
+  (training: Partial<ITrainingForm>) => ({ training })
 )()
 
 export const close = createAction(

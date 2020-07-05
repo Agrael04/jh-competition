@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import useGetTrainingResourceQuery from '../queries/get-training-resource'
+import useGetTrainingResourceQuery, { convertTrainingResourceToInput } from '../queries/get-training-resource'
 
 import { getTimeLabel } from 'data/times'
 import getColorPallete from 'utils/get-color-pallete'
@@ -58,6 +58,8 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
     e => {
       e.stopPropagation()
       actions.schedule.trainingDialog.open('update', tResource?.training._id!)
+      actions.schedule.trainingDialog.setStep(1)
+      actions.schedule.trainingDialog.openResource(convertTrainingResourceToInput(tResource!))
     },
     [actions, tResource]
   )
@@ -89,7 +91,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
   const isOccupied = !!tResource
 
-  const [_, drag] = useDrag({
+  const [, drag] = useDrag({
     item: { type: 'TRAINING_RESOURCE_ITEM', color, _id: tResource?._id },
   })
 

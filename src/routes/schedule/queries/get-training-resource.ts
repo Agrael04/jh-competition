@@ -74,4 +74,13 @@ export const useGetTrainingResourceQuery = (id: string | undefined | null) => {
   return result
 }
 
+export const convertTrainingResourceToInput = (r: IGetTrainingResourceResponse['trainingResource']) => ({
+  _id: r._id,
+  resource: { link: r.resource._id },
+  trainer: r.trainer ? { link: r.trainer._id } : undefined,
+  training: { link: r.training._id },
+  startTime: r.startTime,
+  endTime: r.endTime,
+})
+
 export default useGetTrainingResourceQuery
