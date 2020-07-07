@@ -70,7 +70,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
         return red
       }
 
-      if (records?.filter(r => r.status === 'CLOSED').length === records?.length) {
+      if (records?.filter(r => r.status === 'CLOSED').length === records?.length && records?.length! > 0) {
         return blueGrey
       }
 
@@ -92,7 +92,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const isOccupied = !!tResource
 
   const [, drag] = useDrag({
-    item: { type: 'TRAINING_RESOURCE_ITEM', color, _id: tResource?._id },
+    item: { type: 'TRAINING_RESOURCE_ITEM', color, _id: tResource?._id, trainerId: trainer?._id },
   })
 
   if (!tResource) {

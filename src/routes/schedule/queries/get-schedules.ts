@@ -9,25 +9,27 @@ interface IQueryFilters {
   gym?: string
 }
 
-export interface IGetSchedulesResponse {
-  trainerSchedules: Array<{
+interface ITrainerSchedule{
+  _id: string
+  date: number
+  time: number
+  trainer: {
     _id: string
-    date: number
-    time: number
-    trainer: {
-      _id: string
-      avatarSrc: string
-      color: number
-      firstName: string
-      lastName: string
-      __typename: string
-    }
-    gym: {
-      _id: string
-      __typename: string
-    }
+    avatarSrc: string
+    color: number
+    firstName: string
+    lastName: string
     __typename: string
-  }>
+  }
+  gym: {
+    _id: string
+    __typename: string
+  }
+  __typename: string
+}
+
+export interface IGetSchedulesResponse {
+  trainerSchedules: ITrainerSchedule[]
 }
 
 export const GET_SCHEDULES = gql`
@@ -67,6 +69,16 @@ export const useGetSchedulesQuery = (date?: Date, filters?: IQueryFilters) => {
   })
 
   return result
+}
+
+export const isTrainerAvailable = (schedules: ITrainerSchedule[], trainer: string, gym: string, startTime: number, endTime: number) => {
+  return (
+    schedules
+      .filter(ts => ts.trainer._id === trainer && ts.gym._id === gym)
+      .map(s => s.time)
+      .filter(t => t >= startTime! && t < endTime!)
+      .length === endTime! - startTime!
+  )
 }
 
 export default useGetSchedulesQuery

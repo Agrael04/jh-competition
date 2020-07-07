@@ -42,7 +42,7 @@ export interface ITrainingResourceForm {
   }
   trainer?: {
     link: string
-  }
+  } | null
   startTime: number
   endTime: number
   training: {

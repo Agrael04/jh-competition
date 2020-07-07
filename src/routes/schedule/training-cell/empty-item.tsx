@@ -1,11 +1,12 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import { useActions } from 'store'
+import { useActions, useSelector } from 'store'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Zoom from '@material-ui/core/Zoom'
 
 import useUpdateTrainingResource from '../mutations/update-training-resource'
+import useGetSchedulesQuery, { isTrainerAvailable } from '../queries/get-schedules'
 
 import useStyles from './styles'
 
@@ -17,6 +18,12 @@ interface IProps {
 const EmptyItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
+  const { date, gym } = useSelector(state => ({
+    date: state.schedule.page.activeDate,
+    gym: state.schedule.page.activeGym,
+  }))
+
+  const { data } = useGetSchedulesQuery(date)
 
   const updateTrainingResource = useUpdateTrainingResource()
 
@@ -28,22 +35,26 @@ const EmptyItem = ({ time, resource }: IProps) => {
     [actions, resource, time]
   )
 
-  const onDrop = (_id: string) => {
+  const onDrop = (_id: string, trainer?: string) => {
+    const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, time, time + 1)
+
     updateTrainingResource({
       _id,
       startTime: time,
       endTime: time + 1,
       resource: { link: resource },
+      trainer: isAvailable ? { link: trainer! } : undefined,
     })
   }
 
   const [{ color }, drop] = useDrop({
     accept: 'TRAINING_RESOURCE_ITEM',
-    drop: (item: any) => onDrop(item?._id),
+    drop: (item: any) => onDrop(item?._id, item?.trainerId),
     collect: monitor => ({
       isOver: !!monitor.isOver(),
       color: !!monitor.isOver() && monitor.getItem()?.color,
       _id: !!monitor.isOver() && monitor.getItem()?._id,
+      trainerId: !!monitor.isOver() && monitor.getItem()?.trainerId,
     }),
   })
 

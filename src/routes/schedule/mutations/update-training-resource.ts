@@ -32,7 +32,13 @@ const useUpdateTrainingResource = () => {
     (resource: Partial<ITrainingResourceForm>) => {
 
       return updateTrainingResource({
-        variables: { _id: resource._id, resource },
+        variables: {
+          _id: resource._id,
+          resource: {
+            ...resource,
+            trainer_unset: !resource?.trainer,
+          },
+        },
       })
     },
     [updateTrainingResource]

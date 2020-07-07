@@ -54,9 +54,6 @@ export default function ResourcesBlock() {
       <Grid item={true} lg={12}>
         <ResourceSelect />
       </Grid>
-      <Grid item={true} lg={12}>
-        <TrainerSelect />
-      </Grid>
       <Grid item={true} lg={6}>
         <StartTimeSelect
           fieldSelector={fieldSelector}
@@ -66,6 +63,9 @@ export default function ResourcesBlock() {
         <EndTimeSelect
           fieldSelector={fieldSelector}
         />
+      </Grid>
+      <Grid item={true} lg={12}>
+        <TrainerSelect />
       </Grid>
       <Grid item={true} lg={12} spacing={1} container={true}>
         {
@@ -82,7 +82,6 @@ export default function ResourcesBlock() {
               </Grid>
             ))
         }
-
       </Grid>
       <Grid item={true} lg={12} container={true} justify='space-between'>
         <Button color='primary' onClick={resetResource}>
