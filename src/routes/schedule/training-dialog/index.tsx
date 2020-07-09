@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -17,58 +17,19 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
-import MenuItem from '@material-ui/core/MenuItem'
 
-import TextField from 'containers/text-field'
-import DatePicker from 'containers/date-picker'
-import Select from 'containers/select'
-
-import GymSelect from './fields/gym-select'
-
+import TrainingStep from './training-step'
 import ResourcesStep from './resources-step'
 import RecordsStep from './records-step'
 
 import SubmitButton from './submit-button'
-import SubmitUpdateButton from './submit-update-button'
-import DeleteButton from './delete-button'
 
 import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
 
-const translations = {
-  'date': 'Дата',
-  'startTime': 'Час початку',
-  'trainer': 'Тренер',
-  'gym': 'Зал',
-  'notes': 'Комментарi',
-  'trampolines': 'Батуты',
-  'trainingType': 'Тип треннування',
-  'trainingName': 'Назва',
-  'moneyPrice': 'Разова цiна',
-  'markPrice': 'Кiлькiсть вiдмiток',
-
-  'types.GROUP': 'Групове треннування',
-  'types.RENT': 'Оренда батуту',
-  'types.RENT_WITH_TRAINER': 'Оренда батута с тренером',
-  'types.EVENT': 'Подiя',
-} as any
-
-const trainingTypes = [
-  'GROUP',
-  'RENT',
-  'RENT_WITH_TRAINER',
-  'EVENT',
-]
-
-type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
-
-const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
-
 export default function TrainingDialog() {
-  const { opened, _id, step } = useSelector(state => ({
-    opened: state.schedule.trainingDialog.opened,
-    _id: state.schedule.trainingDialog._id,
-    step: state.schedule.trainingDialog.step,
-  }))
+  const opened = useSelector(state => state.schedule.trainingDialog.opened)
+  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const step = useSelector(state => state.schedule.trainingDialog.step)
 
   const steps = ['Тренировка', 'Ресурсы', 'Записи']
 
@@ -78,22 +39,6 @@ export default function TrainingDialog() {
 
   const close = React.useCallback(
     () => actions.schedule.trainingDialog.close(),
-    [actions]
-  )
-
-  const handleChange = React.useCallback(
-    (name: string, value: any) => {
-      let v = value
-      if (name === 'markPrice' || name === 'moneyPrice') {
-        v = Number(value)
-      }
-
-      if (typeof v === 'object') {
-        v = v.toDate()
-      }
-
-      actions.schedule.trainingDialog.updateField(name, v)
-    },
     [actions]
   )
 
@@ -155,94 +100,7 @@ export default function TrainingDialog() {
 
             {
               step === 0 && (
-                <>
-                  <Grid item={true} container={true} lg={4} spacing={2}>
-                    <Grid item={true} lg={12}>
-                      <GymSelect
-                        name='gym'
-                        label={translations.gym}
-                      />
-                      <Box marginBottom={2.5} />
-                    </Grid>
-                    <Grid item={true} lg={12}>
-                      <DatePicker
-                        name='date'
-                        onChange={handleChange}
-                        fieldSelector={fieldSelector}
-                        label={translations.date}
-                        fullWidth={true}
-                        inputVariant='outlined'
-                        disableToolbar={true}
-                        variant='inline'
-                        disabled={true}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item={true} container={true} lg={4} spacing={2}>
-                    <Grid item={true} lg={12}>
-                      <TextField
-                        name='name'
-                        onChange={handleChange}
-                        fieldSelector={fieldSelector}
-                        label={translations.trainingName}
-                        fullWidth={true}
-                        variant='outlined'
-                      />
-                      <Box marginBottom={2.5} />
-                    </Grid>
-                    <Grid item={true} lg={8}>
-                      <Select
-                        name='type'
-                        onChange={handleChange}
-                        fieldSelector={fieldSelector}
-                        label={translations.trainingType}
-                        fullWidth={true}
-                        variant='outlined'
-                      >
-                        {
-                          trainingTypes.map(type => (
-                            <MenuItem value={type} key={type}>
-                              {translations[`types.${type}`]}
-                            </MenuItem>
-                          ))
-                        }
-                      </Select>
-                    </Grid>
-                    <Grid item={true} lg={4}>
-                      <TextField
-                        name='traineesAmount'
-                        onChange={handleChange}
-                        fieldSelector={fieldSelector}
-                        label={'Кол-во'}
-                        fullWidth={true}
-                        variant='outlined'
-                        type='number'
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item={true} container={true} lg={4} spacing={2}>
-                    <Grid item={true} lg={12}>
-                      <TextField
-                        name='note'
-                        onChange={handleChange}
-                        fieldSelector={fieldSelector}
-                        label={translations.notes}
-                        rows={6}
-                        fullWidth={true}
-                        variant='outlined'
-                        multiline={true}
-                      />
-                    </Grid>
-                  </Grid>
-                  {
-                    trainingQuery.data?.training && (
-                      <Grid item={true} lg={12} container={true} justify='space-between'>
-                        <DeleteButton />
-                        <SubmitUpdateButton />
-                      </Grid>
-                    )
-                  }
-                </>
+                <TrainingStep />
               )
             }
             {

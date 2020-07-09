@@ -37,8 +37,8 @@ export default function RecordsBlock() {
     [actions]
   )
 
-  const resetRecord = actions.schedule.trainingDialog.resetRecord
-  const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
+  const resetRecord = () => actions.schedule.trainingDialog.resetRecord()
+  const openCheckDialog = () => actions.schedule.trainingDialog.openCheckDialog()
 
   if (!isFormActive) {
     return null

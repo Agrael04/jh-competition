@@ -11,7 +11,11 @@ interface IProps {
 }
 
 export default function TextFieldContainer({ name, onChange, fieldSelector, ...rest }: IProps) {
-  const value = useSelector(fieldSelector(name))
+  const selector = React.useMemo(
+    () => fieldSelector(name),
+    [fieldSelector, name]
+  )
+  const value = useSelector(selector)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(name, e.target.value)

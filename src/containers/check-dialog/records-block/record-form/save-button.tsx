@@ -1,15 +1,16 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Button from '@material-ui/core/Button'
 
 import useUpdateTrainingRecord from '../../graphql/update-training-record'
 
-import { useContext } from '../../context'
-
 export default function SaveButton() {
-  const { form, reset } = useContext(s => ({
-    form: s.state.recordForm,
-    reset: s.actions.resetRecord,
+  const actions = useActions()
+  const reset = actions.checkDialog.resetRecord
+  const { form } = useSelector(state => ({
+    form: state.checkDialog.recordForm,
   }))
 
   const updateTrainingRecord = useUpdateTrainingRecord()

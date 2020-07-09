@@ -1,18 +1,19 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Button from '@material-ui/core/Button'
 
 import useCreatePayment from '../../graphql/create-payment'
 import useUpdatePayment from '../../graphql/update-payment'
 
-import { useContext } from '../../context'
-
 export default function SaveButton() {
-  const { mode, form, reset } = useContext(s => ({
-    mode: s.state.paymentMode,
-    form: s.state.paymentForm,
-    reset: s.actions.resetPayment,
+  const { mode, form } = useSelector(state => ({
+    mode: state.checkDialog.paymentMode,
+    form: state.checkDialog.paymentForm,
   }))
+  const actions = useActions()
+  const reset = actions.checkDialog.resetPayment
 
   const createPayment = useCreatePayment()
   const updatePayment = useUpdatePayment()

@@ -1,15 +1,17 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { products } from '../../data'
-import { useContext } from '../../context'
 
 export default function TypeSelect() {
-  const { type, update } = useContext(s => ({
-    type: s.state.positionForm?.type,
-    update: s.actions.updatePosition,
+  const actions = useActions()
+  const update = actions.checkDialog.updatePosition
+  const { type } = useSelector(state => ({
+    type: state.checkDialog.positionForm?.type,
   }))
 
   const handleChange = React.useCallback(

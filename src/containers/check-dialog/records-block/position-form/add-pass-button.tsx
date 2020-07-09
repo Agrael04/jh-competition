@@ -1,16 +1,18 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 
 import { products } from '../../data'
-import { useContext } from '../../context'
 
 export default function PassSelect() {
-  const { openPassForm, type, service } = useContext(s => ({
-    openPassForm: s.actions.openPassForm,
-    type: s.state.positionForm?.type,
-    service: s.state.positionForm?.service,
+  const actions = useActions()
+  const openPassForm = actions.checkDialog.openPassForm
+  const { type, service } = useSelector(state => ({
+    type: state.checkDialog.positionForm?.type,
+    service: state.checkDialog.positionForm?.service,
   }))
 
   if (type !== 'pass') {

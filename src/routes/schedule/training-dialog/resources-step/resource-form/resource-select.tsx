@@ -28,6 +28,10 @@ export default function ResourceSelect() {
     [actions]
   )
 
+  if (resources.length === 0) {
+    return null
+  }
+
   return (
     <Select
       name={'resource'}

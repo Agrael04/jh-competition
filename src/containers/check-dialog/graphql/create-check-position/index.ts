@@ -2,23 +2,23 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
+import { useSelector } from 'store'
 
-import { useContext } from '../../context'
+import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 const CREATE_POSITION = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 
 const useCreateCheckPosition = () => {
   const [mutation] = useMutation(CREATE_POSITION)
-  const variables = useContext(s => ({
-    date: s.state?.params.activeDate,
-    gym: s.state?.params.activeGym,
-    _id: s.state?.params.contact?.link,
+  const variables = useSelector(state => ({
+    date: state.checkDialog.params.activeDate,
+    gym: state.checkDialog.params.activeGym,
+    _id: state.checkDialog.params.contact?.link,
   }))
 
-  const { data } = useContext(s => ({
-    data: s.state.positionForm,
+  const { data } = useSelector(state => ({
+    data: state.checkDialog.positionForm,
   }))
 
   const mutate = React.useCallback(

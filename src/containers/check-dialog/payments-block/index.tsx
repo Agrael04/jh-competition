@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -13,8 +15,6 @@ import useGetContactDetailsQuery from '../graphql/get-contact-details'
 import PaymentForm from './payment-form'
 import PaymentItem from './payment-item'
 
-import { useContext } from '../context'
-
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
 import useStyles from './styles'
@@ -22,15 +22,15 @@ import useStyles from './styles'
 const currentDate = removeTimeFromDate(new Date())!
 
 export default function PaymentBlock() {
+  const actions = useActions()
   const classes = useStyles()
 
-  const { contact, gym, date, isFormActive, setPayment } = useContext(s => ({
-    date: s.state?.params.activeDate,
-    gym: s.state?.params.activeGym,
-    contact: s.state?.params.contact?.link,
-    isFormActive: !!s.state.paymentForm,
-    setPayment: s.actions.setPayment,
-  }))
+  const date = useSelector(state => state.checkDialog.params.activeDate)
+  const gym = useSelector(state => state.checkDialog.params.activeGym)
+  const contact = useSelector(state => state.checkDialog.params.contact?.link)
+  const isFormActive = useSelector(state => !!state.checkDialog.paymentForm)
+
+  const setPayment = actions.checkDialog.setPayment
 
   const { data } = useGetContactDetailsQuery()
 

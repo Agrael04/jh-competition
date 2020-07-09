@@ -2,9 +2,9 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
+import { useSelector } from 'store'
 
-import { useContext } from '../../context'
+import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
 
 const DELETE_PAYMENT = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
@@ -12,10 +12,10 @@ const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreateTrainingPass = () => {
   const [createPayment] = useMutation(DELETE_PAYMENT)
-  const variables = useContext(s => ({
-    date: s.state?.params.activeDate,
-    gym: s.state?.params.activeGym,
-    _id: s.state?.params.contact?.link,
+  const variables = useSelector(state => ({
+    date: state.checkDialog.params.activeDate,
+    gym: state.checkDialog.params.activeGym,
+    _id: state.checkDialog.params.contact?.link,
   }))
 
   const mutate = React.useCallback(

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useSelector } from 'store'
+
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
@@ -11,12 +13,8 @@ import DestinationSelect from './destination-select'
 import CancelButton from './cancel-button'
 import SaveButton from './save-button'
 
-import { useContext } from '../../context'
-
 export default function PaymentForm() {
-  const { type } = useContext(s => ({
-    type: s.state.paymentForm?.type,
-  }))
+  const type = useSelector(state => state.checkDialog.paymentForm?.type)
 
   return (
     <>

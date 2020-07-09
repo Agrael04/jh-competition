@@ -1,6 +1,8 @@
 import React from 'react'
 import moment from 'moment'
 
+import { useSelector, useActions } from 'store'
+
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -10,13 +12,10 @@ import { passTypes, getSizes } from 'data/training-passes'
 
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
 
-import { useContext } from '../../../context'
-
 export default function PassSelect() {
-  const { pass, update } = useContext(s => ({
-    pass: s.state.paymentForm?.pass?.link,
-    update: s.actions.updatePayment,
-  }))
+  const pass = useSelector(state => state.checkDialog.paymentForm?.pass?.link)
+  const actions = useActions()
+  const update = actions.checkDialog.updatePayment
 
   const { data } = useGetTrainingPassesQuery()
 

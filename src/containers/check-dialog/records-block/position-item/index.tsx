@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useActions } from 'store'
+
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -11,8 +13,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import useDeleteCheckPosition from '../../graphql/delete-check-position'
 
-import { useContext } from '../../context'
-
 import IPosition from './position'
 
 import { products } from '../../data'
@@ -23,11 +23,9 @@ interface IProps {
 }
 
 export default function PaymentItem({ position, index }: IProps) {
+  const actions = useActions()
+  const setPosition = actions.checkDialog.setPosition
   const deleteCheckPosition = useDeleteCheckPosition()
-
-  const { setPosition } = useContext(s => ({
-    setPosition: s.actions.setPosition,
-  }))
 
   const openEditForm = React.useCallback(
     () => {

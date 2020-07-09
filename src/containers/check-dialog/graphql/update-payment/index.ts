@@ -2,15 +2,15 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import { useContext } from '../../context'
+import { useSelector } from 'store'
 
 const UPDATE_PAYMENT = loader('./mutation.gql')
 
 const useUpdatePayment = () => {
   const [updatePayment] = useMutation(UPDATE_PAYMENT)
 
-  const { data } = useContext(s => ({
-    data: s.state.paymentForm,
+  const { data } = useSelector(state => ({
+    data: state.checkDialog.paymentForm,
   }))
 
   const mutate = React.useCallback(

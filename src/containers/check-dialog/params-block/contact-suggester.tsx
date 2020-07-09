@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -8,7 +10,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import UserAutocomplete from 'containers/user-autocomplete'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
-import { useContext } from '../context'
 
 interface IProps {
   [x: string]: any
@@ -27,10 +28,11 @@ const Abornment = ({ balance }: { balance: number }) => {
 }
 
 export default function ContactSuggester({ label, disabled }: IProps) {
-  const { data } = useGetContactDetailsQuery()
-  const contact = useContext(s => s.state.params.contact)
+  const actions = useActions()
+  const contact = useSelector(state => state.checkDialog.params.contact)
+  const updateContact = actions.checkDialog.updateContact
 
-  const updateContact = useContext(s => s.actions.updateContact)
+  const { data } = useGetContactDetailsQuery()
 
   const handleChange = (link: string | null) => {
     updateContact(link ? { link } : null)
