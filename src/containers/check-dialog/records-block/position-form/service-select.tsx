@@ -1,16 +1,18 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { products } from '../../data'
-import { useContext } from '../../context'
 
 export default function ServiceSelect() {
-  const { service, type, update } = useContext(s => ({
-    service: s.state.positionForm?.service,
-    type: s.state.positionForm?.type,
-    update: s.actions.updatePosition,
+  const actions = useActions()
+  const update = actions.checkDialog.updatePosition
+  const { service, type } = useSelector(state => ({
+    service: state.checkDialog.positionForm?.service,
+    type: state.checkDialog.positionForm?.type,
   }))
 
   const handleChange = React.useCallback(

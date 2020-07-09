@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useActions } from 'store'
+
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -10,8 +12,6 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import useDeletePayment from '../../graphql/delete-payment'
-
-import { useContext } from '../../context'
 
 import useStyles from '../styles'
 
@@ -25,9 +25,9 @@ interface IProps {
 export default function PaymentItem({ payment, index }: IProps) {
   const classes = useStyles()
 
-  const { setPayment } = useContext(s => ({
-    setPayment: s.actions.setPayment,
-  }))
+  const actions = useActions()
+  const setPayment = actions.checkDialog.setPayment
+
   const deletePayment = useDeletePayment()
 
   const openEditForm = React.useCallback(

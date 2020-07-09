@@ -1,17 +1,18 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import Button from '@material-ui/core/Button'
 
 import useCreateCheckPosition from '../../graphql/create-check-position'
 import useUpdateCheckPosition from '../../graphql/update-check-position'
 
-import { useContext } from '../../context'
-
 export default function SaveButton() {
-  const { form, mode, reset } = useContext(s => ({
-    form: s.state.positionForm,
-    mode: s.state.positionMode,
-    reset: s.actions.resetPosition,
+  const actions = useActions()
+  const reset = actions.checkDialog.resetPosition
+  const { form, mode } = useSelector(state => ({
+    form: state.checkDialog.positionForm,
+    mode: state.checkDialog.positionMode,
   }))
 
   const createCheckPosition = useCreateCheckPosition()

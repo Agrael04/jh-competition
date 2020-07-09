@@ -13,11 +13,12 @@ import Typography from '@material-ui/core/Typography'
 
 import Tooltip from 'components/multiline-tooltip'
 
+import CheckDialog from 'containers/check-dialog'
+
 import times from 'data/times'
 
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
-import CheckDialog from './check-dialog'
 
 import Toolbar from './toolbar'
 import TrainingCell from './training-cell'

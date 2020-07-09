@@ -3,9 +3,9 @@ import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
 
-import useDeleteTraining from '../mutations/delete-training'
+import useDeleteTraining from '../../mutations/delete-training'
 
-import useGetTrainingQuery from '../queries/get-training'
+import useGetTrainingQuery from '../../queries/get-training'
 
 export default function TrainingDialog() {
   const { mode, trainingForm, _id } = useSelector(state => ({

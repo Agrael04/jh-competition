@@ -68,11 +68,13 @@ export function* openRecord(action: ReturnType<typeof actions.schedule.trainingD
 
 export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trainingDialog.openCheckDialog>) {
   try {
-    const { contact } = yield select((state: IStoreState) => ({
+    const { activeDate, activeGym, contact } = yield select((state: IStoreState) => ({
+      activeDate: state.schedule.page.activeDate,
+      activeGym: state.schedule.page.activeGym,
       contact: state.schedule.trainingDialog.recordForm?.contact.link,
     }))
 
-    yield put(actions.schedule.page.openCheckDialog(contact))
+    yield put(actions.checkDialog.openDialog(activeDate, activeGym, contact))
   } catch (error) {
     console.log(error)
   }

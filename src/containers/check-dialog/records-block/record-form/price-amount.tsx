@@ -1,16 +1,17 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import TextField from '@material-ui/core/TextField'
 
-import { useContext } from '../../context'
-
 export default function RecordForm() {
-  const { priceAmount, priceType, update } = useContext(s => ({
-    priceAmount: s.state.recordForm?.priceAmount,
-    priceType: s.state.recordForm?.priceType,
-    update: s.actions.updateRecord,
+  const actions = useActions()
+  const update = actions.checkDialog.updateRecord
+  const { priceAmount, priceType } = useSelector(state => ({
+    priceAmount: state.checkDialog.recordForm?.priceAmount || '',
+    priceType: state.checkDialog.recordForm?.priceType,
   }))
 
   const handleChange = React.useCallback(

@@ -4,6 +4,19 @@ import { IPaymentForm } from 'interfaces/payment'
 import { ITrainingRecordForm } from 'interfaces/training'
 import { ICheckPositionForm } from 'interfaces/check-position'
 
+export const openDialog = createAction(
+  'checkDialog/OPEN_DIALOG',
+  (activeDate: Date, activeGym: string, contact?: string) => ({
+    activeDate,
+    activeGym,
+    contact: contact ? { link: contact } : null,
+  })
+)()
+
+export const closeDialog = createAction(
+  'checkDialog/CLOSE_DIALOG'
+)()
+
 export const updateContact = createAction(
   'checkDialog/UPDATE_CONTACT',
   (contact: { link: string } | null) => ({ contact })
@@ -63,3 +76,28 @@ export const updatePayment = createAction(
   'checkDialog/UPDATE_PAYMENT',
   (payment: Partial<IPaymentForm>) => ({ payment })
 )()
+
+export const actions = {
+  openDialog,
+  closeDialog,
+
+  updateContact,
+  updateActiveDate,
+
+  openPassForm,
+  closePassForm,
+
+  setRecord,
+  resetRecord,
+  updateRecord,
+
+  setPosition,
+  resetPosition,
+  updatePosition,
+
+  setPayment,
+  resetPayment,
+  updatePayment,
+}
+
+export default actions

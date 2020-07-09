@@ -1,11 +1,14 @@
 import { ActionType, createReducer } from 'typesafe-actions'
-import * as actions from './actions'
+import actions from 'store/actions/check-dialog'
 
 import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
 import { ICheckPositionForm } from 'interfaces/check-position'
 
-export interface IReducerState {
+type IAction = ActionType<typeof actions>
+
+export interface IState {
+  opened: boolean
   params: {
     activeDate: Date
     activeGym: string
@@ -26,9 +29,8 @@ export interface IReducerState {
   openedPassForm: boolean
 }
 
-type Action = ActionType<typeof actions>
-
 const initialState = {
+  opened: false,
   params: {
     activeDate: new Date(),
     activeGym: '',
@@ -47,7 +49,20 @@ const initialState = {
   openedPassForm: false,
 }
 
-export const reducer = createReducer<IReducerState, Action>(initialState)
+const reducer = createReducer<IState, IAction>(initialState)
+  .handleAction(actions.openDialog, (state, { payload: { activeDate, activeGym, contact } }) => ({
+    ...state,
+    opened: true,
+    params: {
+      activeDate,
+      activeGym,
+      contact,
+    },
+  }))
+  .handleAction(actions.closeDialog, state => ({
+    ...state,
+    ...initialState,
+  }))
   .handleAction(actions.updateContact, (state, { payload: { contact } }) => ({
     ...state,
     params: {
@@ -121,3 +136,5 @@ export const reducer = createReducer<IReducerState, Action>(initialState)
       ...payment,
     },
   }))
+
+export default reducer

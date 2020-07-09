@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useSelector, useActions } from 'store'
+
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -15,18 +17,17 @@ import PositionItem from './position-item'
 import RecordForm from './record-form'
 import RecordItem from './record-item'
 
-import { useContext } from '../context'
-
 import useStyles from './styles'
 
 export default function TrainingDialog() {
+  const actions = useActions()
+  const setPosition = actions.checkDialog.setPosition
   const classes = useStyles()
-  const { contact, date, isServiceFormActive, isRecordFormActive, setPosition } = useContext(s => ({
-    contact: s.state?.params.contact?.link,
-    date: s.state?.params.activeDate,
-    isServiceFormActive: !!s.state.positionForm,
-    isRecordFormActive: !!s.state.recordForm,
-    setPosition: s.actions.setPosition,
+  const { contact, date, isServiceFormActive, isRecordFormActive } = useSelector(state => ({
+    contact: state.checkDialog.params.contact?.link,
+    date: state.checkDialog.params.activeDate,
+    isServiceFormActive: !!state.checkDialog.positionForm,
+    isRecordFormActive: !!state.checkDialog.recordForm,
   }))
 
   const { data } = useGetContactDetailsQuery()

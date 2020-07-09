@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
+import { useSelector } from 'store'
+
 import ICheckRecord from '../../records-block/record-item/record'
 import ICheckPosition from '../../records-block/position-item/position'
 import IRecord from '../../total-block/record'
@@ -9,8 +11,6 @@ import IPassFormContact from '../../pass-form/contact'
 import IPaymentItem from '../../payments-block/payment-item/payment'
 import ITotalPayment from '../../total-block/payment'
 import ITotalPosition from '../../total-block/position'
-
-import { useContext } from '../../context'
 
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
@@ -22,15 +22,17 @@ export interface IGetContactDetails {
 }
 
 export const useGetContactDetailsQuery = () => {
-  const variables = useContext(s => ({
-    date: s.state?.params.activeDate,
-    gym: s.state?.params.activeGym,
-    _id: s.state?.params.contact?.link,
-  }))
+  const date = useSelector(state => state.checkDialog.params.activeDate)
+  const gym = useSelector(state => state.checkDialog.params.activeGym)
+  const _id = useSelector(state => state.checkDialog.params.contact?.link)
 
   const result = useQuery<IGetContactDetails>(GET_CONTACT_DETAILS, {
-    variables,
-    skip: !variables.gym || !variables._id,
+    variables: {
+      date,
+      gym,
+      _id,
+    },
+    skip: !gym || !_id,
     fetchPolicy: 'cache-and-network',
   })
 

@@ -12,9 +12,6 @@ export interface IState {
   activeResources: string[]
   activeTime: number
   openedTrainers: boolean
-
-  activeContact: string | null
-  openedCheckDialog: boolean
 }
 
 const initialState: IState = {
@@ -23,9 +20,6 @@ const initialState: IState = {
   activeResources: [],
   activeTime: 0,
   openedTrainers: false,
-
-  activeContact: null,
-  openedCheckDialog: false,
 }
 
 const reducer = createReducer<IState, IAction>(initialState)
@@ -45,16 +39,6 @@ const reducer = createReducer<IState, IAction>(initialState)
   .handleAction(actions.setActiveTime, (state, { payload: { time } }) => ({
     ...state,
     activeTime: time,
-  }))
-  .handleAction(actions.openCheckDialog, (state, { payload: { contact } }) => ({
-    ...state,
-    openedCheckDialog: true,
-    activeContact: contact,
-  }))
-  .handleAction(actions.closeCheckDialog, state => ({
-    ...state,
-    openedCheckDialog: false,
-    activeContact: null,
   }))
   .handleAction(actions.toggleOpenedTrainers, state => ({
     ...state,

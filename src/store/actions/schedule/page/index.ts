@@ -43,12 +43,7 @@ export const toggleOpenedTrainers = createAction(
 )()
 
 export const openCheckDialog = createAction(
-  'schedule/page/OPEN_CHECK_DIALOG',
-  (contact?: string) => ({ contact: contact || null })
-)()
-
-export const closeCheckDialog = createAction(
-  'schedule/page/CLOSE_CHECK_DIALOG'
+  'schedule/page/OPEN_CHECK_DIALOG'
 )()
 
 export const actions = {
@@ -66,7 +61,6 @@ export const actions = {
 
   toggleOpenedTrainers,
   openCheckDialog,
-  closeCheckDialog,
 }
 
 export default actions

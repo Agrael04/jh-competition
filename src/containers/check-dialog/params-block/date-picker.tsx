@@ -1,6 +1,8 @@
 import React from 'react'
 import moment from 'moment'
 
+import { useSelector, useActions } from 'store'
+
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 
@@ -12,11 +14,10 @@ import { DatePicker } from '@material-ui/pickers'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
 
-import { useContext } from '../context'
-
 export default function ActiveDatePicker() {
-  const activeDate = useContext(s => s.state.params.activeDate)
-  const updateActiveDate = useContext(s => s.actions.updateActiveDate)
+  const actions = useActions()
+  const activeDate = useSelector(state => state.checkDialog.params.activeDate)
+  const updateActiveDate = actions.checkDialog.updateActiveDate
 
   const currentDate = removeTimeFromDate(new Date())!
 

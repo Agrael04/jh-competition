@@ -1,16 +1,16 @@
 import React from 'react'
 
+import { useSelector } from 'store'
+
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'components/select'
 
 import useGetGymsQuery from '../graphql/get-gyms'
 
-import { useContext } from '../context'
-
 const GymSelect = () => {
   const gyms = useGetGymsQuery()
-  const activeGym = useContext(s => s.state.params.activeGym)
+  const activeGym = useSelector(state => state.checkDialog.params.activeGym)
 
   return (
     <Select

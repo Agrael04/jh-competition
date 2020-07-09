@@ -21,10 +21,8 @@ import useStyles from './styles'
 export default function ResourcesBlock() {
   const classes = useStyles()
   const actions = useActions()
-  const { _id, traineesAmount } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-    traineesAmount: state.schedule.trainingDialog.trainingForm?.traineesAmount,
-  }))
+  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const traineesAmount = useSelector(state => state.schedule.trainingDialog.trainingForm?.traineesAmount)
   const trainingQuery = useGetTrainingQuery(_id)
 
   const activate = React.useCallback(
