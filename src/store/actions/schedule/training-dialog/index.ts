@@ -40,23 +40,18 @@ export const updateResource = createAction(
   (resource: Partial<ITrainingResourceForm>) => ({ resource })
 )()
 
-export const openRecord = createAction(
-  'schedule/trainingDialog/OPEN_RECORD',
+export const openCreateRecordForm = createAction(
+  'checkDialog/OPEN_CREATE_RECORD_FORM',
   (record?: Partial<ITrainingRecordForm>) => ({ record })
 )()
 
-export const setRecord = createAction(
-  'schedule/trainingDialog/SET_RECORD',
-  (record: ITrainingRecordForm | null, mode: 'create' | 'update' | null) => ({ record, mode })
-)()
-
-export const resetRecord = createAction(
-  'schedule/trainingDialog/RESET_RECORD'
-)()
-
-export const updateRecord = createAction(
-  'schedule/trainingDialog/UPDATE_RECORD',
+export const openUpdateRecordForm = createAction(
+  'checkDialog/OPEN_UPDATE_RECORD_FORM',
   (record: Partial<ITrainingRecordForm>) => ({ record })
+)()
+
+export const closeRecord = createAction(
+  'schedule/trainingDialog/CLOSE_RECORD'
 )()
 
 export const setStep = createAction(
@@ -80,10 +75,9 @@ export const actions = {
   resetResource,
   updateResource,
 
-  openRecord,
-  setRecord,
-  resetRecord,
-  updateRecord,
+  openCreateRecordForm,
+  openUpdateRecordForm,
+  closeRecord,
 
   setStep,
   openCheckDialog,

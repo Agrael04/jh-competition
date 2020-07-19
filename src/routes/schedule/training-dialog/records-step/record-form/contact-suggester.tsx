@@ -1,5 +1,7 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
+
+import { useFormContext } from 'react-hook-form'
+import { useSelector } from 'store'
 
 import UserAutocomplete from 'containers/user-autocomplete'
 
@@ -7,12 +9,18 @@ import ContactAbornment from './contact-abornment'
 
 import useGetTrainingQuery from '../../../queries/get-training'
 
-export default function ContactSuggester() {
-  const actions = useActions()
-  const contact = useSelector(s => s.schedule.trainingDialog.recordForm?.contact)
+interface IProps {
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
+}
+
+export default function ContactSuggester({ value, onChange }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.contact
+
   const { _id, recordId } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
-    recordId: state.schedule.trainingDialog.recordForm?._id,
+    recordId: state.schedule.trainingDialog.recordForm.record?._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
@@ -23,7 +31,7 @@ export default function ContactSuggester() {
   )
 
   const handleChange = (link: string | null) => {
-    actions.schedule.trainingDialog.updateRecord({ contact: link ? { link } : undefined })
+    onChange(link ? { link } : undefined)
   }
 
   const initialFilter = record?.contact?.fullName
@@ -31,12 +39,14 @@ export default function ContactSuggester() {
 
   return (
     <UserAutocomplete
-      value={contact ? contact.link : null}
+      value={value ? value.link : null}
       handleChange={handleChange}
-      label='Контактное лицо'
       initialFilter={initialFilter}
       initialBalance={initialBalance}
       StartAdornment={ContactAbornment}
+      label='Контактное лицо'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     />
   )
 }

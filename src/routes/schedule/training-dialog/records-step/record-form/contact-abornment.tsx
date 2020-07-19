@@ -8,7 +8,7 @@ import SentimentSatisfied from '@material-ui/icons/SentimentSatisfied'
 import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied'
 
 export default function ContactAbornment({ balance }: { balance: number }) {
-  const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm)
+  const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm.isActive)
 
   if (!isFormActive) {
     return null

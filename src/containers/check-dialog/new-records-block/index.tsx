@@ -1,13 +1,8 @@
 import React from 'react'
-import { useActions } from 'store'
-
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 
 import Grid from '@material-ui/core/Grid'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
-import Box from '@material-ui/core/Box'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 

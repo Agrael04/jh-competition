@@ -1,32 +1,34 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+
+import { useFormContext } from 'react-hook-form'
+import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
-import Select from 'containers/select'
+import Select from 'components/select'
 
 import { getTimeLabel } from 'data/times'
 import useGetTrainingQuery from '../../../queries/get-training'
 
 interface IProps {
-  name: string
-  label: string
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
 }
 
-const selector = () => (state: IStoreState) => state.schedule.trainingDialog.recordForm?.resource?.link
+export default function ResourceSelect({ onChange, value }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.resource
 
-export default function RecordSelect({ name, label }: IProps) {
-  const actions = useActions()
   const { _id } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
   const handleChange = React.useCallback(
-    (name, link: string) => {
-      actions.schedule.trainingDialog.updateRecord({ [name]: { link } })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange({ link: e.target.value })
     },
-    [actions]
+    [onChange]
   )
 
   const getResouceLabel = React.useCallback(
@@ -43,12 +45,14 @@ export default function RecordSelect({ name, label }: IProps) {
 
   return (
     <Select
-      name={name}
+      value={value ? value.link : undefined}
       onChange={handleChange}
-      fieldSelector={selector}
-      label={label}
+      name={'resource'}
+      label='Ресурс'
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         trainingQuery.data?.trainingResources.map(r => (
