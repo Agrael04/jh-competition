@@ -5,7 +5,11 @@ import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
 import { ICheckPositionForm } from 'interfaces/check-position'
 
+import removeTimeFromDate from 'utils/remove-time-from-date'
+
 type IAction = ActionType<typeof actions>
+
+const currentDate = removeTimeFromDate(new Date())!
 
 export interface IState {
   opened: boolean
@@ -17,14 +21,23 @@ export interface IState {
     } | null
   }
 
-  recordForm: Partial<ITrainingRecordForm> | null
-  recordMode: 'update' | null
+  recordForm: {
+    isActive: boolean
+    mode: 'update' | null
+    record: Partial<ITrainingRecordForm> | null
+  }
 
-  positionForm: Partial<ICheckPositionForm> | null
-  positionMode: 'create' | 'update' | null
+  positionForm: {
+    isActive: boolean
+    mode: 'create' | 'update' | null
+    position: Partial<ICheckPositionForm> | null
+  }
 
-  paymentForm: Partial<IPaymentForm> | null
-  paymentMode: 'create' | 'update' | null
+  paymentForm: {
+    isActive: boolean
+    mode: 'create' | 'update' | null
+    payment: Partial<IPaymentForm> | null
+  }
 
   openedPassForm: boolean
 }
@@ -37,14 +50,23 @@ const initialState = {
     contact: null,
   },
 
-  recordForm: null,
-  recordMode: null,
+  recordForm: {
+    isActive: false,
+    mode: null,
+    record: null,
+  },
 
-  positionForm: null,
-  positionMode: null,
+  positionForm: {
+    isActive: false,
+    mode: null,
+    position: null,
+  },
 
-  paymentForm: null,
-  paymentMode: null,
+  paymentForm: {
+    isActive: false,
+    mode: null,
+    payment: null,
+  },
 
   openedPassForm: false,
 }
@@ -85,56 +107,88 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     openedPassForm: false,
   }))
-  .handleAction(actions.setRecord, (state, { payload: { record, mode } }) => ({
-    ...state,
-    recordForm: record,
-    recordMode: mode,
-  }))
-  .handleAction(actions.resetRecord, state => ({
-    ...state,
-    recordForm: null,
-    recordMode: null,
-  }))
-  .handleAction(actions.updateRecord, (state, { payload: { record } }) => ({
+  .handleAction(actions.openUpdateRecordForm, (state, { payload: { record } }) => ({
     ...state,
     recordForm: {
-      ...state.recordForm,
-      ...record,
+      record: {
+        _id: record._id,
+        priceType: record.priceType || 'units',
+        priceAmount: record.priceAmount,
+      },
+      mode: 'update',
+      isActive: true,
     },
   }))
-  .handleAction(actions.setPosition, (state, { payload: { position, mode } }) => ({
+  .handleAction(actions.closeRecordForm, state => ({
     ...state,
-    positionForm: position,
-    positionMode: mode,
+    recordForm: initialState.recordForm,
   }))
-  .handleAction(actions.resetPosition, state => ({
-    ...state,
-    positionForm: null,
-    positionMode: null,
-  }))
-  .handleAction(actions.updatePosition, (state, { payload: { position } }) => ({
+  .handleAction(actions.openCreatePositionForm, state => ({
     ...state,
     positionForm: {
-      ...state.positionForm,
-      ...position,
+      position: {
+        contact: state.params.contact!,
+        date: state.params.activeDate,
+        type: undefined,
+        service: undefined,
+        priceAmount: null,
+        priceType: 'money',
+      },
+      mode: 'create',
+      isActive: true,
     },
   }))
-  .handleAction(actions.setPayment, (state, { payload: { payment, mode } }) => ({
+  .handleAction(actions.openUpdatePositionForm, (state, { payload: { position } }) => ({
     ...state,
-    paymentForm: payment,
-    paymentMode: mode,
+    positionForm: {
+      position: {
+        _id: position._id,
+        priceType: position.priceType || 'money',
+        priceAmount: position.priceAmount,
+        type: position.type,
+        service: position.service,
+      },
+      mode: 'update',
+      isActive: true,
+    },
   }))
-  .handleAction(actions.resetPayment, state => ({
+  .handleAction(actions.closePositionForm, state => ({
     ...state,
-    paymentForm: null,
-    paymentMode: null,
+    positionForm: initialState.positionForm,
   }))
-  .handleAction(actions.updatePayment, (state, { payload: { payment } }) => ({
+  .handleAction(actions.openCreatePaymentForm, state => ({
     ...state,
     paymentForm: {
-      ...state.paymentForm,
-      ...payment,
+      payment: {
+        contact: state.params.contact!,
+        gym: { link: state.params.activeGym },
+        date: state.params.activeDate,
+        createdAt: currentDate,
+        type: 'units',
+        amount: null,
+      },
+      mode: 'create',
+      isActive: true,
     },
+  }))
+  .handleAction(actions.openUpdatePaymentForm, (state, { payload: { payment } }) => ({
+    ...state,
+    paymentForm: {
+      payment: {
+        _id: payment._id,
+        type: payment.type,
+        pass: payment.pass,
+        amount: payment.amount,
+        destination: payment.destination,
+        transaction: payment.transaction,
+      },
+      mode: 'update',
+      isActive: true,
+    },
+  }))
+  .handleAction(actions.closePaymentForm, state => ({
+    ...state,
+    paymentForm: initialState.paymentForm,
   }))
 
 export default reducer

@@ -1,37 +1,43 @@
 import React from 'react'
 
-import { useSelector, useActions } from 'store'
+import { useFormContext } from 'react-hook-form'
 
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { products } from '../../data'
 
-export default function TypeSelect() {
-  const actions = useActions()
-  const update = actions.checkDialog.updatePosition
-  const { type } = useSelector(state => ({
-    type: state.checkDialog.positionForm?.type,
-  }))
+interface IProps {
+  value: string | null
+}
+
+export default function TypeSelect({ value }: IProps) {
+  const { errors, reset } = useFormContext()
+  const error = errors.type
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      update({
-        type: e.target.value,
-        service: undefined,
+      const type = e.target.value
+      reset({
+        type,
+        service: null,
+        priceType: 'money',
+        priceAmount: null,
       })
     },
-    [update]
+    [reset]
   )
 
   return (
     <Select
       name='type'
       label='Тип услуги'
-      value={type}
+      value={value || ''}
       onChange={handleChange}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         products.map(product => (

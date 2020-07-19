@@ -4,13 +4,15 @@ import { loader } from 'graphql.macro'
 
 import { useSelector } from 'store'
 
+import { IPaymentForm } from 'interfaces/payment'
+
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 const CREATE_PAYMENT = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
-const useCreateTrainingPass = () => {
+const useCreatePayment = () => {
   const [createPayment] = useMutation(CREATE_PAYMENT)
   const variables = useSelector(state => ({
     date: state.checkDialog.params.activeDate,
@@ -18,12 +20,8 @@ const useCreateTrainingPass = () => {
     _id: state.checkDialog.params.contact?.link,
   }))
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.paymentForm,
-  }))
-
   const mutate = React.useCallback(
-    () => {
+    (data: Partial<IPaymentForm>) => {
       if (!data) {
         return
       }
@@ -48,10 +46,10 @@ const useCreateTrainingPass = () => {
         },
       })
     },
-    [createPayment, data, variables]
+    [createPayment, variables]
   )
 
   return mutate
 }
 
-export default useCreateTrainingPass
+export default useCreatePayment

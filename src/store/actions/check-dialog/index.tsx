@@ -35,46 +35,39 @@ export const closePassForm = createAction(
   'checkDialog/CLOSE_PASS'
 )()
 
-export const setRecord = createAction(
-  'checkDialog/SET_RECORD',
-  (record: Partial<ITrainingRecordForm> | null, mode: 'update' | null) => ({ record, mode })
-)()
-
-export const resetRecord = createAction(
-  'checkDialog/RESET_RECORD'
-)()
-
-export const updateRecord = createAction(
-  'checkDialog/UPDATE_RECORD',
+export const openUpdateRecordForm = createAction(
+  'checkDialog/OPEN_UPDATE_RECORD_FORM',
   (record: Partial<ITrainingRecordForm>) => ({ record })
 )()
 
-export const setPosition = createAction(
-  'checkDialog/SET_POSITION',
-  (position: Partial<ICheckPositionForm> | null, mode: 'create' | 'update' | null) => ({ position, mode })
+export const closeRecordForm = createAction(
+  'checkDialog/CLOSE_RECORD_FORM'
 )()
 
-export const resetPosition = createAction(
-  'checkDialog/RESET_POSITION'
+export const openCreatePositionForm = createAction(
+  'checkDialog/OPEN_CREATE_POSITION_FORM'
 )()
 
-export const updatePosition = createAction(
-  'checkDialog/UPDATE_POSITION',
+export const openUpdatePositionForm = createAction(
+  'checkDialog/OPEN_UPDATE_POSITION_FORM',
   (position: Partial<ICheckPositionForm>) => ({ position })
 )()
 
-export const setPayment = createAction(
-  'checkDialog/SET_PAYMENT',
-  (payment: Partial<IPaymentForm> | null, mode: 'create' | 'update' | null) => ({ payment, mode })
+export const closePositionForm = createAction(
+  'checkDialog/CLOSE_POSITION_FORM'
 )()
 
-export const resetPayment = createAction(
-  'checkDialog/RESET_PAYMENT'
+export const openCreatePaymentForm = createAction(
+  'checkDialog/OPEN_CREATE_PAYMENT_FORM'
 )()
 
-export const updatePayment = createAction(
-  'checkDialog/UPDATE_PAYMENT',
+export const openUpdatePaymentForm = createAction(
+  'checkDialog/OPEN_UPDATE_PAYMENT_FORM',
   (payment: Partial<IPaymentForm>) => ({ payment })
+)()
+
+export const closePaymentForm = createAction(
+  'checkDialog/CLOSE_PAYMENT_FORM'
 )()
 
 export const actions = {
@@ -87,17 +80,16 @@ export const actions = {
   openPassForm,
   closePassForm,
 
-  setRecord,
-  resetRecord,
-  updateRecord,
+  openUpdateRecordForm,
+  closeRecordForm,
 
-  setPosition,
-  resetPosition,
-  updatePosition,
+  openCreatePositionForm,
+  openUpdatePositionForm,
+  closePositionForm,
 
-  setPayment,
-  resetPayment,
-  updatePayment,
+  openCreatePaymentForm,
+  openUpdatePaymentForm,
+  closePaymentForm,
 }
 
 export default actions

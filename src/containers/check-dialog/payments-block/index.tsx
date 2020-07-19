@@ -15,39 +15,21 @@ import useGetContactDetailsQuery from '../graphql/get-contact-details'
 import PaymentForm from './payment-form'
 import PaymentItem from './payment-item'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
-
 import useStyles from './styles'
-
-const currentDate = removeTimeFromDate(new Date())!
 
 export default function PaymentBlock() {
   const actions = useActions()
   const classes = useStyles()
 
-  const date = useSelector(state => state.checkDialog.params.activeDate)
-  const gym = useSelector(state => state.checkDialog.params.activeGym)
-  const contact = useSelector(state => state.checkDialog.params.contact?.link)
-  const isFormActive = useSelector(state => !!state.checkDialog.paymentForm)
-
-  const setPayment = actions.checkDialog.setPayment
+  const isFormActive = useSelector(state => state.checkDialog.paymentForm.isActive)
 
   const { data } = useGetContactDetailsQuery()
 
-  const openAddForm = React.useCallback(
+  const openCreateForm = React.useCallback(
     () => {
-      const p = {
-        contact: { link: contact! },
-        gym: { link: gym },
-        date,
-        createdAt: currentDate,
-        type: 'units' as const,
-        amount: null,
-      }
-
-      setPayment(p, 'create')
+      actions.checkDialog.openCreatePaymentForm()
     },
-    [setPayment, contact, date, gym]
+    [actions]
   )
 
   if (isFormActive) {
@@ -58,7 +40,7 @@ export default function PaymentBlock() {
 
   return (
     <List className={classes.list}>
-      <ListItem button={true} onClick={openAddForm}>
+      <ListItem button={true} onClick={openCreateForm}>
         <ListItemAvatar>
           <Avatar className={classes.avatar}>
             <AddOutlined />
@@ -71,7 +53,11 @@ export default function PaymentBlock() {
       {
         data?.payments
           .map((payment, index) => (
-            <PaymentItem payment={payment} index={index} key={payment._id} />
+            <PaymentItem
+              payment={payment}
+              index={index}
+              key={payment._id}
+            />
           ))
       }
     </List>

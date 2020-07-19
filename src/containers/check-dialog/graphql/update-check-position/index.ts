@@ -2,19 +2,15 @@ import React from 'react'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
 
-import { useSelector } from 'store'
+import { ICheckPositionForm } from 'interfaces/check-position'
 
 const UPDATE_CHECK_POSITION = loader('./mutation.gql')
 
 const useUpdateTrainingRecord = () => {
   const [updateCheckPosition] = useMutation(UPDATE_CHECK_POSITION)
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.positionForm,
-  }))
-
   const mutate = React.useCallback(
-    () => {
+    (data: Partial<ICheckPositionForm>) => {
       if (!data) {
         return
       }
@@ -23,7 +19,7 @@ const useUpdateTrainingRecord = () => {
         variables: { _id: data?._id, data },
       })
     },
-    [updateCheckPosition, data]
+    [updateCheckPosition]
   )
 
   return mutate

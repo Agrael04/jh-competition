@@ -92,7 +92,13 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   const isOccupied = !!tResource
 
   const [, drag] = useDrag({
-    item: { type: 'TRAINING_RESOURCE_ITEM', color, _id: tResource?._id, trainerId: trainer?._id },
+    item: {
+      type: 'TRAINING_RESOURCE_ITEM',
+      color,
+      _id: tResource?._id,
+      trainerId: trainer?._id,
+      duration: tResource ? (tResource.endTime - tResource.startTime) : 0,
+    },
   })
 
   if (!tResource) {

@@ -2,19 +2,15 @@ import React from 'react'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
 
-import { useSelector } from 'store'
+import { ITrainingRecordForm } from 'interfaces/training'
 
 const UPDATE_TRAINING_RECORD = loader('./mutation.gql')
 
 const useUpdateTrainingRecord = () => {
   const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.recordForm,
-  }))
-
   const mutate = React.useCallback(
-    () => {
+    (data: Partial<ITrainingRecordForm>) => {
       if (!data) {
         return
       }
@@ -23,7 +19,7 @@ const useUpdateTrainingRecord = () => {
         variables: { _id: data?._id, data },
       })
     },
-    [updateTrainingRecord, data]
+    [updateTrainingRecord]
   )
 
   return mutate

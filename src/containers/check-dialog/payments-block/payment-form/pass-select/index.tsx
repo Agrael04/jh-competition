@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-import { useSelector, useActions } from 'store'
+import { useFormContext } from 'react-hook-form'
 
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -12,28 +12,33 @@ import { passTypes, getSizes } from 'data/training-passes'
 
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
 
-export default function PassSelect() {
-  const pass = useSelector(state => state.checkDialog.paymentForm?.pass?.link)
-  const actions = useActions()
-  const update = actions.checkDialog.updatePayment
+interface IProps {
+  value?: { link: string }
+  onChange: (value: { link: string }) => void
+}
 
+export default function PassSelect({ onChange, value }: IProps) {
   const { data } = useGetTrainingPassesQuery()
+  const { errors } = useFormContext()
+  const error = errors.pass
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      update({ pass: { link: e.target.value } })
+      onChange({ link: e.target.value })
     },
-    [update]
+    [onChange]
   )
 
   return (
     <Select
       name='pass'
       label='Абонимент'
-      value={pass}
+      value={value ? value.link : undefined}
       onChange={handleChange}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         data?.trainingPasss.map(pass => (

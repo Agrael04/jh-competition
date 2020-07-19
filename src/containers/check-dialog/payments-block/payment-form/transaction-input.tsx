@@ -1,29 +1,28 @@
 import React from 'react'
 
-import { useSelector, useActions } from 'store'
+import { useFormContext } from 'react-hook-form'
 
 import TextField from '@material-ui/core/TextField'
 
-export default function TransactionInput() {
-  const transaction = useSelector(state => state.checkDialog.paymentForm?.transaction || '')
-  const actions = useActions()
-  const update = actions.checkDialog.updatePayment
+interface IProps {
+  value: string
+  onChange: (value: any) => void
+}
 
-  const handleChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      update({ transaction: e.target.value })
-    },
-    [update]
-  )
+export default function TransactionInput({ onChange, value }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.transaction
 
   return (
     <TextField
-      name={'transaction'}
-      value={transaction}
-      onChange={handleChange}
+      value={value || ''}
+      onChange={onChange}
+      name='transaction'
       label={'Транзакция'}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     />
   )
 }

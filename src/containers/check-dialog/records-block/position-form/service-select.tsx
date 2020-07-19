@@ -1,25 +1,27 @@
 import React from 'react'
 
-import { useSelector, useActions } from 'store'
+import { useFormContext } from 'react-hook-form'
 
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { products } from '../../data'
 
-export default function ServiceSelect() {
-  const actions = useActions()
-  const update = actions.checkDialog.updatePosition
-  const { service, type } = useSelector(state => ({
-    service: state.checkDialog.positionForm?.service,
-    type: state.checkDialog.positionForm?.type,
-  }))
+interface IProps {
+  value: number
+  onChange: (value: any) => void
+}
+
+export default function ServiceSelect({ onChange, value }: IProps) {
+  const { errors, watch } = useFormContext()
+  const type = watch('type')
+  const error = errors.service
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      update({ service: +e.target.value })
+      onChange(+e.target.value)
     },
-    [update]
+    [onChange]
   )
 
   const product = products.find(p => p.id === type)
@@ -28,11 +30,13 @@ export default function ServiceSelect() {
     <Select
       name='type'
       label='Услуги'
-      value={service}
+      value={value}
       onChange={handleChange}
       fullWidth={true}
       variant='outlined'
       disabled={!type}
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         (product?.options || []).map(service => (
