@@ -1,0 +1,5 @@
+fragment totalServiceRecord on TrainingRecord {
+  _id
+  priceType
+  priceAmount
+}

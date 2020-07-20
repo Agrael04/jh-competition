@@ -24,22 +24,14 @@ interface IProps {
 
 export default function PaymentItem({ position, index }: IProps) {
   const actions = useActions()
-  const setPosition = actions.checkDialog.setPosition
+  const openUpdatePositionForm = actions.checkDialog.openUpdatePositionForm
   const deleteCheckPosition = useDeleteCheckPosition()
 
   const openEditForm = React.useCallback(
     () => {
-      const p = {
-        _id: position._id,
-        priceType: position.priceType || 'money',
-        priceAmount: position.priceAmount,
-        type: position.type,
-        service: position.service,
-      }
-
-      setPosition(p, 'update')
+      openUpdatePositionForm(position)
     },
-    [setPosition, position]
+    [openUpdatePositionForm, position]
   )
 
   const product = products.find(p => p.id === position.type)

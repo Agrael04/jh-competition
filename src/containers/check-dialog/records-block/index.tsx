@@ -21,31 +21,20 @@ import useStyles from './styles'
 
 export default function TrainingDialog() {
   const actions = useActions()
-  const setPosition = actions.checkDialog.setPosition
+  const openCreatePositionForm = actions.checkDialog.openCreatePositionForm
   const classes = useStyles()
-  const { contact, date, isServiceFormActive, isRecordFormActive } = useSelector(state => ({
-    contact: state.checkDialog.params.contact?.link,
-    date: state.checkDialog.params.activeDate,
-    isServiceFormActive: !!state.checkDialog.positionForm,
-    isRecordFormActive: !!state.checkDialog.recordForm,
+  const { isServiceFormActive, isRecordFormActive } = useSelector(state => ({
+    isServiceFormActive: state.checkDialog.positionForm.isActive,
+    isRecordFormActive: state.checkDialog.recordForm.isActive,
   }))
 
   const { data } = useGetContactDetailsQuery()
 
   const openAddForm = React.useCallback(
     () => {
-      const p = {
-        contact: { link: contact! },
-        type: undefined,
-        service: undefined,
-        priceAmount: 0,
-        priceType: 'money' as const,
-        date,
-      }
-
-      setPosition(p, 'create')
+      openCreatePositionForm()
     },
-    [setPosition, contact, date]
+    [openCreatePositionForm]
   )
 
   if (isServiceFormActive) {

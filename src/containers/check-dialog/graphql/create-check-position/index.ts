@@ -6,6 +6,8 @@ import { useSelector } from 'store'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
+import { ICheckPositionForm } from 'interfaces/check-position'
+
 const CREATE_POSITION = loader('./mutation.gql')
 const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 
@@ -17,16 +19,8 @@ const useCreateCheckPosition = () => {
     _id: state.checkDialog.params.contact?.link,
   }))
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.positionForm,
-  }))
-
   const mutate = React.useCallback(
-    () => {
-      if (!data) {
-        return
-      }
-
+    (data: Partial<ICheckPositionForm>) => {
       return mutation({
         variables: { data },
         update: (client, { data }) => {
@@ -43,7 +37,6 @@ const useCreateCheckPosition = () => {
     },
     [
       mutation,
-      data,
       variables,
     ]
   )

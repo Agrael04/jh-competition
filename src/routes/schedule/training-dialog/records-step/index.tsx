@@ -24,10 +24,11 @@ export default function ResourcesBlock() {
   const _id = useSelector(state => state.schedule.trainingDialog._id)
   const traineesAmount = useSelector(state => state.schedule.trainingDialog.trainingForm?.traineesAmount)
   const trainingQuery = useGetTrainingQuery(_id)
+  const isFormActive = useSelector(state => state.schedule.trainingDialog.recordForm.isActive)
 
   const activate = React.useCallback(
     async () => {
-      actions.schedule.trainingDialog.openRecord()
+      actions.schedule.trainingDialog.openCreateRecordForm()
     },
     [actions]
   )
@@ -59,7 +60,11 @@ export default function ResourcesBlock() {
           }
         </List>
       </Grid>
-      <RecordForm />
+      {
+        isFormActive && (
+          <RecordForm />
+        )
+      }
     </Grid>
   )
 }

@@ -9,20 +9,21 @@ interface IProps {
   value: 'units' | 'money' | null
 }
 
-export default function TypeToggle({ value }: IProps) {
+export default function PriceTypeToggle({ value }: IProps) {
   const { reset } = useFormContext()
-  const payment = useSelector(state => state.checkDialog.paymentForm.payment!)
+
+  const record = useSelector(state => state.checkDialog.recordForm.record!)
 
   const handleTypeChange = React.useCallback(
-    (e, type) => {
-      if (type) {
+    (e, priceType) => {
+      if (priceType) {
         reset({
-          type,
-          amount: type === payment.type ? payment.amount : null,
+          priceType,
+          priceAmount: priceType === record.priceType ? record.priceAmount : null,
         })
       }
     },
-    [reset, payment]
+    [reset, record]
   )
 
   return (

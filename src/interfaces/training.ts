@@ -52,19 +52,20 @@ export interface ITrainingResourceForm {
 
 export interface ITrainingRecordForm {
   _id?: string
-  contact: {
-    link: string
-  }
-  attendant?: {
-    link: string
-  }
-  status?: string
-  resource: {
-    link: string
-  }
   training: {
     link: string
   }
-  priceType: 'units' | 'money'
+  contact: {
+    link: string
+  } | null
+  attendant?: {
+    link: string
+  } | null
+  resource: {
+    link: string
+  } | null
+  status?: string | null
+  note?: string | null
+  priceType: 'units' | 'money' | null
   priceAmount: number | null
 }

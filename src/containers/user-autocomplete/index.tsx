@@ -8,33 +8,51 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 interface IProps {
   label: string
   disabled?: boolean
-  handleChange?: (contact: string | null) => void
+  handleChange?: (user: string | null) => void
   value: string | null
   initialFilter?: string
   initialBalance?: number
   StartAdornment?: React.ComponentType<{ balance: number }>
+  error?: boolean
+  helperText?: string
 }
 
-const renderInput = (loading: boolean, label: string, startAdornment?: { Component: React.ComponentType<{ balance: number }>, balance: number }) => (params: any) => (
-  <TextField
-    {...params}
-    fullWidth={true}
-    label={label}
-    variant='outlined'
-    InputProps={{
-      ...params.InputProps,
-      startAdornment: params.inputProps.value && startAdornment && <startAdornment.Component balance={startAdornment.balance} />,
-      endAdornment: (
-        <React.Fragment>
-          {loading ? <CircularProgress color='inherit' size={20} /> : null}
-          {params.InputProps.endAdornment}
-        </React.Fragment>
-      ),
-    }}
-  />
-)
+interface IInputProps {
+  label?: string
+  error?: boolean
+  helperText?: string
+}
 
-export default function ContactSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment }: IProps) {
+interface IStartAbornment {
+  Component?: React.ComponentType<{ balance: number }>
+  prors?: any
+}
+
+const renderInput = (loading: boolean, inputProps: IInputProps, abornment?: IStartAbornment) => (params: any) => {
+  return (
+    <TextField
+      {...params}
+      {...inputProps}
+      fullWidth={true}
+      variant='outlined'
+      InputProps={{
+        ...params.InputProps,
+        startAdornment: (
+          params.inputProps.value &&
+          abornment?.Component && <abornment.Component {...abornment.prors} />
+        ),
+        endAdornment: (
+          <React.Fragment>
+            {loading ? <CircularProgress color='inherit' size={20} /> : null}
+            {params.InputProps.endAdornment}
+          </React.Fragment>
+        ),
+      }}
+    />
+  )
+}
+
+export default function ContactSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment, error, helperText }: IProps) {
   const { options, loading } = useSelector(state => ({
     loading: state.clientSuggester.loading,
     options: state.clientSuggester.options,
@@ -100,7 +118,20 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
 
       inputValue={filter || ''}
       loading={loading}
-      renderInput={renderInput(loading && opened, label, StartAdornment ? { Component: StartAdornment, balance } : undefined)}
+      renderInput={
+        renderInput(
+          loading && opened,
+          {
+            label,
+            error,
+            helperText,
+          },
+          {
+            Component: StartAdornment,
+            prors: { balance },
+          }
+        )
+      }
       disabled={disabled}
     />
   )

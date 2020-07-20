@@ -2,46 +2,43 @@ import React from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
-import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { products } from '../../data'
+import Select from 'components/select'
 
 interface IProps {
-  value: number
+  value: string | null | undefined
   onChange: (value: any) => void
 }
 
-export default function ServiceSelect({ onChange, value }: IProps) {
-  const { errors, watch } = useFormContext()
-  const type = watch('type')
-  const error = errors.service
+const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
+
+export default function StatusSelect({ onChange, value }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.status
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(+e.target.value)
+      onChange(e.target.value)
     },
     [onChange]
   )
 
-  const product = products.find(p => p.id === type)
-
   return (
     <Select
-      name='type'
-      label='Услуги'
       value={value}
       onChange={handleChange}
+      name={'status'}
+      label='Статус'
       fullWidth={true}
       variant='outlined'
-      disabled={!type}
       error={!!error}
       helperText={error && 'Обязательное поле'}
     >
       {
-        (product?.options || []).map(service => (
-          <MenuItem value={service.id} key={service.id}>
-            {service.name}
+        statuses.map(type => (
+          <MenuItem value={type} key={type}>
+            {type}
           </MenuItem>
         ))
       }

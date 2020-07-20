@@ -24,8 +24,8 @@ export default function PassFormWrap() {
     contact: state.checkDialog.params.contact?.link,
     activeDate: state.checkDialog.params.activeDate,
     opened: state.checkDialog.openedPassForm,
-    serviceType: state.checkDialog.positionForm?.type,
-    service: state.checkDialog.positionForm?.service,
+    serviceType: state.checkDialog.positionForm?.position?.type,
+    service: state.checkDialog.positionForm?.position?.service,
   }))
   const close = actions.checkDialog.closePassForm
 

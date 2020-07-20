@@ -1,32 +1,31 @@
 import React from 'react'
 
-import { useSelector, useActions } from 'store'
+import { useFormContext } from 'react-hook-form'
 
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { paymentDestinations } from '../../data'
 
-export default function CapacityInput() {
-  const destination = useSelector(state => state.checkDialog.paymentForm?.destination || '')
-  const actions = useActions()
-  const update = actions.checkDialog.updatePayment
+interface IProps {
+  value: string
+  onChange: (value: any) => void
+}
 
-  const handleChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      update({ destination: e.target.value })
-    },
-    [update]
-  )
+export default function CapacityInput({ onChange, value }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.destination
 
   return (
     <Select
-      name='destination'
       label='Кошелек'
-      value={destination}
-      onChange={handleChange}
+      value={value}
+      name='destination'
+      onChange={onChange}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         paymentDestinations.map(destination => (

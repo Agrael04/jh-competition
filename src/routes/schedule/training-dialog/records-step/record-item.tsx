@@ -28,7 +28,7 @@ export default function RecordItem({ id }: IProps) {
 
   const actions = useActions()
   const { isActive, trainingForm } = useSelector(state => ({
-    isActive: state.schedule.trainingDialog.recordForm?._id === id,
+    isActive: state.schedule.trainingDialog.recordForm.record?._id === id,
     trainingForm: state.schedule.trainingDialog.trainingForm,
   }))
   const trainingQuery = useGetTrainingQuery(trainingForm._id)
@@ -38,7 +38,7 @@ export default function RecordItem({ id }: IProps) {
   const deleteTrainingRecord = useDeleteTrainingRecord()
 
   const activate = React.useCallback(
-    () => actions.schedule.trainingDialog.openRecord(
+    () => actions.schedule.trainingDialog.openUpdateRecordForm(
       convertTrainingRecordToInput(record!)
     ),
     [actions, record]

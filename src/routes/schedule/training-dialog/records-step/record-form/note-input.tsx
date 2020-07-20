@@ -9,16 +9,16 @@ interface IProps {
   onChange: (value: any) => void
 }
 
-export default function TransactionInput({ onChange, value }: IProps) {
+export default function NoteInput({ onChange, value }: IProps) {
   const { errors } = useFormContext()
-  const error = errors.transaction
+  const error = errors.note
 
   return (
     <TextField
       value={value || ''}
       onChange={onChange}
-      name='transaction'
-      label={'Транзакция'}
+      name='note'
+      label={'Заметки'}
       fullWidth={true}
       variant='outlined'
       error={!!error}

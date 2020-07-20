@@ -5,7 +5,7 @@ export interface ICheckPositionForm {
   }
   type: string
   service: number
-  priceType: 'units' | 'money'
+  priceType: 'units' | 'money' | null
   priceAmount: number | null
   date: Date
 }

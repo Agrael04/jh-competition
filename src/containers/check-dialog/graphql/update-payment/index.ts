@@ -2,19 +2,15 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import { useSelector } from 'store'
+import { IPaymentForm } from 'interfaces/payment'
 
 const UPDATE_PAYMENT = loader('./mutation.gql')
 
 const useUpdatePayment = () => {
   const [updatePayment] = useMutation(UPDATE_PAYMENT)
 
-  const { data } = useSelector(state => ({
-    data: state.checkDialog.paymentForm,
-  }))
-
   const mutate = React.useCallback(
-    () => {
+    (data: Partial<IPaymentForm>) => {
       if (!data) {
         return
       }
@@ -23,7 +19,7 @@ const useUpdatePayment = () => {
         variables: { _id: data._id, data },
       })
     },
-    [updatePayment, data]
+    [updatePayment]
   )
 
   return mutate

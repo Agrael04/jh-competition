@@ -1,16 +1,24 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
+
+import { useFormContext } from 'react-hook-form'
+import { useSelector } from 'store'
 
 import UserAutocomplete from 'containers/user-autocomplete'
 
 import useGetTrainingQuery from '../../../queries/get-training'
 
-export default function ContactSuggester() {
-  const actions = useActions()
-  const attendant = useSelector(s => s.schedule.trainingDialog.recordForm?.attendant)
+interface IProps {
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
+}
+
+export default function AttendantSuggester({ value, onChange }: IProps) {
+  const { errors } = useFormContext()
+  const error = errors.attendant
+
   const { _id, recordId } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
-    recordId: state.schedule.trainingDialog.recordForm?._id,
+    recordId: state.schedule.trainingDialog.recordForm.record!._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
@@ -21,17 +29,19 @@ export default function ContactSuggester() {
   )
 
   const handleChange = (link: string | null) => {
-    actions.schedule.trainingDialog.updateRecord({ attendant: link ? { link } : undefined })
+    onChange(link ? { link } : undefined)
   }
 
   const initialFilter = record?.attendant?.fullName
 
   return (
     <UserAutocomplete
-      value={attendant ? attendant.link : null}
+      value={value ? value.link : null}
       handleChange={handleChange}
       label='Физическое лицо'
       initialFilter={initialFilter}
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     />
   )
 }

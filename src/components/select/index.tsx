@@ -5,7 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 
 interface IProps {
-  value: any
+  value?: any
   label?: string
   name?: string
   helperText?: string
@@ -17,11 +17,12 @@ interface IProps {
   variant?: 'filled' | 'outlined' | 'standard'
   fullWidth?: boolean
   multiple?: boolean
+  error?: boolean
 }
 
 const heightStyle = { height: '56px' }
 
-export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children }: IProps) => {
+export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error }: IProps) => {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
   const [labelWidth, setLabelWidth] = React.useState(0)
 
@@ -44,8 +45,8 @@ export default ({ value, onChange, label, helperText, name, variant, disabled, m
   )
 
   return (
-    <FormControl variant={variant} fullWidth={fullWidth} style={heightStyle}>
-      <InputLabel ref={inputLabel}>{label}</InputLabel>
+    <FormControl variant={variant} fullWidth={fullWidth} style={heightStyle} error={error}>
+      <InputLabel error={error} ref={inputLabel}>{label}</InputLabel>
       <Select
         value={v}
         disabled={disabled}
@@ -53,10 +54,11 @@ export default ({ value, onChange, label, helperText, name, variant, disabled, m
         labelWidth={labelWidth}
         multiple={multiple}
         name={name}
+        error={error}
       >
         {children}
       </Select>
-      <FormHelperText>{helperText}</FormHelperText>
+      <FormHelperText error={error}>{helperText}</FormHelperText>
     </FormControl>
   )
 }

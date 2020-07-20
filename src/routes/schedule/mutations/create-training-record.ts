@@ -15,6 +15,7 @@ export const CREATE_TRAINING_RECORD = gql`
       contact {
         _id
         fullName
+        balance
       }
       attendant {
         _id
@@ -35,13 +36,14 @@ const useCreateTrainingRecord = () => {
   const [createTrainingRecord] = useMutation(CREATE_TRAINING_RECORD)
 
   const mutate = React.useCallback(
-    (r: ITrainingRecordForm) => {
+    (r: Partial<ITrainingRecordForm>) => {
       const record = ({
         _id: r._id,
+        training: { link: r.training!.link },
         status: r.status,
-        contact: { link: r.contact.link },
-        resource: { link: r.resource.link },
-        training: { link: r.training.link },
+        note: r.note,
+        contact: r.contact ? { link: r.contact.link } : null,
+        resource: r.resource ? { link: r.resource.link } : null,
         attendant: r.attendant ? { link: r.attendant.link } : null,
       })
       return createTrainingRecord({
@@ -50,11 +52,13 @@ const useCreateTrainingRecord = () => {
           const boundUpdateCachedQuery = updateQuery(client)
           const updater = createUpdater('trainingRecords', data.insertOneTrainingRecord)
 
-          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
-            query: GET_TRAINING_RESOURCE,
-            variables: { id: record.resource.link },
-            updater,
-          })
+          if (record.resource) {
+            boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+              query: GET_TRAINING_RESOURCE,
+              variables: { id: record.resource.link },
+              updater,
+            })
+          }
 
           boundUpdateCachedQuery<IGetTrainingResponse>({
             query: GET_TRAINING,

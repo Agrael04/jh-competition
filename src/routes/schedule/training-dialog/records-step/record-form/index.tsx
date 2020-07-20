@@ -1,104 +1,139 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+
+import { useForm, Controller, FormProvider } from 'react-hook-form'
+import { useSelector, useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
-import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-
-import TextField from 'containers/text-field'
-import Select from 'containers/select'
 
 import ContactSuggester from './contact-suggester'
 import AttendantSuggester from './attendant-suggester'
 import ResourceSelect from './resource-select'
+import StatusSelect from './status-select'
+import NoteInput from './note-input'
 
-import SaveButton from './save-button'
+import useUpdateTrainingRecord from '../../../mutations/update-training-record'
+import useCreateTrainingRecord from '../../../mutations/create-training-record'
 
-const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
+import useGetTrainingQuery from '../../../queries/get-training'
 
-const fieldSelector = (name: any) => (state: IStoreState) => {
-  const form: any = state.schedule.trainingDialog.recordForm
-  if (form) {
-    return form[name]
-  }
-
-  return null
+interface IForm {
+  contact?: {
+    link: string
+  } | null
+  attendant?: {
+    link: string
+  } | null
+  resource?: {
+    link: string
+  } | null
+  status?: string | null
+  note?: string | null
 }
 
 export default function RecordsBlock() {
   const actions = useActions()
-  const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm)
+  const form = useSelector(state => state.schedule.trainingDialog.recordForm)
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+  }))
 
-  const handleChange = React.useCallback(
-    (name, value) => {
-      actions.schedule.trainingDialog.updateRecord({ [name]: value })
+  const trainingQuery = useGetTrainingQuery(_id)
+  const updateTrainingRecord = useUpdateTrainingRecord()
+  const createTrainingRecord = useCreateTrainingRecord()
+
+  const methods = useForm<IForm>({
+    defaultValues: {
+      contact: form.record!.contact,
+      attendant: form.record!.attendant,
+      resource: form.record!.resource,
+      status: form.record!.status,
+      note: form.record!.note,
     },
-    [actions]
-  )
+  })
+  const { control, handleSubmit, errors } = methods
+  const disabled = Object.keys(errors).length > 0
 
-  const resetRecord = () => actions.schedule.trainingDialog.resetRecord()
+  const resetRecord = () => actions.schedule.trainingDialog.closeRecord()
   const openCheckDialog = () => actions.schedule.trainingDialog.openCheckDialog()
 
-  if (!isFormActive) {
-    return null
-  }
+  const submit = React.useCallback(
+    async (record: IForm) => {
+      if (!form.mode) {
+        return
+      }
+
+      if (form.mode === 'update') {
+        const r = trainingQuery.data?.trainingRecords.find(record => record._id === record?._id)
+        await updateTrainingRecord({ ...form.record, ...record }, r?.resource._id)
+      }
+
+      if (form.mode === 'create') {
+        await createTrainingRecord({ ...form.record, ...record })
+      }
+
+      actions.schedule.trainingDialog.closeRecord()
+    },
+    [form, trainingQuery, updateTrainingRecord, createTrainingRecord, actions]
+  )
 
   return (
-    <Grid item={true} lg={8} container={true} spacing={4}>
-      <Grid item={true} lg={9}>
-        <ContactSuggester />
-      </Grid>
-      <Grid item={true} lg={3} container={true}>
-        <Box margin='auto' marginRight={0}>
-          <Button color='primary' variant='contained' onClick={openCheckDialog}>
-            Расчитать
+    <FormProvider {...methods}>
+      <Grid item={true} lg={8} container={true} spacing={4}>
+        <Grid item={true} lg={9}>
+          <Controller
+            control={control}
+            name='contact'
+            render={ContactSuggester}
+            rules={{ required: true }}
+          />
+        </Grid>
+        <Grid item={true} lg={3} container={true}>
+          <Box margin='auto' marginRight={0}>
+            <Button color='primary' variant='contained' onClick={openCheckDialog}>
+              Расчитать
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item={true} lg={5}>
+          <Controller
+            control={control}
+            name='contact'
+            render={AttendantSuggester}
+          />
+        </Grid>
+        <Grid item={true} lg={3}>
+          <Controller
+            control={control}
+            name='status'
+            render={StatusSelect}
+          />
+        </Grid>
+        <Grid item={true} lg={4}>
+          <Controller
+            control={control}
+            name='note'
+            render={NoteInput}
+          />
+        </Grid>
+        <Grid item={true} lg={12}>
+          <Controller
+            control={control}
+            name='resource'
+            render={ResourceSelect}
+            rules={{ required: true }}
+          />
+        </Grid>
+        <Grid item={true} lg={12} container={true} justify='space-between'>
+          <Button color='primary' onClick={resetRecord}>
+            Отменить
           </Button>
-        </Box>
+          <Button color='primary' variant='contained' onClick={handleSubmit(submit)} disabled={disabled}>
+            Сохранить
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item={true} lg={5}>
-        <AttendantSuggester />
-      </Grid>
-      <Grid item={true} lg={3}>
-        <Select
-          name='status'
-          onChange={handleChange}
-          fieldSelector={fieldSelector}
-          label={'Статус'}
-          fullWidth={true}
-          variant='outlined'
-        >
-          {
-            statuses.map(type => (
-              <MenuItem value={type} key={type}>
-                {type}
-              </MenuItem>
-            ))
-          }
-        </Select>
-      </Grid>
-      <Grid item={true} lg={4}>
-        <TextField
-          name='note'
-          onChange={handleChange}
-          fieldSelector={fieldSelector}
-          label={'Заметки'}
-          fullWidth={true}
-          variant='outlined'
-        />
-      </Grid>
-      <Grid item={true} lg={12}>
-        <ResourceSelect
-          name='resource'
-          label='Ресурс'
-        />
-      </Grid>
-      <Grid item={true} lg={12} container={true} justify='space-between'>
-        <Button color='primary' onClick={resetRecord}>
-          Отменить
-        </Button>
-        <SaveButton />
-      </Grid>
-    </Grid>
+    </FormProvider>
   )
 }

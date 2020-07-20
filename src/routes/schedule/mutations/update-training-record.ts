@@ -34,17 +34,17 @@ const useUpdateTrainingRecord = () => {
   const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
 
   const mutate = React.useCallback(
-    (rawRecord: ITrainingRecordForm, prevResource?: string) => {
+    (rawRecord: Partial<ITrainingRecordForm>, prevResource?: string) => {
       const record = ({
         ...rawRecord,
-        contact: { link: rawRecord.contact.link },
+        contact: rawRecord.contact ? { link: rawRecord.contact.link } : null,
         attendant: rawRecord.attendant ? { link: rawRecord.attendant.link } : null,
       })
 
       return updateTrainingRecord({
         variables: { _id: record._id, record },
         update: (client, { data }) => {
-          if (prevResource === rawRecord.resource.link) {
+          if (prevResource === rawRecord.resource?.link) {
             return
           }
 
@@ -58,11 +58,13 @@ const useUpdateTrainingRecord = () => {
             updater: boundRemoveUpdater,
           })
 
-          boundUpdateCachedQuery<IGetTrainingResourceResponse>({
-            query: GET_TRAINING_RESOURCE,
-            variables: { id: record.resource.link },
-            updater: boundCreateUpdate,
-          })
+          if (record.resource) {
+            boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+              query: GET_TRAINING_RESOURCE,
+              variables: { id: record.resource.link },
+              updater: boundCreateUpdate,
+            })
+          }
         },
       })
     },

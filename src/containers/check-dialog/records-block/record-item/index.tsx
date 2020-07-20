@@ -18,17 +18,17 @@ interface IProps {
 
 export default function PaymentItem({ record, index }: IProps) {
   const actions = useActions()
-  const setRecord = actions.checkDialog.setRecord
+  const openUpdateRecordForm = actions.checkDialog.openUpdateRecordForm
 
   const openEditForm = React.useCallback(
     () => {
-      setRecord({
+      openUpdateRecordForm({
         _id: record._id,
         priceType: record.priceType || 'units',
         priceAmount: record.priceAmount,
-      }, 'update')
+      })
     },
-    [setRecord, record]
+    [record, openUpdateRecordForm]
   )
 
   return (

@@ -23,27 +23,19 @@ interface IProps {
 }
 
 export default function PaymentItem({ payment, index }: IProps) {
-  const classes = useStyles()
-
   const actions = useActions()
-  const setPayment = actions.checkDialog.setPayment
+  const classes = useStyles()
 
   const deletePayment = useDeletePayment()
 
-  const openEditForm = React.useCallback(
+  const openUpdateForm = React.useCallback(
     () => {
-      const p = {
-        _id: payment._id,
-        type: payment.type,
+      actions.checkDialog.openUpdatePaymentForm({
+        ...payment,
         pass: payment.pass ? { link: payment.pass._id } : undefined,
-        amount: payment.amount,
-        destination: payment.destination,
-        transaction: payment.transaction,
-      }
-
-      setPayment(p, 'update')
+      })
     },
-    [setPayment, payment]
+    [actions, payment]
   )
 
   const removePayment = React.useCallback(
@@ -52,7 +44,7 @@ export default function PaymentItem({ payment, index }: IProps) {
   )
 
   return (
-    <ListItem button={true} key={payment._id} onClick={openEditForm}>
+    <ListItem button={true} key={payment._id} onClick={openUpdateForm}>
       <ListItemAvatar>
         <Avatar className={classes.avatar}>
           {index + 1}

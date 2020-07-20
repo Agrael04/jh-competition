@@ -26,17 +26,27 @@ const fieldSelector = (name: any) => (state: IStoreState) => {
 export default function ResourcesBlock() {
   const actions = useActions()
   const isFormActive = useSelector(state => !!state.schedule.trainingDialog.resourceForm)
-  const { trainingForm, _id } = useSelector(state => ({
+  const { trainingForm, _id, mode } = useSelector(state => ({
     trainingForm: state.schedule.trainingDialog.trainingForm,
     _id: state.schedule.trainingDialog.resourceForm?._id,
+    mode: state.schedule.trainingDialog.resourceMode,
   }))
   const trainingQuery = useGetTrainingQuery(trainingForm._id)
+
+  const activateNew = React.useCallback(
+    () => {
+      if (mode === 'update') {
+        actions.schedule.trainingDialog.openUpdateRecordForm({ resource: { link: _id! } })
+      }
+    },
+    [actions, _id, mode]
+  )
 
   const activate = React.useCallback(
     (id: string) => () => {
       const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 
-      actions.schedule.trainingDialog.openRecord(
+      actions.schedule.trainingDialog.openUpdateRecordForm(
         convertTrainingRecordToInput(record!)
       )
     },
@@ -69,12 +79,23 @@ export default function ResourcesBlock() {
       </Grid>
       <Grid item={true} lg={12} spacing={1} container={true}>
         {
+          mode === 'update' && (
+            <Grid item={true}>
+              <Chip
+                label='Добавить запись'
+                color='primary'
+                variant='outlined'
+                onClick={activateNew}
+              />
+            </Grid>
+          )
+        }
+        {
           trainingQuery?.data?.trainingRecords
             .filter(record => record.resource?._id === _id)
             .map(r => (
               <Grid item={true} key={r._id}>
                 <Chip
-                  key={r._id}
                   label={r.contact.fullName}
                   color='primary'
                   onClick={activate(r._id)}

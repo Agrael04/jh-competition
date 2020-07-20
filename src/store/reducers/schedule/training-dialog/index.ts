@@ -17,8 +17,11 @@ export interface IState {
   resourceForm: ITrainingResourceForm | null | undefined
   resourceMode: 'create' | 'update' | null
 
-  recordForm: ITrainingRecordForm | null
-  recordMode: 'create' | 'update' | null
+  recordForm: {
+    isActive: boolean
+    mode: 'create' | 'update' | null
+    record: Partial<ITrainingRecordForm> | null
+  }
 
   step: number
 }
@@ -42,8 +45,11 @@ const initialState: IState = {
   resourceForm: null,
   resourceMode: null,
 
-  recordForm: null,
-  recordMode: null,
+  recordForm: {
+    isActive: false,
+    mode: null,
+    record: null,
+  },
 
   step: 0,
 }
@@ -84,8 +90,7 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     resourceForm: resource,
     resourceMode: mode,
-    recordForm: null,
-    recordMode: null,
+    recordForm: initialState.recordForm,
   }))
   .handleAction(actions.resetResource, state => ({
     ...state,
@@ -99,26 +104,40 @@ const reducer = createReducer<IState, IAction>(initialState)
       ...resource,
     } as ITrainingResourceForm,
   }))
-  .handleAction(actions.setRecord, (state, { payload: { record, mode } }) => ({
-    ...state,
-    recordForm: record,
-    recordMode: mode,
-    resourceForm: null,
-    resourceMode: null,
-    step: 2,
-  }))
-  .handleAction(actions.resetRecord, state => ({
-    ...state,
-    recordForm: null,
-    recordMode: null,
-  }))
-  .handleAction(actions.updateRecord, (state, { payload: { record } }) => ({
+  .handleAction(actions.openCreateRecordForm, (state, { payload: { record } }) => ({
     ...state,
     recordForm: {
-      ...state.recordForm,
-      ...record,
-    } as ITrainingRecordForm,
+      record: {
+        training: { link: state.trainingForm._id },
+        resource: record?.resource,
+      },
+      mode: 'create',
+      isActive: true,
+    },
+    step: 2,
   }))
+  .handleAction(actions.openUpdateRecordForm, (state, { payload: { record } }) => ({
+    ...state,
+    recordForm: {
+      record: {
+        _id: record._id,
+        training: record.training,
+        resource: record.resource,
+        contact: record.contact,
+        attendant: record.attendant,
+        status: record.status,
+        note: record.note,
+      },
+      mode: 'update',
+      isActive: true,
+    },
+    step: 2,
+  }))
+  .handleAction(actions.closeRecord, state => ({
+    ...state,
+    recordForm: initialState.recordForm,
+  }))
+
   .handleAction(actions.setStep, (state, { payload: { step } }) => ({
     ...state,
     step,

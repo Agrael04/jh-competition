@@ -7,6 +7,7 @@ import Zoom from '@material-ui/core/Zoom'
 
 import useUpdateTrainingResource from '../mutations/update-training-resource'
 import useGetSchedulesQuery, { isTrainerAvailable } from '../queries/get-schedules'
+import useGetTrainingResourcesQuery from '../queries/get-training-resources'
 
 import useStyles from './styles'
 
@@ -25,6 +26,7 @@ const EmptyItem = ({ time, resource }: IProps) => {
 
   const { data } = useGetSchedulesQuery(date)
 
+  const trainingResources = useGetTrainingResourcesQuery()
   const updateTrainingResource = useUpdateTrainingResource()
 
   const handleCreateClick = React.useCallback(
@@ -35,13 +37,16 @@ const EmptyItem = ({ time, resource }: IProps) => {
     [actions, resource, time]
   )
 
-  const onDrop = (_id: string, trainer?: string) => {
-    const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, time, time + 1)
+  const onDrop = (_id: string, trainer: string, duration: number) => {
+    const nextResouce = trainingResources.data?.trainingResources.find(tr => tr.resource._id === resource && tr.startTime > time)
+    const endTime = Math.min(time + duration, (nextResouce?.startTime || Infinity))
+
+    const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, time, endTime)
 
     updateTrainingResource({
       _id,
       startTime: time,
-      endTime: time + 1,
+      endTime,
       resource: { link: resource },
       trainer: isAvailable ? { link: trainer! } : undefined,
     })
@@ -49,7 +54,7 @@ const EmptyItem = ({ time, resource }: IProps) => {
 
   const [{ color }, drop] = useDrop({
     accept: 'TRAINING_RESOURCE_ITEM',
-    drop: (item: any) => onDrop(item?._id, item?.trainerId),
+    drop: (item: any) => onDrop(item?._id, item?.trainerId, item?.duration),
     collect: monitor => ({
       isOver: !!monitor.isOver(),
       color: !!monitor.isOver() && monitor.getItem()?.color,
