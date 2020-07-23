@@ -1,15 +1,18 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
+import Select from 'components/select'
 
-import Select from 'containers/select'
 import useGetGymsQuery from '../../../queries/get-gyms'
 
-const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.resource?.link
+interface IProps {
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
+  error?: any
+}
 
-export default function ResourceSelect() {
-  const actions = useActions()
+export default function ResourceSelect({ value, onChange, error }: IProps) {
   const { gym } = useSelector(state => ({
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
   }))
@@ -21,25 +24,25 @@ export default function ResourceSelect() {
     }, [gyms, gym]
   )
 
-  const handleChange = React.useCallback(
-    (name, link) => {
-      actions.schedule.trainingDialog.updateResource({ resource: { link } })
-    },
-    [actions]
-  )
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange({ link: e.target.value })
+  }
 
   if (resources.length === 0) {
-    return null
+    return (
+      <div />
+    )
   }
 
   return (
     <Select
-      name={'resource'}
+      value={value ? value.link : null}
       onChange={handleChange}
-      fieldSelector={selector}
       label={'Ресурс'}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         resources.map(r => (

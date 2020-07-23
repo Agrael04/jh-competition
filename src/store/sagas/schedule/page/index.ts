@@ -23,17 +23,13 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
     }
 
     const resource = {
-      _id: new BSON.ObjectID().toString(),
       startTime: action.payload.time,
       endTime: action.payload.time + 2,
       resource: { link: action.payload.resource },
-      trainer: undefined,
-      records: { link: [] },
-      training: { link: _id },
     }
 
     yield put(actions.trainingDialog.initialize(training))
-    yield put(actions.trainingDialog.setResource(resource, 'create'))
+    yield put(actions.trainingDialog.openCreateResourceForm(resource))
   } catch (error) {
     console.log(error)
   }

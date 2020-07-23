@@ -1,40 +1,8 @@
 import { all, put, takeLatest, select } from 'redux-saga/effects'
-import { BSON } from 'mongodb-stitch-browser-sdk'
 
 import actions from 'store/actions'
 
 import { IStoreState } from 'store'
-
-export function* openResource(action: ReturnType<typeof actions.schedule.trainingDialog.openResource>) {
-  try {
-    const { trainingId } = yield select((state: IStoreState) => ({
-      trainingId: state.schedule.trainingDialog.trainingForm._id,
-    }))
-
-    let resource: any
-    let mode: 'create' | 'update' | null = null
-
-    if (action.payload.resource) {
-      resource = action.payload.resource
-      mode = 'update'
-    } else {
-      resource = {
-        _id: new BSON.ObjectID(),
-        resource: null,
-        trainer: null,
-        startTime: undefined,
-        endTime: undefined,
-        training: { link: trainingId },
-        traineesAmount: undefined,
-      }
-      mode = 'create'
-    }
-
-    yield put(actions.schedule.trainingDialog.setResource(resource, mode))
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trainingDialog.openCheckDialog>) {
   try {
@@ -52,17 +20,12 @@ export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trai
   }
 }
 
-function* watchOpenResource() {
-  yield takeLatest(actions.schedule.trainingDialog.openResource, openResource)
-}
-
 function* watchOpenCheckDialog() {
   yield takeLatest(actions.schedule.trainingDialog.openCheckDialog, openCheckDialog)
 }
 
 export default function* root() {
   yield all([
-    watchOpenResource(),
     watchOpenCheckDialog(),
   ])
 }

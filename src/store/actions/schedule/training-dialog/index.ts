@@ -21,32 +21,27 @@ export const updateField = createAction(
   (field: string, value: any) => ({ field, value })
 )()
 
-export const openResource = createAction(
-  'schedule/trainingDialog/OPEN_RESOURCE',
+export const openCreateResourceForm = createAction(
+  'schedule/trainingDialog/OPEN_CREATE_RESOURCE_FORM',
   (resource?: Partial<ITrainingResourceForm>) => ({ resource })
 )()
 
-export const setResource = createAction(
-  'schedule/trainingDialog/SET_RESOURCE',
-  (resource: ITrainingResourceForm | null, mode: 'create' | 'update' | null) => ({ resource, mode })
-)()
-
-export const resetResource = createAction(
-  'schedule/trainingDialog/RESET_RESOURCE'
-)()
-
-export const updateResource = createAction(
-  'schedule/trainingDialog/UPDATE_RESOURCE',
+export const openUpdateResourceForm = createAction(
+  'schedule/trainingDialog/OPEN_UPDATE_RESOURCE_FORM',
   (resource: Partial<ITrainingResourceForm>) => ({ resource })
 )()
 
+export const closeResource = createAction(
+  'schedule/trainingDialog/CLOSE_RESOURCE'
+)()
+
 export const openCreateRecordForm = createAction(
-  'checkDialog/OPEN_CREATE_RECORD_FORM',
+  'schedule/trainingDialog/OPEN_CREATE_RECORD_FORM',
   (record?: Partial<ITrainingRecordForm>) => ({ record })
 )()
 
 export const openUpdateRecordForm = createAction(
-  'checkDialog/OPEN_UPDATE_RECORD_FORM',
+  'schedule/trainingDialog/OPEN_UPDATE_RECORD_FORM',
   (record: Partial<ITrainingRecordForm>) => ({ record })
 )()
 
@@ -70,10 +65,9 @@ export const actions = {
 
   updateField,
 
-  openResource,
-  setResource,
-  resetResource,
-  updateResource,
+  openCreateResourceForm,
+  openUpdateResourceForm,
+  closeResource,
 
   openCreateRecordForm,
   openUpdateRecordForm,

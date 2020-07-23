@@ -33,7 +33,7 @@ interface IForm {
 
 export default function RecordsBlock() {
   const actions = useActions()
-  const form = useSelector(state => state.schedule.trainingDialog.recordForm)
+  const record = useSelector(state => state.schedule.trainingDialog.recordForm.record)
 
   const methods = useForm<IForm>()
 
@@ -48,7 +48,7 @@ export default function RecordsBlock() {
             name='contact'
             Component={ContactSuggester}
             rules={{ required: true }}
-            defaultValue={form.record!.contact}
+            defaultValue={record!.contact}
           />
         </Grid>
         <Grid item={true} lg={3} container={true}>
@@ -62,21 +62,21 @@ export default function RecordsBlock() {
           <FormController
             name='attendant'
             Component={AttendantSuggester}
-            defaultValue={form.record!.attendant}
+            defaultValue={record!.attendant}
           />
         </Grid>
         <Grid item={true} lg={3}>
           <FormController
             name='status'
             Component={StatusSelect}
-            defaultValue={form.record!.status}
+            defaultValue={record!.status}
           />
         </Grid>
         <Grid item={true} lg={4}>
           <FormController
             name='note'
             Component={NoteInput}
-            defaultValue={form.record!.note}
+            defaultValue={record!.note}
           />
         </Grid>
         <Grid item={true} lg={12}>
@@ -84,7 +84,7 @@ export default function RecordsBlock() {
             name='resource'
             Component={ResourceSelect}
             rules={{ required: true }}
-            defaultValue={form.record!.resource}
+            defaultValue={record!.resource}
           />
         </Grid>
         <Grid item={true} lg={12} container={true} justify='space-between'>

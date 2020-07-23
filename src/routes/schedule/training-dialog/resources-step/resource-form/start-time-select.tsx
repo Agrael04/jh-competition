@@ -1,27 +1,33 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+
+import { useFormContext } from 'react-hook-form'
+import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
+import Select from 'components/select'
 
-import Select from 'containers/select'
 import useGetTrainingResourcesQuery from '../../../queries/get-training-resources'
 import useGetSchedulesQuery, { isTrainerAvailable } from '../../../queries/get-schedules'
 
 import times from 'data/times'
 
 interface IProps {
-  fieldSelector: (name: any) => (state: IStoreState) => any
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
+  error?: any
 }
 
-export default function TrainerSelect({ fieldSelector }: IProps) {
-  const actions = useActions()
-  const { date, gym, endTime, trainer, resource, _id } = useSelector(state => ({
+export default function StartTimeSelect({ value, error }: IProps) {
+  const { watch, reset } = useFormContext()
+
+  const endTime = watch('endTime')
+  const trainer = watch('trainer')?.link
+  const resource = watch('resource')?.link
+
+  const { date, gym, _id } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    endTime: state.schedule.trainingDialog.resourceForm?.endTime,
-    trainer: state.schedule.trainingDialog.resourceForm?.trainer?.link,
-    resource: state.schedule.trainingDialog.resourceForm?.resource?.link,
-    _id: state.schedule.trainingDialog.resourceForm?._id,
+    _id: state.schedule.trainingDialog.resourceForm.resource?._id,
   }))
   const trainingResources = useGetTrainingResourcesQuery()
   const { data } = useGetSchedulesQuery(date)
@@ -39,26 +45,28 @@ export default function TrainerSelect({ fieldSelector }: IProps) {
   )
 
   const handleChange = React.useCallback(
-    (name, startTime) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const startTime = +e.target.value
       const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, startTime, endTime!)
 
-      actions.schedule.trainingDialog.updateResource({
+      reset({
         startTime,
         endTime: endTime || (startTime < 27 ? startTime + 2 : endTime),
         trainer: isAvailable ? { link: trainer! } : undefined,
       })
     },
-    [actions, endTime, data, trainer, gym]
+    [reset, endTime, data, trainer, gym]
   )
 
   return (
     <Select
-      name='startTime'
+      value={value}
       onChange={handleChange}
-      fieldSelector={fieldSelector}
       label={'Время начала'}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         filteredTimes.map(time => (

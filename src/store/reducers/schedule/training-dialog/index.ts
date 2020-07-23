@@ -14,8 +14,11 @@ export interface IState {
   trainingForm: ITrainingForm
   mode: 'create' | 'update' | null
 
-  resourceForm: ITrainingResourceForm | null | undefined
-  resourceMode: 'create' | 'update' | null
+  resourceForm: {
+    isActive: boolean
+    mode: 'create' | 'update' | null
+    resource: Partial<ITrainingResourceForm> | null
+  }
 
   recordForm: {
     isActive: boolean
@@ -42,8 +45,11 @@ const initialState: IState = {
     note: '',
   },
 
-  resourceForm: null,
-  resourceMode: null,
+  resourceForm: {
+    isActive: false,
+    mode: null,
+    resource: null,
+  },
 
   recordForm: {
     isActive: false,
@@ -86,24 +92,40 @@ const reducer = createReducer<IState, IAction>(initialState)
       [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
     },
   }))
-  .handleAction(actions.setResource, (state, { payload: { resource, mode } }) => ({
-    ...state,
-    resourceForm: resource,
-    resourceMode: mode,
-    recordForm: initialState.recordForm,
-  }))
-  .handleAction(actions.resetResource, state => ({
-    ...state,
-    resourceForm: null,
-    resourceMode: null,
-  }))
-  .handleAction(actions.updateResource, (state, { payload: { resource } }) => ({
+
+  .handleAction(actions.openCreateResourceForm, (state, { payload: { resource } }) => ({
     ...state,
     resourceForm: {
-      ...state.resourceForm,
-      ...resource,
-    } as ITrainingResourceForm,
+      resource: {
+        training: { link: state.trainingForm._id },
+        startTime: resource?.startTime,
+        endTime: resource?.endTime,
+        resource: resource?.resource,
+      },
+      mode: 'create',
+      isActive: true,
+    },
   }))
+  .handleAction(actions.openUpdateResourceForm, (state, { payload: { resource } }) => ({
+    ...state,
+    resourceForm: {
+      resource: {
+        _id: resource._id,
+        training: resource.training,
+        resource: resource.resource,
+        trainer: resource.trainer,
+        startTime: resource.startTime,
+        endTime: resource.endTime,
+      },
+      mode: 'update',
+      isActive: true,
+    },
+  }))
+  .handleAction(actions.closeResource, state => ({
+    ...state,
+    resourceForm: initialState.resourceForm,
+  }))
+
   .handleAction(actions.openCreateRecordForm, (state, { payload: { record } }) => ({
     ...state,
     recordForm: {

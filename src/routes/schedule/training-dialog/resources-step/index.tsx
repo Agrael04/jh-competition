@@ -25,10 +25,11 @@ export default function ResourcesBlock() {
     _id: state.schedule.trainingDialog._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
+  const isFormActive = useSelector(state => state.schedule.trainingDialog.resourceForm.isActive)
 
   const activate = React.useCallback(
     async () => {
-      actions.schedule.trainingDialog.openResource()
+      actions.schedule.trainingDialog.openCreateResourceForm()
     },
     [actions]
   )
@@ -54,7 +55,11 @@ export default function ResourcesBlock() {
           }
         </List>
       </Grid>
-      <ResourceForm />
+      {
+        isFormActive && (
+          <ResourceForm />
+        )
+      }
     </Grid>
   )
 }

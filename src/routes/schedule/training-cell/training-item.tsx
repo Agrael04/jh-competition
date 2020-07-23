@@ -59,7 +59,9 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
       e.stopPropagation()
       actions.schedule.trainingDialog.open('update', tResource?.training._id!)
       actions.schedule.trainingDialog.setStep(1)
-      actions.schedule.trainingDialog.openResource(convertTrainingResourceToInput(tResource!))
+      actions.schedule.trainingDialog.openUpdateResourceForm(
+        convertTrainingResourceToInput(tResource!)
+      )
     },
     [actions, tResource]
   )

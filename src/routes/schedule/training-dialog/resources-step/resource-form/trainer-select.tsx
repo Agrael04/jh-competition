@@ -1,21 +1,29 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+
+import { useFormContext } from 'react-hook-form'
+import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
+import Select from 'components/select'
 
-import Select from 'containers/select'
 import useGetSchedulesQuery from '../../../queries/get-schedules'
 
-const selector = () => (state: IStoreState) => state.schedule.trainingDialog.resourceForm?.trainer?.link
+interface IProps {
+  value: { link: string } | null | undefined
+  onChange: (value: any) => void
+  error?: any
+}
 
-export default function TrainerSelect() {
-  const actions = useActions()
-  const { date, gym, endTime, startTime, trainer } = useSelector(state => ({
+export default function TrainerSelect({ value, onChange, error }: IProps) {
+  const { watch, reset } = useFormContext()
+
+  const startTime = watch('startTime')
+  const endTime = watch('endTime')
+  const trainer = watch('trainer')?.link
+
+  const { date, gym } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
-    startTime: state.schedule.trainingDialog.resourceForm?.startTime,
-    endTime: state.schedule.trainingDialog.resourceForm?.endTime,
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
-    trainer: state.schedule.trainingDialog.resourceForm?.trainer?.link,
   }))
   const { data, loading } = useGetSchedulesQuery(date)
 
@@ -55,31 +63,42 @@ export default function TrainerSelect() {
   )
 
   const handleChange = React.useCallback(
-    (name, link) => {
+    (link: string | null) => {
       if (link) {
-        actions.schedule.trainingDialog.updateResource({ trainer: { link } })
+        onChange({ link })
       }
     },
-    [actions]
+    [onChange]
   )
 
   React.useEffect(
     () => {
-      if (!loading && !trainers?.find(ft => ft._id === trainer)) {
-        handleChange('trainer', undefined)
+      if (loading) {
+        return
       }
+
+      if (!trainer) {
+        return
+      }
+
+      if (trainers?.find(ft => ft._id === trainer)) {
+        return
+      }
+
+      reset({ trainer: undefined })
     },
-    [loading, trainers, handleChange, trainer]
+    [reset, loading, trainers, handleChange, trainer]
   )
 
   return (
     <Select
-      name={'trainer'}
+      value={value ? value.link : null}
       onChange={handleChange}
-      fieldSelector={selector}
       label={'Тренер'}
       fullWidth={true}
       variant='outlined'
+      error={!!error}
+      helperText={error && 'Обязательное поле'}
     >
       {
         trainers?.map(trainer => (

@@ -39,15 +39,15 @@ export interface ITrainingResourceForm {
   _id?: string
   resource?: {
     link: string
-  }
+  } | null
   trainer?: {
     link: string
   } | null
-  startTime: number
-  endTime: number
+  startTime: number | null
+  endTime: number | null
   training: {
     link: string
-  }
+  } | null
 }
 
 export interface ITrainingRecordForm {

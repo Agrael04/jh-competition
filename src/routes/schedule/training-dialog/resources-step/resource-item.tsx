@@ -27,7 +27,7 @@ export default function ResourceItem({ id }: IProps) {
   const actions = useActions()
   const { isActive, trainingForm } = useSelector(state => ({
     trainingForm: state.schedule.trainingDialog.trainingForm,
-    isActive: state.schedule.trainingDialog.resourceForm?._id === id,
+    isActive: state.schedule.trainingDialog.resourceForm.resource?._id === id,
   }))
   const trainingQuery = useGetTrainingQuery(trainingForm._id)
 
@@ -36,7 +36,7 @@ export default function ResourceItem({ id }: IProps) {
   const deleteTrainingResource = useDeleteTrainingResource()
 
   const activate = React.useCallback(
-    () => actions.schedule.trainingDialog.openResource(
+    () => actions.schedule.trainingDialog.openUpdateResourceForm(
       convertTrainingResourceToInput(resource!)
     ),
     [actions, resource]
