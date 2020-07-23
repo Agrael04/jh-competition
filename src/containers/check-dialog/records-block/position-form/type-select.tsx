@@ -9,11 +9,11 @@ import { products } from '../../data'
 
 interface IProps {
   value: string | null
+  error?: any
 }
 
-export default function TypeSelect({ value }: IProps) {
-  const { errors, reset } = useFormContext()
-  const error = errors.type
+export default function TypeSelect({ value, error }: IProps) {
+  const { reset } = useFormContext()
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

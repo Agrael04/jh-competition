@@ -1,11 +1,13 @@
 import React from 'react'
 
-import { useForm, Controller, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { useSelector, useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+
+import FormController from 'components/form-controller'
 
 import TypeSelect from './type-select'
 import ServiceSelect from './service-select'
@@ -13,8 +15,7 @@ import AddPassButton from './add-pass-button'
 import PriceAmount from './price-amount'
 import PriceTypeToggle from './price-type-toggle'
 
-import useCreateCheckPosition from '../../graphql/create-check-position'
-import useUpdateCheckPosition from '../../graphql/update-check-position'
+import SubmitButtom from './submit-button'
 
 interface IForm {
   type?: string
@@ -27,14 +28,6 @@ export default function ServiceForm() {
   const actions = useActions()
   const form = useSelector(state => state.checkDialog.positionForm)
 
-  const createCheckPosition = useCreateCheckPosition()
-  const updateCheckPosition = useUpdateCheckPosition()
-
-  const mutations = {
-    create: createCheckPosition,
-    update: updateCheckPosition,
-  }
-
   const methods = useForm<IForm>({
     defaultValues: {
       type: form.position!.type,
@@ -43,22 +36,6 @@ export default function ServiceForm() {
       priceType: form.position!.priceType,
     },
   })
-  const { control, handleSubmit, errors } = methods
-
-  const disabled = Object.keys(errors).length > 0
-
-  const submit = React.useCallback(
-    async (position: IForm) => {
-      if (!form.mode) {
-        return
-      }
-
-      await mutations[form.mode]({ ...form.position, ...position })
-
-      actions.checkDialog.closePositionForm()
-    },
-    [form, mutations, actions]
-  )
 
   const cancel = React.useCallback(
     () => {
@@ -70,19 +47,17 @@ export default function ServiceForm() {
     <FormProvider {...methods}>
       <Grid container={true} spacing={3}>
         <Grid item={true} lg={12}>
-          <Controller
-            control={control}
+          <FormController
             name='type'
-            render={TypeSelect}
+            Component={TypeSelect}
             rules={{ required: true }}
           />
         </Grid>
 
         <Grid item={true} lg={8}>
-          <Controller
-            control={control}
+          <FormController
             name='service'
-            render={ServiceSelect}
+            Component={ServiceSelect}
             rules={{ required: true }}
           />
         </Grid>
@@ -92,19 +67,17 @@ export default function ServiceForm() {
         </Grid>
 
         <Grid item={true} lg={8}>
-          <Controller
-            control={control}
+          <FormController
             name='priceAmount'
-            render={PriceAmount}
+            Component={PriceAmount}
             rules={{ required: true }}
           />
         </Grid>
         <Grid item={true} lg={4} container={true}>
           <Box margin='auto'>
-            <Controller
-              control={control}
+            <FormController
               name='priceType'
-              render={PriceTypeToggle}
+              Component={PriceTypeToggle}
               rules={{ required: true }}
             />
           </Box>
@@ -115,9 +88,7 @@ export default function ServiceForm() {
           <Button onClick={cancel} color='primary'>
             Отменить
           </Button>
-          <Button color='primary' variant='contained' onClick={handleSubmit(submit)} disabled={disabled}>
-            Сохранить
-          </Button>
+          <SubmitButtom />
         </Grid>
       </Box>
     </FormProvider>

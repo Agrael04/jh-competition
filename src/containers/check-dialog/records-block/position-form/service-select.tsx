@@ -10,12 +10,12 @@ import { products } from '../../data'
 interface IProps {
   value: number
   onChange: (value: any) => void
+  error?: any
 }
 
-export default function ServiceSelect({ onChange, value }: IProps) {
-  const { errors, watch } = useFormContext()
+export default function ServiceSelect({ onChange, value, error }: IProps) {
+  const { watch } = useFormContext()
   const type = watch('type')
-  const error = errors.service
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

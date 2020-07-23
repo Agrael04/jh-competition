@@ -1,18 +1,14 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
-
 import TextField from '@material-ui/core/TextField'
 
 interface IProps {
   value: string
   onChange: (value: any) => void
+  error?: any
 }
 
-export default function TransactionInput({ onChange, value }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.transaction
-
+export default function TransactionInput({ onChange, value, error }: IProps) {
   return (
     <TextField
       value={value || ''}

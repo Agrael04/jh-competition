@@ -1,8 +1,6 @@
 import React from 'react'
 import moment from 'moment'
 
-import { useFormContext } from 'react-hook-form'
-
 import Select from 'components/select'
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -15,12 +13,11 @@ import { getUsedUnits, getExpirationDate } from 'utils/pass'
 interface IProps {
   value?: { link: string }
   onChange: (value: { link: string }) => void
+  error?: any
 }
 
-export default function PassSelect({ onChange, value }: IProps) {
+export default function PassSelect({ onChange, value, error }: IProps) {
   const { data } = useGetTrainingPassesQuery()
-  const { errors } = useFormContext()
-  const error = errors.pass
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
