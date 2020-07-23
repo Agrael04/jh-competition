@@ -28,14 +28,7 @@ export default function ServiceForm() {
   const actions = useActions()
   const form = useSelector(state => state.checkDialog.positionForm)
 
-  const methods = useForm<IForm>({
-    defaultValues: {
-      type: form.position!.type,
-      service: form.position!.service,
-      priceAmount: form.position!.priceAmount,
-      priceType: form.position!.priceType,
-    },
-  })
+  const methods = useForm<IForm>()
 
   const cancel = React.useCallback(
     () => {
@@ -51,6 +44,7 @@ export default function ServiceForm() {
             name='type'
             Component={TypeSelect}
             rules={{ required: true }}
+            defaultValue={form.position!.type}
           />
         </Grid>
 
@@ -59,6 +53,7 @@ export default function ServiceForm() {
             name='service'
             Component={ServiceSelect}
             rules={{ required: true }}
+            defaultValue={form.position!.service}
           />
         </Grid>
 
@@ -71,6 +66,7 @@ export default function ServiceForm() {
             name='priceAmount'
             Component={PriceAmount}
             rules={{ required: true }}
+            defaultValue={form.position!.priceAmount}
           />
         </Grid>
         <Grid item={true} lg={4} container={true}>
@@ -79,6 +75,7 @@ export default function ServiceForm() {
               name='priceType'
               Component={PriceTypeToggle}
               rules={{ required: true }}
+              defaultValue={form.position!.priceType}
             />
           </Box>
         </Grid>
