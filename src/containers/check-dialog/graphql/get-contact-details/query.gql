@@ -1,4 +1,4 @@
-#import "../../records-block/record-item/record.gql"
+#import "../../new-records-block/record.gql"
 #import "../../records-block/position-item/position.gql"
 #import "../../total-block/record.gql"
 #import "../../header/contact.gql"

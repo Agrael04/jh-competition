@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
@@ -13,12 +12,10 @@ import useGetTrainingQuery from '../../../queries/get-training'
 interface IProps {
   value: { link: string } | null | undefined
   onChange: (value: any) => void
+  error?: any
 }
 
-export default function ResourceSelect({ onChange, value }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.resource
-
+export default function ResourceSelect({ onChange, value, error }: IProps) {
   const { _id } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
   }))

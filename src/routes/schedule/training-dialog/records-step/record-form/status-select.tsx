@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
-
 import MenuItem from '@material-ui/core/MenuItem'
 
 import Select from 'components/select'
@@ -14,9 +12,6 @@ interface IProps {
 const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
 
 export default function StatusSelect({ onChange, value }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.status
-
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value)
@@ -32,8 +27,6 @@ export default function StatusSelect({ onChange, value }: IProps) {
       label='Статус'
       fullWidth={true}
       variant='outlined'
-      error={!!error}
-      helperText={error && 'Обязательное поле'}
     >
       {
         statuses.map(type => (

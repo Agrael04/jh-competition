@@ -1,7 +1,6 @@
 import { createAction } from 'typesafe-actions'
 
 import { IPaymentForm } from 'interfaces/payment'
-import { ITrainingRecordForm } from 'interfaces/training'
 import { ICheckPositionForm } from 'interfaces/check-position'
 
 export const openDialog = createAction(
@@ -35,17 +34,9 @@ export const closePassForm = createAction(
   'checkDialog/CLOSE_PASS'
 )()
 
-export const openUpdateRecordForm = createAction(
-  'checkDialog/OPEN_UPDATE_RECORD_FORM',
-  (record: Partial<ITrainingRecordForm>) => ({ record })
-)()
-
-export const closeRecordForm = createAction(
-  'checkDialog/CLOSE_RECORD_FORM'
-)()
-
 export const openCreatePositionForm = createAction(
-  'checkDialog/OPEN_CREATE_POSITION_FORM'
+  'checkDialog/OPEN_CREATE_POSITION_FORM',
+  (position?: Partial<ICheckPositionForm>) => ({ position })
 )()
 
 export const openUpdatePositionForm = createAction(
@@ -79,9 +70,6 @@ export const actions = {
 
   openPassForm,
   closePassForm,
-
-  openUpdateRecordForm,
-  closeRecordForm,
 
   openCreatePositionForm,
   openUpdatePositionForm,

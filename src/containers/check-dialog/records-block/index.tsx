@@ -14,8 +14,6 @@ import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 import PositionForm from './position-form'
 import PositionItem from './position-item'
-import RecordForm from './record-form'
-import RecordItem from './record-item'
 
 import useStyles from './styles'
 
@@ -23,10 +21,7 @@ export default function TrainingDialog() {
   const actions = useActions()
   const openCreatePositionForm = actions.checkDialog.openCreatePositionForm
   const classes = useStyles()
-  const { isServiceFormActive, isRecordFormActive } = useSelector(state => ({
-    isServiceFormActive: state.checkDialog.positionForm.isActive,
-    isRecordFormActive: state.checkDialog.recordForm.isActive,
-  }))
+  const isFormActive = useSelector(state => state.checkDialog.positionForm.isActive)
 
   const { data } = useGetContactDetailsQuery()
 
@@ -37,15 +32,9 @@ export default function TrainingDialog() {
     [openCreatePositionForm]
   )
 
-  if (isServiceFormActive) {
+  if (isFormActive) {
     return (
       <PositionForm />
-    )
-  }
-
-  if (isRecordFormActive) {
-    return (
-      <RecordForm />
     )
   }
 
@@ -62,11 +51,6 @@ export default function TrainingDialog() {
             primary={`Добавить позицию`}
           />
         </ListItem>
-        {
-          data?.trainingRecords.map((record, index) => (
-            <RecordItem record={record} index={index} key={record._id} />
-          ))
-        }
         {
           data?.checkPositions.map((position, index) => (
             <PositionItem position={position} index={index} key={position._id} />

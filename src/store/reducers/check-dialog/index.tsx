@@ -1,7 +1,6 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 import actions from 'store/actions/check-dialog'
 
-import { ITrainingRecordForm } from 'interfaces/training'
 import { IPaymentForm } from 'interfaces/payment'
 import { ICheckPositionForm } from 'interfaces/check-position'
 
@@ -19,12 +18,6 @@ export interface IState {
     contact: {
       link: string
     } | null
-  }
-
-  recordForm: {
-    isActive: boolean
-    mode: 'update' | null
-    record: Partial<ITrainingRecordForm> | null
   }
 
   positionForm: {
@@ -48,12 +41,6 @@ const initialState = {
     activeDate: new Date(),
     activeGym: '',
     contact: null,
-  },
-
-  recordForm: {
-    isActive: false,
-    mode: null,
-    record: null,
   },
 
   positionForm: {
@@ -107,30 +94,14 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     openedPassForm: false,
   }))
-  .handleAction(actions.openUpdateRecordForm, (state, { payload: { record } }) => ({
-    ...state,
-    recordForm: {
-      record: {
-        _id: record._id,
-        priceType: record.priceType || 'units',
-        priceAmount: record.priceAmount,
-      },
-      mode: 'update',
-      isActive: true,
-    },
-  }))
-  .handleAction(actions.closeRecordForm, state => ({
-    ...state,
-    recordForm: initialState.recordForm,
-  }))
-  .handleAction(actions.openCreatePositionForm, state => ({
+  .handleAction(actions.openCreatePositionForm, (state, { payload: { position } }) => ({
     ...state,
     positionForm: {
       position: {
         contact: state.params.contact!,
         date: state.params.activeDate,
-        type: undefined,
-        service: undefined,
+        type: position?.type,
+        service: position?.service,
         priceAmount: null,
         priceType: 'money',
       },

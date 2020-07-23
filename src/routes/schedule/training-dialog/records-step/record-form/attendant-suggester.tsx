@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'store'
 
 import UserAutocomplete from 'containers/user-autocomplete'
@@ -13,9 +12,6 @@ interface IProps {
 }
 
 export default function AttendantSuggester({ value, onChange }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.attendant
-
   const { _id, recordId } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
     recordId: state.schedule.trainingDialog.recordForm.record!._id,
@@ -40,8 +36,6 @@ export default function AttendantSuggester({ value, onChange }: IProps) {
       handleChange={handleChange}
       label='Физическое лицо'
       initialFilter={initialFilter}
-      error={!!error}
-      helperText={error && 'Обязательное поле'}
     />
   )
 }

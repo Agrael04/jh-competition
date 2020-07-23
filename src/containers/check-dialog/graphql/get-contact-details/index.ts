@@ -3,7 +3,7 @@ import { loader } from 'graphql.macro'
 
 import { useSelector } from 'store'
 
-import ICheckRecord from '../../records-block/record-item/record'
+import ICheckRecord from '../../new-records-block/record'
 import ICheckPosition from '../../records-block/position-item/position'
 import IRecord from '../../total-block/record'
 import IHeaderContact from '../../header/contract'

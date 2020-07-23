@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
-
 import TextField from '@material-ui/core/TextField'
 
 interface IProps {
@@ -10,9 +8,6 @@ interface IProps {
 }
 
 export default function NoteInput({ onChange, value }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.note
-
   return (
     <TextField
       value={value || ''}
@@ -21,8 +16,6 @@ export default function NoteInput({ onChange, value }: IProps) {
       label={'Заметки'}
       fullWidth={true}
       variant='outlined'
-      error={!!error}
-      helperText={error && 'Обязательное поле'}
     />
   )
 }

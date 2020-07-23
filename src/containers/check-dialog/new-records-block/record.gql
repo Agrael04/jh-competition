@@ -1,5 +1,13 @@
-fragment totalServiceRecord on TrainingRecord {
-  _id
-  priceType
-  priceAmount
-}
+  fragment checkRecord on TrainingRecord {
+    _id
+    resource {
+      _id
+      startTime
+      endTime
+    }
+    training {
+      _id
+      type
+      name
+    }
+  }

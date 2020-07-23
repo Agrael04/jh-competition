@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'store'
 
 import UserAutocomplete from 'containers/user-autocomplete'
@@ -12,12 +11,10 @@ import useGetTrainingQuery from '../../../queries/get-training'
 interface IProps {
   value: { link: string } | null | undefined
   onChange: (value: any) => void
+  error?: any
 }
 
-export default function ContactSuggester({ value, onChange }: IProps) {
-  const { errors } = useFormContext()
-  const error = errors.contact
-
+export default function ContactSuggester({ value, onChange, error }: IProps) {
   const { _id, recordId } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
     recordId: state.schedule.trainingDialog.recordForm.record?._id,
