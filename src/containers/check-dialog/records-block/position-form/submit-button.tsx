@@ -10,7 +10,7 @@ import useUpdateCheckPosition from '../../graphql/update-check-position'
 
 interface IForm {
   type?: string
-  service?: number
+  service?: string
   priceAmount?: number | null
   priceType?: 'money' | 'units' | null
 }

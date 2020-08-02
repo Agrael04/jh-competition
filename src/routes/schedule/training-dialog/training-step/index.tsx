@@ -16,6 +16,8 @@ import DeleteButton from './delete-button'
 
 import useGetTrainingQuery, { convertTrainingToInput } from '../../queries/get-training'
 
+import { trainingTypes } from 'data/training-types'
+
 const translations = {
   'date': 'Дата',
   'startTime': 'Час початку',
@@ -27,19 +29,7 @@ const translations = {
   'trainingName': 'Назва',
   'moneyPrice': 'Разова цiна',
   'markPrice': 'Кiлькiсть вiдмiток',
-
-  'types.GROUP': 'Групове треннування',
-  'types.RENT': 'Оренда батуту',
-  'types.RENT_WITH_TRAINER': 'Оренда батута с тренером',
-  'types.EVENT': 'Подiя',
 } as any
-
-const trainingTypes = [
-  'GROUP',
-  'RENT',
-  'RENT_WITH_TRAINER',
-  'EVENT',
-]
 
 type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 
@@ -125,8 +115,8 @@ export default function TrainingDialog() {
           >
             {
               trainingTypes.map(type => (
-                <MenuItem value={type} key={type}>
-                  {translations[`types.${type}`]}
+                <MenuItem value={type.id} key={type.id}>
+                  {type.text}
                 </MenuItem>
               ))
             }

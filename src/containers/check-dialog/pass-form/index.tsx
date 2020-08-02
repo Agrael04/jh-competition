@@ -39,7 +39,7 @@ export default function PassFormWrap() {
         isActive: true,
       }
 
-      if (serviceType === 'pass' && (service || service === 0)) {
+      if (serviceType === 'pass' && service) {
         const p: any = products.find(p => p.id === 'pass')?.options.find(o => o.id === service)!
 
         if (p.type === 'open') {

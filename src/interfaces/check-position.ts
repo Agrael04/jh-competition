@@ -4,7 +4,7 @@ export interface ICheckPositionForm {
     link: string
   }
   type: string
-  service: number
+  service: string
   priceType: 'units' | 'money' | null
   priceAmount: number | null
   date: Date

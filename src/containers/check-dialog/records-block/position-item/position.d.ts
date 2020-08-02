@@ -3,6 +3,6 @@ export default interface ICheckPosition {
   priceType: 'units' | 'money'
   priceAmount: number
   type: string
-  service: number
+  service: string
   __typename: string
 }

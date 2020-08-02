@@ -28,7 +28,11 @@ export default function ServiceForm() {
   const actions = useActions()
   const form = useSelector(state => state.checkDialog.positionForm)
 
-  const methods = useForm<IForm>()
+  const methods = useForm<IForm>({
+    defaultValues: {
+      type: form.position!.type,
+    },
+  })
 
   const cancel = React.useCallback(
     () => {

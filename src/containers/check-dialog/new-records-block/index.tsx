@@ -4,117 +4,76 @@ import { useActions } from 'store'
 import Grid from '@material-ui/core/Grid'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
+import Typography from '@material-ui/core/Typography'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
-import { getTimeLabel } from 'data/times'
+import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
 
-const trainingTypes = {
-  'GROUP': 'Групповая тренировка',
-  'RENT': 'Аренда батута',
-  'RENT_WITH_TRAINER': 'Аренда батута с тренером',
-  'EVENT': 'Тематическое мероприятие',
-} as any
+interface IMappedRecord {
+  _id: string
+  type: string
+  name: string
+  count: number
+  isMulti: boolean
+}
 
 export default function TrainingDialog() {
   const actions = useActions()
   const openCreatePositionForm = actions.checkDialog.openCreatePositionForm
   const { data } = useGetContactDetailsQuery()
 
-  const groupRecords = data?.trainingRecords.filter(tr => tr.training.type === 'GROUP' || tr.training.type === 'EVENT') || []
-  const rentRecords = data?.trainingRecords.filter(tr => tr.training.type !== 'GROUP' && tr.training.type !== 'EVENT') || []
+  const mappedRecords = React.useMemo(
+    () => data?.trainingRecords.reduce(
+      (res, item) => {
+        const isMulti = (
+          item.training.type === GROUP_TRAININGS.GROUP ||
+          item.training.type === GROUP_TRAININGS.EVENT ||
+          item.training.type === GROUP_TRAININGS.SECTION
+        )
+        const index = res.findIndex(record => record._id === item.training._id)
 
-  const mappedGroupRecords = groupRecords.reduce(
-    (res, item) => {
-      const index = res.findIndex((record: any) => record._id === item.training._id)
+        if (index === -1) {
+          const rs = data?.trainingRecords.filter(r => r.training._id === item.training._id)
 
-      if (index === -1) {
-        return [
-          ...res,
-          {
-            _id: item.training._id,
-            type: item.training.type,
-            name: item.training.name,
-            startTime: item.resource.startTime,
-            endTime: item.resource.endTime,
-            count: 1,
-            serviceId: item.training.type === 'GROUP' ? 2 : 3,
-          },
-        ]
-      }
+          return [
+            ...res,
+            {
+              _id: item.training._id,
+              type: item.training.type,
+              name: item.training.name,
+              count: isMulti ? rs.length : (item.resource.endTime - item.resource.startTime) / 2,
+              isMulti,
+            },
+          ]
+        }
 
-      const record = res[index]
+        return res
+      }, [] as IMappedRecord[]
+    ), [data]
+  )!
 
-      return [
-        ...res.filter((item, i) => i !== index),
-        {
-          ...record,
-          startTime: Math.min(record.startTime, item.resource.startTime),
-          endTime: Math.max(record.endTime, item.resource.endTime),
-          count: record.count + 1,
-        },
-      ]
-    }, [] as any[]
-  )
-
-  const mappedRentRecords = rentRecords.reduce(
-    (res, item) => {
-      const index = res.findIndex((record: any) => record._id === item.resource._id)
-
-      if (index === -1) {
-        return [
-          ...res,
-          {
-            _id: item.resource._id,
-            type: item.training.type,
-            name: item.training.name,
-            startTime: item.resource.startTime,
-            endTime: item.resource.endTime,
-            count: 1,
-            serviceId: item.training.type === 'RENT' ? 0 : 1,
-          },
-        ]
-      }
-
-      const record = res[index]
-
-      return [
-        ...res.filter((item, i) => i !== index),
-        {
-          ...record,
-          count: record.count + 1,
-        },
-      ]
-    }, [] as any[]
-  )
+  const openPositionForm = (service: string) => () => openCreatePositionForm({ type: 'training', service })
 
   return (
     <>
       <Grid item={true} lg={12} container={true} spacing={1}>
         {
-          mappedRentRecords
+          mappedRecords
             .map(r => (
               <Grid item={true} key={r._id}>
                 <Chip
                   key={r._id}
-                  label={`${trainingTypes[r.type]}${r.name ? `(${r.name})` : ''} - ${getTimeLabel(r.startTime)} : ${getTimeLabel(r.endTime)}`}
-                  color='primary'
+                  label={(
+                    <Typography color='textPrimary' variant='body2'>
+                      {`${trainingTypes.find(t => t.id === r.type)?.text}`}
+                      {r.name ? `(${r.name})` : ''}
+                    </Typography>
+                  )}
+                  variant='outlined'
+                  color={r.isMulti ? 'secondary' : 'primary'}
                   avatar={<Avatar>{r.count}</Avatar>}
-                  onClick={() => openCreatePositionForm({ type: 'training', service: r.serviceId })}
-                />
-              </Grid>
-            ))
-        }
-        {
-          mappedGroupRecords
-            .map(r => (
-              <Grid item={true} key={r._id}>
-                <Chip
-                  key={r._id}
-                  label={`${trainingTypes[r.type]}${r.name ? `(${r.name})` : ''} - ${getTimeLabel(r.startTime)} : ${getTimeLabel(r.endTime)}`}
-                  color='primary'
-                  avatar={<Avatar>{r.count}</Avatar>}
-                  onClick={() => openCreatePositionForm({ type: 'training', service: r.serviceId })}
+                  onClick={openPositionForm(r.type)}
                 />
               </Grid>
             ))

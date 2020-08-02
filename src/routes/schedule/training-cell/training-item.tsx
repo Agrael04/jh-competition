@@ -15,6 +15,7 @@ import FaceIcon from '@material-ui/icons/Face'
 import useGetTrainingResourceQuery, { convertTrainingResourceToInput } from '../queries/get-training-resource'
 
 import { getTimeLabel } from 'data/times'
+import { trainingTypes } from 'data/training-types'
 import getColorPallete from 'utils/get-color-pallete'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import red from '@material-ui/core/colors/red'
@@ -26,13 +27,6 @@ interface IProps {
   time: number
   resource: string
   id: string | undefined
-}
-
-const trainingTexts = {
-  'GROUP': 'Группа',
-  'RENT': 'Аренда',
-  'RENT_WITH_TRAINER': 'Аренда',
-  'EVENT': 'Событие',
 }
 
 const TrainingCell = ({ time, resource, id }: IProps) => {
@@ -115,19 +109,23 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
         <ButtonBase onDoubleClick={handleUpdateClick} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
           <Box height='100%' color='white'>
             <Grid container={true} justify='space-between'>
-              <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle}>
-                <FaceIcon />
-              </Avatar>
+              <Grid item={true}>
+                <Avatar src={trainer?.avatarSrc} className={classes.mainAvatar} style={borderColorStyle}>
+                  <FaceIcon />
+                </Avatar>
+              </Grid>
 
-              <Box margin='auto'>
-                <Typography color='inherit' variant='caption'>
-                  {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
-                </Typography>
-                <br />
-                <Typography color='inherit' variant='caption'>
-                  {(trainingTexts as any)[type!]}
-                </Typography>
-              </Box>
+              <Grid item={true} lg={9}>
+                <Box margin='auto'>
+                  <Typography color='inherit' variant='caption'>
+                    {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
+                  </Typography>
+                  <br />
+                  <Typography color='inherit' variant='caption'>
+                    {trainingTypes.find(t => t.id === type)?.text}
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
             <Box marginY={0.5}>
               <Divider className={classes.divider} />

@@ -15,6 +15,7 @@ import ResourceItem from './resource-item'
 import ResourceForm from './resource-form'
 
 import useGetTrainingQuery from '../../queries/get-training'
+import { trainingTypes } from 'data/training-types'
 
 import useStyles from './styles'
 
@@ -34,11 +35,15 @@ export default function ResourcesBlock() {
     [actions]
   )
 
+  const type = trainingQuery.data?.training.type
+  const hasResourceLimit = trainingTypes.find(t => t.id === type)
+  const disabled = hasResourceLimit && (trainingQuery.data?.trainingResources?.length || 0) > 0
+
   return (
     <Grid container={true} spacing={3}>
       <Grid item={true} lg={4} className={classes.divider}>
         <List>
-          <ListItem button={true} onClick={activate}>
+          <ListItem button={true} onClick={activate} disabled={disabled}>
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
                 <AddOutlined />
