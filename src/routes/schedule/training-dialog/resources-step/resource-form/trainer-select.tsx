@@ -63,9 +63,9 @@ export default function TrainerSelect({ value, onChange, error }: IProps) {
   )
 
   const handleChange = React.useCallback(
-    (link: string | null) => {
-      if (link) {
-        onChange({ link })
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value) {
+        onChange({ link: e.target.value })
       }
     },
     [onChange]
