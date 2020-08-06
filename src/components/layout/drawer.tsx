@@ -12,6 +12,7 @@ import DomainIcon from '@material-ui/icons/Domain'
 import PeopleIcon from '@material-ui/icons/People'
 import SchoolIcon from '@material-ui/icons/School'
 import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed'
+import BookmarksIcon from '@material-ui/icons/Bookmarks'
 
 import useStyles from './styles'
 
@@ -33,6 +34,12 @@ function LayoutDrawer({ open, handleDrawerClose }: any) {
           <ListItem button={true} onClick={handleDrawerClose}>
             <ListItemIcon><TodayIcon /></ListItemIcon>
             <ListItemText primary={'Расписание'} />
+          </ListItem>
+        </Link>
+        <Link to={'/records'} className={classes.link} onClick={handleDrawerClose}>
+          <ListItem button={true} onClick={handleDrawerClose}>
+            <ListItemIcon><BookmarksIcon /></ListItemIcon>
+            <ListItemText primary={'Записи'} />
           </ListItem>
         </Link>
         <Link to={'/training-passes'} className={classes.link} onClick={handleDrawerClose}>

@@ -1,0 +1,41 @@
+query {
+  trainingRecords(query: {
+    training: {
+      date_gt: "2020-07-01T22:00:00Z",
+      date_lt: "2020-08-01T22:00:00Z",
+      gym: {
+        _id: "5e8c197c1c9d44000044182a"
+      }
+    }
+    resource: {
+      trainer: {
+        _id: "5e880fc493f66c21c2f5b6f7"
+      }
+    }
+  }) {
+    _id
+    training {
+      _id
+      date
+      gym {
+        _id
+        shortName
+      }
+      type
+    }
+    resource {
+      startTime
+      endTime
+      trainer {
+        _id
+        firstName
+        lastName
+      }
+    }
+    contact {
+      _id
+      name
+      surname
+    }
+  }
+}

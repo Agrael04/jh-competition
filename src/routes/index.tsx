@@ -5,6 +5,7 @@ import useStyles from './styles'
 
 import Schedule from './schedule'
 import TrainingPasses from './training-passes'
+import Records from './records'
 
 import Login from './login'
 
@@ -22,6 +23,10 @@ export default function Routes() {
 
         <PrivateRoute path={'/training-passes'} exact={true}>
           <TrainingPasses />
+        </PrivateRoute>
+
+        <PrivateRoute path={'/records'} exact={true}>
+          <Records />
         </PrivateRoute>
 
         <PrivateRoute path='/' exact={true}>
