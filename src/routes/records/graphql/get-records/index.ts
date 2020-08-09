@@ -1,5 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
+import { useSelector } from 'store'
+import moment from 'moment'
 
 const GET_TRAINING_PASSES = loader('./query.gql')
 
@@ -35,7 +37,19 @@ export interface IGetRecords {
 }
 
 export const useGetRecordsQuery = () => {
+  const filters = useSelector(state => state.records.page.filters)
+
+  const minDate = moment(filters.date).utc().format()
+  const maxDate = moment(filters.date).add(1, 'month').utc().format()
+
   const result = useQuery<IGetRecords>(GET_TRAINING_PASSES, {
+    variables: {
+      minDate,
+      maxDate,
+      trainer: filters.trainer,
+      gym: filters.gym,
+      types: filters.types.length > 0 ? filters.types : null,
+    },
     fetchPolicy: 'cache-and-network',
   })
 

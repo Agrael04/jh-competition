@@ -1,15 +1,16 @@
-query {
+query getRecords ($minDate: DateTime!, $maxDate: DateTime!, $trainer: ObjectId, $gym: ObjectId, $types: [String]) {
   trainingRecords(query: {
     training: {
-      date_gt: "2020-07-01T22:00:00Z",
-      date_lt: "2020-08-01T22:00:00Z",
+      date_gte: $minDate,
+      date_lt: $maxDate,
       gym: {
-        _id: "5e8c197c1c9d44000044182a"
+        _id: $gym
       }
+      type_in: $types
     }
     resource: {
       trainer: {
-        _id: "5e880fc493f66c21c2f5b6f7"
+        _id: $trainer
       }
     }
   }) {

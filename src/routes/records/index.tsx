@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { uniq } from 'lodash'
+import { useSelector, useActions } from 'store'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -10,21 +11,36 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-// import Toolbar from '@material-ui/core/Toolbar'
+import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
-// import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@material-ui/core/IconButton'
+import Dialog from '@material-ui/core/Dialog'
+import Typography from '@material-ui/core/Typography'
 
-// import AddCircleIcon from '@material-ui/icons/AddCircle'
+import ReceiptIcon from '@material-ui/icons/Receipt'
+
+import FiltersDialog from './filters-dialog'
 
 import useGetRecords, { IRecord } from './graphql/get-records'
+import useGetGymsQuery from './graphql/get-gyms'
+import useGetTrainersQuery from './graphql/get-trainers'
 
 import { getTimeLabel } from 'data/times'
 import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
 
 import useStyles from './styles'
-import { Typography } from '@material-ui/core'
+
+import XLSX from 'xlsx'
+
+const generateXLSX = (data: any[][]) => {
+  const wb = XLSX.utils.book_new()
+  const ws = XLSX.utils.aoa_to_sheet(data)
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Записи')
+  XLSX.writeFile(wb, `Записи.xlsx`)
+}
 
 const PEOPLE_TYPE = 'PEOPLE'
 const HOURS_TYPE = 'HOURS'
@@ -44,66 +60,122 @@ interface ITraining {
 }
 
 const RecordsPage = () => {
+  const actions = useActions()
+  const { filters, openedFiltersDialog } = useSelector(state => state.records.page)
   const classes = useStyles()
 
   const { data, loading } = useGetRecords()
+  const gyms = useGetGymsQuery()
+  const trainers = useGetTrainersQuery()
 
-  const trainings: ITraining[] = []
+  const trainings = React.useMemo(
+    () => {
+      const trainings: ITraining[] = []
 
-  data?.trainingRecords.forEach(tr => {
-    const isMulti = (
-      tr.training.type === GROUP_TRAININGS.GROUP ||
-      tr.training.type === GROUP_TRAININGS.EVENT ||
-      tr.training.type === GROUP_TRAININGS.SECTION
-    )
+      data?.trainingRecords.forEach(tr => {
+        const isMulti = (
+          tr.training.type === GROUP_TRAININGS.GROUP ||
+          tr.training.type === GROUP_TRAININGS.EVENT ||
+          tr.training.type === GROUP_TRAININGS.SECTION
+        )
 
-    const index = trainings.findIndex(t => t._id === tr.training._id)
+        const index = trainings.findIndex(t => t._id === tr.training._id)
 
-    if (index === -1) {
-      const records = data?.trainingRecords.filter(t => t.training._id === tr.training._id)
-      const duration = tr.resource.endTime - tr.resource.startTime
+        if (index === -1) {
+          const records = data?.trainingRecords.filter(t => t.training._id === tr.training._id)
+          const duration = tr.resource.endTime - tr.resource.startTime
 
-      const hours = !isMulti ? duration / 2 : tr.training.type === GROUP_TRAININGS.GROUP ? records.length / 2 : 0
-      const people = !isMulti ? 0 : tr.training.type === GROUP_TRAININGS.GROUP ? 0 : records.length
+          const hours = !isMulti ? duration / 2 : tr.training.type === GROUP_TRAININGS.GROUP ? records.length / 2 : 0
+          const people = !isMulti ? 0 : tr.training.type === GROUP_TRAININGS.GROUP ? 0 : records.length
 
-      const valueType = !isMulti ? HOURS_TYPE : tr.training.type === GROUP_TRAININGS.GROUP ? HOURS_TYPE : PEOPLE_TYPE
+          const valueType = !isMulti ? HOURS_TYPE : tr.training.type === GROUP_TRAININGS.GROUP ? HOURS_TYPE : PEOPLE_TYPE
 
-      trainings.push({
-        _id: tr.training._id,
-        trainer: tr.resource.trainer,
-        startTime: Math.min(...records.map(r => r.resource.startTime)),
-        endTime: Math.max(...records.map(r => r.resource.endTime)),
-        gym: tr.training.gym,
-        date: tr.training.date,
-        type: tr.training.type,
-        contacts: records.map(t => ({
-          _id: t.contact._id,
-          name: t.contact.name,
-          surname: t.contact.surname,
-        })),
-        hours,
-        people,
-        valueType,
+          trainings.push({
+            _id: tr.training._id,
+            trainer: tr.resource.trainer,
+            startTime: Math.min(...records.map(r => r.resource.startTime)),
+            endTime: Math.max(...records.map(r => r.resource.endTime)),
+            gym: tr.training.gym,
+            date: tr.training.date,
+            type: tr.training.type,
+            contacts: records.map(t => ({
+              _id: t.contact._id,
+              name: t.contact.name,
+              surname: t.contact.surname,
+            })),
+            hours,
+            people,
+            valueType,
+          })
+        }
       })
-    }
-  })
+
+      return trainings
+    }, [data]
+  )
+
+  const handleXLSXClick = React.useCallback(
+    () => {
+      const ws_data = trainings.map(tr => ([
+        moment(tr.date).format('DD.MM'),
+        tr.gym.shortName,
+        trainingTypes.find(t => t.id === tr.type)?.text,
+        getTimeLabel(tr.startTime),
+        getTimeLabel(tr.endTime),
+        `${tr.trainer?.lastName} ${tr.trainer?.firstName}`,
+        tr.valueType === HOURS_TYPE ? tr.hours : '',
+        tr.valueType === PEOPLE_TYPE ? tr.people : '',
+        tr.contacts.map(contact => `${contact.surname} ${contact.name}`).join(', '),
+      ]))
+      generateXLSX([
+        ['Дата', 'Зал', 'Тип тренировки', 'Время начало', 'Время конца', 'Тренер', 'Батуто-часы', 'Люди', 'Контакты'],
+        ...ws_data,
+      ])
+    }, [trainings]
+  )
+
+  const startFilterEditing = React.useCallback(
+    () => {
+      actions.records.page.startFilterUpdate()
+    }, [actions]
+  )
+
+  const close = React.useCallback(
+    () => {
+      actions.records.page.cancelFilterUpdate()
+    }, [actions]
+  )
+
+  const currentGym = React.useMemo(
+    () => {
+      return gyms?.data?.gyms.find(gym => gym._id === filters.gym)
+    }, [gyms, filters.gym]
+  )
+
+  const currentTrainer = React.useMemo(
+    () => {
+      return trainers?.data?.trainers.find(trainer => trainer._id === filters.trainer)
+    }, [trainers, filters.trainer]
+  )
+
+  // console.log(filters.date.format())
 
   return (
     <Paper className={classes.rootPaper}>
-      {/* <Toolbar>
+      <Toolbar>
         <Grid container={true} justify='flex-end'>
-          <IconButton color='primary'>
-            <AddCircleIcon />
+          <IconButton color='primary' onClick={handleXLSXClick}>
+            <ReceiptIcon />
           </IconButton>
         </Grid>
-      </Toolbar> */}
+      </Toolbar>
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
-            <TableCell>
+            <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Дата
               <Typography variant='caption' color='primary' component='div'>
-                Июль 2020
+                {filters.date.format('MMMM YYYY')}
               </Typography>
               {
                 !loading && (
@@ -113,26 +185,38 @@ const RecordsPage = () => {
                 )
               }
             </TableCell>
-            <TableCell>
+            <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Зал
-              <Typography variant='caption' color='primary' component='div'>
-                ХШ
-              </Typography>
+              {
+                filters.gym && !gyms.loading && (
+                  <Typography variant='caption' color='primary' component='div'>
+                    {currentGym?.shortName}
+                  </Typography>
+                )
+              }
             </TableCell>
-            <TableCell>
+            <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тип тренировки
-              <Typography variant='caption' color='primary' component='div'>
-                Аренда батута с тренером
-              </Typography>
+              {
+                filters.types.length > 0 && (
+                  <Typography variant='caption' color='primary' component='div'>
+                    Выбрано: {filters.types.length}
+                  </Typography>
+                )
+              }
             </TableCell>
             <TableCell>Время</TableCell>
-            <TableCell>
+            <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тренер
-              <Typography variant='caption' color='primary' component='div'>
-                Василяка Іван
-              </Typography>
+              {
+                filters.trainer && !trainers.loading && (
+                  <Typography variant='caption' color='primary' component='div'>
+                    {currentTrainer?.lastName} {currentTrainer?.firstName}
+                  </Typography>
+                )
+              }
             </TableCell>
-            <TableCell>
+            <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Значение
               {
                 !loading && (
@@ -164,17 +248,19 @@ const RecordsPage = () => {
         <TableBody>
           {
             loading && (
-              <TableCell colSpan={7}>
-                <Grid container={true}>
-                  <Box margin='auto'>
-                    <CircularProgress />
-                  </Box>
-                </Grid>
-              </TableCell>
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <Grid container={true}>
+                    <Box margin='auto'>
+                      <CircularProgress />
+                    </Box>
+                  </Grid>
+                </TableCell>
+              </TableRow>
             )
           }
           {
-            trainings
+            !loading && trainings
               .sort((a, b) => {
                 if (a.date !== b.date) {
                   return moment(b.date).diff(a.date)
@@ -218,6 +304,9 @@ const RecordsPage = () => {
           }
         </TableBody>
       </Table>
+      <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true}>
+        <FiltersDialog />
+      </Dialog>
     </Paper>
   )
 }

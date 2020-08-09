@@ -4,7 +4,7 @@ import { useFormContext, Controller } from 'react-hook-form'
 
 type BaseProps = ComponentProps<typeof Controller>
 
-interface IDefaultComponentProps {
+export interface IDefaultComponentProps {
   value: any
   onChange: (value: any) => void
 }

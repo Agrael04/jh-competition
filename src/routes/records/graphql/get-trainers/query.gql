@@ -1,0 +1,9 @@
+  query getTrainers{
+    trainers {
+      _id
+      firstName
+      lastName
+      color
+      avatarSrc
+    }
+  }

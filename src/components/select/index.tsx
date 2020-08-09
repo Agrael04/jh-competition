@@ -18,11 +18,12 @@ interface IProps {
   fullWidth?: boolean
   multiple?: boolean
   error?: boolean
+  renderValue?: (value: any) => string
 }
 
 const heightStyle = { height: '56px' }
 
-export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error }: IProps) => {
+export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error, renderValue }: IProps) => {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
   const [labelWidth, setLabelWidth] = React.useState(0)
 
@@ -55,6 +56,7 @@ export default ({ value, onChange, label, helperText, name, variant, disabled, m
         multiple={multiple}
         name={name}
         error={error}
+        renderValue={renderValue}
       >
         {children}
       </Select>

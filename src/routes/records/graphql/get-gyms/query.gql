@@ -1,0 +1,7 @@
+  query getGyms{
+    gyms {
+      _id
+      name
+      shortName
+    }
+  }

@@ -10,4 +10,7 @@ export default makeStyles((theme: Theme) => ({
     color: theme.palette.error.main,
     fontWeight: 'bold',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }))
