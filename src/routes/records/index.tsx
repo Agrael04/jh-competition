@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import moment from 'moment'
 import { uniq } from 'lodash'
 import { useSelector, useActions } from 'store'
@@ -34,14 +34,6 @@ import useStyles from './styles'
 
 import XLSX from 'xlsx'
 
-const generateXLSX = (data: any[][]) => {
-  const wb = XLSX.utils.book_new()
-  const ws = XLSX.utils.aoa_to_sheet(data)
-
-  XLSX.utils.book_append_sheet(wb, ws, 'Записи')
-  XLSX.writeFile(wb, `Записи.xlsx`)
-}
-
 const PEOPLE_TYPE = 'PEOPLE'
 const HOURS_TYPE = 'HOURS'
 
@@ -59,6 +51,140 @@ interface ITraining {
   contacts: Array<IRecord['contact']>
 }
 
+const generateXLSX = (records: any[][], trainers: any[][], dates: any[][]) => {
+  const wb = XLSX.utils.book_new()
+  const recordsSheet = XLSX.utils.aoa_to_sheet(records)
+  const trainersSheet = XLSX.utils.aoa_to_sheet(trainers)
+  const datesSheet = XLSX.utils.aoa_to_sheet(dates)
+
+  XLSX.utils.book_append_sheet(wb, recordsSheet, 'Записи до конца месяца')
+  XLSX.utils.book_append_sheet(wb, datesSheet, 'По дням')
+  XLSX.utils.book_append_sheet(wb, trainersSheet, 'Тренера')
+  XLSX.writeFile(wb, `Записи.xlsx`)
+}
+
+const prepareData = (trainings: ITraining[]) => {
+  const trainers = uniq(trainings.map(tr => `${tr.trainer?.lastName} ${tr.trainer?.firstName}`))
+    .map(trainer => {
+      const trs = trainings.filter(tr => `${tr.trainer?.lastName} ${tr.trainer?.firstName}` === trainer)
+
+      return ({
+        name: trainer,
+        activeHours: trs
+          .filter(tr => moment(tr.date).diff(moment([2020, 6, 15])) <= 0)
+          .reduce((res, tr) => {
+            return res + (tr.valueType === HOURS_TYPE ? tr.hours : 0)
+          }, 0),
+        hours: trs
+          .reduce((res, tr) => {
+            return res + (tr.valueType === HOURS_TYPE ? tr.hours : 0)
+          }, 0),
+        activePeople: trs
+          .filter(tr => moment(tr.date).diff(moment([2020, 6, 15])) <= 0)
+          .reduce((res, tr) => {
+            return res + (tr.valueType === PEOPLE_TYPE ? tr.people : 0)
+          }, 0),
+        people: trs
+          .reduce((res, tr) => {
+            return res + (tr.valueType === PEOPLE_TYPE ? tr.people : 0)
+          }, 0),
+        days: uniq(trs.map(tr => tr.date)).length,
+      })
+    })
+
+  const dates = uniq(trainings.map(tr => tr.date)).map(date => ({
+    date: moment(date).format('DD.MM.YYYY'),
+    hours: trainings.filter(tr => tr.date === date).reduce((res, tr) => res + tr.hours, 0),
+    people: trainings.filter(tr => tr.date === date).reduce((res, tr) => res + tr.people, 0),
+  }))
+
+  const recordsSheet = [
+    ['Дата', 'Зал', 'Тип тренировки', 'Время начало', 'Время конца', 'Тренер', 'Батуто-часы', 'Люди', 'Контакты'],
+    ...trainings.map(tr => ([
+      moment(tr.date).format('DD.MM.YYYY'),
+      tr.gym.shortName,
+      trainingTypes.find(t => t.id === tr.type)?.text,
+      getTimeLabel(tr.startTime),
+      getTimeLabel(tr.endTime),
+      `${tr.trainer?.lastName} ${tr.trainer?.firstName}`,
+      tr.valueType === HOURS_TYPE ? tr.hours : '',
+      tr.valueType === PEOPLE_TYPE ? tr.people : '',
+      tr.contacts.map(contact => `${contact.surname} ${contact.name}`).join(', '),
+    ])),
+  ]
+
+  const trainersSheet = [
+    ['', 'Б-ч', 'Люди', 'Дни'],
+    ...trainers.map(tr => ([
+      tr.name,
+      `${tr.activeHours}(${tr.hours})`,
+      `${tr.activePeople}(${tr.people})`,
+      tr.days,
+    ])),
+  ]
+
+  const datesSheet = [
+    ['Дата', 'Б-ч', 'Люди'],
+    ...dates.map(date => ([
+      date.date,
+      date.hours,
+      date.people,
+    ])),
+    [],
+    ['', dates.reduce((res, date) => res + date.hours, 0), dates.reduce((res, date) => res + date.people, 0)],
+  ]
+
+  return {
+    recordsSheet,
+    trainersSheet,
+    datesSheet,
+  }
+}
+
+const convertRecordsToTrainings = (trainingRecords?: IRecord[]) => {
+  const trainings: ITraining[] = []
+
+  trainingRecords?.forEach(tr => {
+    const isMulti = (
+      tr.training.type === GROUP_TRAININGS.GROUP ||
+      tr.training.type === GROUP_TRAININGS.EVENT ||
+      tr.training.type === GROUP_TRAININGS.SECTION
+    )
+
+    const index = trainings.findIndex(t => t._id === tr.training._id)
+
+    if (index === -1) {
+      const records = trainingRecords?.filter(t => t.training._id === tr.training._id)
+      const duration = tr.resource.endTime - tr.resource.startTime
+
+      const hours = !isMulti ? duration / 2 : tr.training.type === GROUP_TRAININGS.GROUP ? Math.max(1, records.length / 2) : 0
+      const people = !isMulti ? 0 : tr.training.type === GROUP_TRAININGS.GROUP ? 0 : records.length
+
+      const valueType = !isMulti ? HOURS_TYPE : tr.training.type === GROUP_TRAININGS.GROUP ? HOURS_TYPE : PEOPLE_TYPE
+
+      trainings.push({
+        _id: tr.training._id,
+        trainer: tr.resource.trainer,
+        startTime: Math.min(...records.map(r => r.resource.startTime)),
+        endTime: Math.max(...records.map(r => r.resource.endTime)),
+        gym: tr.training.gym,
+        date: tr.training.date,
+        type: tr.training.type,
+        contacts: records.map(t => ({
+          _id: t.contact._id,
+          name: t.contact.name,
+          surname: t.contact.surname,
+        })),
+        hours,
+        people,
+        valueType,
+      })
+    }
+  })
+
+  return trainings
+}
+
 const RecordsPage = () => {
   const actions = useActions()
   const { filters, openedFiltersDialog } = useSelector(state => state.records.page)
@@ -68,97 +194,43 @@ const RecordsPage = () => {
   const gyms = useGetGymsQuery()
   const trainers = useGetTrainersQuery()
 
-  const trainings = React.useMemo(
+  const trainings = useMemo(
     () => {
-      const trainings: ITraining[] = []
-
-      data?.trainingRecords.forEach(tr => {
-        const isMulti = (
-          tr.training.type === GROUP_TRAININGS.GROUP ||
-          tr.training.type === GROUP_TRAININGS.EVENT ||
-          tr.training.type === GROUP_TRAININGS.SECTION
-        )
-
-        const index = trainings.findIndex(t => t._id === tr.training._id)
-
-        if (index === -1) {
-          const records = data?.trainingRecords.filter(t => t.training._id === tr.training._id)
-          const duration = tr.resource.endTime - tr.resource.startTime
-
-          const hours = !isMulti ? duration / 2 : tr.training.type === GROUP_TRAININGS.GROUP ? records.length / 2 : 0
-          const people = !isMulti ? 0 : tr.training.type === GROUP_TRAININGS.GROUP ? 0 : records.length
-
-          const valueType = !isMulti ? HOURS_TYPE : tr.training.type === GROUP_TRAININGS.GROUP ? HOURS_TYPE : PEOPLE_TYPE
-
-          trainings.push({
-            _id: tr.training._id,
-            trainer: tr.resource.trainer,
-            startTime: Math.min(...records.map(r => r.resource.startTime)),
-            endTime: Math.max(...records.map(r => r.resource.endTime)),
-            gym: tr.training.gym,
-            date: tr.training.date,
-            type: tr.training.type,
-            contacts: records.map(t => ({
-              _id: t.contact._id,
-              name: t.contact.name,
-              surname: t.contact.surname,
-            })),
-            hours,
-            people,
-            valueType,
-          })
-        }
-      })
-
-      return trainings
+      return convertRecordsToTrainings(data?.trainingRecords)
     }, [data]
   )
 
-  const handleXLSXClick = React.useCallback(
+  const handleXLSXClick = useCallback(
     () => {
-      const ws_data = trainings.map(tr => ([
-        moment(tr.date).format('DD.MM'),
-        tr.gym.shortName,
-        trainingTypes.find(t => t.id === tr.type)?.text,
-        getTimeLabel(tr.startTime),
-        getTimeLabel(tr.endTime),
-        `${tr.trainer?.lastName} ${tr.trainer?.firstName}`,
-        tr.valueType === HOURS_TYPE ? tr.hours : '',
-        tr.valueType === PEOPLE_TYPE ? tr.people : '',
-        tr.contacts.map(contact => `${contact.surname} ${contact.name}`).join(', '),
-      ]))
-      generateXLSX([
-        ['Дата', 'Зал', 'Тип тренировки', 'Время начало', 'Время конца', 'Тренер', 'Батуто-часы', 'Люди', 'Контакты'],
-        ...ws_data,
-      ])
+      const { recordsSheet, trainersSheet, datesSheet } = prepareData(trainings)
+
+      generateXLSX(recordsSheet, trainersSheet, datesSheet)
     }, [trainings]
   )
 
-  const startFilterEditing = React.useCallback(
+  const startFilterEditing = useCallback(
     () => {
       actions.records.page.startFilterUpdate()
     }, [actions]
   )
 
-  const close = React.useCallback(
+  const close = useCallback(
     () => {
       actions.records.page.cancelFilterUpdate()
     }, [actions]
   )
 
-  const currentGym = React.useMemo(
+  const currentGym = useMemo(
     () => {
       return gyms?.data?.gyms.find(gym => gym._id === filters.gym)
     }, [gyms, filters.gym]
   )
 
-  const currentTrainer = React.useMemo(
+  const currentTrainer = useMemo(
     () => {
       return trainers?.data?.trainers.find(trainer => trainer._id === filters.trainer)
     }, [trainers, filters.trainer]
   )
-
-  // console.log(filters.date.format())
 
   return (
     <Paper className={classes.rootPaper}>

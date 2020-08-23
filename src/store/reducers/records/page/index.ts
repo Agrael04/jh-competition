@@ -35,4 +35,5 @@ const reducer = createReducer<IState, IAction>(initialState)
     filters,
     openedFiltersDialog: false,
   }))
+
 export default reducer
