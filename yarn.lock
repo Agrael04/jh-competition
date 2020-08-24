@@ -11641,6 +11641,11 @@ use-context-selector@^1.1.1:
   resolved "https://registry.yarnpkg.com/use-context-selector/-/use-context-selector-1.1.1.tgz#1180ad98dcc585aee39c458a3e5582392a1afcf9"
   integrity sha512-MDcSTShyTB+PMlbIeN0kWzTeognnXyH6ffZL+fHwaTegNRQvpzbELIZW80Bdmjn+xckxfVugfz2WqTXcFsA8UA==
 
+use-debounce@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-3.4.3.tgz#5df9322322b3f1b1c263d46413f9facf6d8b56ab"
+  integrity sha512-nxy+opOxDccWfhMl36J5BSCTpvcj89iaQk2OZWLAtBJQj7ISCtx1gh+rFbdjGfMl6vtCZf6gke/kYvrkVfHMoA==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

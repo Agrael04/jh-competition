@@ -48,7 +48,7 @@ function LayoutDrawer({ open, handleDrawerClose }: any) {
             <ListItemText primary={'Абонименты'} />
           </ListItem>
         </Link>
-        <Link to={'/'} className={classes.link} onClick={handleDrawerClose}>
+        <Link to={'/clients'} className={classes.link} onClick={handleDrawerClose}>
           <ListItem button={true}>
             <ListItemIcon><PeopleIcon /></ListItemIcon>
             <ListItemText primary={('Клиенты')} />

@@ -20,6 +20,7 @@ import Dialog from '@material-ui/core/Dialog'
 import Typography from '@material-ui/core/Typography'
 
 import ReceiptIcon from '@material-ui/icons/Receipt'
+import FilterListIcon from '@material-ui/icons/FilterList'
 
 import FiltersDialog from './filters-dialog'
 
@@ -236,6 +237,9 @@ const RecordsPage = () => {
     <Paper className={classes.rootPaper}>
       <Toolbar>
         <Grid container={true} justify='flex-end'>
+          <IconButton color='primary' onClick={startFilterEditing}>
+            <FilterListIcon />
+          </IconButton>
           <IconButton color='primary' onClick={handleXLSXClick}>
             <ReceiptIcon />
           </IconButton>

@@ -1,9 +1,11 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
+import { useDebounce } from 'use-debounce'
 
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
+
+import useSearchClients from './graphql/search-clients'
 
 interface IProps {
   label: string
@@ -53,36 +55,32 @@ const renderInput = (loading: boolean, inputProps: IInputProps, abornment?: ISta
 }
 
 export default function ContactSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment, error, helperText }: IProps) {
-  const { options, loading } = useSelector(state => ({
-    loading: state.clientSuggester.loading,
-    options: state.clientSuggester.options,
-  }))
-
-  const actions = useActions()
+  const { search, res: { data, loading } } = useSearchClients()
 
   const [opened, setOpened] = React.useState(false)
   const [filter, setFilter] = React.useState<string>(initialFilter || '')
   const [balance, setBalance] = React.useState<number>(initialBalance || 0)
+  const [query] = useDebounce(filter, 750)
 
   React.useEffect(
     () => {
-      if (opened) {
-        actions.clientSuggester.search(filter)
+      if (opened && query) {
+        search({ variables: { query } })
       }
     },
-    [opened, filter, actions]
+    [opened, query, search]
   )
 
   const open = () => setOpened(true)
   const close = () => setOpened(false)
 
   const mapOptionLabel = (option?: string | null) => {
-    const o = options.find(o => o._id === option)
+    const o = data?.suggestedClients.find(o => o._id === option)
     return o?.fullName || ''
   }
 
   const mapOptionBalance = (option?: string | null) => {
-    const o = options.find(o => o._id === option)
+    const o = data?.suggestedClients.find(o => o._id === option)
     return o?.balance || 0
   }
 
@@ -111,7 +109,7 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
       onChange={boundHandleChange}
       value={value}
 
-      options={options.map(o => o._id)}
+      options={data?.suggestedClients.map(o => o._id) || []}
       getOptionLabel={mapOptionLabel}
       onInputChange={handleInputChange}
       filterOptions={filterOptions}

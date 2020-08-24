@@ -3,13 +3,11 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import checkDialog from './check-dialog'
-import clientSuggester from './client-suggester'
 import schedule from './schedule'
 import records from './records'
 
 export const actions = {
   checkDialog,
-  clientSuggester,
   schedule,
   records,
 }
@@ -24,7 +22,6 @@ export const useActions = () => {
   const result = useMemo(
     () => ({
       checkDialog: bindActionCreators(checkDialog, dispatch),
-      clientSuggester: bindActionCreators(clientSuggester, dispatch),
       schedule: {
         page: bindActionCreators(schedule.page, dispatch),
         addTrainerDialog: bindActionCreators(schedule.addTrainerDialog, dispatch),

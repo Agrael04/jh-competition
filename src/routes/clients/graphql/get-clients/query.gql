@@ -1,0 +1,11 @@
+query {
+  users(limit: 100) {
+    name
+    surname
+    birthday
+    phone
+    altPhone
+    type
+    balance
+  }
+}

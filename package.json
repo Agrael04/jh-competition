@@ -39,6 +39,7 @@
     "typesafe-actions": "^5.1.0",
     "typescript": "3.7.2",
     "use-context-selector": "^1.1.1",
+    "use-debounce": "^3.4.3",
     "xlsx": "^0.16.5"
   },
   "scripts": {
