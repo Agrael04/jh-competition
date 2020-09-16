@@ -1,0 +1,13 @@
+  mutation createTrainingRecord ($data: ClientInsertInput!) {
+    insertOneClient(data: $data) {
+      _id
+      firstName
+      lastName
+      birthday
+      phone
+      altPhone
+      balance
+      communicationType
+      specialConditions
+    }
+  }

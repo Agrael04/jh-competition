@@ -5,17 +5,20 @@ const GET_CLIENTS = loader('./query.gql')
 
 export interface IClient {
   _id: string
-  name: string
-  surname: string
-  birthday: string
+  firstName: string
+  lastName: string
+  birthday?: string
   phone: string
-  altPhone: string
-  type: string
-  balance: number
+  altPhone?: string
+  balance?: number
+  communicationType: string[]
+  specialConditions?: string
+  group?: string
+  groupRole?: string
 }
 
 export interface IGetClients {
-  users: IClient[]
+  clients: IClient[]
 }
 
 export const useGetClientsQuery = () => {

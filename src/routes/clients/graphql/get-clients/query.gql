@@ -1,11 +1,15 @@
 query {
-  users(limit: 100) {
-    name
-    surname
+  clients(limit: 100) {
+    _id
+    firstName
+    lastName
     birthday
     phone
     altPhone
-    type
     balance
+    communicationType
+    specialConditions
+    group
+    groupRole
   }
 }

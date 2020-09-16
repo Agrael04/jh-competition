@@ -1,0 +1,19 @@
+  mutation createTrainingRecord ($_id: ObjectId!,$data: ClientUpdateInput!) {
+    updateOneClient(query: { _id: $_id }, set: $data) {
+      _id
+      firstName
+      lastName
+      birthday
+      phone
+      altPhone
+      balance
+      communicationType
+      questionaryNumber
+      source
+      rights
+      group
+      groupRole
+      level
+      specialConditions
+    }
+  }

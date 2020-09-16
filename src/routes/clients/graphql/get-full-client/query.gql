@@ -1,0 +1,19 @@
+query getClient($_id: ObjectId!) {
+  client(query: { _id: $_id }) {
+    _id
+    firstName
+    lastName
+    birthday
+    phone
+    altPhone
+    balance
+    communicationType
+    questionaryNumber
+    source
+    rights
+    group
+    groupRole
+    level
+    specialConditions
+  }
+}
