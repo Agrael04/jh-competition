@@ -194,7 +194,7 @@ const ClientsPage = () => {
                     )
                   }
                   {
-                    client.communicationType.length ? (
+                    client.communicationType?.length ? (
                       <>
                         <br />
                         {client.communicationType.join(', ')}

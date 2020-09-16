@@ -1,22 +1,11 @@
 import { Stitch, RemoteMongoClient, AnonymousCredential, GoogleRedirectCredential, UserPasswordCredential } from 'mongodb-stitch-browser-sdk'
 
-import { ISearchedTrainee } from '../../interfaces/trainee'
-
 const APP_ID = process.env.REACT_APP_MONGODB_APP_ID
 const DATABASE = 'test-db'
-const COLLECTION = 'users'
 
 export const client = Stitch.initializeDefaultAppClient(APP_ID)
 
 export const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(DATABASE)
-
-const searchUsers = async (name: string) => {
-  const docs = await db.collection(COLLECTION).find({
-    fullName: { $regex: name, $options: 'i' }, surname: { $ne: '' }
-  }, { limit: 20, sort: { surname: 1 }, projection: { fullName: 1, balance: 1 } }).toArray()
-
-  return docs as ISearchedTrainee[]
-}
 
 export function loginAnonymous() {
   // Allow users to log in anonymously
@@ -67,5 +56,3 @@ export function logoutCurrentUser() {
   // Logout the currently logged in user
   return client.auth.logout()
 }
-
-export default searchUsers
