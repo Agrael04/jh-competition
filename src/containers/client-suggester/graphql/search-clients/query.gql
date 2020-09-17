@@ -1,0 +1,8 @@
+query searchClient($query: String!, $rights: [String!]!){
+  suggestedClients(input: { query: $query, rights: $rights }) {
+    _id
+    balance
+    firstName
+    lastName
+  }
+}

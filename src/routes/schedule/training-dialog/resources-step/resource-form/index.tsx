@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/AddCircle'
 
 import FormController from 'components/form-controller'
 
+import getClientLabel from 'utils/get-client-label'
+
 import ResourceSelect from './resource-select'
 import TrainerSelect from './trainer-select'
 import StartTimeSelect from './start-time-select'
@@ -125,7 +127,7 @@ export default function ResourcesBlock() {
               .map(r => (
                 <Grid item={true} key={r._id}>
                   <Chip
-                    label={r.contact.fullName}
+                    label={getClientLabel(r?.contact)}
                     color='primary'
                     onClick={activate(r._id)}
                   />

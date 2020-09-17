@@ -6,10 +6,10 @@ import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import FormController from './fields/form-controller'
-import DatePicker from './fields/date-picker'
-import TextInput from './fields/text-input'
-import Select from './fields/select'
+import FormController from 'containers/fields/form-controller'
+import DatePicker from 'containers/fields/date-picker'
+import TextInput from 'containers/fields/text-input'
+import Select from 'containers/fields/select'
 
 import SubmitButton from './submit-button'
 

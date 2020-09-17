@@ -14,12 +14,14 @@ export const CREATE_TRAINING_RECORD = gql`
       _id
       contact {
         _id
-        fullName
+        firstName
+        lastName
         balance
       }
       attendant {
         _id
-        fullName
+        firstName
+        lastName
       }
       training {
         _id
@@ -27,6 +29,7 @@ export const CREATE_TRAINING_RECORD = gql`
       resource {
         _id
       }
+      note
       status
     }
   }

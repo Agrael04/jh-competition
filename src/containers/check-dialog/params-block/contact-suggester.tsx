@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import UserAutocomplete from 'containers/user-autocomplete'
+import ClientSuggester from 'containers/client-suggester'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
@@ -52,7 +52,7 @@ export default function ContactSuggester({ label, disabled }: IProps) {
   }
 
   return (
-    <UserAutocomplete
+    <ClientSuggester
       value={contact ? contact.link : null}
       handleChange={handleChange}
       label={label}

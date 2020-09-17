@@ -38,11 +38,13 @@ export const UPDATE_TRAINING = gql`
         _id
         contact {
           _id
-          fullName
+          firstName
+          lastName
         }
         attendant {
           _id
-          fullName
+          firstName
+          lastName
         }
         status
       }

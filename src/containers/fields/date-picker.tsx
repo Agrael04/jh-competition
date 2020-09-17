@@ -11,7 +11,6 @@ type IProps = OmittedProps & {
   error?: {
     message: string
   }
-  name?: string
 }
 
 export default function DatePicker(props: IProps) {

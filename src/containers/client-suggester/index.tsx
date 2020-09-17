@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import useSearchClients from './graphql/search-clients'
 
-interface IProps {
+export interface ISuggesterProps {
   label: string
   disabled?: boolean
   handleChange?: (user: string | null) => void
@@ -17,6 +17,7 @@ interface IProps {
   StartAdornment?: React.ComponentType<{ balance: number }>
   error?: boolean
   helperText?: string
+  rights?: string[]
 }
 
 interface IInputProps {
@@ -54,7 +55,7 @@ const renderInput = (loading: boolean, inputProps: IInputProps, abornment?: ISta
   )
 }
 
-export default function ContactSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment, error, helperText }: IProps) {
+export default function ClientSuggester({ value, handleChange, label, initialFilter, initialBalance, disabled, StartAdornment, error, helperText, rights }: ISuggesterProps) {
   const { search, res: { data, loading } } = useSearchClients()
 
   const [opened, setOpened] = React.useState(false)
@@ -65,10 +66,10 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
   React.useEffect(
     () => {
       if (opened && query) {
-        search({ variables: { query } })
+        search({ variables: { query, rights: rights || ['RECORD', 'ATTEND'] } })
       }
     },
-    [opened, query, search]
+    [opened, query, search, rights]
   )
 
   const open = () => setOpened(true)
@@ -76,7 +77,7 @@ export default function ContactSuggester({ value, handleChange, label, initialFi
 
   const mapOptionLabel = (option?: string | null) => {
     const o = data?.suggestedClients.find(o => o._id === option)
-    return o?.fullName || ''
+    return o ? `${o.lastName} ${o.firstName}` : ''
   }
 
   const mapOptionBalance = (option?: string | null) => {

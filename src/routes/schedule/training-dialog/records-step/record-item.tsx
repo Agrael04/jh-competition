@@ -16,6 +16,7 @@ import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../queries
 import useDeleteTrainingRecord from '../../mutations/delete-training-record'
 
 import removeTimeFromDate from 'utils/remove-time-from-date'
+import getClientLabel from 'utils/get-client-label'
 
 import useStyles from './styles'
 
@@ -62,8 +63,8 @@ export default function RecordItem({ id }: IProps) {
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={record?.contact?.fullName}
-        secondary={record?.attendant?.fullName}
+        primary={getClientLabel(record?.contact)}
+        secondary={getClientLabel(record?.attendant)}
       />
       {
         trainingDate > currentDate && (

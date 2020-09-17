@@ -1,6 +1,6 @@
 import React from 'react'
 
-import UserAutocomplete from 'containers/user-autocomplete'
+import ClientSuggester from 'containers/client-suggester'
 
 import { useContext } from '../context'
 
@@ -19,7 +19,7 @@ export default function ContactSuggester({ label, initialFilter, disabled }: IPr
   }
 
   return (
-    <UserAutocomplete
+    <ClientSuggester
       value={contact ? contact.link : null}
       handleChange={handleChange}
       label={label}

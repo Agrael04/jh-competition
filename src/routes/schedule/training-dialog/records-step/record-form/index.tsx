@@ -6,14 +6,20 @@ import { useSelector, useActions } from 'store'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import MenuItem from '@material-ui/core/MenuItem'
 
-import FormController from 'components/form-controller'
+import ContactAbornment from './contact-abornment'
 
-import ContactSuggester from './contact-suggester'
-import AttendantSuggester from './attendant-suggester'
-import ResourceSelect from './resource-select'
-import StatusSelect from './status-select'
-import NoteInput from './note-input'
+import FormController from 'containers/fields/form-controller'
+import TextInput from 'containers/fields/text-input'
+import Select from 'containers/fields/select'
+import ClientSuggester from 'containers/fields/client-suggester'
+
+import { getTimeLabel } from 'data/times'
+import getClientLabel from 'utils/get-client-label'
+import { requiredValidation } from 'utils/validations'
+
+import useGetTrainingQuery from '../../../queries/get-training'
 
 import SubmitButton from './submit-button'
 
@@ -31,25 +37,59 @@ interface IForm {
   note?: string | null
 }
 
+const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
+
 export default function RecordsBlock() {
   const actions = useActions()
   const record = useSelector(state => state.schedule.trainingDialog.recordForm.record)
+  const { _id, recordId } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+    recordId: state.schedule.trainingDialog.recordForm.record!._id,
+  }))
+  const trainingQuery = useGetTrainingQuery(_id)
 
-  const methods = useForm<IForm>()
+  const methods = useForm<IForm>({
+    defaultValues: record || undefined,
+  })
 
   const resetRecord = () => actions.schedule.trainingDialog.closeRecord()
   const openCheckDialog = () => actions.schedule.trainingDialog.openCheckDialog()
+
+  const queryRecord = React.useMemo(
+    () => {
+      return trainingQuery.data?.trainingRecords.find(tr => tr._id === recordId)
+    }, [trainingQuery, recordId]
+  )
+
+  const getResouceLabel = React.useCallback(
+    resource => {
+      const name = resource?.resource?.name
+      const st = getTimeLabel(resource.startTime)
+      const et = getTimeLabel(resource.endTime)
+      const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource?._id === resource._id).length
+
+      return `${name}, ${st} - ${et}, ${recordsLength} записей`
+    },
+    [trainingQuery]
+  )
+
+  const attendantLabel = getClientLabel(queryRecord?.attendant)
+  const contactLabel = getClientLabel(queryRecord?.contact)
+  const contactBalance = queryRecord?.contact?.balance
 
   return (
     <FormProvider {...methods}>
       <Grid item={true} lg={8} container={true} spacing={4}>
         <Grid item={true} lg={9}>
-          <FormController
-            name='contact'
-            Component={ContactSuggester}
-            rules={{ required: true }}
-            defaultValue={record!.contact}
-          />
+          <FormController name='contact' rules={requiredValidation}>
+            <ClientSuggester
+              initialFilter={contactLabel}
+              initialBalance={contactBalance}
+              StartAdornment={ContactAbornment}
+              rights={['RECORD']}
+              label='Контактное лицо'
+            />
+          </FormController>
         </Grid>
         <Grid item={true} lg={3} container={true}>
           <Box margin='auto' marginRight={0}>
@@ -59,33 +99,57 @@ export default function RecordsBlock() {
           </Box>
         </Grid>
         <Grid item={true} lg={5}>
-          <FormController
-            name='attendant'
-            Component={AttendantSuggester}
-            defaultValue={record!.attendant}
-          />
+          <FormController name='attendant'>
+            <ClientSuggester
+              initialFilter={attendantLabel}
+              rights={['ATTEND']}
+              label='Посетитель'
+            />
+          </FormController>
         </Grid>
         <Grid item={true} lg={3}>
-          <FormController
-            name='status'
-            Component={StatusSelect}
-            defaultValue={record!.status}
-          />
+          <FormController name='status'>
+            <Select
+              label='Статус'
+              fullWidth={true}
+              variant='outlined'
+            >
+              {
+                statuses.map(type => (
+                  <MenuItem value={type} key={type}>
+                    {type}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          </FormController>
         </Grid>
         <Grid item={true} lg={4}>
-          <FormController
-            name='note'
-            Component={NoteInput}
-            defaultValue={record!.note}
-          />
+          <FormController name='note'>
+            <TextInput
+              label={'Заметки'}
+              fullWidth={true}
+              variant='outlined'
+            />
+          </FormController>
         </Grid>
         <Grid item={true} lg={12}>
-          <FormController
-            name='resource'
-            Component={ResourceSelect}
-            rules={{ required: true }}
-            defaultValue={record!.resource}
-          />
+          <FormController name='resource' rules={requiredValidation}>
+            <Select
+              label='Ресурс'
+              fullWidth={true}
+              variant='outlined'
+              linked={true}
+            >
+              {
+                trainingQuery.data?.trainingResources.map(r => (
+                  <MenuItem value={r._id} key={r._id}>
+                    {getResouceLabel(r)}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          </FormController>
         </Grid>
         <Grid item={true} lg={12} container={true} justify='space-between'>
           <Button color='primary' onClick={resetRecord}>

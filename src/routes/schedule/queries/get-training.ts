@@ -21,13 +21,15 @@ export interface IGetTrainingResponse {
     _id: string
     contact: {
       _id: string
-      fullName: string
+      firstName: string
+      lastName: string
       balance: number
       __typename: string
     }
     attendant: {
       _id: string
-      fullName: string
+      firstName: string
+      lastName: string
       __typename: string
     }
     resource: {
@@ -36,9 +38,9 @@ export interface IGetTrainingResponse {
     }
     training: {
       _id: string
-      fullName: string
       __typename: string
     }
+    note: string
     status: string
     __typename: string
   }>
@@ -102,12 +104,14 @@ export const GET_TRAINING = gql`
       _id
       contact {
         _id
-        fullName
+        lastName
+        firstName
         balance
       }
       attendant {
         _id
-        fullName
+        lastName
+        firstName
       }
       training {
         _id
@@ -115,6 +119,7 @@ export const GET_TRAINING = gql`
       resource {
         _id
       }
+      note
       status
     }
   }
@@ -157,6 +162,7 @@ export const convertTrainingRecordToInput = (r: IGetTrainingResponse['trainingRe
   resource: { link: r.resource._id },
   training: { link: r.training._id },
   status: r.status,
+  note: r.note,
   contact: r.contact ? {
     link: r.contact._id,
   } : undefined,

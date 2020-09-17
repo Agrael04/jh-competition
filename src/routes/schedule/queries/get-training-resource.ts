@@ -29,7 +29,8 @@ export interface IGetTrainingResourceResponse {
     contact: {
       _id: string
       __typename: string
-      fullName: string
+      firstName: string
+      lastName: string
     }
     status: string
   }>
@@ -58,7 +59,8 @@ export const GET_TRAINING_RESOURCE = gql`
       _id
       contact {
         _id
-        fullName
+        firstName
+        lastName
       }
       status
     }

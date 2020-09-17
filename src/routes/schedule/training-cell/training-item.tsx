@@ -20,6 +20,8 @@ import getColorPallete from 'utils/get-color-pallete'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import red from '@material-ui/core/colors/red'
 
+import getClientLabel from 'utils/get-client-label'
+
 import EmptyItem from './empty-item'
 import useStyles from './styles'
 
@@ -133,7 +135,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
             {
               records?.map(r => (
                 <div key={r._id}>
-                  {r.contact?.fullName}
+                  {getClientLabel(r.contact)}
                 </div>
               ))
             }

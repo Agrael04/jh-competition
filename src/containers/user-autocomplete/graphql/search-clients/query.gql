@@ -1,7 +1,0 @@
-query searchClient($query: String!){
-  suggestedClients(input: { query: $query }) {
-    _id
-    balance
-    fullName
-  }
-}

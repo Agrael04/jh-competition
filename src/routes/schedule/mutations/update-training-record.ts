@@ -13,11 +13,13 @@ export const UPDATE_TRAINING_RECORD = gql`
       _id
       contact {
         _id
-        fullName
+          firstName
+          lastName
       }
       attendant {
         _id
-        fullName
+          firstName
+          lastName
       }
       training {
         _id
@@ -25,6 +27,7 @@ export const UPDATE_TRAINING_RECORD = gql`
       resource {
         _id
       }
+      note
       status
     }
   }

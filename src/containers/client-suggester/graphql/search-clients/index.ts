@@ -5,7 +5,8 @@ const GET_CLIENTS = loader('./query.gql')
 
 export interface IClient {
   _id: string
-  fullName: string
+  firstName: string
+  lastName: string
   balance: number
 }
 

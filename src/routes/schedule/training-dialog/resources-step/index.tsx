@@ -36,7 +36,7 @@ export default function ResourcesBlock() {
   )
 
   const type = trainingQuery.data?.training.type
-  const hasResourceLimit = trainingTypes.find(t => t.id === type)
+  const hasResourceLimit = trainingTypes.find(t => t.id === type)?.hasResourceLimit
   const disabled = hasResourceLimit && (trainingQuery.data?.trainingResources?.length || 0) > 0
 
   return (
