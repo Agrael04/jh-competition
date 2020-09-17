@@ -8,13 +8,18 @@ type IProps = TextFieldProps & {
   error?: {
     message: string
   }
+  number?: boolean
 }
 
 export default function TextInput(props: IProps) {
-  const { value, error, onChange } = props
+  const { value, error, onChange, number } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value)
+    if (number) {
+      onChange(+e.target.value || '')
+    } else {
+      onChange(e.target.value)
+    }
   }
 
   return (

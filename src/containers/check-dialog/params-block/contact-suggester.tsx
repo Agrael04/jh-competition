@@ -9,6 +9,8 @@ import Box from '@material-ui/core/Box'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ClientSuggester from 'containers/client-suggester'
 
+import getClientLabel from 'utils/get-client-label'
+
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 interface IProps {
@@ -38,10 +40,10 @@ export default function ContactSuggester({ label, disabled }: IProps) {
     updateContact(link ? { link } : null)
   }
 
-  const initialFilter = data?.user.fullName
-  const initialBalance = data?.user.balance || 0
+  const initialFilter = getClientLabel(data?.client)
+  const initialBalance = data?.client.balance || 0
 
-  if (contact && !data?.user) {
+  if (contact && !data?.client) {
     return (
       <Grid container={true}>
         <Box margin='auto'>

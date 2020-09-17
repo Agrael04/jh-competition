@@ -15,7 +15,7 @@ import AddPassButton from './add-pass-button'
 import PriceAmount from './price-amount'
 import PriceTypeToggle from './price-type-toggle'
 
-import SubmitButtom from './submit-button'
+import SubmitButton from './submit-button'
 
 interface IForm {
   type?: string
@@ -89,7 +89,7 @@ export default function ServiceForm() {
           <Button onClick={cancel} color='primary'>
             Отменить
           </Button>
-          <SubmitButtom />
+          <SubmitButton />
         </Grid>
       </Box>
     </FormProvider>

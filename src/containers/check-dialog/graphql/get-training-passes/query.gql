@@ -1,6 +1,3 @@
-#import "../../payments-block/payment-form/pass-select/pass.gql"
-#import "../../payments-block/payment-form/pass-select/payment.gql"
-
 query getContactDetails($_id: ObjectId){
   trainingPasss(query: {
     contact: {
@@ -8,7 +5,13 @@ query getContactDetails($_id: ObjectId){
     }
     isActive: true
   }) {
-    ...paymentPass
+    _id
+    type
+    size
+    capacity
+    duration
+    activation
+    createdAt
   }
   payments(query: {
     contact: {
@@ -19,6 +22,11 @@ query getContactDetails($_id: ObjectId){
     }
     type: "units"
   }) {
-    ...passPayment
+    _id
+    pass {
+      _id
+    }
+    amount
+    date
   }
 }

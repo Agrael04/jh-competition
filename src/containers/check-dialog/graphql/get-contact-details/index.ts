@@ -3,22 +3,48 @@ import { loader } from 'graphql.macro'
 
 import { useSelector } from 'store'
 
-import ICheckRecord from '../../new-records-block/record'
-import ICheckPosition from '../../records-block/position-item/position'
-import IRecord from '../../total-block/record'
-import IHeaderContact from '../../header/contract'
-import IPassFormContact from '../../pass-form/contact'
-import IPaymentItem from '../../payments-block/payment-item/payment'
-import ITotalPayment from '../../total-block/payment'
+import ICheckPosition from '../../positions-block/position-item/position'
 import ITotalPosition from '../../total-block/position'
 
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
 export interface IGetContactDetails {
-  trainingRecords: Array<ICheckRecord & IRecord>
+  trainingRecords: Array<{
+    _id: string
+    training: {
+      _id: string
+      type: string
+      name: string
+      __typename: string
+    }
+    resource: {
+      _id: string
+      startTime: number
+      endTime: number
+      __typename: string
+    }
+    __typename: string
+  }>
   checkPositions: Array<ICheckPosition & ITotalPosition>
-  payments: Array<IPaymentItem & ITotalPayment>
-  user: IHeaderContact & IPassFormContact
+  payments: Array<{
+    _id: string
+    type: 'units' | 'money'
+    pass?: {
+      _id: string
+    }
+    createdAt: Date
+    amount: number
+    destination?: string
+    transaction?: string
+    __typename: string
+  }>
+  client: {
+    _id: string
+    __typename: string
+    firstName: string
+    lastName: string
+    balance: number | null
+  }
 }
 
 export const useGetContactDetailsQuery = () => {

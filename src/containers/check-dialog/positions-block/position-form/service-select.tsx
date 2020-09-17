@@ -19,12 +19,14 @@ export default function ServiceSelect({ onChange, value, error }: IProps) {
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(+e.target.value)
+      onChange(e.target.value)
     },
     [onChange]
   )
 
   const product = products.find(p => p.id === type)
+
+  console.log(product, value)
 
   return (
     <Select

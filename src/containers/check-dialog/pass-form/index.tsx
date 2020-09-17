@@ -7,6 +7,7 @@ import PassForm from 'containers/pass-form'
 
 import { DataProxy } from 'apollo-cache'
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
+import getClientLabel from 'utils/get-client-label'
 
 import { products } from '../data'
 import { passTypes, getSizes } from 'data/training-passes'
@@ -88,7 +89,7 @@ export default function PassFormWrap() {
       disabledPrice={true}
       disabledActivation={true}
       disabledDuration={true}
-      initialContactFilter={data?.user.fullName || ''}
+      initialContactFilter={getClientLabel(data?.client)}
       updateCacheOnCreate={updateCacheOnCreate}
     />
   )

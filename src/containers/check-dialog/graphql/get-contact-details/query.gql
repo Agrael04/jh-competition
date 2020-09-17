@@ -1,10 +1,4 @@
-#import "../../new-records-block/record.gql"
-#import "../../records-block/position-item/position.gql"
-#import "../../total-block/record.gql"
-#import "../../header/contact.gql"
-#import "../../pass-form/contact.gql"
-#import "../../payments-block/payment-item/payment.gql"
-#import "../../total-block/payment.gql"
+#import "../../positions-block/position-item/position.gql"
 #import "../../total-block/position.gql"
 
 query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
@@ -19,8 +13,17 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
       }
     }
   }) {
-    ...checkRecord
-    ...totalServiceRecord
+    _id
+    resource {
+      _id
+      startTime
+      endTime
+    }
+    training {
+      _id
+      type
+      name
+    }
     status
   }
   checkPositions(query: {
@@ -41,11 +44,20 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
       _id: $gym
     }
   }) {
-    ...checkPaymentItem
-    ...totalCheckPayment
+    _id
+    type
+    pass {
+      _id
+    }
+    createdAt
+    amount
+    destination
+    transaction
   }
-  user(query: { _id: $_id }) {
-    ...headerContact
-    ...passFormContact
+  client(query: { _id: $_id }) {
+    _id
+    firstName
+    lastName
+    balance
   }
 }

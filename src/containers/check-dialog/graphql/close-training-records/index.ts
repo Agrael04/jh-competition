@@ -24,7 +24,7 @@ const useCloseTrainingRecords = () => {
 
   const mutate = React.useCallback(
     (balanceDiff: number) => {
-      const balance = (query.data?.user.balance || 0) + balanceDiff
+      const balance = (query.data?.client.balance || 0) + balanceDiff
 
       return updateTrainingRecord({
         variables: {
@@ -43,8 +43,8 @@ const useCloseTrainingRecords = () => {
                 ...tr,
                 status: balance < 0 ? 'CLOSED_DEBT' : 'CLOSED',
               })),
-              user: {
-                ...data.user,
+              client: {
+                ...data.client,
                 balance,
               },
             })

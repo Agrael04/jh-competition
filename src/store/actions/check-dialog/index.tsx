@@ -48,19 +48,6 @@ export const closePositionForm = createAction(
   'checkDialog/CLOSE_POSITION_FORM'
 )()
 
-export const openCreatePaymentForm = createAction(
-  'checkDialog/OPEN_CREATE_PAYMENT_FORM'
-)()
-
-export const openUpdatePaymentForm = createAction(
-  'checkDialog/OPEN_UPDATE_PAYMENT_FORM',
-  (payment: Partial<IPaymentForm>) => ({ payment })
-)()
-
-export const closePaymentForm = createAction(
-  'checkDialog/CLOSE_PAYMENT_FORM'
-)()
-
 export const actions = {
   openDialog,
   closeDialog,
@@ -74,10 +61,6 @@ export const actions = {
   openCreatePositionForm,
   openUpdatePositionForm,
   closePositionForm,
-
-  openCreatePaymentForm,
-  openUpdatePaymentForm,
-  closePaymentForm,
 }
 
 export default actions

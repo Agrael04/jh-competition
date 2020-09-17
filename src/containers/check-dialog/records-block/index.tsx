@@ -1,62 +1,84 @@
 import React from 'react'
+import { useActions } from 'store'
 
-import { useSelector, useActions } from 'store'
-
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
+import Grid from '@material-ui/core/Grid'
+import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
-
-import AddOutlined from '@material-ui/icons/AddOutlined'
+import Typography from '@material-ui/core/Typography'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
-import PositionForm from './position-form'
-import PositionItem from './position-item'
+import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
 
-import useStyles from './styles'
+interface IMappedRecord {
+  _id: string
+  type: string
+  name: string
+  count: number
+  isMulti: boolean
+}
 
 export default function TrainingDialog() {
   const actions = useActions()
   const openCreatePositionForm = actions.checkDialog.openCreatePositionForm
-  const classes = useStyles()
-  const isFormActive = useSelector(state => state.checkDialog.positionForm.isActive)
-
   const { data } = useGetContactDetailsQuery()
 
-  const openAddForm = React.useCallback(
-    () => {
-      openCreatePositionForm()
-    },
-    [openCreatePositionForm]
-  )
+  const mappedRecords = React.useMemo(
+    () => data?.trainingRecords.reduce(
+      (res, item) => {
+        const isMulti = (
+          item.training.type === GROUP_TRAININGS.GROUP ||
+          item.training.type === GROUP_TRAININGS.EVENT ||
+          item.training.type === GROUP_TRAININGS.SECTION
+        )
+        const index = res.findIndex(record => record._id === item.training._id)
 
-  if (isFormActive) {
-    return (
-      <PositionForm />
-    )
-  }
+        if (index === -1) {
+          const rs = data?.trainingRecords.filter(r => r.training._id === item.training._id)
+
+          return [
+            ...res,
+            {
+              _id: item.training._id,
+              type: item.training.type,
+              name: item.training.name,
+              count: isMulti ? rs.length : (item.resource.endTime - item.resource.startTime) / 2,
+              isMulti,
+            },
+          ]
+        }
+
+        return res
+      }, [] as IMappedRecord[]
+    ), [data]
+  )!
+
+  const openPositionForm = (service: string) => () => openCreatePositionForm({ type: 'training', service })
 
   return (
-    <div>
-      <List>
-        <ListItem button={true} onClick={openAddForm}>
-          <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              <AddOutlined />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={`Добавить позицию`}
-          />
-        </ListItem>
+    <>
+      <Grid item={true} lg={12} container={true} spacing={1}>
         {
-          data?.checkPositions.map((position, index) => (
-            <PositionItem position={position} index={index} key={position._id} />
-          ))
+          mappedRecords
+            .map(r => (
+              <Grid item={true} key={r._id}>
+                <Chip
+                  key={r._id}
+                  label={(
+                    <Typography color='textPrimary' variant='body2'>
+                      {`${trainingTypes.find(t => t.id === r.type)?.text}`}
+                      {r.name ? `(${r.name})` : ''}
+                    </Typography>
+                  )}
+                  variant='outlined'
+                  color={r.isMulti ? 'secondary' : 'primary'}
+                  avatar={<Avatar>{r.count}</Avatar>}
+                  onClick={openPositionForm(r.type)}
+                />
+              </Grid>
+            ))
         }
-      </List>
-    </div>
+      </Grid>
+    </>
   )
 }

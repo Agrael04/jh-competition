@@ -16,16 +16,14 @@ export default function TrainingDialog() {
   const closeTrainingRecords = useCloseTrainingRecords()
   const [initAmount, setInitAmount] = React.useState<number | null>(null)
 
-  const servicePassAmount = data?.trainingRecords.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
-  const serviceMoneyAmount = data?.trainingRecords.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
-
+  const positionsPassAmount = data?.checkPositions.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
   const positionsMoneyAmount = data?.checkPositions.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
 
   const paymentPassAmount = data?.payments.filter(p => p.type === 'units').reduce((res, p) => res + p.amount, 0) || 0
   const paymentMoneyAmount = data?.payments.filter(p => p.type === 'money').reduce((res, p) => res + p.amount, 0) || 0
 
-  const passAmount = paymentPassAmount - servicePassAmount
-  const moneyAmount = paymentMoneyAmount - serviceMoneyAmount - positionsMoneyAmount
+  const passAmount = paymentPassAmount - positionsPassAmount
+  const moneyAmount = paymentMoneyAmount - positionsMoneyAmount
 
   const close = React.useCallback(
     async () => {
@@ -51,16 +49,16 @@ export default function TrainingDialog() {
               Всего заказано
             </Typography>
             {
-              (serviceMoneyAmount + positionsMoneyAmount)! > 0 && (
+              (positionsMoneyAmount)! > 0 && (
                 <Typography variant='h6' align='center'>
-                  -{serviceMoneyAmount + positionsMoneyAmount} грн
+                  -{positionsMoneyAmount} грн
                 </Typography>
               )
             }
             {
-              servicePassAmount! > 0 && (
+              positionsPassAmount! > 0 && (
                 <Typography variant='h6' align='center'>
-                  -{servicePassAmount} АБ
+                  -{positionsPassAmount} АБ
                 </Typography>
               )
             }

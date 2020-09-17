@@ -12,8 +12,8 @@ import Header from './header'
 import ParamsBlock from './params-block'
 import PassForm from './pass-form'
 import PaymentsBlock from './payments-block'
+import PositionsBlock from './positions-block'
 import RecordsBlock from './records-block'
-import NewRecordsBlock from './new-records-block'
 import TotalBlock from './total-block'
 
 import useGetContactDetails from './graphql/get-contact-details'
@@ -36,12 +36,12 @@ export default function CheckDialog() {
           {
             !loading ? (
               <>
-                <NewRecordsBlock />
+                <RecordsBlock />
                 <Grid item={true} lg={12}>
                   <Box border={1} borderColor='primary.main' width={1} />
                 </Grid>
                 <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
-                  <RecordsBlock />
+                  <PositionsBlock />
                 </Grid>
                 <Grid item={true} lg={4} container={true} justify='space-between' direction='column'>
                   <PaymentsBlock />

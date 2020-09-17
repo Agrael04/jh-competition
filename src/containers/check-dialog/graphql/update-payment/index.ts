@@ -10,13 +10,13 @@ const useUpdatePayment = () => {
   const [updatePayment] = useMutation(UPDATE_PAYMENT)
 
   const mutate = React.useCallback(
-    (data: Partial<IPaymentForm>) => {
+    (_id: string, data: Partial<IPaymentForm>) => {
       if (!data) {
         return
       }
 
       return updatePayment({
-        variables: { _id: data._id, data },
+        variables: { _id, data },
       })
     },
     [updatePayment]

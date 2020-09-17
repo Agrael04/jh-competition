@@ -3,14 +3,28 @@ import { loader } from 'graphql.macro'
 
 import { useSelector } from 'store'
 
-import ICheckPass from '../../payments-block/payment-form/pass-select/pass'
-import IPassPayment from '../../payments-block/payment-form/pass-select/payment'
-
 const GET_TRAINING_PASSES = loader('./query.gql')
 
 export interface IGetContactRecords {
-  trainingPasss: ICheckPass[]
-  payments: IPassPayment[]
+  trainingPasss: Array<{
+    _id: string
+    type: 'universal' | 'no_trainer' | 'sport' | 'open'
+    size: string
+    capacity: number
+    duration: number
+    activation: number
+    createdAt: Date
+    __typename: string
+  }>
+  payments: Array<{
+    _id: string
+    pass: {
+      _id: string
+    }
+    amount: number
+    date: Date
+    __typename: string
+  }>
 }
 
 export const useGetTrainingPassesQuery = () => {

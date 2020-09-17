@@ -1,4 +1,0 @@
-fragment passFormContact on User {
-  _id
-  fullName
-}

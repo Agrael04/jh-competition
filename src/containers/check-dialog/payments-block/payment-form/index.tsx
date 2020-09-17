@@ -1,24 +1,30 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
+import moment from 'moment'
 
+import { useActions } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
-
-import FormController from 'components/form-controller'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
-
-import PassSelect from './pass-select'
-import AddPassButton from './add-pass-button'
-import AmountInput from './amount-input'
-import TransactionInput from './transaction-input'
-import DestinationSelect from './destination-select'
-import TypeToggle from './type-toggle'
+import MenuItem from '@material-ui/core/MenuItem'
+import ToggleButton from '@material-ui/lab/ToggleButton'
 
 import SubmitButton from './submit-button'
 
-interface IForm {
+import NewFormController from 'containers/fields/form-controller'
+import TextInput from 'containers/fields/text-input'
+import Select from 'containers/fields/select'
+import ToggleGroup from 'containers/fields/toggle-group'
+
+import useGetTrainingPassesQuery from '../../graphql/get-training-passes'
+import { paymentDestinations } from '../../data'
+
+import { passTypes, getSizes } from 'data/training-passes'
+import { getUsedUnits, getExpirationDate } from 'utils/pass'
+import { requiredValidation } from 'utils/validations'
+
+export interface IPaymentForm {
   amount?: number | null
   type?: 'money' | 'units' | null
   pass?: {
@@ -28,53 +34,98 @@ interface IForm {
   transaction?: string
 }
 
-export default function PaymentForm() {
-  const actions = useActions()
-  const form = useSelector(state => state.checkDialog.paymentForm)
+interface IProps {
+  defaultValues?: IPaymentForm
+  close: () => void
+  submit: (form: IPaymentForm) => void
+}
 
-  const methods = useForm<IForm>()
+export default function PaymentForm({ defaultValues, close, submit }: IProps) {
+  const { data } = useGetTrainingPassesQuery()
+  const actions = useActions()
+  const openPassForm = actions.checkDialog.openPassForm
+  const methods = useForm<IPaymentForm>({
+    defaultValues: defaultValues || {},
+  })
   const type = methods.watch('type')
 
-  const cancel = React.useCallback(
+  const cancel = useCallback(
     () => {
-      actions.checkDialog.closePaymentForm()
-    }, [actions]
+      close()
+    }, [close]
+  )
+
+  const passes = useMemo(
+    () => data?.trainingPasss.map(pass => {
+      const type = passTypes.find(p => p.value === pass.type)?.text
+      const sizes = getSizes(pass.type)
+      const size = sizes?.find(s => s.value === pass.size)?.text
+      const capacity = pass.capacity - getUsedUnits(data?.payments, pass)
+      const date = moment(getExpirationDate(data?.payments, pass)).format('D MMMM')
+
+      return {
+        _id: pass._id,
+        label: `${type}${size ? ` ${size}` : ''}, ${capacity} АБ, ${date}`,
+      }
+    }),
+    [data]
   )
 
   return (
     <FormProvider {...methods}>
       <Grid container={true} spacing={3}>
         <Grid item={true} lg={8} container={true} justify='space-between'>
-          <FormController
-            name='amount'
-            Component={AmountInput}
-            rules={{ required: true }}
-            defaultValue={form.payment!.amount}
-          />
+          <NewFormController name='amount' rules={requiredValidation}>
+            <TextInput
+              label='Сумма'
+              fullWidth={true}
+              variant='outlined'
+              type='number'
+              number={true}
+            />
+          </NewFormController>
         </Grid>
         <Grid item={true} lg={4} container={true} justify='space-between'>
           <Box margin='auto'>
-            <FormController
-              name='type'
-              Component={TypeToggle}
-              rules={{ required: true }}
-              defaultValue={form.payment!.type}
-            />
+            <NewFormController name='type' rules={requiredValidation}>
+              <ToggleGroup exclusive={true}>
+                <ToggleButton value='money'>
+                  Грн
+                </ToggleButton>
+                <ToggleButton value='units'>
+                  АБ
+                </ToggleButton>
+              </ToggleGroup>
+            </NewFormController>
           </Box>
         </Grid>
         {
           type === 'units' && (
             <>
               <Grid item={true} lg={8}>
-                <FormController
-                  name='pass'
-                  Component={PassSelect}
-                  rules={{ required: type === 'units' }}
-                  defaultValue={form.payment!.pass}
-                />
+                <NewFormController name='pass' rules={requiredValidation}>
+                  <Select
+                    label='Абонимент'
+                    fullWidth={true}
+                    variant='outlined'
+                    linked={true}
+                  >
+                    {
+                      passes?.map(pass => (
+                        <MenuItem value={pass._id} key={pass._id}>
+                          {pass.label}
+                        </MenuItem>
+                      ))
+                    }
+                  </Select>
+                </NewFormController>
               </Grid>
               <Grid item={true} lg={4} container={true} justify='flex-end'>
-                <AddPassButton />
+                <Box marginY='auto' marginRight={0}>
+                  <Button color='primary' onClick={openPassForm}>
+                    Добавить
+                  </Button>
+                </Box>
               </Grid>
             </>
           )
@@ -83,20 +134,30 @@ export default function PaymentForm() {
           type === 'money' && (
             <>
               <Grid item={true} lg={12}>
-                <FormController
-                  name='destination'
-                  Component={DestinationSelect}
-                  rules={{ required: type === 'money' }}
-                  defaultValue={form.payment!.destination}
-                />
+                <NewFormController name='destination' rules={requiredValidation}>
+                  <Select
+                    label='Кошелек'
+                    fullWidth={true}
+                    variant='outlined'
+                  >
+                    {
+                      paymentDestinations.map(destination => (
+                        <MenuItem value={destination.value} key={destination.value}>
+                          {destination.text}
+                        </MenuItem>
+                      ))
+                    }
+                  </Select>
+                </NewFormController>
               </Grid>
               <Grid item={true} lg={12}>
-                <FormController
-                  name='transaction'
-                  Component={TransactionInput}
-                  rules={{ required: type === 'money' }}
-                  defaultValue={form.payment!.transaction}
-                />
+                <NewFormController name='transaction' rules={requiredValidation}>
+                  <TextInput
+                    label={'Транзакция'}
+                    fullWidth={true}
+                    variant='outlined'
+                  />
+                </NewFormController>
               </Grid>
             </>
           )
@@ -107,7 +168,7 @@ export default function PaymentForm() {
           <Button onClick={cancel} color='primary'>
             Отменить
           </Button>
-          <SubmitButton />
+          <SubmitButton submit={submit} />
         </Grid>
       </Box>
     </FormProvider>
