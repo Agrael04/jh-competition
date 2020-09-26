@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useCallback, useState } from 'react'
 import moment from 'moment'
 // import { useSelector, useActions } from 'store'
 
@@ -24,7 +24,6 @@ import InfoIcon from '@material-ui/icons/Info'
 import ClientDialog, { IClientForm } from 'containers/client-dialog'
 
 import useGetClients from './graphql/get-clients'
-import useGetClient from './graphql/get-full-client'
 import useCreateClient from './graphql/create-client'
 import useUpdateClient from './graphql/update-client'
 
@@ -35,9 +34,9 @@ const ClientsPage = () => {
   // const { openedFiltersDialog } = useSelector(state => state.records.page)
   const classes = useStyles()
   const [openedClientDialog, setOpenedClientDialog] = useState<boolean>(false)
+  const [activeId, setActiveId] = useState<string | undefined>()
 
   const { data, loading } = useGetClients()
-  const { load, result } = useGetClient()
   const createClient = useCreateClient()
   const updateClient = useUpdateClient()
 
@@ -59,13 +58,15 @@ const ClientsPage = () => {
   const openNewClientDialog = useCallback(
     () => {
       setOpenedClientDialog(true)
+      setActiveId(undefined)
     }, [setOpenedClientDialog]
   )
 
   const openOldClientDialog = useCallback(
-    (id: string) => async () => {
-      await load(id)
-    }, [load]
+    (id: string) => () => {
+      setOpenedClientDialog(true)
+      setActiveId(id)
+    }, [setOpenedClientDialog, setActiveId]
   )
 
   const closeClientDialog = useCallback(
@@ -76,37 +77,14 @@ const ClientsPage = () => {
 
   const submit = useCallback(
     async (values: IClientForm) => {
-      if (result.data?.client) {
-        await updateClient(result.data.client._id, values)
+      if (activeId) {
+        await updateClient(activeId, values)
       } else {
         await createClient(values)
       }
 
       closeClientDialog()
-    }, [createClient, updateClient, result, closeClientDialog]
-  )
-
-  const defaultValues = useMemo(
-    () => {
-      if (result.loading || !result.data?.client) {
-        return undefined
-      }
-
-      return {
-        ...result.data.client,
-        birthday: result.data.client.birthday ? new Date(result.data.client.birthday) : null,
-      }
-    },
-    [result]
-  )
-
-  useEffect(
-    () => {
-      if (defaultValues) {
-        setOpenedClientDialog(true)
-      }
-    },
-    [defaultValues, setOpenedClientDialog]
+    }, [createClient, updateClient, activeId, closeClientDialog]
   )
 
   return (
@@ -224,7 +202,7 @@ const ClientsPage = () => {
         opened={openedClientDialog}
         close={closeClientDialog}
         submit={submit}
-        defaultValues={defaultValues}
+        _id={activeId}
       />
 
       {/* <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true} /> */}

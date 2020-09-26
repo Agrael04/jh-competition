@@ -3,9 +3,6 @@ import { loader } from 'graphql.macro'
 
 import { useSelector } from 'store'
 
-import ICheckPosition from '../../positions-block/position-item/position'
-import ITotalPosition from '../../total-block/position'
-
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
 export interface IGetContactDetails {
@@ -25,7 +22,14 @@ export interface IGetContactDetails {
     }
     __typename: string
   }>
-  checkPositions: Array<ICheckPosition & ITotalPosition>
+  checkPositions: Array<{
+    _id: string
+    priceType: 'units' | 'money'
+    priceAmount: number
+    type: string
+    service: string
+    __typename: string
+  }>
   payments: Array<{
     _id: string
     type: 'units' | 'money'
@@ -48,17 +52,15 @@ export interface IGetContactDetails {
 }
 
 export const useGetContactDetailsQuery = () => {
-  const date = useSelector(state => state.checkDialog.params.activeDate)
-  const gym = useSelector(state => state.checkDialog.params.activeGym)
-  const _id = useSelector(state => state.checkDialog.params.contact?.link)
+  const variables = useSelector(state => ({
+    date: state.checkDialog.params.activeDate,
+    gym: state.checkDialog.params.activeGym,
+    _id: state.checkDialog.params.contact?.link,
+  }))
 
   const result = useQuery<IGetContactDetails>(GET_CONTACT_DETAILS, {
-    variables: {
-      date,
-      gym,
-      _id,
-    },
-    skip: !gym || !_id,
+    variables,
+    skip: !variables.gym || !variables._id,
     fetchPolicy: 'cache-and-network',
   })
 

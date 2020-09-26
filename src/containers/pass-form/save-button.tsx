@@ -1,12 +1,11 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
 
 import useCreateTrainingPass from './graphql/create-training-pass'
 import useUpdateTrainingPass from './graphql/update-training-pass'
 import { IUpdateCacheFn } from 'utils/apollo-cache-updater'
-
-import { useContext } from './context'
 
 interface IProps {
   mode: 'create' | 'update' | null
@@ -15,41 +14,30 @@ interface IProps {
 }
 
 export default function SaveButton({ updateCacheOnCreate, mode, close }: IProps) {
-  const pass = useContext(s => s.state.passForm)
+  const { handleSubmit, errors } = useFormContext()
 
   const createTrainingPass = useCreateTrainingPass(updateCacheOnCreate)
   const updateTrainingPass = useUpdateTrainingPass()
 
-  const save = React.useCallback(
-    async () => {
+  const submit = React.useCallback(
+    async (form: any) => {
       if (mode === 'create') {
-        await createTrainingPass(pass!)
+        await createTrainingPass(form!)
       }
 
       if (mode === 'update') {
-        await updateTrainingPass(pass!)
+        await updateTrainingPass(form!)
       }
 
       close()
     },
-    [createTrainingPass, updateTrainingPass, pass, mode, close]
+    [createTrainingPass, updateTrainingPass, mode, close]
   )
 
-  const disabled = React.useMemo(
-    () => {
-      return (
-        !pass ||
-        !pass.type ||
-        !pass.duration ||
-        (pass.activation === undefined) ||
-        !pass.createdAt ||
-        !pass.contact
-      )
-    }, [pass]
-  )
+  const disabled = Object.keys(errors).length > 0
 
   return (
-    <Button color='primary' variant='contained' onClick={save} disabled={disabled}>
+    <Button color='primary' variant='contained' onClick={handleSubmit(submit)} disabled={disabled}>
       Сохранить
     </Button>
   )

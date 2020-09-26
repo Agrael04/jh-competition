@@ -12,6 +12,7 @@ import Header from './header'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 import removeTimeFromDate from 'utils/remove-time-from-date'
+import getClientLabel from 'utils/get-client-label'
 
 import useGetTrainingPassesQuery from '../graphql/get-training-passes'
 const GET_TRAINING_PASSES = loader('../graphql/get-training-passes/query.gql')
@@ -65,6 +66,8 @@ export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
     }, [pass, mode]
   )
 
+  const contactLabel = getClientLabel(pass?.contact)
+
   return (
     <Dialog open={!!mode} onClose={handleClose} maxWidth='sm' fullWidth={true}>
       <Header close={handleClose}/>
@@ -73,8 +76,7 @@ export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
           mode={mode}
           initialForm={initialForm}
           close={handleClose}
-
-          initialContactFilter={pass?.contact.fullName || ''}
+          initialContactFilter={contactLabel}
           updateCacheOnCreate={updateCacheOnCreate}
         />
       </Box>

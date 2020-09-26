@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+
+import { useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -9,27 +11,39 @@ import IconButton from '@material-ui/core/IconButton'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import { IGetContactDetails } from '../../graphql/get-contact-details'
+import useGetContactDetailsQuery from '../../graphql/get-contact-details'
 import useDeletePayment from '../../graphql/delete-payment'
 
 import useStyles from '../styles'
 
 interface IProps {
-  payment: IGetContactDetails['payments'][number]
   index: number
-  openForm: (_id: string) => void
+  id: string
 }
 
-export default function PaymentItem({ payment, index, openForm }: IProps) {
+export default function PaymentItem({ index, id }: IProps) {
   const classes = useStyles()
+  const actions = useActions()
+  const { data } = useGetContactDetailsQuery()
+
+  const payment = useMemo(
+    () => {
+      return data?.payments.find(p => p._id === id)!
+    }, [data, id]
+  )
 
   const deletePayment = useDeletePayment()
 
   const openUpdateForm = React.useCallback(
     () => {
-      openForm(payment._id)
+      actions.checkDialog.openPaymentForm(payment._id, {
+        ...payment,
+        pass: payment.pass ? {
+          link: payment.pass._id,
+        } : undefined,
+      })
     },
-    [openForm, payment]
+    [actions, payment]
   )
 
   const removePayment = React.useCallback(

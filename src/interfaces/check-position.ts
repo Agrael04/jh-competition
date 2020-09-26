@@ -3,6 +3,9 @@ export interface ICheckPositionForm {
   contact: {
     link: string
   }
+  gym: {
+    link: string
+  }
   type: string
   service: string
   priceType: 'units' | 'money' | null

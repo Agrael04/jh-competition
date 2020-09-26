@@ -3,7 +3,8 @@ mutation updateTrainingPass ($_id: ObjectId!, $data: TrainingPassUpdateInput!) {
     _id
     contact {
       _id
-      fullName
+      firstName
+      lastName
     }
     type
     size

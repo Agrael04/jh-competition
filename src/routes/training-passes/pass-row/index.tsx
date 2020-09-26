@@ -21,14 +21,13 @@ import EditIcon from '@material-ui/icons/Edit'
 
 import useStyles from '../styles'
 
-import useGetTrainingPassesQuery from '../graphql/get-training-passes'
+import useGetTrainingPassesQuery, { IGetTrainingPasses } from '../graphql/get-training-passes'
 import useArchiveTrainingPass from '../graphql/archive-training-pass'
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
-
-import IPassRow from './pass'
+import getClientLabel from 'utils/get-client-label'
 
 interface IProps {
-  pass: IPassRow
+  pass: IGetTrainingPasses['trainingPasss'][number]
   handleEdit: (_id: string) => void
 }
 
@@ -73,7 +72,9 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
   return (
     <>
       <TableRow onClick={toggle}>
-        <TableCell>{pass.contact.fullName}</TableCell>
+        <TableCell>
+          {getClientLabel(pass.contact)}
+        </TableCell>
         <TableCell>{pass.type} {pass.size && pass.size}</TableCell>
         <TableCell>{pass.price} грн</TableCell>
         <TableCell className={(!remainingCapacity && pass.capacity > 0) ? classes.errorText : ''}>
@@ -105,8 +106,8 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
           <Collapse in={open} timeout='auto' unmountOnExit={true}>
             <Box marginX='auto' marginY={2} width={320}>
               <List>
-                {payments.map((payment: any) => {
-                  return (
+                {
+                  payments.map((payment: any) => (
                     <ListItem key={payment._id} button={true} onClick={handleToggle(payment._id)}>
                       <ListItemAvatar>
                         <Avatar>
@@ -121,8 +122,8 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
                         />
                       </ListItemSecondaryAction>
                     </ListItem>
-                  )
-                })}
+                  ))
+                }
               </List>
               <Grid container={true} justify='flex-end'>
                 <Button color='secondary' variant='contained' disabled={checked.length < payments.length} onClick={handleArchive}>

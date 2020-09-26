@@ -51,6 +51,7 @@ export default function RecordsBlock() {
   const methods = useForm<IForm>({
     defaultValues: record || undefined,
   })
+  const contact = methods.watch('contact')
 
   const resetRecord = () => actions.schedule.trainingDialog.closeRecord()
   const openCheckDialog = () => actions.schedule.trainingDialog.openCheckDialog()
@@ -80,7 +81,7 @@ export default function RecordsBlock() {
   return (
     <FormProvider {...methods}>
       <Grid item={true} lg={8} container={true} spacing={4}>
-        <Grid item={true} lg={9}>
+        <Grid item={true} lg={5}>
           <FormController name='contact' rules={requiredValidation}>
             <ClientSuggester
               initialFilter={contactLabel}
@@ -91,9 +92,10 @@ export default function RecordsBlock() {
             />
           </FormController>
         </Grid>
+        <Grid item={true} lg={4} />
         <Grid item={true} lg={3} container={true}>
           <Box margin='auto' marginRight={0}>
-            <Button color='primary' variant='contained' onClick={openCheckDialog}>
+            <Button color='primary' variant='contained' onClick={openCheckDialog} disabled={!contact}>
               Расчитать
             </Button>
           </Box>

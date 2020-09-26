@@ -1,7 +1,9 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 import actions from 'store/actions/check-dialog'
 
-import { ICheckPositionForm } from 'interfaces/check-position'
+import { IPositionForm } from 'containers/check-dialog/positions-block/position-form'
+import { IPaymentForm } from 'containers/check-dialog/payments-block/payment-form'
+import { ITrainingPassForm } from 'interfaces/training-pass'
 
 type IAction = ActionType<typeof actions>
 
@@ -16,12 +18,22 @@ export interface IState {
   }
 
   positionForm: {
-    isActive: boolean
-    mode: 'create' | 'update' | null
-    position: Partial<ICheckPositionForm> | null
+    active: boolean
+    _id: string | null
+    defaultValues: Partial<IPositionForm> | null
   }
 
-  openedPassForm: boolean
+  paymentForm: {
+    active: boolean
+    _id: string | null
+    defaultValues: IPaymentForm | null
+  }
+
+  passForm: {
+    active: boolean
+    _id: string | null
+    defaultValues: ITrainingPassForm | null
+  }
 }
 
 const initialState = {
@@ -33,12 +45,22 @@ const initialState = {
   },
 
   positionForm: {
-    isActive: false,
-    mode: null,
-    position: null,
+    active: false,
+    _id: null,
+    defaultValues: null,
   },
 
-  openedPassForm: false,
+  paymentForm: {
+    active: false,
+    _id: null,
+    defaultValues: null,
+  },
+
+  passForm: {
+    active: false,
+    _id: null,
+    defaultValues: null,
+  },
 }
 
 const reducer = createReducer<IState, IAction>(initialState)
@@ -69,46 +91,46 @@ const reducer = createReducer<IState, IAction>(initialState)
       activeDate,
     },
   }))
-  .handleAction(actions.openPassForm, state => ({
+  .handleAction(actions.openPassForm, (state, { payload: { defaultValues } }) => ({
     ...state,
-    openedPassForm: true,
+    passForm: {
+      active: true,
+      _id: null,
+      defaultValues: {
+        contact: state.params.contact,
+        createdAt: state.params.activeDate,
+        isActive: false,
+        ...defaultValues,
+      },
+    },
   }))
   .handleAction(actions.closePassForm, state => ({
     ...state,
-    openedPassForm: false,
+    passForm: initialState.passForm,
   }))
-  .handleAction(actions.openCreatePositionForm, (state, { payload: { position } }) => ({
+  .handleAction(actions.openPositionForm, (state, { payload: { _id, defaultValues } }) => ({
     ...state,
     positionForm: {
-      position: {
-        contact: state.params.contact!,
-        date: state.params.activeDate,
-        type: position?.type,
-        service: position?.service,
-        priceAmount: null,
-        priceType: 'money',
-      },
-      mode: 'create',
-      isActive: true,
-    },
-  }))
-  .handleAction(actions.openUpdatePositionForm, (state, { payload: { position } }) => ({
-    ...state,
-    positionForm: {
-      position: {
-        _id: position._id,
-        priceType: position.priceType || 'money',
-        priceAmount: position.priceAmount,
-        type: position.type,
-        service: position.service,
-      },
-      mode: 'update',
-      isActive: true,
+      active: true,
+      _id,
+      defaultValues,
     },
   }))
   .handleAction(actions.closePositionForm, state => ({
     ...state,
     positionForm: initialState.positionForm,
+  }))
+  .handleAction(actions.openPaymentForm, (state, { payload: { _id, defaultValues } }) => ({
+    ...state,
+    paymentForm: {
+      active: true,
+      _id,
+      defaultValues,
+    },
+  }))
+  .handleAction(actions.closePaymentForm, state => ({
+    ...state,
+    paymentForm: initialState.paymentForm,
   }))
 
 export default reducer

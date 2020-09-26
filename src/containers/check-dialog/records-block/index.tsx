@@ -20,7 +20,6 @@ interface IMappedRecord {
 
 export default function TrainingDialog() {
   const actions = useActions()
-  const openCreatePositionForm = actions.checkDialog.openCreatePositionForm
   const { data } = useGetContactDetailsQuery()
 
   const mappedRecords = React.useMemo(
@@ -53,7 +52,7 @@ export default function TrainingDialog() {
     ), [data]
   )!
 
-  const openPositionForm = (service: string) => () => openCreatePositionForm({ type: 'training', service })
+  const openPositionForm = (service: string) => () => actions.checkDialog.openPositionForm(null, { type: 'training', service, priceType: 'money' })
 
   return (
     <>

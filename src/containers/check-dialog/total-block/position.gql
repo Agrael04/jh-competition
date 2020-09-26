@@ -1,5 +1,0 @@
-fragment totalPosition on CheckPosition {
-  _id
-  priceType
-  priceAmount
-}

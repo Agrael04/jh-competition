@@ -10,13 +10,13 @@ const useUpdateTrainingRecord = () => {
   const [updateCheckPosition] = useMutation(UPDATE_CHECK_POSITION)
 
   const mutate = React.useCallback(
-    (data: Partial<ICheckPositionForm>) => {
+    (_id: string, data: Partial<ICheckPositionForm>) => {
       if (!data) {
         return
       }
 
       return updateCheckPosition({
-        variables: { _id: data?._id, data },
+        variables: { _id, data },
       })
     },
     [updateCheckPosition]

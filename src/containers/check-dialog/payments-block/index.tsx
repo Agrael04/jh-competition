@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import moment from 'moment'
 
-import { useSelector } from 'store'
+import { useActions, useSelector } from 'store'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -20,16 +20,14 @@ import PaymentItem from './payment-item'
 
 import useStyles from './styles'
 
-interface IFormState {
-  active: boolean
-  _id: string | null
-}
-
 export default function PaymentBlock() {
   const classes = useStyles()
   const date = useSelector(state => state.checkDialog.params.activeDate)
+  const contact = useSelector(state => state.checkDialog.params.contact)!
+  const gym = useSelector(state => state.checkDialog.params.activeGym)
 
-  const [form, setForm] = useState<IFormState>({ active: false, _id: null })
+  const actions = useActions()
+  const paymentForm = useSelector(state => state.checkDialog.paymentForm)
 
   const { data } = useGetContactDetailsQuery()
   const createPayment = useCreatePayment()
@@ -37,64 +35,34 @@ export default function PaymentBlock() {
 
   const openCreateForm = useCallback(
     () => {
-      setForm({ active: true, _id: null })
+      actions.checkDialog.openPaymentForm(null, {
+        type: 'units' as const,
+      })
     },
-    [setForm]
-  )
-
-  const openUpdateForm = useCallback(
-    (_id: string) => {
-      setForm({ active: true, _id })
-    },
-    [setForm]
-  )
-
-  const closeForm = useCallback(
-    () => {
-      setForm({ active: false, _id: null })
-    }, [setForm]
+    [actions]
   )
 
   const submit = useCallback(
     async (values: IPaymentForm) => {
-      if (form._id) {
-        await updatePayment(form._id, values)
+      if (paymentForm._id) {
+        await updatePayment(paymentForm._id, values)
       } else {
-        await createPayment(values)
+        await createPayment({
+          contact,
+          date: moment(date).toDate(),
+          gym: { link: gym },
+          ...values,
+        })
       }
 
-      closeForm()
-    }, [createPayment, updatePayment, closeForm, form]
+      actions.checkDialog.closePaymentForm()
+    }, [createPayment, updatePayment, actions, paymentForm, date, gym, contact]
   )
 
-  const defaultValues = useMemo(
-    () => {
-      if (!form.active) {
-        return {}
-      }
-
-      if (!form._id) {
-        return {
-          type: 'units' as const,
-          createdAt: moment(date).toDate(),
-        }
-      }
-
-      const payment = data?.payments.find(p => p._id === form._id)!
-
-      return {
-        ...payment,
-        pass: payment.pass ? { link: payment.pass._id } : undefined,
-      }
-    },
-    [data, form, date]
-  )
-
-  if (form.active) {
+  if (paymentForm.active) {
     return (
       <PaymentForm
-        defaultValues={defaultValues}
-        close={closeForm}
+        defaultValues={paymentForm.defaultValues}
         submit={submit}
       />
     )
@@ -116,10 +84,9 @@ export default function PaymentBlock() {
         data?.payments
           .map((payment, index) => (
             <PaymentItem
-              payment={payment}
               index={index}
-              openForm={openUpdateForm}
               key={payment._id}
+              id={payment._id}
             />
           ))
       }

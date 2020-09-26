@@ -1,6 +1,3 @@
-#import "../../positions-block/position-item/position.gql"
-#import "../../total-block/position.gql"
-
 query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
   trainingRecords(query: {
     contact: {
@@ -30,10 +27,16 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     contact: {
       _id: $_id
     },
-    date: $date
+    date: $date,
+    gym: {
+      _id: $gym
+    }
   }) {
-    ...position
-    ...totalPosition
+    _id
+    type
+    service
+    priceType
+    priceAmount
   }
   payments(query: {
     contact: {

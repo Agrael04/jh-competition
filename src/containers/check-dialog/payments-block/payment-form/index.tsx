@@ -12,7 +12,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton'
 
 import SubmitButton from './submit-button'
 
-import NewFormController from 'containers/fields/form-controller'
+import FormController from 'containers/fields/form-controller'
 import TextInput from 'containers/fields/text-input'
 import Select from 'containers/fields/select'
 import ToggleGroup from 'containers/fields/toggle-group'
@@ -32,27 +32,34 @@ export interface IPaymentForm {
   }
   destination?: string
   transaction?: string
+  createdAt?: Date
+  contact?: { link: string }
+  gym?: { link: string }
 }
 
 interface IProps {
-  defaultValues?: IPaymentForm
-  close: () => void
+  defaultValues?: IPaymentForm | null
   submit: (form: IPaymentForm) => void
 }
 
-export default function PaymentForm({ defaultValues, close, submit }: IProps) {
-  const { data } = useGetTrainingPassesQuery()
+export default function PaymentForm({ defaultValues, submit }: IProps) {
   const actions = useActions()
-  const openPassForm = actions.checkDialog.openPassForm
+  const { data } = useGetTrainingPassesQuery()
   const methods = useForm<IPaymentForm>({
     defaultValues: defaultValues || {},
   })
   const type = methods.watch('type')
 
+  const triggerOpenPassForm = useCallback(
+    () => {
+      actions.checkDialog.openPassForm()
+    }, [actions]
+  )
+
   const cancel = useCallback(
     () => {
-      close()
-    }, [close]
+      actions.checkDialog.closePositionForm()
+    }, [actions]
   )
 
   const passes = useMemo(
@@ -75,19 +82,18 @@ export default function PaymentForm({ defaultValues, close, submit }: IProps) {
     <FormProvider {...methods}>
       <Grid container={true} spacing={3}>
         <Grid item={true} lg={8} container={true} justify='space-between'>
-          <NewFormController name='amount' rules={requiredValidation}>
+          <FormController name='amount' rules={requiredValidation}>
             <TextInput
               label='Сумма'
               fullWidth={true}
               variant='outlined'
               type='number'
-              number={true}
             />
-          </NewFormController>
+          </FormController>
         </Grid>
         <Grid item={true} lg={4} container={true} justify='space-between'>
           <Box margin='auto'>
-            <NewFormController name='type' rules={requiredValidation}>
+            <FormController name='type' rules={requiredValidation}>
               <ToggleGroup exclusive={true}>
                 <ToggleButton value='money'>
                   Грн
@@ -96,14 +102,14 @@ export default function PaymentForm({ defaultValues, close, submit }: IProps) {
                   АБ
                 </ToggleButton>
               </ToggleGroup>
-            </NewFormController>
+            </FormController>
           </Box>
         </Grid>
         {
           type === 'units' && (
             <>
               <Grid item={true} lg={8}>
-                <NewFormController name='pass' rules={requiredValidation}>
+                <FormController name='pass' rules={requiredValidation}>
                   <Select
                     label='Абонимент'
                     fullWidth={true}
@@ -118,11 +124,11 @@ export default function PaymentForm({ defaultValues, close, submit }: IProps) {
                       ))
                     }
                   </Select>
-                </NewFormController>
+                </FormController>
               </Grid>
               <Grid item={true} lg={4} container={true} justify='flex-end'>
                 <Box marginY='auto' marginRight={0}>
-                  <Button color='primary' onClick={openPassForm}>
+                  <Button color='primary' onClick={triggerOpenPassForm}>
                     Добавить
                   </Button>
                 </Box>
@@ -134,7 +140,7 @@ export default function PaymentForm({ defaultValues, close, submit }: IProps) {
           type === 'money' && (
             <>
               <Grid item={true} lg={12}>
-                <NewFormController name='destination' rules={requiredValidation}>
+                <FormController name='destination' rules={requiredValidation}>
                   <Select
                     label='Кошелек'
                     fullWidth={true}
@@ -148,16 +154,16 @@ export default function PaymentForm({ defaultValues, close, submit }: IProps) {
                       ))
                     }
                   </Select>
-                </NewFormController>
+                </FormController>
               </Grid>
               <Grid item={true} lg={12}>
-                <NewFormController name='transaction' rules={requiredValidation}>
+                <FormController name='transaction' rules={requiredValidation}>
                   <TextInput
                     label={'Транзакция'}
                     fullWidth={true}
                     variant='outlined'
                   />
-                </NewFormController>
+                </FormController>
               </Grid>
             </>
           )
