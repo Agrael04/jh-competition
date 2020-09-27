@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import Select from 'containers/select'
+import Select from 'containers/deprecated/select'
 import times from 'data/times'
 
 import useGetGymsQuery from '../queries/get-gyms'

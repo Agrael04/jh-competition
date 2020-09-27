@@ -5,9 +5,9 @@ import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import TextField from 'containers/text-field'
-import DatePicker from 'containers/date-picker'
-import Select from 'containers/select'
+import TextField from 'containers/deprecated/text-field'
+import DatePicker from 'containers/deprecated/date-picker'
+import Select from 'containers/deprecated/select'
 
 import GymSelect from './gym-select'
 

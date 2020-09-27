@@ -13,11 +13,11 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-import DatePicker from 'containers/date-picker'
+import DatePicker from 'containers/deprecated/date-picker'
 
 import useStyles from './styles'
 
-import Select from 'containers/select'
+import Select from 'containers/deprecated/select'
 
 import TimeframesBlock from './timeframes-block'
 import SubmitButton from './submit-button'

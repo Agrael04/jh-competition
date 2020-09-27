@@ -3,7 +3,7 @@ import { IStoreState, useActions, useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
 
-import Select from 'containers/select'
+import Select from 'containers/deprecated/select'
 import useGetGymsQuery from '../../queries/get-gyms'
 import useGetTrainingQuery from '../../queries/get-training'
 

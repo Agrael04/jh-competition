@@ -14,8 +14,8 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import Today from '@material-ui/icons/Today'
 
-import DatePicker from 'containers/date-picker'
-import Select from 'containers/select'
+import DatePicker from 'containers/deprecated/date-picker'
+import Select from 'containers/deprecated/select'
 
 import useGetGymsQuery from './queries/get-gyms'
 
