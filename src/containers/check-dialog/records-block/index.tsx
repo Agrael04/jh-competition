@@ -58,8 +58,7 @@ export default function TrainingDialog() {
     <>
       <Grid item={true} lg={12} container={true} spacing={1}>
         {
-          mappedRecords
-            .map(r => (
+          mappedRecords?.map(r => (
               <Grid item={true} key={r._id}>
                 <Chip
                   key={r._id}

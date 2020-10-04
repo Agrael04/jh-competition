@@ -9,11 +9,15 @@ import { IClientForm } from 'containers/client-dialog'
 const CREATE_PAYMENT = loader('./mutation.gql')
 const GET_CLIENTS = loader('../get-clients/query.gql')
 
+type IClient = IClientForm & {
+  fullName?: string
+}
+
 const useCreateClient = () => {
   const [createClient] = useMutation(CREATE_PAYMENT)
 
   const mutate = React.useCallback(
-    (data: Partial<IClientForm>) => {
+    (data: Partial<IClient>) => {
       if (!data) {
         return
       }

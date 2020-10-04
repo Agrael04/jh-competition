@@ -12,10 +12,11 @@
     }, set: $data) {
       modifiedCount
     }
-    updateOneUser(query: {
+    updateOneClient(query: {
       _id: $_id
     }, set: {
       balance: $balance
+      visitedAt: $date
     }) {
       _id
       balance

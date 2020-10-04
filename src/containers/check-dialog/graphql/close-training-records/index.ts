@@ -9,7 +9,7 @@ import { updateQuery } from 'utils/apollo-cache-updater'
 import { useGetContactDetailsQuery, IGetContactDetails } from '../get-contact-details'
 
 const MUTATION = loader('./mutation.gql')
-const GET_CONTRACT_DETAILS = loader('../get-contact-details/query.gql')
+const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 
 const useCloseTrainingRecords = () => {
   const [updateTrainingRecord] = useMutation(MUTATION)
@@ -51,7 +51,7 @@ const useCloseTrainingRecords = () => {
           }
 
           boundUpdateCachedQuery({
-            query: GET_CONTRACT_DETAILS,
+            query: GET_CONTACT_DETAILS,
             variables,
             updater,
           })

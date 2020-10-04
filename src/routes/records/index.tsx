@@ -11,22 +11,16 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
-import IconButton from '@material-ui/core/IconButton'
 import Dialog from '@material-ui/core/Dialog'
 import Typography from '@material-ui/core/Typography'
 
-import ReceiptIcon from '@material-ui/icons/Receipt'
-import FilterListIcon from '@material-ui/icons/FilterList'
-
+import Header from './header'
 import FiltersDialog from './filters-dialog'
 
 import useGetRecords, { IRecord } from './graphql/get-records'
-import useGetGymsQuery from './graphql/get-gyms'
-import useGetTrainersQuery from './graphql/get-trainers'
 
 import { getTimeLabel } from 'data/times'
 import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
@@ -38,7 +32,7 @@ import XLSX from 'xlsx'
 const PEOPLE_TYPE = 'PEOPLE'
 const HOURS_TYPE = 'HOURS'
 
-interface ITraining {
+export interface ITraining {
   _id: IRecord['training']['_id']
   trainer: IRecord['resource']['trainer']
   startTime: IRecord['resource']['startTime']
@@ -188,12 +182,10 @@ const convertRecordsToTrainings = (trainingRecords?: IRecord[]) => {
 
 const RecordsPage = () => {
   const actions = useActions()
-  const { filters, openedFiltersDialog } = useSelector(state => state.records.page)
+  const { openedFiltersDialog } = useSelector(state => state.records.page)
   const classes = useStyles()
 
   const { data, loading } = useGetRecords()
-  const gyms = useGetGymsQuery()
-  const trainers = useGetTrainersQuery()
 
   const trainings = useMemo(
     () => {
@@ -221,103 +213,34 @@ const RecordsPage = () => {
     }, [actions]
   )
 
-  const currentGym = useMemo(
-    () => {
-      return gyms?.data?.gyms.find(gym => gym._id === filters.gym)
-    }, [gyms, filters.gym]
-  )
-
-  const currentTrainer = useMemo(
-    () => {
-      return trainers?.data?.trainers.find(trainer => trainer._id === filters.trainer)
-    }, [trainers, filters.trainer]
-  )
-
   return (
     <Paper className={classes.rootPaper}>
-      <Toolbar>
-        <Grid container={true} justify='flex-end'>
-          <IconButton color='primary' onClick={startFilterEditing}>
-            <FilterListIcon />
-          </IconButton>
-          <IconButton color='primary' onClick={handleXLSXClick}>
-            <ReceiptIcon />
-          </IconButton>
-        </Grid>
-      </Toolbar>
+      <Header
+        handleXLSXClick={handleXLSXClick}
+        startFilterEditing={startFilterEditing}
+        trainings={trainings}
+      />
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Дата
-              <Typography variant='caption' color='primary' component='div'>
-                {filters.date.format('MMMM YYYY')}
-              </Typography>
-              {
-                !loading && (
-                  <Typography variant='caption' color='secondary'>
-                    {uniq(trainings.map(t => t.date)).length} дней
-                  </Typography>
-                )
-              }
             </TableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Зал
-              {
-                filters.gym && !gyms.loading && (
-                  <Typography variant='caption' color='primary' component='div'>
-                    {currentGym?.shortName}
-                  </Typography>
-                )
-              }
             </TableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тип тренировки
-              {
-                filters.types.length > 0 && (
-                  <Typography variant='caption' color='primary' component='div'>
-                    Выбрано: {filters.types.length}
-                  </Typography>
-                )
-              }
             </TableCell>
             <TableCell>Время</TableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тренер
-              {
-                filters.trainer && !trainers.loading && (
-                  <Typography variant='caption' color='primary' component='div'>
-                    {currentTrainer?.lastName} {currentTrainer?.firstName}
-                  </Typography>
-                )
-              }
             </TableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Значение
-              {
-                !loading && (
-                  <>
-                    <Typography color='primary' variant='caption' component='div'>
-                      {trainings.reduce((res, a) => res + a.hours, 0)} бч
-                    </Typography>
-                    <Typography color='secondary' variant='caption' component='div'>
-                      {trainings.reduce((res, a) => res + a.people, 0)} чел
-                    </Typography>
-                  </>
-                )
-              }
             </TableCell>
             <TableCell>
               Контакты
-              {
-                !loading && (
-                  <>
-                    <Typography color='secondary' variant='caption' component='div'>
-                      {uniq(trainings.reduce((res: ITraining['contacts'], a) => [...res, ...a.contacts], []).map(c => `${c.surname} ${c.name}`)).length} контактов
-                    </Typography>
-                  </>
-                )
-              }
             </TableCell>
           </TableRow>
         </TableHead>

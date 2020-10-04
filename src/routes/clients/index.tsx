@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import moment from 'moment'
-// import { useSelector, useActions } from 'store'
+import { useSelector, useActions } from 'store'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -10,18 +10,17 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
-import IconButton from '@material-ui/core/IconButton'
 // import Dialog from '@material-ui/core/Dialog'
 
-import FilterListIcon from '@material-ui/icons/FilterList'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
 import InfoIcon from '@material-ui/icons/Info'
 
+import SortableCell from 'components/sortable-cell'
 import ClientDialog, { IClientForm } from 'containers/client-dialog'
+
+import Header from './header'
 
 import useGetClients from './graphql/get-clients'
 import useCreateClient from './graphql/create-client'
@@ -30,13 +29,13 @@ import useUpdateClient from './graphql/update-client'
 import useStyles from './styles'
 
 const ClientsPage = () => {
-  // const actions = useActions()
-  // const { openedFiltersDialog } = useSelector(state => state.records.page)
+  const actions = useActions()
+  const { activeOrder } = useSelector(state => state.clients.page)
   const classes = useStyles()
   const [openedClientDialog, setOpenedClientDialog] = useState<boolean>(false)
   const [activeId, setActiveId] = useState<string | undefined>()
 
-  const { data, loading } = useGetClients()
+  const { data, loading } = useGetClients(`${activeOrder.orderKey.toUpperCase()}_${activeOrder.direction.toUpperCase()}`)
   const createClient = useCreateClient()
   const updateClient = useUpdateClient()
 
@@ -78,48 +77,62 @@ const ClientsPage = () => {
   const submit = useCallback(
     async (values: IClientForm) => {
       if (activeId) {
-        await updateClient(activeId, values)
+        await updateClient(activeId, {
+          ...values,
+          fullName: `${values.lastName} ${values.firstName}`,
+        })
       } else {
-        await createClient(values)
+        await createClient({
+          ...values,
+          fullName: `${values.lastName} ${values.firstName}`,
+        })
       }
 
       closeClientDialog()
     }, [createClient, updateClient, activeId, closeClientDialog]
   )
 
+  const onOrderChange = (key: string) => () => actions.clients.page.changeOrder(key)
+
   return (
     <Paper className={classes.rootPaper}>
-      <Toolbar>
-        <Grid container={true} justify='flex-end'>
-          <IconButton color='primary' onClick={startFilterEditing}>
-            <FilterListIcon />
-          </IconButton>
-          <IconButton color='primary' onClick={openNewClientDialog}>
-            <AddCircleIcon />
-          </IconButton>
-        </Grid>
-      </Toolbar>
+      <Header
+        openClientForm={openNewClientDialog}
+      />
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <SortableCell
+              orderKey='fullName'
+              activeOrder={activeOrder}
+              onOrderChange={onOrderChange}
+            >
               Имя
-            </TableCell>
+            </SortableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Телефон
             </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <SortableCell
+              orderKey='birthday'
+              activeOrder={activeOrder}
+              onOrderChange={onOrderChange}
+            >
               Возраст
-            </TableCell>
-            {/* <TableCell onClick={startFilterEditing} className={classes.clickable}>
-              Тип клиента
-            </TableCell> */}
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            </SortableCell>
+            <SortableCell
+              orderKey='visitedAt'
+              activeOrder={activeOrder}
+              onOrderChange={onOrderChange}
+            >
               Дата посещения
-            </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            </SortableCell>
+            <SortableCell
+              orderKey='balance'
+              activeOrder={activeOrder}
+              onOrderChange={onOrderChange}
+            >
               Баланс
-            </TableCell>
+            </SortableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -184,11 +197,8 @@ const ClientsPage = () => {
                 <TableCell>
                   {client.birthday && moment().diff(moment(client.birthday), 'years')}
                 </TableCell>
-                {/* <TableCell>
-                  {client.type}
-                </TableCell> */}
                 <TableCell>
-                  {moment().format('D MMMM, YYYY')}
+                  {client.visitedAt && moment(client.visitedAt).format('D MMMM, YYYY')}
                 </TableCell>
                 <TableCell>
                   {client.balance}
@@ -202,7 +212,7 @@ const ClientsPage = () => {
         opened={openedClientDialog}
         close={closeClientDialog}
         submit={submit}
-        _id={activeId}
+        id={activeId}
       />
 
       {/* <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true} /> */}

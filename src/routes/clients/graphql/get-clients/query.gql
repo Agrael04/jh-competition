@@ -1,5 +1,5 @@
-query {
-  clients(limit: 100) {
+query getClients($sortBy: ClientSortByInput!){
+  clients(limit: 100, sortBy: $sortBy, query: { firstName_ne: "", lastName_ne: "" }) {
     _id
     firstName
     lastName
@@ -11,5 +11,6 @@ query {
     specialConditions
     group
     groupRole
+    visitedAt
   }
 }

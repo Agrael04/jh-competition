@@ -5,11 +5,13 @@ import { bindActionCreators } from 'redux'
 import checkDialog from './check-dialog'
 import schedule from './schedule'
 import records from './records'
+import clients from './clients'
 
 export const actions = {
   checkDialog,
   schedule,
   records,
+  clients,
 }
 
 export default actions
@@ -29,6 +31,9 @@ export const useActions = () => {
       },
       records: {
         page: bindActionCreators(records.page, dispatch),
+      },
+      clients: {
+        page: bindActionCreators(clients.page, dispatch),
       },
     }),
     [dispatch]

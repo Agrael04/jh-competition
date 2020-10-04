@@ -15,15 +15,30 @@ export interface IClient {
   specialConditions?: string
   group?: string
   groupRole?: string
+  visitedAt?: Date
 }
 
 export interface IGetClients {
   clients: IClient[]
 }
 
-export const useGetClientsQuery = () => {
+// export enum SortBy {
+//   fullNameAsc = 'FULLNAME_ASC',
+//   fullNameDesc = 'FULLNAME_DESC',
+//   birthdayAsc = 'BIRTHDAY_DESC',
+//   birthdayDesc = 'BIRTHDAY_DESC',
+//   visitedAtAsc = 'VISITEDAT_DESC',
+//   visitedAtDesc = 'VISITEDAT_DESC',
+//   balanceAsc = 'BALANCE_DESC',
+//   balanceDesc = 'BALANCE_DESC',
+// }
+
+export const useGetClientsQuery = (sortBy?: string) => {
   const result = useQuery<IGetClients>(GET_CLIENTS, {
     fetchPolicy: 'cache-and-network',
+    variables: {
+      sortBy: sortBy || 'FULLNAME_ASC',
+    },
   })
 
   return result

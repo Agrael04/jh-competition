@@ -16,13 +16,11 @@ interface IClientDialogProps {
   opened: boolean
   submit: (form: IClientForm) => void
   close: () => void
-  _id?: string
+  id?: string
 }
 
-export default function ClientDialog({ opened, close, submit, _id }: IClientDialogProps) {
-  const { data, loading } = useGetClient(_id)
-
-  console.log(data, _id)
+export default function ClientDialog({ opened, close, submit, id }: IClientDialogProps) {
+  const { data, loading } = useGetClient(id)
 
   const defaultValues = useMemo(
     () => {

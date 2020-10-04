@@ -18,19 +18,6 @@ import useGetTrainingQuery, { convertTrainingToInput } from '../../queries/get-t
 
 import { trainingTypes } from 'data/training-types'
 
-const translations = {
-  'date': 'Дата',
-  'startTime': 'Час початку',
-  'trainer': 'Тренер',
-  'gym': 'Зал',
-  'notes': 'Комментарi',
-  'trampolines': 'Батуты',
-  'trainingType': 'Тип треннування',
-  'trainingName': 'Назва',
-  'moneyPrice': 'Разова цiна',
-  'markPrice': 'Кiлькiсть вiдмiток',
-} as any
-
 type FieldName = keyof IStoreState['schedule']['trainingDialog']['trainingForm']
 
 const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.trainingDialog.trainingForm[name]
@@ -74,7 +61,7 @@ export default function TrainingDialog() {
         <Grid item={true} lg={12}>
           <GymSelect
             name='gym'
-            label={translations.gym}
+            label='Зал'
           />
           <Box marginBottom={2.5} />
         </Grid>
@@ -83,7 +70,7 @@ export default function TrainingDialog() {
             name='date'
             onChange={handleChange}
             fieldSelector={fieldSelector}
-            label={translations.date}
+            label='Дата'
             fullWidth={true}
             inputVariant='outlined'
             disableToolbar={true}
@@ -98,7 +85,7 @@ export default function TrainingDialog() {
             name='name'
             onChange={handleChange}
             fieldSelector={fieldSelector}
-            label={translations.trainingName}
+            label='Название'
             fullWidth={true}
             variant='outlined'
           />
@@ -109,7 +96,7 @@ export default function TrainingDialog() {
             name='type'
             onChange={handleChange}
             fieldSelector={fieldSelector}
-            label={translations.trainingType}
+            label={'Тип треннировки'}
             fullWidth={true}
             variant='outlined'
           >
@@ -140,7 +127,7 @@ export default function TrainingDialog() {
             name='note'
             onChange={handleChange}
             fieldSelector={fieldSelector}
-            label={translations.notes}
+            label='Комментарий'
             rows={6}
             fullWidth={true}
             variant='outlined'

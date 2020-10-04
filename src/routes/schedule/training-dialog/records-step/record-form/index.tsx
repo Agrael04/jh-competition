@@ -62,7 +62,7 @@ export default function RecordsBlock() {
     }, [trainingQuery, recordId]
   )
 
-  const getResouceLabel = React.useCallback(
+  const getResourceLabel = React.useCallback(
     resource => {
       const name = resource?.resource?.name
       const st = getTimeLabel(resource.startTime)
@@ -146,7 +146,7 @@ export default function RecordsBlock() {
               {
                 trainingQuery.data?.trainingResources.map(r => (
                   <MenuItem value={r._id} key={r._id}>
-                    {getResouceLabel(r)}
+                    {getResourceLabel(r)}
                   </MenuItem>
                 ))
               }
