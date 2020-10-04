@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import moment from 'moment'
 import { useSelector, useActions } from 'store'
 
@@ -30,10 +30,8 @@ import useStyles from './styles'
 
 const ClientsPage = () => {
   const actions = useActions()
-  const { activeOrder } = useSelector(state => state.clients.page)
+  const { activeOrder, clientDialog } = useSelector(state => state.clients.page)
   const classes = useStyles()
-  const [openedClientDialog, setOpenedClientDialog] = useState<boolean>(false)
-  const [activeId, setActiveId] = useState<string | undefined>()
 
   const { data, loading } = useGetClients(`${activeOrder.orderKey.toUpperCase()}_${activeOrder.direction.toUpperCase()}`)
   const createClient = useCreateClient()
@@ -56,28 +54,26 @@ const ClientsPage = () => {
 
   const openNewClientDialog = useCallback(
     () => {
-      setOpenedClientDialog(true)
-      setActiveId(undefined)
-    }, [setOpenedClientDialog]
+      actions.clients.page.openClientDialog()
+    }, [actions]
   )
 
   const openOldClientDialog = useCallback(
     (id: string) => () => {
-      setOpenedClientDialog(true)
-      setActiveId(id)
-    }, [setOpenedClientDialog, setActiveId]
+      actions.clients.page.openClientDialog(id)
+    }, [actions]
   )
 
   const closeClientDialog = useCallback(
     () => {
-      setOpenedClientDialog(false)
-    }, [setOpenedClientDialog]
+      actions.clients.page.closeClientDialog()
+    }, [actions]
   )
 
   const submit = useCallback(
     async (values: IClientForm) => {
-      if (activeId) {
-        await updateClient(activeId, {
+      if (clientDialog.id) {
+        await updateClient(clientDialog.id, {
           ...values,
           fullName: `${values.lastName} ${values.firstName}`,
         })
@@ -89,7 +85,7 @@ const ClientsPage = () => {
       }
 
       closeClientDialog()
-    }, [createClient, updateClient, activeId, closeClientDialog]
+    }, [createClient, updateClient, clientDialog, closeClientDialog]
   )
 
   const onOrderChange = (key: string) => () => actions.clients.page.changeOrder(key)
@@ -209,10 +205,10 @@ const ClientsPage = () => {
         </TableBody>
       </Table>
       <ClientDialog
-        opened={openedClientDialog}
+        opened={clientDialog.opened}
         close={closeClientDialog}
         submit={submit}
-        id={activeId}
+        id={clientDialog.id}
       />
 
       {/* <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true} /> */}

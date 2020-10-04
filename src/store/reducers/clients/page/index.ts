@@ -9,12 +9,21 @@ export interface IState {
     orderKey: string
     direction: 'asc' | 'desc'
   }
+
+  clientDialog: {
+    opened: boolean
+    id?: string
+  }
 }
 
 const initialState: IState = {
   activeOrder: {
     orderKey: 'fullName',
     direction: 'asc',
+  },
+  clientDialog: {
+    opened: false,
+    id: undefined,
   },
 }
 
@@ -28,6 +37,20 @@ const reducer = createReducer<IState, IAction>(initialState)
         : state.activeOrder.direction === 'desc'
           ? 'asc'
           : 'desc',
+    },
+  }))
+  .handleAction(actions.openClientDialog, (state, { payload: { id } }) => ({
+    ...state,
+    clientDialog: {
+      opened: true,
+      id,
+    },
+  }))
+  .handleAction(actions.closeClientDialog, state => ({
+    ...state,
+    clientDialog: {
+      opened: false,
+      id: undefined,
     },
   }))
 export default reducer
