@@ -1,25 +1,28 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import uniqBy from 'lodash/uniqBy'
 
 import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
-import Select from 'components/select'
+import Select, { ISelectProps } from 'components/select'
 
 import useGetSchedulesQuery from '../../../queries/get-schedules'
 
-interface IProps {
-  value: { link: string } | null | undefined
-  onChange: (value: any) => void
-  error?: any
+type IProps = ISelectProps & {
+  onChange?: any
+  value?: any
+  error?: {
+    message: string
+  }
 }
 
-export default function TrainerSelect({ value, onChange, error }: IProps) {
-  const { watch, reset } = useFormContext()
+export default function TrainerSelect(props: IProps) {
+  const { value, error, onChange } = props
+  const { watch } = useFormContext()
 
   const startTime = watch('startTime')
   const endTime = watch('endTime')
-  const trainer = watch('trainer')?.link
 
   const { date, gym } = useSelector(state => ({
     date: state.schedule.trainingDialog.trainingForm.date,
@@ -27,11 +30,11 @@ export default function TrainerSelect({ value, onChange, error }: IProps) {
   }))
   const { data, loading } = useGetSchedulesQuery(date)
 
-  const trainers = React.useMemo(
+  const trainers = useMemo(
     () => {
       const schedules = data?.trainerSchedules
         .filter(ts => {
-          if (ts.gym._id !== gym) {
+          if (gym && ts.gym._id !== gym) {
             return false
           }
 
@@ -53,13 +56,18 @@ export default function TrainerSelect({ value, onChange, error }: IProps) {
           return arr.filter(t => t.trainer._id === ts.trainer._id).length === (endTime - startTime)
         })
 
-      const trainers = schedules?.map(sh => sh.trainer).filter((tr, index, arr) => {
-        return arr.findIndex(item => item._id === tr._id) === index
-      })
+      const trainers = uniqBy(schedules?.map(sh => sh.trainer), '_id')
 
       return trainers
     },
     [data, startTime, endTime, gym]
+  )
+
+  const filteredTrainer = useMemo(
+    () => {
+      return trainers?.find(ft => ft._id === value?.link)
+    },
+    [trainers, value]
   )
 
   const handleChange = React.useCallback(
@@ -73,26 +81,16 @@ export default function TrainerSelect({ value, onChange, error }: IProps) {
 
   React.useEffect(
     () => {
-      if (loading) {
-        return
+      if (!loading && value && !filteredTrainer) {
+        onChange(undefined)
       }
-
-      if (!trainer) {
-        return
-      }
-
-      if (trainers?.find(ft => ft._id === trainer)) {
-        return
-      }
-
-      reset({ trainer: undefined })
     },
-    [reset, loading, trainers, handleChange, trainer]
+    [onChange, loading, value, filteredTrainer]
   )
 
   return (
     <Select
-      value={value ? value.link : null}
+      value={filteredTrainer ? value.link : null}
       onChange={handleChange}
       label={'Тренер'}
       fullWidth={true}

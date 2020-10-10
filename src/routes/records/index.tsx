@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import moment from 'moment'
-import { uniq } from 'lodash'
+import uniq from 'lodash/uniq'
 import { useSelector, useActions } from 'store'
 
 import Paper from '@material-ui/core/Paper'

@@ -2,17 +2,22 @@ import React from 'react'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
-import Select from 'components/select'
+import Select, { ISelectProps } from 'components/select'
 
 import useGetGymsQuery from '../../../queries/get-gyms'
 
-interface IProps {
-  value: { link: string } | null | undefined
-  onChange: (value: any) => void
-  error?: any
+type IProps = ISelectProps & {
+  onChange?: any
+  value?: any
+  error?: {
+    message: string
+  }
+  linked?: boolean
 }
 
-export default function ResourceSelect({ value, onChange, error }: IProps) {
+export default function ResourceSelect(props: IProps) {
+  const { value, error, onChange } = props
+
   const { gym } = useSelector(state => ({
     gym: state.schedule.trainingDialog.trainingForm.gym.link,
   }))
@@ -42,7 +47,7 @@ export default function ResourceSelect({ value, onChange, error }: IProps) {
       fullWidth={true}
       variant='outlined'
       error={!!error}
-      helperText={error && 'Обязательное поле'}
+      helperText={error?.message || props.helperText}
     >
       {
         resources.map(r => (

@@ -1,36 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
-import Select from 'components/select'
+import Select, { ISelectProps } from 'components/select'
 
 import useGetTrainingResourcesQuery from '../../../queries/get-training-resources'
-import useGetSchedulesQuery, { isTrainerAvailable } from '../../../queries/get-schedules'
 
-import times from 'data/times'
+import times, { MIN_TIME_ID, MAX_TIME_ID } from 'data/times'
 
-interface IProps {
-  value: { link: string } | null | undefined
-  onChange: (value: any) => void
-  error?: any
+type IProps = ISelectProps & {
+  onChange?: any
+  value?: any
+  error?: {
+    message: string
+  }
 }
 
-export default function StartTimeSelect({ value, error }: IProps) {
-  const { watch, reset } = useFormContext()
+export default function StartTimeSelect(props: IProps) {
+  const { value, onChange, error } = props
+  const { watch } = useFormContext()
 
   const endTime = watch('endTime')
-  const trainer = watch('trainer')?.link
   const resource = watch('resource')?.link
 
-  const { date, gym, _id } = useSelector(state => ({
-    date: state.schedule.trainingDialog.trainingForm.date,
-    gym: state.schedule.trainingDialog.trainingForm.gym.link,
+  const { _id } = useSelector(state => ({
     _id: state.schedule.trainingDialog.resourceForm.resource?._id,
   }))
   const trainingResources = useGetTrainingResourcesQuery()
-  const { data } = useGetSchedulesQuery(date)
 
   const filteredTimes = React.useMemo(
     () => {
@@ -40,22 +38,24 @@ export default function StartTimeSelect({ value, error }: IProps) {
       return times
         .filter(t => !endTime || t.id < endTime)
         .filter(t => !prevResource || t.id >= prevResource?.endTime)
+        .filter(t => t.id < MAX_TIME_ID)
     },
     [endTime, _id, resource, trainingResources]
   )
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const startTime = +e.target.value
-      const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, startTime, endTime!)
-
-      reset({
-        startTime,
-        endTime: endTime || (startTime < 27 ? startTime + 2 : endTime),
-        trainer: isAvailable ? { link: trainer! } : undefined,
-      })
+      onChange(+e.target.value)
     },
-    [reset, endTime, data, trainer, gym]
+    [onChange]
+  )
+
+  useEffect(
+    () => {
+      if (endTime && !value) {
+        onChange(Math.max(endTime - 2, MIN_TIME_ID))
+      }
+    }, [endTime, value, onChange]
   )
 
   return (

@@ -34,4 +34,7 @@ export const getTimeLabel = (id?: number) => {
   return times.find(t => t.id === id)?.label
 }
 
+export const MIN_TIME_ID = 1
+export const MAX_TIME_ID = 29
+
 export default times

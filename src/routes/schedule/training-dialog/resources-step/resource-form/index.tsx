@@ -9,9 +9,9 @@ import Chip from '@material-ui/core/Chip'
 
 import AddIcon from '@material-ui/icons/AddCircle'
 
-import FormController from 'components/form-controller'
-
 import getClientLabel from 'utils/get-client-label'
+
+import FormController from 'containers/fields/form-controller'
 
 import ResourceSelect from './resource-select'
 import TrainerSelect from './trainer-select'
@@ -37,7 +37,9 @@ export default function ResourcesBlock() {
   const actions = useActions()
   const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
 
-  const methods = useForm<IForm>()
+  const methods = useForm<IForm>({
+    defaultValues: form.resource || undefined,
+  })
   const { trainingForm, traineesAmount } = useSelector(state => ({
     trainingForm: state.schedule.trainingDialog.trainingForm,
     traineesAmount: state.schedule.trainingDialog.trainingForm?.traineesAmount,
@@ -76,35 +78,24 @@ export default function ResourcesBlock() {
     <FormProvider {...methods}>
       <Grid item={true} lg={8} container={true} spacing={3}>
         <Grid item={true} lg={12}>
-          <FormController
-            name='resource'
-            Component={ResourceSelect}
-            rules={{ required: true }}
-            defaultValue={form.resource!.resource}
-          />
+          <FormController name='resource' rules={{ required: true }}>
+            <ResourceSelect />
+          </FormController>
         </Grid>
         <Grid item={true} lg={6}>
-          <FormController
-            name='startTime'
-            Component={StartTimeSelect}
-            rules={{ required: true }}
-            defaultValue={form.resource!.startTime}
-          />
+          <FormController name='startTime' rules={{ required: true }}>
+            <StartTimeSelect />
+          </FormController>
         </Grid>
         <Grid item={true} lg={6}>
-          <FormController
-            name='endTime'
-            Component={EndTimeSelect}
-            rules={{ required: true }}
-            defaultValue={form.resource!.endTime}
-          />
+          <FormController name='endTime' rules={{ required: true }}>
+            <EndTimeSelect />
+          </FormController>
         </Grid>
         <Grid item={true} lg={12}>
-          <FormController
-            name='trainer'
-            Component={TrainerSelect}
-            defaultValue={form.resource!.trainer}
-          />
+          <FormController name='trainer'>
+            <TrainerSelect />
+          </FormController>
         </Grid>
         <Grid item={true} lg={12} spacing={1} container={true}>
           {
