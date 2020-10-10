@@ -104,7 +104,7 @@ const prepareData = (trainings: ITraining[]) => {
       `${tr.trainer?.lastName} ${tr.trainer?.firstName}`,
       tr.valueType === HOURS_TYPE ? tr.hours : '',
       tr.valueType === PEOPLE_TYPE ? tr.people : '',
-      tr.contacts.map(contact => `${contact.surname} ${contact.name}`).join(', '),
+      tr.contacts.map(contact => `${contact.lastName} ${contact.firstName}`).join(', '),
     ])),
   ]
 
@@ -167,8 +167,8 @@ const convertRecordsToTrainings = (trainingRecords?: IRecord[]) => {
         type: tr.training.type,
         contacts: records.map(t => ({
           _id: t.contact._id,
-          name: t.contact.name,
-          surname: t.contact.surname,
+          firstName: t.contact.firstName,
+          lastName: t.contact.lastName,
         })),
         hours,
         people,

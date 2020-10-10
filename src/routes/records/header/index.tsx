@@ -90,7 +90,7 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
                 <Box marginLeft={1} marginY='auto'>
                   <Chip
                     color='primary'
-                    label={`${uniq(trainings.reduce((res: ITraining['contacts'], a) => [...res, ...a.contacts], []).map(c => `${c.surname} ${c.name}`)).length} контактов`}
+                    label={`${uniq(trainings.reduce((res: ITraining['contacts'], a) => [...res, ...a.contacts], []).map(c => `${c.lastName} ${c.firstName}`)).length} контактов`}
                   />
                 </Box>
               )

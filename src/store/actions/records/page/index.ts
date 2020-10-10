@@ -1,12 +1,6 @@
 import { createAction } from 'typesafe-actions'
-import { Moment } from 'moment'
 
-export interface IFilters {
-  date: Moment
-  gym?: string
-  trainer?: string
-  types: string[]
-}
+import { IFiltersForm } from 'routes/records/filters-dialog'
 
 export const startFilterUpdate = createAction(
   'records/page/START_FILTER_UPDATE'
@@ -18,7 +12,7 @@ export const cancelFilterUpdate = createAction(
 
 export const completeFilterUpdate = createAction(
   'records/page/COMPLETE_FILTER_UPDATE',
-  (filters: IFilters) => ({ filters })
+  (filters: IFiltersForm) => ({ filters })
 )()
 
 export const actions = {

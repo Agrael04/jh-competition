@@ -6,12 +6,21 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
-import Select from 'components/select'
-import { IDefaultComponentProps } from 'components/form-controller'
+import Select, { ISelectProps } from 'components/select'
 
 import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
 
-const TypeSelect = ({ value, onChange }: IDefaultComponentProps) => {
+type IProps = ISelectProps & {
+  onChange?: any
+  value?: any
+  error?: {
+    message: string
+  }
+}
+
+const TypeSelect = (props: IProps) => {
+  const { value, onChange } = props
+
   const findType = React.useCallback(
     (type: string) => {
       return value.find((v: string) => v === type)

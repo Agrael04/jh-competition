@@ -3,7 +3,7 @@ import { loader } from 'graphql.macro'
 import { useSelector } from 'store'
 import moment from 'moment'
 
-const GET_TRAINING_PASSES = loader('./query.gql')
+const GET_RECORDS = loader('./query.gql')
 
 export interface IRecord {
   _id: string
@@ -27,8 +27,8 @@ export interface IRecord {
   }
   contact: {
     _id: string
-    name: string
-    surname: string
+    firstName: string
+    lastName: string
   }
 }
 
@@ -39,14 +39,14 @@ export interface IGetRecords {
 export const useGetRecordsQuery = () => {
   const filters = useSelector(state => state.records.page.filters)
 
-  const minDate = moment(filters.date).utc().format()
-  const maxDate = moment(filters.date).add(1, 'month').utc().format()
+  const minDate = moment(filters.date).startOf('month').utc().format()
+  const maxDate = moment(filters.date).startOf('month').add(1, 'month').utc().format()
 
-  const result = useQuery<IGetRecords>(GET_TRAINING_PASSES, {
+  const result = useQuery<IGetRecords>(GET_RECORDS, {
     variables: {
       minDate,
       maxDate,
-      trainer: filters.trainer,
+      trainer: filters.trainer ? { _id: filters.trainer } : null,
       gym: filters.gym,
       types: filters.types.length > 0 ? filters.types : null,
     },

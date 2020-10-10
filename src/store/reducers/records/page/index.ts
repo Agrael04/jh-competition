@@ -1,12 +1,13 @@
 import { createReducer, ActionType } from 'typesafe-actions'
 import moment from 'moment'
 
-import actions, { IFilters } from 'store/actions/records/page'
+import actions from 'store/actions/records/page'
+import { IFiltersForm } from 'routes/records/filters-dialog'
 
 type IAction = ActionType<typeof actions>
 
 export interface IState {
-  filters: IFilters
+  filters: IFiltersForm
 
   openedFiltersDialog: boolean
 }
