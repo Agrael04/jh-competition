@@ -13,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
-// import Dialog from '@material-ui/core/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 
 import InfoIcon from '@material-ui/icons/Info'
 
@@ -21,6 +21,7 @@ import SortableCell from 'components/sortable-cell'
 import ClientDialog, { IClientForm } from 'containers/client-dialog'
 
 import Header from './header'
+import FiltersDialog from './filters-dialog'
 
 import useGetClients from './graphql/get-clients'
 import useCreateClient from './graphql/create-client'
@@ -30,27 +31,18 @@ import useStyles from './styles'
 
 const ClientsPage = () => {
   const actions = useActions()
-  const { activeOrder, clientDialog } = useSelector(state => state.clients.page)
+  const { activeOrder, clientDialog, openedFiltersDialog } = useSelector(state => state.clients.page)
   const classes = useStyles()
 
-  const { data, loading } = useGetClients(`${activeOrder.orderKey.toUpperCase()}_${activeOrder.direction.toUpperCase()}`)
+  const { data, loading } = useGetClients()
   const createClient = useCreateClient()
   const updateClient = useUpdateClient()
 
-  const startFilterEditing = useCallback(
+  const close = useCallback(
     () => {
-      console.log('started')
-      // actions.records.page.startFilterUpdate()
-    }, [
-    // actions,
-  ]
+      actions.clients.page.cancelFilterUpdate()
+    }, [actions]
   )
-
-  // const close = useCallback(
-  //   () => {
-  //     actions.records.page.cancelFilterUpdate()
-  //   }, [actions]
-  // )
 
   const openNewClientDialog = useCallback(
     () => {
@@ -105,7 +97,7 @@ const ClientsPage = () => {
             >
               Имя
             </SortableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell className={classes.clickable}>
               Телефон
             </TableCell>
             <SortableCell
@@ -211,7 +203,9 @@ const ClientsPage = () => {
         id={clientDialog.id}
       />
 
-      {/* <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true} /> */}
+      <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true}>
+        <FiltersDialog />
+      </Dialog>
     </Paper>
   )
 }

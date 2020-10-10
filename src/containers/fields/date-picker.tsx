@@ -22,11 +22,11 @@ export default function DatePicker(props: IProps) {
 
   return (
     <MaterialDatePicker
+      {...props}
       value={value ? new Date(value) : null}
       onChange={handleChange}
       error={!!error}
       helperText={error?.message || props.helperText}
-      {...props}
     />
   )
 }
