@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select, { ISelectProps } from 'components/select'
 
 import useGetSchedulesQuery from '../../../queries/get-schedules'
+import useGetTrainingQuery from '../../../queries/get-training'
 
 type IProps = ISelectProps & {
   onChange?: any
@@ -20,21 +21,21 @@ type IProps = ISelectProps & {
 export default function TrainerSelect(props: IProps) {
   const { value, error, onChange } = props
   const { watch } = useFormContext()
+  const _id = useSelector(state => state.schedule.trainingDialog._id)
+
+  const trainingQuery = useGetTrainingQuery(_id!)
+  const training = trainingQuery.data?.training
 
   const startTime = watch('startTime')
   const endTime = watch('endTime')
 
-  const { date, gym } = useSelector(state => ({
-    date: state.schedule.trainingDialog.trainingForm.date,
-    gym: state.schedule.trainingDialog.trainingForm.gym.link,
-  }))
-  const { data, loading } = useGetSchedulesQuery(date)
+  const { data, loading } = useGetSchedulesQuery(training?.date)
 
   const trainers = useMemo(
     () => {
       const schedules = data?.trainerSchedules
         .filter(ts => {
-          if (gym && ts.gym._id !== gym) {
+          if (training && ts.gym._id !== training.gym._id) {
             return false
           }
 
@@ -60,7 +61,7 @@ export default function TrainerSelect(props: IProps) {
 
       return trainers
     },
-    [data, startTime, endTime, gym]
+    [data, startTime, endTime, training]
   )
 
   const filteredTrainer = useMemo(

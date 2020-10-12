@@ -28,11 +28,11 @@ export default function RecordItem({ id }: IProps) {
   const classes = useStyles()
 
   const actions = useActions()
-  const { isActive, trainingForm } = useSelector(state => ({
+  const { isActive, _id } = useSelector(state => ({
     isActive: state.schedule.trainingDialog.recordForm.record?._id === id,
-    trainingForm: state.schedule.trainingDialog.trainingForm,
+    _id: state.schedule.trainingDialog._id,
   }))
-  const trainingQuery = useGetTrainingQuery(trainingForm._id)
+  const trainingQuery = useGetTrainingQuery(_id)
   const date = trainingQuery.data?.training.date!
   const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 

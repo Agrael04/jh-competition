@@ -22,8 +22,8 @@ export default function ResourcesBlock() {
   const classes = useStyles()
   const actions = useActions()
   const _id = useSelector(state => state.schedule.trainingDialog._id)
-  const traineesAmount = useSelector(state => state.schedule.trainingDialog.trainingForm?.traineesAmount)
   const trainingQuery = useGetTrainingQuery(_id)
+  const traineesAmount = trainingQuery.data?.training.traineesAmount
   const isFormActive = useSelector(state => state.schedule.trainingDialog.recordForm.isActive)
 
   const activate = React.useCallback(

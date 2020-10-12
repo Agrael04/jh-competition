@@ -24,7 +24,6 @@ interface IForm {
 export default function ResourcesBlock() {
   const actions = useActions()
   const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
-  const trainingForm = useSelector(state => state.schedule.trainingDialog.trainingForm)
 
   const updateTrainingResource = useUpdateTrainingResource()
   const createTrainingResource = useCreateTrainingResource()
@@ -43,12 +42,12 @@ export default function ResourcesBlock() {
       }
 
       if (form.mode === 'create') {
-        await createTrainingResource(trainingForm!, { ...form.resource, ...resource } as ITrainingResourceForm)
+        await createTrainingResource({ ...form.resource, ...resource } as ITrainingResourceForm)
       }
 
       actions.schedule.trainingDialog.closeResource()
     },
-    [actions, createTrainingResource, updateTrainingResource, trainingForm, form]
+    [actions, createTrainingResource, updateTrainingResource, form]
   )
 
   return (

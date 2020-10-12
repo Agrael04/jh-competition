@@ -8,19 +8,9 @@ import times from 'data/times'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
-    const date: Date = yield select((state: IStoreState) => state.schedule.page.activeDate)
-    const gym: string = yield select((state: IStoreState) => state.schedule.page.activeGym)
-
     const _id = new BSON.ObjectID().toString()
 
     yield put(actions.trainingDialog.open('create', _id))
-
-    const training = {
-      _id,
-      gym: { link: gym },
-      date,
-      traineesAmount: 1,
-    }
 
     const resource = {
       startTime: action.payload.time,
@@ -28,7 +18,6 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
       resource: { link: action.payload.resource },
     }
 
-    yield put(actions.trainingDialog.initialize(training))
     yield put(actions.trainingDialog.openCreateResourceForm(resource))
   } catch (error) {
     console.log(error)

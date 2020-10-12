@@ -3,15 +3,13 @@ import { createReducer, ActionType } from 'typesafe-actions'
 import actions from 'store/actions/schedule/training-dialog'
 import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
-
 type IAction = ActionType<typeof actions>
 
 export interface IState {
   opened: boolean
   _id: string | null
 
-  trainingForm: ITrainingForm
+  trainingForm: ITrainingForm | null
   mode: 'create' | 'update' | null
 
   resourceForm: {
@@ -33,17 +31,7 @@ const initialState: IState = {
   opened: false,
   mode: null,
   _id: null,
-  trainingForm: {
-    _id: '',
-
-    gym: { link: '' },
-    date: removeTimeFromDate(new Date())!,
-
-    name: '',
-    type: '',
-    traineesAmount: undefined,
-    note: '',
-  },
+  trainingForm: null,
 
   resourceForm: {
     isActive: false,
@@ -85,19 +73,19 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     ...initialState,
   }))
-  .handleAction(actions.updateField, (state, { payload: { field, value } }) => ({
-    ...state,
-    trainingForm: {
-      ...state.trainingForm,
-      [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
-    },
-  }))
+  // .handleAction(actions.updateField, (state, { payload: { field, value } }) => ({
+  //   ...state,
+  //   trainingForm: {
+  //     ...state.trainingForm,
+  //     [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
+  //   },
+  // }))
 
   .handleAction(actions.openCreateResourceForm, (state, { payload: { resource } }) => ({
     ...state,
     resourceForm: {
       resource: {
-        training: { link: state.trainingForm._id },
+        training: { link: state._id! },
         startTime: resource?.startTime,
         endTime: resource?.endTime,
         resource: resource?.resource,
@@ -130,7 +118,7 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     recordForm: {
       record: {
-        training: { link: state.trainingForm._id },
+        training: { link: state._id! },
         resource: record?.resource,
       },
       mode: 'create',
@@ -142,7 +130,7 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     recordForm: {
       record: {
-        _id: record._id,
+        _id: record._id!,
         training: record.training,
         resource: record.resource,
         contact: record.contact,

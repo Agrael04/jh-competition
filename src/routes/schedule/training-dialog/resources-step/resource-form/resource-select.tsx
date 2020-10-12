@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select, { ISelectProps } from 'components/select'
 
 import useGetGymsQuery from '../../../queries/get-gyms'
+import useGetTrainingQuery from '../../../queries/get-training'
 
 type IProps = ISelectProps & {
   onChange?: any
@@ -17,16 +18,17 @@ type IProps = ISelectProps & {
 
 export default function ResourceSelect(props: IProps) {
   const { value, error, onChange } = props
+  const _id = useSelector(state => state.schedule.trainingDialog._id)
 
-  const { gym } = useSelector(state => ({
-    gym: state.schedule.trainingDialog.trainingForm.gym.link,
-  }))
+  const trainingQuery = useGetTrainingQuery(_id!)
+  const training = trainingQuery.data?.training
+
   const gyms = useGetGymsQuery()
 
   const resources = React.useMemo(
     () => {
-      return gyms.data?.resources.filter(r => r.gym._id === gym) || []
-    }, [gyms, gym]
+      return gyms.data?.resources.filter(r => r.gym._id === training?.gym._id) || []
+    }, [gyms, training]
   )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

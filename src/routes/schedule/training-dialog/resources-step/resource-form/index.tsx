@@ -22,7 +22,7 @@ import SubmitButton from './submit-button'
 
 import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../../queries/get-training'
 
-interface IForm {
+export interface IResourceForm {
   resource?: {
     link: string
   } | null
@@ -36,15 +36,14 @@ interface IForm {
 export default function ResourcesBlock() {
   const actions = useActions()
   const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
+  const _id = useSelector(state => state.schedule.trainingDialog._id)
 
-  const methods = useForm<IForm>({
+  const methods = useForm<IResourceForm>({
     defaultValues: form.resource || undefined,
   })
-  const { trainingForm, traineesAmount } = useSelector(state => ({
-    trainingForm: state.schedule.trainingDialog.trainingForm,
-    traineesAmount: state.schedule.trainingDialog.trainingForm?.traineesAmount,
-  }))
-  const trainingQuery = useGetTrainingQuery(trainingForm._id)
+
+  const trainingQuery = useGetTrainingQuery(_id)
+  const traineesAmount = trainingQuery.data?.training.traineesAmount
 
   const activateNew = React.useCallback(
     () => {

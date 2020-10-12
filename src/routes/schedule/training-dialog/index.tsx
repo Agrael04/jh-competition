@@ -22,9 +22,7 @@ import TrainingStep from './training-step'
 import ResourcesStep from './resources-step'
 import RecordsStep from './records-step'
 
-import SubmitButton from './submit-button'
-
-import useGetTrainingQuery, { convertTrainingToInput } from '../queries/get-training'
+import useGetTrainingQuery from '../queries/get-training'
 
 export default function TrainingDialog() {
   const opened = useSelector(state => state.schedule.trainingDialog.opened)
@@ -42,22 +40,12 @@ export default function TrainingDialog() {
     [actions]
   )
 
-  React.useEffect(
-    () => {
-      if (trainingQuery.data?.training) {
-        const training = convertTrainingToInput(trainingQuery.data.training)
-
-        actions.schedule.trainingDialog.initialize(training)
-      }
-    }, [actions, trainingQuery, _id]
-  )
-
   const activateStep = (index: number) => () => {
     actions.schedule.trainingDialog.setStep(index)
   }
 
   const isResourceStepAvailable = React.useMemo(
-    () => trainingQuery.data?.training,
+    () => !!trainingQuery.data?.training,
     [trainingQuery]
   )
 
@@ -125,21 +113,16 @@ export default function TrainingDialog() {
             </Button>
           )
         }
-        {
-          (
-            (step === 0 && isResourceStepAvailable) ||
-            (step === 1 && isRecordStepAvailable)
-          ) && (
-            <Button color='primary' onClick={activateStep(step + 1)}>
-              Далее
-            </Button>
-          )
-        }
-        {
-          step === 0 && !trainingQuery.data?.training && (
-            <SubmitButton />
-          )
-        }
+        <Button
+          color='primary'
+          onClick={activateStep(step + 1)}
+          disabled={(
+            (step === 0 && !isResourceStepAvailable) ||
+            (step === 1 && !isRecordStepAvailable)
+          )}
+        >
+          Далее
+        </Button>
       </DialogActions>
     </Dialog>
   )

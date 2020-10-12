@@ -1,10 +1,10 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import { useSelector } from 'store'
 
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
-import { ITrainingForm } from 'interfaces/training'
 
 import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
 
@@ -24,12 +24,16 @@ export const DELETE_TRAINING = gql`
 
 const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
+  const { date, _id } = useSelector(state => ({
+    date: state.schedule.page.activeDate,
+    _id: state.schedule.trainingDialog._id,
+  }))
 
   const mutate = React.useCallback(
-    (training: ITrainingForm) => {
+    () => {
       return deleteTraining({
         variables: {
-          _id: training._id,
+          _id,
         },
         update: (client, { data }) => {
           const trainingQuery = { query: GET_TRAINING, variables: { id: data.deleteOneTraining._id } }
@@ -40,13 +44,13 @@ const useDeleteTraining = () => {
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,
-            variables: { date: new Date(training.date) },
+            variables: { date: new Date(date) },
             updater,
           })
         },
       })
     },
-    [deleteTraining]
+    [deleteTraining, _id, date]
   )
 
   return mutate

@@ -25,11 +25,11 @@ export default function ResourceItem({ id }: IProps) {
   const classes = useStyles()
 
   const actions = useActions()
-  const { isActive, trainingForm } = useSelector(state => ({
-    trainingForm: state.schedule.trainingDialog.trainingForm,
+  const { isActive, _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
     isActive: state.schedule.trainingDialog.resourceForm.resource?._id === id,
   }))
-  const trainingQuery = useGetTrainingQuery(trainingForm._id)
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const resource = trainingQuery?.data?.trainingResources.find(r => r._id === id)
 
@@ -44,9 +44,9 @@ export default function ResourceItem({ id }: IProps) {
 
   const remove = React.useCallback(
     async () => {
-      await deleteTrainingResource(trainingForm, id)
+      await deleteTrainingResource(id)
     },
-    [deleteTrainingResource, trainingForm, id]
+    [deleteTrainingResource, id]
   )
 
   const primaryLabel = React.useMemo(
