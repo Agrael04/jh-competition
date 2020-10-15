@@ -26,10 +26,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
 
 export function* openAddTrainerDialog() {
   try {
-    const date: Date = yield select((state: IStoreState) => state.schedule.page.activeDate)
-    const gym: string = yield select((state: IStoreState) => state.schedule.page.activeGym)
-
-    yield put(actions.addTrainerDialog.open(gym, date))
+    yield put(actions.addTrainerDialog.open())
   } catch (error) {
     console.log(error)
   }

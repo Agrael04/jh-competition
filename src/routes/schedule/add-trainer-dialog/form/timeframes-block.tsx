@@ -1,5 +1,6 @@
 import React from 'react'
-import { useSelector, useActions } from 'store'
+import { useSelector } from 'store'
+import { useFieldArray } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -8,10 +9,17 @@ import Typography from '@material-ui/core/Typography'
 import TraineeRow from './timeframe-row'
 
 export default function TraineesBlock() {
-  const timeFrames = useSelector(state => state.schedule.addTrainerDialog.timeFrames)
-  const actions = useActions()
+  const { fields, append, remove } = useFieldArray({
+    name: 'timeFrames',
+  })
 
-  const addTimeFrame = actions.schedule.addTrainerDialog.addTimeFrame
+  const addTimeFrame = () => append({})
+
+  const handleRemove = (index: number) => {
+    if (fields.length > 1) {
+      remove(index)
+    }
+  }
 
   return (
     <>
@@ -21,12 +29,12 @@ export default function TraineesBlock() {
         </Typography>
       </Grid>
       {
-        timeFrames.map((tf, index) => (
-          <TraineeRow index={index} key={index} />
+        fields.map((tf, index) => (
+          <TraineeRow index={index} key={tf.id} remove={handleRemove} />
         ))
       }
       {
-        timeFrames.length < 3 && (
+        fields.length < 3 && (
           <Grid item={true} container={true} justify='flex-end'>
             <Button variant='outlined' color='primary' onClick={addTimeFrame}> Добавить время </Button>
           </Grid>

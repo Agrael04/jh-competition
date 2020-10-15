@@ -16,11 +16,6 @@ export const close = createAction(
   'schedule/trainingDialog/CLOSE'
 )()
 
-export const updateField = createAction(
-  'schedule/trainingDialog/UPDATE_FIELD',
-  (field: string, value: any) => ({ field, value })
-)()
-
 export const openCreateResourceForm = createAction(
   'schedule/trainingDialog/OPEN_CREATE_RESOURCE_FORM',
   (resource?: Partial<ITrainingResourceForm>) => ({ resource })
@@ -62,8 +57,6 @@ export const actions = {
   open,
   initialize,
   close,
-
-  updateField,
 
   openCreateResourceForm,
   openUpdateResourceForm,

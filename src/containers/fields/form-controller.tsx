@@ -1,4 +1,5 @@
 import React, { ComponentProps } from 'react'
+import get from 'lodash/get'
 
 import { useFormContext, Controller } from 'react-hook-form'
 
@@ -16,7 +17,7 @@ interface IProps extends BaseProps {
 export default function FormController(props: IProps) {
   const { control, errors } = useFormContext()
 
-  const error = errors[props.name]
+  const error = get(errors, props.name)
   const Child = React.cloneElement(props.children, { name: props.name, error })
 
   return (

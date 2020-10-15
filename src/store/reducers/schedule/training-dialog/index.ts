@@ -73,13 +73,6 @@ const reducer = createReducer<IState, IAction>(initialState)
     ...state,
     ...initialState,
   }))
-  // .handleAction(actions.updateField, (state, { payload: { field, value } }) => ({
-  //   ...state,
-  //   trainingForm: {
-  //     ...state.trainingForm,
-  //     [field]: field === 'date' ? removeTimeFromDate(new Date(value)) : value,
-  //   },
-  // }))
 
   .handleAction(actions.openCreateResourceForm, (state, { payload: { resource } }) => ({
     ...state,

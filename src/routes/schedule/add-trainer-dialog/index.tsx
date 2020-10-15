@@ -1,54 +1,34 @@
 import React from 'react'
-import { IStoreState, useSelector, useActions } from 'store'
+import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
-import Divider from '@material-ui/core/Divider'
-import MenuItem from '@material-ui/core/MenuItem'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-import DatePicker from 'containers/deprecated/date-picker'
+import Form from './form'
 
-import useStyles from './styles'
-
-import Select from 'containers/deprecated/select'
-
-import TimeframesBlock from './timeframes-block'
-import SubmitButton from './submit-button'
-
-import useGetSchedulesQuery from '../queries/get-schedules'
-import useGetTrainersQuery from '../queries/get-trainers'
-
-type FieldName = keyof IStoreState['schedule']['addTrainerDialog']['form']
-
-const fieldSelector = (name: FieldName) => (state: IStoreState) => state.schedule.addTrainerDialog.form[name]
+export interface IScheduleForm {
+  trainer?: string
+  date?: Date
+  timeFrames?: Array<{
+    from?: number
+    to?: number
+    gym?: string
+  }>
+}
 
 export default function TrainingDialog() {
-  const classes = useStyles()
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
   const actions = useActions()
-  const schedulesQuery = useGetSchedulesQuery()
-  const trainersQuery = useGetTrainersQuery(!opened)
-
-  const filteredTrainers = React.useMemo(
-    () => trainersQuery?.data?.trainers?.filter(trainer => !schedulesQuery.data?.trainerSchedules.find(s => s.trainer._id === trainer._id)) || [],
-    [trainersQuery, schedulesQuery]
-  )
 
   const close = React.useCallback(
     () => actions.schedule.addTrainerDialog.close(),
     [actions]
   )
-
-  const handleChange = (name: string, value: any) => {
-    actions.schedule.addTrainerDialog.updateField(name, value)
-  }
 
   return (
     <Dialog open={opened} onClose={close} maxWidth='sm' fullWidth={true}>
@@ -62,53 +42,9 @@ export default function TrainingDialog() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box padding={3}>
-        <Grid container={true} direction='column' justify='space-around'>
-          <Grid item={true} container={true} spacing={3} justify='space-around'>
-            <Grid item={true} lg={6}>
-              <DatePicker
-                name='date'
-                fieldSelector={fieldSelector}
-                label={'Дата'}
-                fullWidth={true}
-                inputVariant='outlined'
-                disableToolbar={true}
-                variant='inline'
-                disabled={true}
-              />
-            </Grid>
-            <Grid item={true} lg={6} container={true}>
-              <Box marginY='auto' width='100%'>
-                <Select
-                  name='trainer'
-                  onChange={handleChange}
-                  fieldSelector={fieldSelector}
-                  label={'Тренер'}
-                  fullWidth={true}
-                  variant='outlined'
-                >
-                  {
-                    filteredTrainers.map(trainer => (
-                      <MenuItem value={trainer._id} key={trainer._id}>
-                        {trainer.firstName} {trainer.lastName}
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
-              </Box>
-            </Grid>
-            <Grid item={true} lg={12}>
-              <Divider className={classes.divider} />
-            </Grid>
-            <TimeframesBlock />
-          </Grid>
-          <Box marginTop={2}>
-            <Grid item={true} container={true} justify='flex-end'>
-              <SubmitButton />
-            </Grid>
-          </Box>
-        </Grid>
-      </Box>
+      {
+        opened && <Form />
+      }
     </Dialog>
   )
 }
