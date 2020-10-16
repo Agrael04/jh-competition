@@ -1,12 +1,11 @@
 import React from 'react'
-import { useSelector } from 'store'
 import { useFieldArray } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
-import TraineeRow from './timeframe-row'
+import TimeframeRow from './timeframe-row'
 
 export default function TraineesBlock() {
   const { fields, append, remove } = useFieldArray({
@@ -30,7 +29,7 @@ export default function TraineesBlock() {
       </Grid>
       {
         fields.map((tf, index) => (
-          <TraineeRow index={index} key={tf.id} remove={handleRemove} />
+          <TimeframeRow index={index} key={tf.id} remove={handleRemove} />
         ))
       }
       {
