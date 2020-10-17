@@ -19,12 +19,11 @@ interface IProps {
 const EmptyItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
-  const { date, gym } = useSelector(state => ({
-    date: state.schedule.page.activeDate,
-    gym: state.schedule.page.activeGym,
+  const { gym } = useSelector(state => ({
+    gym: state.schedule.page.filters.gym?.link!,
   }))
 
-  const { data } = useGetSchedulesQuery(date)
+  const { data } = useGetSchedulesQuery()
 
   const trainingResources = useGetTrainingResourcesQuery()
   const updateTrainingResource = useUpdateTrainingResource()

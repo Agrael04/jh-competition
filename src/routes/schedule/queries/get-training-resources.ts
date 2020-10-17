@@ -36,10 +36,10 @@ export const GET_TRAINING_RESOURCES = gql`
 `
 
 export const useGetTrainingResourcesQuery = () => {
-  const date = useSelector(state => state.schedule.page.activeDate)
+  const date = useSelector(state => state.schedule.page.filters.date)
 
   const result = useQuery<IGetTrainingResourcesResponse>(GET_TRAINING_RESOURCES, {
-    variables: { date },
+    variables: { date: date.toDate() },
   })
 
   return result

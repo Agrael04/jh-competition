@@ -24,7 +24,7 @@ interface IProps {
 const TrainerBodyCell = ({ time, trainers, primaryRow, activeRow }: IProps) => {
   const classes = useStyles()
   const openedTrainers = useSelector(state => state.schedule.page.openedTrainers)
-  const activeGym = useSelector(state => state.schedule.page.activeGym)
+  const activeGym = useSelector(state => state.schedule.page.filters.gym?.link)
   const { data } = useGetSchedulesQuery()
 
   return (

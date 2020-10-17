@@ -1,4 +1,11 @@
 import { createAction } from 'typesafe-actions'
+import { Moment } from 'moment'
+
+interface IFilters {
+  date: Moment
+  gym: { link: string } | null
+  resources: string[]
+}
 
 export const openCreateTrainingDialog = createAction(
   'schedule/page/OPEN_CREATE_TRAINING_DIALOG',
@@ -46,6 +53,19 @@ export const openCheckDialog = createAction(
   'schedule/page/OPEN_CHECK_DIALOG'
 )()
 
+export const startFilterUpdate = createAction(
+  'schedule/page/START_FILTER_UPDATE'
+)()
+
+export const cancelFilterUpdate = createAction(
+  'schedule/page/CANCEL_FILTER_UPDATE'
+)()
+
+export const completeFilterUpdate = createAction(
+  'schedule/page/COMPLETE_FILTER_UPDATE',
+  (filters: IFilters) => ({ filters })
+)()
+
 export const actions = {
   openCreateTrainingDialog,
   openUpdateTrainingDialog,
@@ -61,6 +81,10 @@ export const actions = {
 
   toggleOpenedTrainers,
   openCheckDialog,
+
+  startFilterUpdate,
+  cancelFilterUpdate,
+  completeFilterUpdate,
 }
 
 export default actions

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
+import { Moment } from 'moment'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
@@ -23,7 +24,7 @@ import { requiredValidation } from 'utils/validations'
 
 export interface IScheduleForm {
   trainer?: string
-  date?: Date
+  date?: Moment
   timeFrames?: Array<{
     from?: number
     to?: number
@@ -34,8 +35,8 @@ export interface IScheduleForm {
 export default function TrainingDialog() {
   const classes = useStyles()
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
-  const date = useSelector(state => state.schedule.page.activeDate)
-  const gym = useSelector(state => state.schedule.page.activeGym)
+  const date = useSelector(state => state.schedule.page.filters.date)
+  const gym = useSelector(state => state.schedule.page.filters.gym?.link)
   const schedulesQuery = useGetSchedulesQuery()
   const trainersQuery = useGetTrainersQuery(!opened)
 

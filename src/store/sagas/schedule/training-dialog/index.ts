@@ -7,8 +7,8 @@ import { IStoreState } from 'store'
 export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trainingDialog.openCheckDialog>) {
   try {
     const { activeDate, activeGym, contact } = yield select((state: IStoreState) => ({
-      activeDate: state.schedule.page.activeDate,
-      activeGym: state.schedule.page.activeGym,
+      activeDate: state.schedule.page.filters.date,
+      activeGym: state.schedule.page.filters.gym?.link!,
       contact: state.schedule.trainingDialog.recordForm.record?.contact?.link,
     }))
 

@@ -44,8 +44,6 @@ export default function TrainingForm() {
   const gyms = useGetGymsQuery()
   const trainingQuery = useGetTrainingQuery(_id!)
 
-  console.log(trainingQuery.data?.training)
-
   return (
     <FormProvider {...methods}>
       <Grid item={true} container={true} lg={4} spacing={2}>

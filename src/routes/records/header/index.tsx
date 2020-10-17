@@ -76,10 +76,22 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
               <FilterListIcon />
             </IconButton>
             {
+              filterChips.map(filter => (
+                <Box marginLeft={1} marginY={'auto'} key={filter}>
+                  <Chip
+                    color='primary'
+                    label={filter}
+                    onClick={startFilterEditing}
+                  />
+                </Box>
+              ))
+            }
+            <Grid item={true} lg={12} />
+            {
               !trainings.length && (
                 <Box marginLeft={1} marginY='auto'>
                   <Chip
-                    color='primary'
+                    color='secondary'
                     label={`${uniq(trainings.map(t => t.date)).length} дней`}
                   />
                 </Box>
@@ -89,7 +101,7 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
               !trainings.length && (
                 <Box marginLeft={1} marginY='auto'>
                   <Chip
-                    color='primary'
+                    color='secondary'
                     label={`${uniq(trainings.reduce((res: ITraining['contacts'], a) => [...res, ...a.contacts], []).map(c => `${c.lastName} ${c.firstName}`)).length} контактов`}
                   />
                 </Box>
@@ -99,7 +111,7 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
               !trainings.length && (
                 <Box marginLeft={1} marginY='auto'>
                   <Chip
-                    color='primary'
+                    color='secondary'
                     label={`${trainings.reduce((res, a) => res + a.people, 0)} чел`}
                   />
                 </Box>
@@ -109,21 +121,11 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
               !trainings.length && (
                 <Box marginLeft={1} marginY='auto'>
                   <Chip
-                    color='primary'
+                    color='secondary'
                     label={`${trainings.reduce((res, a) => res + a.hours, 0)} бч`}
                   />
                 </Box>
               )
-            }
-            <Grid item={true} lg={12} />
-            {
-              filterChips.map(filter => (
-                <Box marginLeft={1} marginY={1} key={filter}>
-                  <Chip
-                    label={filter}
-                  />
-                </Box>
-              ))
             }
           </Grid>
         </Grid>

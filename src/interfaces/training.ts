@@ -11,7 +11,7 @@ export interface ITrainingForm {
   date: Date
   gym: {
     link: string
-  }
+  } | null
 
   name?: string
   type?: string

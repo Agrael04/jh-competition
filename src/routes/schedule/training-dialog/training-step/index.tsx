@@ -11,8 +11,8 @@ export default function TrainingDialog() {
   const actions = useActions()
   const { date, gym, _id, trainingForm } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id!,
-    date: state.schedule.page.activeDate,
-    gym: state.schedule.page.activeGym,
+    date: state.schedule.page.filters.date,
+    gym: state.schedule.page.filters.gym,
     trainingForm: state.schedule.trainingDialog.trainingForm,
   }))
 
@@ -30,8 +30,8 @@ export default function TrainingDialog() {
 
       return {
         _id,
-        gym: { link: gym },
-        date,
+        gym,
+        date: date.toDate(),
         traineesAmount: 1,
       }
     }, [loading, data, _id, gym, date]

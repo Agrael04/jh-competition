@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
@@ -10,6 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Dialog from '@material-ui/core/Dialog'
 
 import Tooltip from 'components/multiline-tooltip'
 
@@ -20,10 +21,11 @@ import times from 'data/times'
 import AddTrainerDialog from './add-trainer-dialog'
 import TrainingDialog from './training-dialog'
 
-import Toolbar from './toolbar'
+import Header from './header'
 import TrainingCell from './training-cell'
 import { TrainerHeaderCell, TrainerBodyCell } from './trainer-cell'
 import TableCell from './table-cell'
+import FiltersDialog from './filters-dialog'
 
 import useGetTrainingResourcesQuery from './queries/get-training-resources'
 import useGetSchedulesQuery from './queries/get-schedules'
@@ -40,8 +42,9 @@ const SchedulePage = () => {
   const trainingResources = useGetTrainingResourcesQuery()
   const schedules = useGetSchedulesQuery()
   const gyms = useGetGymsQuery()
-  const activeResources = useSelector(state => state.schedule.page.activeResources)
+  const activeResources = useSelector(state => state.schedule.page.filters.resources)
   const activeTime = useSelector(state => state.schedule.page.activeTime)
+  const openedFiltersDialog = useSelector(state => state.schedule.page.openedFiltersDialog)
 
   /* another graphql request */
   const trainers = React.useMemo(
@@ -62,6 +65,12 @@ const SchedulePage = () => {
     }, [gyms, activeResources]
   )
 
+  const close = useCallback(
+    () => {
+      actions.schedule.page.cancelFilterUpdate()
+    }, [actions]
+  )
+
   React.useEffect(
     () => {
       actions.schedule.page.checkActiveTime()
@@ -71,7 +80,7 @@ const SchedulePage = () => {
 
   return (
     <Paper className={classes.rootPaper}>
-      <Toolbar />
+      <Header />
       <Divider />
       <Table stickyHeader={true}>
         <TableHead>
@@ -162,6 +171,9 @@ const SchedulePage = () => {
       <TrainingDialog />
       <CheckDialog />
       <AddTrainerDialog />
+      <Dialog open={openedFiltersDialog} onClose={close} maxWidth='xs' fullWidth={true}>
+        <FiltersDialog />
+      </Dialog>
     </Paper>
   )
 }

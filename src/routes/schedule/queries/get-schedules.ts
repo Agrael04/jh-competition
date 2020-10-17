@@ -9,7 +9,7 @@ interface IQueryFilters {
   gym?: string
 }
 
-interface ITrainerSchedule{
+interface ITrainerSchedule {
   _id: string
   date: number
   time: number
@@ -59,11 +59,11 @@ export const GET_SCHEDULES = gql`
 `
 
 export const useGetSchedulesQuery = (date?: Date, filters?: IQueryFilters) => {
-  const activeDate = useSelector(state => state.schedule.page.activeDate)
+  const activeDate = useSelector(state => state.schedule.page.filters.date)
 
   const result = useQuery<IGetSchedulesResponse>(GET_SCHEDULES, {
     variables: {
-      date: date || activeDate,
+      date: date || activeDate.toDate(),
       ...filters,
     },
   })

@@ -47,10 +47,10 @@ export const GET_TRAININGS = gql`
 `
 
 export const useGetTrainingsQuery = () => {
-  const date = useSelector(state => state.schedule.page.activeDate)
+  const date = useSelector(state => state.schedule.page.filters.date)
 
   const result = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
-    variables: { date },
+    variables: { date: date.toDate() },
   })
 
   return result

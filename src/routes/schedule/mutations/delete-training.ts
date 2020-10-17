@@ -25,7 +25,7 @@ export const DELETE_TRAINING = gql`
 const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
   const { date, _id } = useSelector(state => ({
-    date: state.schedule.page.activeDate,
+    date: state.schedule.page.filters.date,
     _id: state.schedule.trainingDialog._id,
   }))
 
@@ -44,7 +44,7 @@ const useDeleteTraining = () => {
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,
-            variables: { date: new Date(date) },
+            variables: { date: date.toDate() },
             updater,
           })
         },

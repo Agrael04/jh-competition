@@ -34,7 +34,7 @@ export const CREATE_TRAINING_RESOURCE = gql`
 const useCreateTrainingResource = () => {
   const [createTrainingResource] = useMutation(CREATE_TRAINING_RESOURCE)
   const { date, _id } = useSelector(state => ({
-    date: state.schedule.page.activeDate,
+    date: state.schedule.page.filters.date,
     _id: state.schedule.trainingDialog._id,
   }))
 
@@ -48,7 +48,7 @@ const useCreateTrainingResource = () => {
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,
-            variables: { date: new Date(date) },
+            variables: { date: date.toDate() },
             updater,
           })
 

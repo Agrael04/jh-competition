@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 import moment from 'moment'
 
@@ -30,6 +30,26 @@ const Header = ({ openClientForm }: IProps) => {
     }, [openClientForm]
   )
 
+  const filterChips = useMemo(
+    () => {
+      const chips = []
+
+      if (filters.visitedAt) {
+        chips.push(`Последние посещение: ${moment(filters.visitedAt).format('MMMM YYYY')}`)
+      }
+
+      if (filters.withDebt) {
+        chips.push(`С долгом`)
+      }
+      
+      if (filters.age) {
+        chips.push(`Возраст: ${filters.age}`)
+      }
+
+      return chips
+    }, [filters]
+  )
+
   return (
     <Toolbar>
       <Grid container={true} justify='space-between'>
@@ -41,34 +61,15 @@ const Header = ({ openClientForm }: IProps) => {
               </IconButton>
             </Grid>
             {
-              filters.visitedAt && (
-                <Box marginLeft={2} marginY='auto'>
+              filterChips.map(filter => (
+                <Box marginLeft={1} marginY={'auto'} key={filter}>
                   <Chip
-                    label={`Последние посещение: ${moment(filters.visitedAt).format('MMMM YYYY')}`}
+                    color='primary'
+                    label={filter}
                     onClick={startFilterEditing}
                   />
                 </Box>
-              )
-            }
-            {
-              filters.withDebt && (
-                <Box marginLeft={2} marginY='auto'>
-                  <Chip
-                    label={`С долгом`}
-                    onClick={startFilterEditing}
-                  />
-                </Box>
-              )
-            }
-            {
-              filters.age && (
-                <Box marginLeft={2} marginY='auto'>
-                  <Chip
-                    label={`Возраст: ${filters.age}`}
-                    onClick={startFilterEditing}
-                  />
-                </Box>
-              )
+              ))
             }
           </Grid>
         </div>
