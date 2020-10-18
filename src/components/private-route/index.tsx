@@ -2,9 +2,8 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 
-import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-boost'
-import { setContext } from 'apollo-link-context'
-import { onError } from 'apollo-link-error'
+import { ApolloClient, InMemoryCache, HttpLink, from, ApolloLink } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 import { hasLoggedInUser, getCurrentUser, logoutCurrentUser } from 'api/mongodb'
 
 import Layout from '../layout'
@@ -22,12 +21,15 @@ export default function PrivateRoute({ path, exact, children }: any) {
 
   const accessToken = getCurrentUser().auth.activeUserAuthInfo.accessToken
 
-  const authLink = setContext((_: any, { headers }: any) => ({
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${accessToken}`,
-    },
-  }))
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    operation.setContext({
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    return forward(operation)
+  })
 
   const httpLink = new HttpLink({ uri: GRAPHQL_URL })
 
@@ -40,7 +42,7 @@ export default function PrivateRoute({ path, exact, children }: any) {
   })
 
   const client = new ApolloClient({
-    link: authLink.concat(errorLink.concat(httpLink)),
+    link: from([authMiddleware, errorLink, httpLink]),
     cache: new InMemoryCache(),
   })
 

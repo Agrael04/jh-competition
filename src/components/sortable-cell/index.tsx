@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import TableCell, { TableCellProps } from '@material-ui/core/TableCell'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 
-type SortableProps = TableCellProps & {
+interface ISortingProps {
   orderKey: string
   onOrderChange: (key: string) => () => void
   activeOrder: {
@@ -11,6 +11,8 @@ type SortableProps = TableCellProps & {
     direction: 'asc' | 'desc'
   }
 }
+
+type SortableProps = TableCellProps & ISortingProps
 
 const SortableCell = (props: SortableProps) => {
   const active = useMemo(
@@ -25,10 +27,7 @@ const SortableCell = (props: SortableProps) => {
 
   const innerProps = useMemo(
     () => {
-      const innerProps = { ...props }
-      delete innerProps.orderKey
-      delete innerProps.onOrderChange
-      delete innerProps.activeOrder
+      const { orderKey, onOrderChange, activeOrder, ...innerProps } = { ...props }
 
       return innerProps
     },

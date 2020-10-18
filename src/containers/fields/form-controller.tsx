@@ -1,16 +1,14 @@
-import React, { ComponentProps } from 'react'
+import React from 'react'
 import get from 'lodash/get'
 
-import { useFormContext, Controller } from 'react-hook-form'
-
-type BaseProps = ComponentProps<typeof Controller>
+import { useFormContext, Controller, ControllerProps } from 'react-hook-form'
 
 export interface IDefaultComponentProps {
   value: any
   onChange: (value: any) => void
 }
 
-interface IProps extends BaseProps {
+type IProps = Omit<ControllerProps<any>, 'render'> & {
   children: React.ReactElement
 }
 

@@ -41,7 +41,7 @@ const Header = ({ openClientForm }: IProps) => {
       if (filters.withDebt) {
         chips.push(`С долгом`)
       }
-      
+
       if (filters.age) {
         chips.push(`Возраст: ${filters.age}`)
       }

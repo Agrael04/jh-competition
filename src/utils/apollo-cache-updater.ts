@@ -1,10 +1,10 @@
-import { DataProxy } from 'apollo-cache'
+import { ApolloCache, QueryBaseOptions } from '@apollo/client'
 
 type IUpdaterFunction<TData> = (data: TData) => TData
 
-export type IUpdateCacheFn = (client: DataProxy, { data }: any) => void
+export type IUpdateCacheFn = (client: ApolloCache<any>, { data }: any) => void
 
-interface IUpdateQuery<TData, TVariables> extends DataProxy.Query<TVariables> {
+interface IUpdateQuery<TData, TVariables> extends QueryBaseOptions<TVariables> {
   updater: IUpdaterFunction<TData>
 }
 
@@ -42,7 +42,7 @@ export const removeUpdater = (key: string, ...items: IDeletedItem[]) => (queryDa
   }
 }
 
-export const updateQuery = (client: DataProxy) => <TData, TVariables = any>(options: IUpdateQuery<TData, TVariables>) => {
+export const updateQuery = (client: ApolloCache<any>) => <TData, TVariables = any>(options: IUpdateQuery<TData, TVariables>) => {
   const queryData = client.readQuery<TData>(options)
 
   if (!queryData) {

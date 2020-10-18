@@ -8,7 +8,7 @@ import MomentUtils from '@date-io/moment'
 import 'moment/locale/uk'
 
 import { DndProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import store from './store'
 import theme from './theme'

@@ -6,7 +6,7 @@ import { loader } from 'graphql.macro'
 
 import PassForm from 'containers/pass-form'
 
-import { DataProxy } from 'apollo-cache'
+import { ApolloCache } from '@apollo/client'
 
 import Header from './header'
 
@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
-  const updateCacheOnCreate = (client: DataProxy, { data }: any) => {
+  const updateCacheOnCreate = (client: ApolloCache<any>, { data }: any) => {
     const boundUpdateCachedQuery = updateQuery(client)
     const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
 

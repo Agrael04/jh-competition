@@ -37,8 +37,8 @@ const useCreateTraining = () => {
       return createTraining({
         variables: {
           training: {
-            _id,
             ...training,
+            _id,
           },
         },
         update: (client, { data }) => {

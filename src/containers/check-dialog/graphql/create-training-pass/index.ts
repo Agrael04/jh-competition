@@ -6,14 +6,14 @@ import { useSelector } from 'store'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
 
-import { DataProxy } from 'apollo-cache'
+import { ApolloCache } from '@apollo/client'
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
 const CREATE_TRAINING_PASS = loader('./mutation.gql')
 
 const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
-export const updateCacheOnCreate = (variables: any) => (client: DataProxy, { data }: any) => {
+export const updateCacheOnCreate = (variables: any) => (client: ApolloCache<any>, { data }: any) => {
   const boundUpdateCachedQuery = updateQuery(client)
   const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
 
