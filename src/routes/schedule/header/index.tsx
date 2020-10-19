@@ -20,7 +20,7 @@ const Header = () => {
 
   const startFilterEditing = useCallback(
     () => {
-      actions.schedule.page.startFilterUpdate()
+      actions.schedule.page.startFiltersUpdate()
     }, [actions]
   )
 
@@ -48,7 +48,10 @@ const Header = () => {
     () => {
       if (!gyms.loading) {
         const _id = gyms.data?.gyms[0]._id!
-        actions.schedule.page.setActiveGym(_id, gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || [])
+        actions.schedule.page.setFilters({
+          gym: { link: _id },
+          resources: gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || []
+        })
       }
     }, [gyms, actions]
   )

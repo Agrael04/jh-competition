@@ -25,21 +25,6 @@ export const checkActiveTime = createAction(
   'schedule/page/CHECK_ACTIVE_TIME'
 )()
 
-export const setActiveDate = createAction(
-  'schedule/page/SET_ACTIVE_DATE',
-  (date: Date) => ({ date })
-)()
-
-export const setActiveGym = createAction(
-  'schedule/page/SET_ACTIVE_GYM',
-  (gym: string, resources: string[]) => ({ gym, resources })
-)()
-
-export const setActiveResources = createAction(
-  'schedule/page/SET_ACTIVE_RESOURCES',
-  (resources: string[]) => ({ resources })
-)()
-
 export const setActiveTime = createAction(
   'schedule/page/SET_ACTIVE_TIME',
   (time: number) => ({ time })
@@ -53,16 +38,21 @@ export const openCheckDialog = createAction(
   'schedule/page/OPEN_CHECK_DIALOG'
 )()
 
-export const startFilterUpdate = createAction(
-  'schedule/page/START_FILTER_UPDATE'
+export const startFiltersUpdate = createAction(
+  'schedule/page/START_FILTERS_UPDATE'
 )()
 
-export const cancelFilterUpdate = createAction(
-  'schedule/page/CANCEL_FILTER_UPDATE'
+export const cancelFiltersUpdate = createAction(
+  'schedule/page/CANCEL_FILTERS_UPDATE'
 )()
 
-export const completeFilterUpdate = createAction(
-  'schedule/page/COMPLETE_FILTER_UPDATE',
+export const setFilters = createAction(
+  'schedule/page/SET_FILTERS',
+  (filters: Partial<IFilters>) => ({ filters })
+)()
+
+export const completeFiltersUpdate = createAction(
+  'schedule/page/COMPLETE_FILTERS_UPDATE',
   (filters: IFilters) => ({ filters })
 )()
 
@@ -74,17 +64,15 @@ export const actions = {
 
   checkActiveTime,
 
-  setActiveDate,
-  setActiveGym,
-  setActiveResources,
   setActiveTime,
 
   toggleOpenedTrainers,
   openCheckDialog,
 
-  startFilterUpdate,
-  cancelFilterUpdate,
-  completeFilterUpdate,
+  startFiltersUpdate,
+  cancelFiltersUpdate,
+  setFilters,
+  completeFiltersUpdate,
 }
 
 export default actions

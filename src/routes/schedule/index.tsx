@@ -67,7 +67,7 @@ const SchedulePage = () => {
 
   const close = useCallback(
     () => {
-      actions.schedule.page.cancelFilterUpdate()
+      actions.schedule.page.cancelFiltersUpdate()
     }, [actions]
   )
 

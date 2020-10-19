@@ -45,7 +45,7 @@ export default function FiltersDialog() {
 
   const submit = useCallback(
     (form: any) => {
-      actions.schedule.page.completeFilterUpdate(form)
+      actions.schedule.page.completeFiltersUpdate(form)
     },
     [actions]
   )
