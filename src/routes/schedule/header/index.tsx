@@ -50,7 +50,7 @@ const Header = () => {
         const _id = gyms.data?.gyms[0]._id!
         actions.schedule.page.setFilters({
           gym: { link: _id },
-          resources: gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || []
+          resources: gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || [],
         })
       }
     }, [gyms, actions]
