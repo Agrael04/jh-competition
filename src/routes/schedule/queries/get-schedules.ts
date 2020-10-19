@@ -63,7 +63,7 @@ export const useGetSchedulesQuery = (date?: Date, filters?: IQueryFilters) => {
 
   const result = useQuery<IGetSchedulesResponse>(GET_SCHEDULES, {
     variables: {
-      date: date || activeDate.toDate(),
+      date: date || activeDate,
       ...filters,
     },
   })

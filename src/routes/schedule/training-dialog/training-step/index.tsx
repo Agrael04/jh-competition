@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import { useActions, useSelector } from 'store'
+import moment from 'moment'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import TrainingForm from './training-form'
 
-import useGetTrainingQuery, { convertTrainingToInput } from '../../queries/get-training'
+import useGetTrainingQuery from '../../queries/get-training'
 
 export default function TrainingDialog() {
   const actions = useActions()
@@ -25,16 +26,26 @@ export default function TrainingDialog() {
       }
 
       if (data?.training) {
-        return convertTrainingToInput(data.training)
+        return {
+          gym: { link: data.training.gym._id },
+          date: moment(data.training.date),
+          name: data.training.name,
+          type: data.training.type,
+          traineesAmount: data.training.traineesAmount,
+          note: data.training.note,
+        }
+      }
+
+      if (!gym) {
+        return null
       }
 
       return {
-        _id,
         gym,
-        date: date.toDate(),
+        date,
         traineesAmount: 1,
       }
-    }, [loading, data, _id, gym, date]
+    }, [loading, data, gym, date]
   )
 
   useEffect(

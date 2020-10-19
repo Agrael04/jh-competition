@@ -1,7 +1,9 @@
 import { createReducer, ActionType } from 'typesafe-actions'
 
 import actions from 'store/actions/schedule/training-dialog'
-import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
+import { ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
+
+import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
 
 type IAction = ActionType<typeof actions>
 
@@ -59,7 +61,6 @@ const reducer = createReducer<IState, IAction>(initialState)
   .handleAction(actions.initialize, (state, { payload: { training } }) => ({
     ...state,
     trainingForm: {
-      _id: training._id!,
       gym: training.gym!,
       date: training.date!,
 

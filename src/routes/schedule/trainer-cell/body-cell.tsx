@@ -34,7 +34,7 @@ const TrainerBodyCell = ({ time, trainers, primaryRow, activeRow }: IProps) => {
           trainers.map((tr, index) => (
             data?.trainerSchedules
               .filter(s => s.gym._id === activeGym)
-              .find(s => s.time === time && s.trainer === tr)
+              .find(s => s.time === time && s.trainer._id === tr._id)
               ? (
                 <TrainerAvatar
                   time={time}

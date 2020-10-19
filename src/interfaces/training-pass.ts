@@ -1,3 +1,5 @@
+import { Moment } from 'moment'
+
 export interface ITrainingPassForm {
   _id?: string
   contact?: {
@@ -10,5 +12,5 @@ export interface ITrainingPassForm {
   activation?: number | null
   price?: number | null
   isActive?: boolean | null
-  createdAt?: Date | null
+  createdAt?: Moment | null
 }

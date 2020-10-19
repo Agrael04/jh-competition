@@ -11,33 +11,22 @@ import DatePicker from 'containers/fields/date-picker'
 import TextInput from 'containers/fields/text-input'
 import Select from 'containers/fields/select'
 
+import { trainingTypes } from 'data/training-types'
+import { requiredValidation } from 'utils/validations'
+
 import SubmitButton from './submit-button'
 import DeleteButton from './delete-button'
 
 import useGetGymsQuery from '../../../queries/get-gyms'
 import useGetTrainingQuery from '../../../queries/get-training'
 
-import { trainingTypes } from 'data/training-types'
-import { requiredValidation } from 'utils/validations'
-
-// import removeTimeFromDate from 'utils/remove-time-from-date'
-// {
-//   _id: '',
-
-//   gym: { link: '' },
-//   date: removeTimeFromDate(new Date())!,
-
-//   name: '',
-//   type: '',
-//   traineesAmount: undefined,
-//   note: '',
-// }
+import ITrainingForm from './form'
 
 export default function TrainingForm() {
   const _id = useSelector(state => state.schedule.trainingDialog._id)
   const trainingForm = useSelector(state => state.schedule.trainingDialog.trainingForm)
 
-  const methods = useForm<any>({
+  const methods = useForm<ITrainingForm>({
     defaultValues: trainingForm || {},
   })
 

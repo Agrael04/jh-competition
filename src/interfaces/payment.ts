@@ -1,3 +1,5 @@
+import { Moment } from 'moment'
+
 export interface IPaymentForm {
   _id?: string
   contact: {
@@ -6,8 +8,8 @@ export interface IPaymentForm {
   gym: {
     link: string
   }
-  date: Date
-  createdAt: Date
+  date: Moment
+  createdAt: Moment
   type: 'money' | 'units' | null
   pass?: {
     link: string

@@ -1,5 +1,6 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 import actions from 'store/actions/check-dialog'
+import moment, { Moment } from 'moment'
 
 import { IPositionForm } from 'containers/check-dialog/positions-block/position-form'
 import { IPaymentForm } from 'containers/check-dialog/payments-block/payment-form'
@@ -10,7 +11,7 @@ type IAction = ActionType<typeof actions>
 export interface IState {
   opened: boolean
   params: {
-    activeDate: Date
+    activeDate: Moment
     activeGym: string
     contact: {
       link: string
@@ -39,7 +40,7 @@ export interface IState {
 const initialState = {
   opened: false,
   params: {
-    activeDate: new Date(),
+    activeDate: moment().startOf('day'),
     activeGym: '',
     contact: null,
   },

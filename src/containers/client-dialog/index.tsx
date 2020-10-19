@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import moment from 'moment'
 
 import Dialog from '@material-ui/core/Dialog'
 import Box from '@material-ui/core/Box'
@@ -30,7 +31,7 @@ export default function ClientDialog({ opened, close, submit, id }: IClientDialo
 
       return {
         ...data.client,
-        birthday: data.client.birthday ? new Date(data.client.birthday) : null,
+        birthday: data.client.birthday ? moment(data.client.birthday) : null,
       }
     },
     [data, loading]

@@ -17,7 +17,7 @@ import useGetTrainersQuery from '../graphql/get-trainers'
 
 import { trainingTypes } from 'data/training-types'
 
-import { ITraining } from '../index'
+import { ITraining } from 'utils/records-xlsx'
 
 interface IProps {
   startFilterEditing: () => void

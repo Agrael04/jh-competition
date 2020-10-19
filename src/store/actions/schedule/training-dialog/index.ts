@@ -1,6 +1,8 @@
 import { createAction } from 'typesafe-actions'
 
-import { ITrainingForm, ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
+import { ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
+
+import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
 
 export const open = createAction(
   'schedule/trainingDialog/OPEN',
@@ -9,7 +11,7 @@ export const open = createAction(
 
 export const initialize = createAction(
   'schedule/trainingDialog/INITIALIZE',
-  (training: Partial<ITrainingForm>) => ({ training })
+  (training: ITrainingForm) => ({ training })
 )()
 
 export const close = createAction(

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Moment } from 'moment'
 
 import { useForm, FormProvider } from 'react-hook-form'
 
@@ -19,7 +20,7 @@ import { requiredValidation, optionalPhoneValidation, requiredPhoneValidation } 
 export interface IClientForm {
   firstName?: string
   lastName?: string
-  birthday?: Date | null
+  birthday?: Moment | null
   phone?: string
   altPhone?: string
   communicationType: string[]

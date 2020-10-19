@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 import Dialog from '@material-ui/core/Dialog'
 import Box from '@material-ui/core/Box'
@@ -11,7 +12,6 @@ import { ApolloCache } from '@apollo/client'
 import Header from './header'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
-import removeTimeFromDate from 'utils/remove-time-from-date'
 import getClientLabel from 'utils/get-client-label'
 
 import useGetTrainingPassesQuery from '../graphql/get-training-passes'
@@ -51,13 +51,13 @@ export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
           duration: pass.duration,
           activation: pass.activation,
           price: pass.price,
-          createdAt: pass.createdAt,
+          createdAt: moment(pass.createdAt),
         }
       }
 
       if (mode === 'create') {
         return {
-          createdAt: removeTimeFromDate(new Date())!,
+          createdAt: moment().startOf('day'),
           isActive: true,
         }
       }

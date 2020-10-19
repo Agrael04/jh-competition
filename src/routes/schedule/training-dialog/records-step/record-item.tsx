@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { useSelector, useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
@@ -15,7 +16,6 @@ import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../queries
 
 import useDeleteTrainingRecord from '../../mutations/delete-training-record'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
 import getClientLabel from 'utils/get-client-label'
 
 import useStyles from './styles'
@@ -52,9 +52,6 @@ export default function RecordItem({ id }: IProps) {
     [record, deleteTrainingRecord]
   )
 
-  const trainingDate = new Date(date)?.getTime()
-  const currentDate = removeTimeFromDate(new Date())?.getTime()!
-
   return (
     <ListItem button={true} onClick={activate} selected={isActive}>
       <ListItemAvatar>
@@ -67,7 +64,7 @@ export default function RecordItem({ id }: IProps) {
         secondary={getClientLabel(record?.attendant)}
       />
       {
-        trainingDate > currentDate && (
+        moment(date).diff(moment()) > 0 && (
           <ListItemSecondaryAction>
             <IconButton onClick={remove}>
               <DeleteIcon />

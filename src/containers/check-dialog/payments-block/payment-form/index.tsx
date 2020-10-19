@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 
 import { useActions } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -32,7 +32,7 @@ export interface IPaymentForm {
   }
   destination?: string
   transaction?: string
-  createdAt?: Date
+  createdAt?: Moment
   contact?: { link: string }
   gym?: { link: string }
 }

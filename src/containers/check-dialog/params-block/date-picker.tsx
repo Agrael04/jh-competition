@@ -12,18 +12,16 @@ import Today from '@material-ui/icons/Today'
 
 import { DatePicker } from '@material-ui/pickers'
 
-import removeTimeFromDate from 'utils/remove-time-from-date'
-
 export default function ActiveDatePicker() {
   const actions = useActions()
   const activeDate = useSelector(state => state.checkDialog.params.activeDate)
   const updateActiveDate = actions.checkDialog.updateActiveDate
 
-  const currentDate = removeTimeFromDate(new Date())!
+  const currentDate = moment().startOf('day')
 
   const isCurrentDate = React.useMemo(
     () => {
-      return activeDate.getTime() === currentDate?.getTime()
+      return activeDate.isSame(currentDate)
     }, [activeDate, currentDate]
   )
 
@@ -34,7 +32,7 @@ export default function ActiveDatePicker() {
   const handlePrevDateClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     const d = moment(activeDate).subtract(1, 'days')
-    updateActiveDate(d.toDate())
+    updateActiveDate(d)
   }
 
   const currentDateClick = (e: React.MouseEvent) => {
@@ -48,14 +46,14 @@ export default function ActiveDatePicker() {
   const handleNextDateClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     const d = moment(activeDate).add(1, 'days')
-    updateActiveDate(d.toDate())
+    updateActiveDate(d)
   }
 
   return (
     <DatePicker
       name='date'
       onChange={handleDateChange}
-      value={activeDate ? new Date(activeDate) : null}
+      value={activeDate || null}
       disableToolbar={true}
       inputVariant='outlined'
       fullWidth={true}

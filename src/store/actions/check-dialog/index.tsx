@@ -1,4 +1,5 @@
 import { createAction } from 'typesafe-actions'
+import { Moment } from 'moment'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
 import { IPositionForm } from 'containers/check-dialog/positions-block/position-form'
@@ -6,7 +7,7 @@ import { IPaymentForm } from 'containers/check-dialog/payments-block/payment-for
 
 export const openDialog = createAction(
   'checkDialog/OPEN_DIALOG',
-  (activeDate: Date, activeGym: string, contact?: string) => ({
+  (activeDate: Moment, activeGym: string, contact?: string) => ({
     activeDate,
     activeGym,
     contact: contact ? { link: contact } : null,
@@ -24,7 +25,7 @@ export const updateContact = createAction(
 
 export const updateActiveDate = createAction(
   'checkDialog/UPDATE_ACTIVE_DATE',
-  (activeDate: Date) => ({ activeDate })
+  (activeDate: Moment) => ({ activeDate })
 )()
 
 export const openPassForm = createAction(

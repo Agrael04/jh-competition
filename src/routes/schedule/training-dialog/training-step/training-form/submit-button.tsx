@@ -8,8 +8,13 @@ import useUpdateTraining from '../../../mutations/update-training'
 import useCreateTraining from '../../../mutations/create-training'
 import useGetTrainingQuery from '../../../queries/get-training'
 
+import ITrainingForm from './form'
+
 export default function TrainingDialog() {
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const { step, _id } = useSelector(state => ({
+    step: state.schedule.trainingDialog.step,
+    _id: state.schedule.trainingDialog._id,
+  }))
   const createTraining = useCreateTraining()
   const updateTraining = useUpdateTraining()
 
@@ -17,14 +22,12 @@ export default function TrainingDialog() {
   const disabled = Object.keys(errors).length > 0
 
   const actions = useActions()
-  const { step } = useSelector(state => ({
-    step: state.schedule.trainingDialog.step,
-  }))
 
   const trainingQuery = useGetTrainingQuery(_id!)
 
   const submit = React.useCallback(
-    async (trainingForm: any) => {
+    async (trainingForm: ITrainingForm) => {
+
       if (trainingQuery.data?.training) {
         await updateTraining(trainingForm)
 

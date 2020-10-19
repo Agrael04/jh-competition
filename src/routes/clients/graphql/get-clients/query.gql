@@ -1,22 +1,21 @@
 query getClients(
-  $sortBy: ClientSortByInput!,
-  $minVisitedAt: DateTime,
-  $maxVisitedAt: DateTime,
-  $minBirthday: DateTime,
-  $maxBirthday: DateTime,
+  $sortBy: ClientSortByInput!
+  $minVisitedAt: DateTime
+  $maxVisitedAt: DateTime
+  $minBirthday: DateTime
+  $maxBirthday: DateTime
   $maxBalance: Int
-  )
-{
+) {
   clients(
-    limit: 100,
-    sortBy: $sortBy,
+    limit: 100
+    sortBy: $sortBy
     query: {
-      visitedAt_gte: $minVisitedAt,
-      visitedAt_lt: $maxVisitedAt,
-      birthday_gte: $minBirthday,
-      birthday_lt: $maxBirthday,
-      balance_lt: $maxBalance,
-      firstName_ne: "",
+      visitedAt_gte: $minVisitedAt
+      visitedAt_lt: $maxVisitedAt
+      birthday_gte: $minBirthday
+      birthday_lte: $maxBirthday
+      balance_lt: $maxBalance
+      firstName_ne: ""
       lastName_ne: ""
     }
   ) {

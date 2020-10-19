@@ -49,7 +49,7 @@ export default function PaymentBlock() {
       } else {
         await createPayment({
           contact,
-          date: moment(date).toDate(),
+          date: moment(date),
           gym: { link: gym },
           ...values,
         })

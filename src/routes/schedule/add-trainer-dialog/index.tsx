@@ -1,4 +1,5 @@
 import React from 'react'
+import { Moment } from 'moment'
 import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
@@ -13,7 +14,7 @@ import Form from './form'
 
 export interface IScheduleForm {
   trainer?: string
-  date?: Date
+  date?: Moment
   timeFrames?: Array<{
     from?: number
     to?: number

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import moment from 'moment'
 
 import { useActions } from 'store'
 
@@ -38,6 +39,7 @@ export default function PaymentItem({ index, id }: IProps) {
     () => {
       actions.checkDialog.openPaymentForm(payment._id, {
         ...payment,
+        createdAt: moment(payment.createdAt),
         pass: payment.pass ? {
           link: payment.pass._id,
         } : undefined,

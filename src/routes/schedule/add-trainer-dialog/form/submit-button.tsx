@@ -25,7 +25,7 @@ export default function SubmitButton() {
             time: t,
             gym: { link: tf.gym! },
             trainer: { link: data.trainer! },
-            date: data.date!,
+            date: data.date?.toDate()!,
           }))
       )
 

@@ -17,7 +17,7 @@ export default function DatePicker(props: IProps) {
   const { value, error, onChange } = props
 
   const handleChange = (date: moment.Moment | null) => {
-    onChange(date?.toDate())
+    onChange(date)
   }
 
   return (
