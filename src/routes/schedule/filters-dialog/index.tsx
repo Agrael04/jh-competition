@@ -20,7 +20,7 @@ import useGetGymsQuery from '../queries/get-gyms'
 
 export interface IFiltersForm {
   date: Moment
-  gym: { link: string } | null
+  gym: string
   resources: string[]
 }
 
@@ -38,7 +38,7 @@ export default function FiltersDialog() {
 
   const resources = useMemo(
     () => {
-      return gyms.data?.resources.filter(r => r.gym._id === gym?.link) || []
+      return gyms.data?.resources.filter(r => r.gym._id === gym) || []
     },
     [gyms, gym]
   )

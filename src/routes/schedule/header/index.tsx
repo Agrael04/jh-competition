@@ -33,7 +33,7 @@ const Header = () => {
       }
 
       if (filters.gym) {
-        chips.push(gyms.data?.gyms.find(g => g._id === filters.gym?.link!)?.name)
+        chips.push(gyms.data?.gyms.find(g => g._id === filters.gym)?.name)
       }
 
       filters.resources.forEach(r => {
@@ -49,7 +49,7 @@ const Header = () => {
       if (!gyms.loading) {
         const _id = gyms.data?.gyms[0]._id!
         actions.schedule.page.setFilters({
-          gym: { link: _id },
+          gym: _id,
           resources: gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || [],
         })
       }

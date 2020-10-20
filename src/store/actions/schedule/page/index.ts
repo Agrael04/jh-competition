@@ -3,7 +3,7 @@ import { Moment } from 'moment'
 
 interface IFilters {
   date: Moment
-  gym: { link: string } | null
+  gym: string
   resources: string[]
 }
 

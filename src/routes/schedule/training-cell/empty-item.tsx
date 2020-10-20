@@ -20,7 +20,7 @@ const EmptyItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
   const { gym } = useSelector(state => ({
-    gym: state.schedule.page.filters.gym?.link!,
+    gym: state.schedule.page.filters.gym,
   }))
 
   const { data } = useGetSchedulesQuery()

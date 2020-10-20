@@ -36,7 +36,7 @@ export default function TrainingDialog() {
           )
         } else {
           actions.schedule.trainingDialog.openCreateTrainingForm({
-            gym,
+            gym: { link: gym },
             date,
             traineesAmount: 1,
           })

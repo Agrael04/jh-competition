@@ -24,7 +24,7 @@ export default function GymSelect(props: IProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const resources = gyms.data?.resources.filter(r => r.gym._id === e.target.value) || []
 
-      onChange({ link: e.target.value })
+      onChange(e.target.value)
       setValue('resources', resources.map(r => r._id))
     },
     [onChange, setValue, gyms]
@@ -33,7 +33,7 @@ export default function GymSelect(props: IProps) {
   return (
     <Select
       {...props}
-      value={value?.link || ''}
+      value={value}
       onChange={handleChange}
       error={!!error}
       helperText={error?.message}

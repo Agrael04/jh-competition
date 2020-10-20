@@ -46,7 +46,6 @@ const SchedulePage = () => {
   const activeTime = useSelector(state => state.schedule.page.activeTime)
   const openedFiltersDialog = useSelector(state => state.schedule.page.openedFiltersDialog)
 
-  /* another graphql request */
   const trainers = React.useMemo(
     () => {
       return schedules?.data?.trainerSchedules.map(t => t.trainer).filter((tr, index, arr) => arr.indexOf(tr) === index) || []

@@ -11,7 +11,7 @@ export interface IState {
 
   filters: {
     date: Moment
-    gym: { link: string } | null
+    gym: string
     resources: string[]
   }
 
@@ -25,7 +25,7 @@ const initialState: IState = {
   openedFiltersDialog: false,
   filters: {
     date: moment().startOf('day'),
-    gym: null,
+    gym: '',
     resources: [],
   },
 }

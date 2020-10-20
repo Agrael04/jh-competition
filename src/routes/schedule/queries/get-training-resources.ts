@@ -20,8 +20,18 @@ export interface IGetTrainingResourcesResponse {
 }
 
 export const GET_TRAINING_RESOURCES = gql`
-  query getTrainingResources($date: DateTime){
-    trainingResources(query: { training: { date: $date } }) {
+  query getTrainingResources($date: DateTime, $gym: ObjectId, $resources: [ObjectId]){
+    trainingResources(query: {
+      training: {
+        date: $date
+        gym: {
+          _id: $gym
+        }
+      }
+      resource: {
+        _id_in: $resources
+      }
+    }) {
       _id
       startTime
       endTime
@@ -36,10 +46,15 @@ export const GET_TRAINING_RESOURCES = gql`
 `
 
 export const useGetTrainingResourcesQuery = () => {
-  const date = useSelector(state => state.schedule.page.filters.date)
+  const filters = useSelector(state => state.schedule.page.filters)
 
   const result = useQuery<IGetTrainingResourcesResponse>(GET_TRAINING_RESOURCES, {
-    variables: { date: date.toDate() },
+    variables: {
+      date: filters.date.toDate(),
+      gym: filters.gym,
+      resources: filters.resources,
+    },
+    skip: !filters.gym,
   })
 
   return result
