@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import { getTimeLabel } from 'data/times'
-import useGetTrainingQuery, { convertTrainingResourceToInput } from '../../queries/get-training'
+import useGetTrainingQuery from '../../queries/get-training'
 
 import useDeleteTrainingResource from '../../mutations/delete-training-resource'
 
@@ -27,7 +27,7 @@ export default function ResourceItem({ id }: IProps) {
   const actions = useActions()
   const { isActive, _id } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
-    isActive: state.schedule.trainingDialog.resourceForm.resource?._id === id,
+    isActive: state.schedule.trainingDialog.resourceForm._id === id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
@@ -36,9 +36,23 @@ export default function ResourceItem({ id }: IProps) {
   const deleteTrainingResource = useDeleteTrainingResource()
 
   const activate = React.useCallback(
-    () => actions.schedule.trainingDialog.openUpdateResourceForm(
-      convertTrainingResourceToInput(resource!)
-    ),
+    () => {
+      if (!resource) {
+        return
+      }
+
+      const initialForm = {
+        resource: { link: resource.resource._id },
+        trainer: resource.trainer ? { link: resource.trainer._id } : undefined,
+        startTime: resource.startTime,
+        endTime: resource.endTime,
+      }
+
+      actions.schedule.trainingDialog.openUpdateResourceForm(
+        resource._id,
+        initialForm
+      )
+    },
     [actions, resource]
   )
 

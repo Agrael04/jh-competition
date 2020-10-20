@@ -3,8 +3,8 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
-import { ITrainingRecordForm } from 'interfaces/training'
 
+import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 import { updateQuery, createUpdater, removeUpdater } from 'utils/apollo-cache-updater'
 
 export const UPDATE_TRAINING_RECORD = gql`
@@ -37,17 +37,14 @@ const useUpdateTrainingRecord = () => {
   const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
 
   const mutate = React.useCallback(
-    (rawRecord: Partial<ITrainingRecordForm>, prevResource?: string) => {
-      const record = ({
-        ...rawRecord,
-        contact: rawRecord.contact ? { link: rawRecord.contact.link } : null,
-        attendant: rawRecord.attendant ? { link: rawRecord.attendant.link } : null,
-      })
-
+    (_id: string, record: Partial<IRecordForm>, prevResource?: string) => {
       return updateTrainingRecord({
-        variables: { _id: record._id, record },
+        variables: {
+          _id,
+          record,
+        },
         update: (client, { data }) => {
-          if (prevResource === rawRecord.resource?.link) {
+          if (prevResource === record.resource?.link) {
             return
           }
 

@@ -10,19 +10,7 @@ import useCreateTrainingRecord from '../../../mutations/create-training-record'
 
 import useGetTrainingQuery from '../../../queries/get-training'
 
-interface IForm {
-  contact?: {
-    link: string
-  } | null
-  attendant?: {
-    link: string
-  } | null
-  resource?: {
-    link: string
-  } | null
-  status?: string | null
-  note?: string | null
-}
+import IRecordForm from './form'
 
 export default function RecordsBlock() {
   const actions = useActions()
@@ -39,18 +27,18 @@ export default function RecordsBlock() {
   const disabled = Object.keys(errors).length > 0
 
   const submit = React.useCallback(
-    async (record: IForm) => {
+    async (record: IRecordForm) => {
       if (!form.mode) {
         return
       }
 
-      if (form.mode === 'update') {
+      if (form.mode === 'update' && form._id) {
         const r = trainingQuery.data?.trainingRecords.find(record => record._id === record?._id)
-        await updateTrainingRecord({ ...form.record, ...record }, r?.resource._id)
+        await updateTrainingRecord(form._id, record, r?.resource._id)
       }
 
       if (form.mode === 'create') {
-        await createTrainingRecord({ ...form.record, ...record })
+        await createTrainingRecord(record)
       }
 
       actions.schedule.trainingDialog.closeRecord()

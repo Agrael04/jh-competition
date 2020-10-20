@@ -23,33 +23,20 @@ import useGetTrainingQuery from '../../../queries/get-training'
 
 import SubmitButton from './submit-button'
 
-interface IForm {
-  contact?: {
-    link: string
-  } | null
-  attendant?: {
-    link: string
-  } | null
-  resource?: {
-    link: string
-  } | null
-  status?: string | null
-  note?: string | null
-}
-
-const statuses = ['ONLINE_BOOKED', 'SCHEDULED', 'BOOKED', 'CONFIRMED', 'CANCELED', 'LATE_CANCELED', 'STARTED', 'FINISHED', 'CLOSED', 'CLOSED_DEBT']
+import { statuses } from './data'
+import IRecordForm from './form'
 
 export default function RecordsBlock() {
   const actions = useActions()
-  const record = useSelector(state => state.schedule.trainingDialog.recordForm.record)
+  const defaultValues = useSelector(state => state.schedule.trainingDialog.recordForm.defaultValues)
   const { _id, recordId } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
-    recordId: state.schedule.trainingDialog.recordForm.record!._id,
+    recordId: state.schedule.trainingDialog.recordForm._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 
-  const methods = useForm<IForm>({
-    defaultValues: record || undefined,
+  const methods = useForm<IRecordForm>({
+    defaultValues,
   })
   const contact = methods.watch('contact')
 

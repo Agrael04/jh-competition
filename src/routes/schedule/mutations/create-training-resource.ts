@@ -5,7 +5,8 @@ import { useSelector } from 'store'
 
 import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
-import { ITrainingResourceForm } from 'interfaces/training'
+
+import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
@@ -39,9 +40,16 @@ const useCreateTrainingResource = () => {
   }))
 
   const mutate = React.useCallback(
-    (resource: ITrainingResourceForm) => {
+    (r: IResourceForm) => {
+      const resource = ({
+        ...r,
+        training: { link: _id },
+      })
+
       return createTrainingResource({
-        variables: { resource },
+        variables: {
+          resource,
+        },
         update: (client, { data }) => {
           const boundUpdateCachedQuery = updateQuery(client)
           const updater = createUpdater('trainingResources', data.insertOneTrainingResource)

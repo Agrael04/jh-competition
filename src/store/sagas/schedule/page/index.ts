@@ -10,7 +10,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
   try {
     const _id = new BSON.ObjectID().toString()
 
-    yield put(actions.trainingDialog.open('create', _id))
+    yield put(actions.trainingDialog.open(_id))
 
     const resource = {
       startTime: action.payload.time,

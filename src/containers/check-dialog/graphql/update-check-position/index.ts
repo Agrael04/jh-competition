@@ -6,7 +6,7 @@ import { ICheckPositionForm } from 'interfaces/check-position'
 
 const UPDATE_CHECK_POSITION = loader('./mutation.gql')
 
-const useUpdateTrainingRecord = () => {
+const useUpdateCheckPosition = () => {
   const [updateCheckPosition] = useMutation(UPDATE_CHECK_POSITION)
 
   const mutate = React.useCallback(
@@ -25,4 +25,4 @@ const useUpdateTrainingRecord = () => {
   return mutate
 }
 
-export default useUpdateTrainingRecord
+export default useUpdateCheckPosition

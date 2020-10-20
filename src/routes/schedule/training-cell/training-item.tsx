@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider'
 
 import FaceIcon from '@material-ui/icons/Face'
 
-import useGetTrainingResourceQuery, { convertTrainingResourceToInput } from '../queries/get-training-resource'
+import useGetTrainingResourceQuery from '../queries/get-training-resource'
 
 import { getTimeLabel } from 'data/times'
 import { trainingTypes } from 'data/training-types'
@@ -52,11 +52,23 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
 
   const handleUpdateClick = React.useCallback(
     e => {
+      if (!tResource) {
+        return
+      }
+
+      const initialForm = {
+        resource: { link: tResource.resource._id },
+        trainer: tResource.trainer ? { link: tResource.trainer._id } : undefined,
+        startTime: tResource.startTime,
+        endTime: tResource.endTime,
+      }
+
       e.stopPropagation()
-      actions.schedule.trainingDialog.open('update', tResource?.training._id!)
+      actions.schedule.trainingDialog.open(tResource.training._id)
       actions.schedule.trainingDialog.setStep(1)
       actions.schedule.trainingDialog.openUpdateResourceForm(
-        convertTrainingResourceToInput(tResource!)
+        tResource._id,
+        initialForm
       )
     },
     [actions, tResource]

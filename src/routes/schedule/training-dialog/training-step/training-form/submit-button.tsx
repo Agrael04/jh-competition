@@ -27,7 +27,6 @@ export default function TrainingDialog() {
 
   const submit = React.useCallback(
     async (trainingForm: ITrainingForm) => {
-
       if (trainingQuery.data?.training) {
         await updateTraining(trainingForm)
 
@@ -35,6 +34,7 @@ export default function TrainingDialog() {
       } else {
         await createTraining(trainingForm)
 
+        actions.schedule.trainingDialog.closeTraining()
         actions.schedule.trainingDialog.setStep(step + 1)
       }
     },

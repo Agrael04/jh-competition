@@ -8,18 +8,7 @@ import Button from '@material-ui/core/Button'
 import useUpdateTrainingResource from '../../../mutations/update-training-resource'
 import useCreateTrainingResource from '../../../mutations/create-training-resource'
 
-import { ITrainingResourceForm } from 'interfaces/training'
-
-interface IForm {
-  resource?: {
-    link: string
-  } | null
-  trainer?: {
-    link: string
-  } | null
-  startTime?: number | null
-  endTime?: number | null
-}
+import IResourceForm from './form'
 
 export default function ResourcesBlock() {
   const actions = useActions()
@@ -32,17 +21,17 @@ export default function ResourcesBlock() {
   const disabled = Object.keys(errors).length > 0
 
   const submit = React.useCallback(
-    async (resource: IForm) => {
+    async (resource: IResourceForm) => {
       if (!form.mode) {
         return
       }
 
-      if (form.mode === 'update') {
-        await updateTrainingResource({ ...form.resource, ...resource })
+      if (form.mode === 'update' && form._id) {
+        await updateTrainingResource(form._id, resource)
       }
 
       if (form.mode === 'create') {
-        await createTrainingResource({ ...form.resource, ...resource } as ITrainingResourceForm)
+        await createTrainingResource(resource)
       }
 
       actions.schedule.trainingDialog.closeResource()

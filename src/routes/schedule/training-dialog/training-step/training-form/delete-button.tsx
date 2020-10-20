@@ -10,7 +10,7 @@ import useGetTrainingQuery from '../../../queries/get-training'
 export default function TrainingDialog() {
   const { mode, _id } = useSelector(state => ({
     _id: state.schedule.trainingDialog._id,
-    mode: state.schedule.trainingDialog.mode,
+    mode: state.schedule.trainingDialog.trainingForm.mode,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
 

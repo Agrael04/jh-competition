@@ -24,10 +24,10 @@ import ITrainingForm from './form'
 
 export default function TrainingForm() {
   const _id = useSelector(state => state.schedule.trainingDialog._id)
-  const trainingForm = useSelector(state => state.schedule.trainingDialog.trainingForm)
+  const defaultValues = useSelector(state => state.schedule.trainingDialog.trainingForm.defaultValues)
 
   const methods = useForm<ITrainingForm>({
-    defaultValues: trainingForm || {},
+    defaultValues,
   })
 
   const gyms = useGetGymsQuery()

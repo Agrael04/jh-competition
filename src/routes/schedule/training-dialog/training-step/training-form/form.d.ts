@@ -4,8 +4,9 @@ export default interface ITrainingForm {
   gym: { link: string }
   date: Moment
 
+  type: string
+  traineesAmount: number
+
   name?: string
-  type?: string
-  traineesAmount?: number
   note?: string
 }

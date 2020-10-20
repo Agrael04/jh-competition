@@ -20,18 +20,9 @@ import EndTimeSelect from './end-time-select'
 
 import SubmitButton from './submit-button'
 
-import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../../queries/get-training'
+import useGetTrainingQuery from '../../../queries/get-training'
 
-export interface IResourceForm {
-  resource?: {
-    link: string
-  } | null
-  trainer?: {
-    link: string
-  } | null
-  startTime?: number | null
-  endTime?: number | null
-}
+import IResourceForm from './form'
 
 export default function ResourcesBlock() {
   const actions = useActions()
@@ -39,7 +30,7 @@ export default function ResourcesBlock() {
   const _id = useSelector(state => state.schedule.trainingDialog._id)
 
   const methods = useForm<IResourceForm>({
-    defaultValues: form.resource || undefined,
+    defaultValues: form.defaultValues,
   })
 
   const trainingQuery = useGetTrainingQuery(_id)
@@ -47,8 +38,8 @@ export default function ResourcesBlock() {
 
   const activateNew = React.useCallback(
     () => {
-      if (form.mode === 'update') {
-        actions.schedule.trainingDialog.openCreateRecordForm({ resource: { link: form.resource!._id! } })
+      if (form.mode === 'update' && form._id) {
+        actions.schedule.trainingDialog.openCreateRecordForm({ resource: { link: form._id } })
       }
     },
     [actions, form]
@@ -58,8 +49,23 @@ export default function ResourcesBlock() {
     (id: string) => () => {
       const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 
+      if (!record) {
+        return
+      }
+
+      const initialForm = {
+        resource: { link: record.resource._id },
+        status: record.status,
+        note: record.note,
+        contact: { link: record.contact._id },
+        attendant: record.attendant ? {
+          link: record.attendant._id,
+        } : undefined,
+      }
+
       actions.schedule.trainingDialog.openUpdateRecordForm(
-        convertTrainingRecordToInput(record!)
+        id,
+        initialForm
       )
     },
     [actions, trainingQuery]
@@ -113,7 +119,7 @@ export default function ResourcesBlock() {
           }
           {
             trainingQuery?.data?.trainingRecords
-              .filter(record => record.resource?._id === form.resource?._id)
+              .filter(record => record.resource?._id === form?._id)
               .map(r => (
                 <Grid item={true} key={r._id}>
                   <Chip

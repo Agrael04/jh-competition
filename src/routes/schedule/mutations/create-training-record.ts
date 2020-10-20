@@ -1,10 +1,12 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import { useSelector } from 'store'
 
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
-import { ITrainingRecordForm } from 'interfaces/training'
+
+import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
@@ -37,18 +39,17 @@ export const CREATE_TRAINING_RECORD = gql`
 
 const useCreateTrainingRecord = () => {
   const [createTrainingRecord] = useMutation(CREATE_TRAINING_RECORD)
+  const { _id } = useSelector(state => ({
+    _id: state.schedule.trainingDialog._id,
+  }))
 
   const mutate = React.useCallback(
-    (r: Partial<ITrainingRecordForm>) => {
+    (r: Partial<IRecordForm>) => {
       const record = ({
-        _id: r._id,
-        training: { link: r.training!.link },
-        status: r.status,
-        note: r.note,
-        contact: r.contact ? { link: r.contact.link } : null,
-        resource: r.resource ? { link: r.resource.link } : null,
-        attendant: r.attendant ? { link: r.attendant.link } : null,
+        ...r,
+        training: { link: _id },
       })
+
       return createTrainingRecord({
         variables: { record },
         update: (client, { data }) => {
@@ -65,13 +66,13 @@ const useCreateTrainingRecord = () => {
 
           boundUpdateCachedQuery<IGetTrainingResponse>({
             query: GET_TRAINING,
-            variables: { id: record.training.link },
+            variables: { id: _id },
             updater,
           })
         },
       })
     },
-    [createTrainingRecord]
+    [createTrainingRecord, _id]
   )
 
   return mutate

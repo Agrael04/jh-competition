@@ -26,7 +26,7 @@ export default function StartTimeSelect(props: IProps) {
   const resource = watch('resource')?.link
 
   const { _id } = useSelector(state => ({
-    _id: state.schedule.trainingDialog.resourceForm.resource?._id,
+    _id: state.schedule.trainingDialog.resourceForm._id,
   }))
   const trainingResources = useGetTrainingResourcesQuery()
 

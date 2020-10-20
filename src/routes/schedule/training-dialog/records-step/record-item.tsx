@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton'
 import PersonIcon from '@material-ui/icons/Person'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import useGetTrainingQuery, { convertTrainingRecordToInput } from '../../queries/get-training'
+import useGetTrainingQuery from '../../queries/get-training'
 
 import useDeleteTrainingRecord from '../../mutations/delete-training-record'
 
@@ -29,7 +29,7 @@ export default function RecordItem({ id }: IProps) {
 
   const actions = useActions()
   const { isActive, _id } = useSelector(state => ({
-    isActive: state.schedule.trainingDialog.recordForm.record?._id === id,
+    isActive: state.schedule.trainingDialog.recordForm._id === id,
     _id: state.schedule.trainingDialog._id,
   }))
   const trainingQuery = useGetTrainingQuery(_id)
@@ -39,9 +39,26 @@ export default function RecordItem({ id }: IProps) {
   const deleteTrainingRecord = useDeleteTrainingRecord()
 
   const activate = React.useCallback(
-    () => actions.schedule.trainingDialog.openUpdateRecordForm(
-      convertTrainingRecordToInput(record!)
-    ),
+    () => {
+      if (!record) {
+        return
+      }
+
+      const initialForm = {
+        resource: { link: record.resource._id },
+        status: record.status,
+        note: record.note,
+        contact: { link: record.contact._id },
+        attendant: record.attendant ? {
+          link: record.attendant._id,
+        } : undefined,
+      }
+
+      actions.schedule.trainingDialog.openUpdateRecordForm(
+        record._id,
+        initialForm
+      )
+    },
     [actions, record]
   )
 

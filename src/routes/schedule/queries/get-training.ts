@@ -134,27 +134,4 @@ export const useGetTrainingQuery = (id: string | null | undefined, skip?: boolea
   return result
 }
 
-export const convertTrainingResourceToInput = (r: IGetTrainingResponse['trainingResources'][0]) => ({
-  _id: r._id,
-  resource: { link: r.resource._id },
-  trainer: r.trainer ? { link: r.trainer._id } : undefined,
-  training: { link: r.training._id },
-  startTime: r.startTime,
-  endTime: r.endTime,
-})
-
-export const convertTrainingRecordToInput = (r: IGetTrainingResponse['trainingRecords'][0]) => ({
-  _id: r._id,
-  resource: { link: r.resource._id },
-  training: { link: r.training._id },
-  status: r.status,
-  note: r.note,
-  contact: r.contact ? {
-    link: r.contact._id,
-  } : undefined,
-  attendant: r.attendant ? {
-    link: r.attendant._id,
-  } : undefined,
-})
-
 export default useGetTrainingQuery

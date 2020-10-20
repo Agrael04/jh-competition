@@ -1,31 +1,40 @@
 import { createAction } from 'typesafe-actions'
 
-import { ITrainingResourceForm, ITrainingRecordForm } from 'interfaces/training'
-
 import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
+import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
+import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 
 export const open = createAction(
   'schedule/trainingDialog/OPEN',
-  (mode: 'create' | 'update', _id: string) => ({ mode, _id })
-)()
-
-export const initialize = createAction(
-  'schedule/trainingDialog/INITIALIZE',
-  (training: ITrainingForm) => ({ training })
+  (_id: string) => ({ _id })
 )()
 
 export const close = createAction(
   'schedule/trainingDialog/CLOSE'
 )()
 
+export const openCreateTrainingForm = createAction(
+  'schedule/trainingDialog/OPEN_CREATE_TRAINING_FORM',
+  (defaultValues?: Partial<ITrainingForm>) => ({ defaultValues })
+)()
+
+export const openUpdateTrainingForm = createAction(
+  'schedule/trainingDialog/OPEN_UPDATE_TRAINING_FORM',
+  (_id: string, defaultValues: Partial<ITrainingForm>) => ({ _id, defaultValues })
+)()
+
+export const closeTraining = createAction(
+  'schedule/trainingDialog/CLOSE_TRAINING'
+)()
+
 export const openCreateResourceForm = createAction(
   'schedule/trainingDialog/OPEN_CREATE_RESOURCE_FORM',
-  (resource?: Partial<ITrainingResourceForm>) => ({ resource })
+  (defaultValues?: Partial<IResourceForm>) => ({ defaultValues })
 )()
 
 export const openUpdateResourceForm = createAction(
   'schedule/trainingDialog/OPEN_UPDATE_RESOURCE_FORM',
-  (resource: Partial<ITrainingResourceForm>) => ({ resource })
+  (_id: string, defaultValues: Partial<IResourceForm>) => ({ _id, defaultValues })
 )()
 
 export const closeResource = createAction(
@@ -34,12 +43,12 @@ export const closeResource = createAction(
 
 export const openCreateRecordForm = createAction(
   'schedule/trainingDialog/OPEN_CREATE_RECORD_FORM',
-  (record?: Partial<ITrainingRecordForm>) => ({ record })
+  (defaultValues?: Partial<IRecordForm>) => ({ defaultValues })
 )()
 
 export const openUpdateRecordForm = createAction(
   'schedule/trainingDialog/OPEN_UPDATE_RECORD_FORM',
-  (record: Partial<ITrainingRecordForm>) => ({ record })
+  (_id: string, defaultValues: Partial<IRecordForm>) => ({ _id, defaultValues })
 )()
 
 export const closeRecord = createAction(
@@ -57,8 +66,11 @@ export const openCheckDialog = createAction(
 
 export const actions = {
   open,
-  initialize,
   close,
+
+  openCreateTrainingForm,
+  openUpdateTrainingForm,
+  closeTraining,
 
   openCreateResourceForm,
   openUpdateResourceForm,

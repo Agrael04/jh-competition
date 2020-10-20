@@ -42,13 +42,15 @@ const EmptyItem = ({ time, resource }: IProps) => {
 
     const isAvailable = trainer && isTrainerAvailable(data?.trainerSchedules || [], trainer, gym, time, endTime)
 
-    updateTrainingResource({
+    updateTrainingResource(
       _id,
-      startTime: time,
-      endTime,
-      resource: { link: resource },
-      trainer: isAvailable ? { link: trainer! } : undefined,
-    })
+      {
+        startTime: time,
+        endTime,
+        resource: { link: resource },
+        trainer: isAvailable ? { link: trainer! } : undefined,
+      }
+    )
   }
 
   const [{ color }, drop] = useDrop({

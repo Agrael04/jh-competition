@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import { ITrainingResourceForm } from 'interfaces/training'
+import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
 
 export const UPDATE_TRAINING_RESOURCE = gql`
   mutation updateTrainingResource ($_id: ObjectId!, $resource: TrainingResourceUpdateInput!) {
@@ -29,11 +29,10 @@ const useUpdateTrainingResource = () => {
   const [updateTrainingResource] = useMutation(UPDATE_TRAINING_RESOURCE)
 
   const mutate = React.useCallback(
-    (resource: Partial<ITrainingResourceForm>) => {
-
+    (_id: string, resource: IResourceForm) => {
       return updateTrainingResource({
         variables: {
-          _id: resource._id,
+          _id,
           resource: {
             ...resource,
             trainer_unset: !resource?.trainer,
