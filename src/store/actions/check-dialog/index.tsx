@@ -2,8 +2,8 @@ import { createAction } from 'typesafe-actions'
 import { Moment } from 'moment'
 
 import { ITrainingPassForm } from 'interfaces/training-pass'
-import { IPositionForm } from 'containers/check-dialog/positions-block/position-form'
-import { IPaymentForm } from 'containers/check-dialog/payments-block/payment-form'
+import IPositionForm from 'containers/check-dialog/positions-block/position-form/form'
+import IPaymentForm from 'containers/check-dialog/payments-block/payment-form/form'
 
 export const openDialog = createAction(
   'checkDialog/OPEN_DIALOG',
@@ -28,31 +28,41 @@ export const updateActiveDate = createAction(
   (activeDate: Moment) => ({ activeDate })
 )()
 
-export const openPassForm = createAction(
-  'checkDialog/OPEN_PASS',
-  (defaultValues?: Partial<ITrainingPassForm>) => ({ defaultValues })
+export const openCreatePositionForm = createAction(
+  'checkDialog/OPEN_CREATE_POSITION_FORM',
+  (defaultValues?: Partial<IPositionForm>) => ({ defaultValues })
 )()
 
-export const closePassForm = createAction(
-  'checkDialog/CLOSE_PASS'
-)()
-
-export const openPositionForm = createAction(
-  'checkDialog/OPEN_POSITION_FORM',
-  (_id: string | null = null, defaultValues: Partial<IPositionForm> | null = null) => ({ _id, defaultValues })
+export const openUpdatePositionForm = createAction(
+  'checkDialog/OPEN_UPDATE_POSITION_FORM',
+  (_id: string, defaultValues: Partial<IPositionForm>) => ({ _id, defaultValues })
 )()
 
 export const closePositionForm = createAction(
   'checkDialog/CLOSE_POSITION_FORM'
 )()
 
-export const openPaymentForm = createAction(
-  'checkDialog/OPEN_PAYMENT_FORM',
-  (_id: string | null = null, defaultValues: Partial<IPaymentForm> | null = null) => ({ _id, defaultValues })
+export const openCreatePaymentForm = createAction(
+  'checkDialog/OPEN_CREATE_PAYMENT_FORM',
+  (defaultValues?: Partial<IPaymentForm>) => ({ defaultValues })
+)()
+
+export const openUpdatePaymentForm = createAction(
+  'checkDialog/OPEN_UPDATE_PAYMENT_FORM',
+  (_id: string, defaultValues: Partial<IPaymentForm>) => ({ _id, defaultValues })
 )()
 
 export const closePaymentForm = createAction(
   'checkDialog/CLOSE_PAYMENT_FORM'
+)()
+
+export const openCreatePassForm = createAction(
+  'checkDialog/OPEN_CREATE_PASS_PASS',
+  (defaultValues?: Partial<ITrainingPassForm>) => ({ defaultValues })
+)()
+
+export const closePassForm = createAction(
+  'checkDialog/CLOSE_PASS'
 )()
 
 export const actions = {
@@ -62,14 +72,16 @@ export const actions = {
   updateContact,
   updateActiveDate,
 
-  openPassForm,
-  closePassForm,
-
-  openPositionForm,
+  openCreatePositionForm,
+  openUpdatePositionForm,
   closePositionForm,
 
-  openPaymentForm,
+  openCreatePaymentForm,
+  openUpdatePaymentForm,
   closePaymentForm,
+
+  openCreatePassForm,
+  closePassForm,
 }
 
 export default actions

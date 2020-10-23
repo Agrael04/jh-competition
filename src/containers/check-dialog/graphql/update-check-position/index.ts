@@ -1,25 +1,21 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
 
-import { ICheckPositionForm } from 'interfaces/check-position'
+import IPositionForm from '../../positions-block/position-form/form'
 
 const UPDATE_CHECK_POSITION = loader('./mutation.gql')
 
 const useUpdateCheckPosition = () => {
-  const [updateCheckPosition] = useMutation(UPDATE_CHECK_POSITION)
+  const [mutation] = useMutation(UPDATE_CHECK_POSITION)
 
-  const mutate = React.useCallback(
-    (_id: string, data: Partial<ICheckPositionForm>) => {
-      if (!data) {
-        return
-      }
-
-      return updateCheckPosition({
+  const mutate = useCallback(
+    (_id: string, data: Partial<IPositionForm>) => {
+      return mutation({
         variables: { _id, data },
       })
     },
-    [updateCheckPosition]
+    [mutation]
   )
 
   return mutate

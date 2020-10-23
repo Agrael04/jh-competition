@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { loader } from 'graphql.macro'
 import { useMutation } from '@apollo/react-hooks'
 
@@ -22,7 +22,7 @@ const useCloseTrainingRecords = () => {
 
   const query = useGetContactDetailsQuery()
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (balanceDiff: number) => {
       const balance = (query.data?.client.balance || 0) + balanceDiff
 

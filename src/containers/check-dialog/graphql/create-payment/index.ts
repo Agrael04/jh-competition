@@ -1,6 +1,7 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
+import moment from 'moment'
 
 import { useSelector } from 'store'
 
@@ -13,20 +14,23 @@ const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreatePayment = () => {
-  const [createPayment] = useMutation(CREATE_PAYMENT)
+  const [mutation] = useMutation(CREATE_PAYMENT)
   const variables = useSelector(state => ({
     date: state.checkDialog.params.activeDate,
     gym: state.checkDialog.params.activeGym,
     _id: state.checkDialog.params.contact?.link,
   }))
 
-  const mutate = React.useCallback(
-    (data: Partial<IPaymentForm>) => {
-      if (!data) {
-        return
-      }
+  const mutate = useCallback(
+    (form: Partial<IPaymentForm>) => {
+      const data = ({
+        ...form,
+        contact: { link: variables._id },
+        date: moment(variables.date).toDate(),
+        gym: { link: variables.gym },
+      })
 
-      return createPayment({
+      return mutation({
         variables: { data },
         update: (client, { data }) => {
           const boundUpdateCachedQuery = updateQuery(client)
@@ -46,7 +50,7 @@ const useCreatePayment = () => {
         },
       })
     },
-    [createPayment, variables]
+    [mutation, variables]
   )
 
   return mutate

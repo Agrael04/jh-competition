@@ -34,7 +34,7 @@ export default function PositionItem({ index, id }: IProps) {
 
   const openUpdateForm = useCallback(
     () => {
-      actions.checkDialog.openPositionForm(position._id, position)
+      actions.checkDialog.openUpdatePositionForm(position._id, position)
     },
     [actions, position]
   )

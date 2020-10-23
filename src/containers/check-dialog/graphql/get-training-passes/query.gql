@@ -1,10 +1,5 @@
-query getContactDetails($_id: ObjectId){
-  trainingPasss(query: {
-    contact: {
-      _id: $_id
-    }
-    isActive: true
-  }) {
+query getTrainingPasses($_id: ObjectId) {
+  trainingPasss(query: { contact: { _id: $_id }, isActive: true }) {
     _id
     type
     size
@@ -13,15 +8,9 @@ query getContactDetails($_id: ObjectId){
     activation
     createdAt
   }
-  payments(query: {
-    contact: {
-      _id: $_id
-    },
-    pass: {
-      isActive: true
-    }
-    type: "units"
-  }) {
+  payments(
+    query: { contact: { _id: $_id }, pass: { isActive: true }, type: "units" }
+  ) {
     _id
     pass {
       _id

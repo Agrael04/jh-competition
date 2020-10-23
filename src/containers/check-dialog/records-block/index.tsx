@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
@@ -52,7 +52,16 @@ export default function TrainingDialog() {
     ), [data]
   )!
 
-  const openPositionForm = (service: string) => () => actions.checkDialog.openPositionForm(null, { type: 'training', service, priceType: 'money' })
+  const openPositionForm = useCallback(
+    (service: string) => () => {
+      actions.checkDialog.openCreatePositionForm({
+        type: 'training',
+        service,
+        priceType: 'money',
+      })
+    },
+    [actions]
+  )
 
   return (
     <>

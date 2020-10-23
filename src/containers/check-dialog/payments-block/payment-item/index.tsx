@@ -37,7 +37,7 @@ export default function PaymentItem({ index, id }: IProps) {
 
   const openUpdateForm = React.useCallback(
     () => {
-      actions.checkDialog.openPaymentForm(payment._id, {
+      actions.checkDialog.openUpdatePaymentForm(payment._id, {
         ...payment,
         createdAt: moment(payment.createdAt),
         pass: payment.pass ? {

@@ -8,7 +8,7 @@ export function* openCheckDialog(action: ReturnType<typeof actions.schedule.trai
   try {
     const { activeDate, activeGym, contact } = yield select((state: IStoreState) => ({
       activeDate: state.schedule.page.filters.date,
-      activeGym: state.schedule.page.filters.gym?.link!,
+      activeGym: state.schedule.page.filters.gym,
       contact: state.schedule.trainingDialog.recordForm.defaultValues?.contact?.link,
     }))
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
-import { useActions } from 'store'
+import { useActions, useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import Grid from '@material-ui/core/Grid'
@@ -14,28 +14,21 @@ import TextInput from 'containers/fields/text-input'
 import Select from 'containers/fields/select'
 import ToggleGroup from 'containers/fields/toggle-group'
 
-import SubmitButton from './submit-button'
-
 import { requiredValidation } from 'utils/validations'
-import { products } from '../../data'
 import { passTypes, getSizes } from 'data/training-passes'
 
-export interface IPositionForm {
-  type?: string
-  service?: string
-  priceAmount?: number | null
-  priceType?: 'money' | 'units' | null
-}
+import { products } from '../../data'
 
-interface IProps {
-  defaultValues?: IPositionForm | null
-  submit: (form: IPositionForm) => void
-}
+import SubmitButton from './submit-button'
+import IForm from './form'
 
-export default function PositionForm({ defaultValues, submit }: IProps) {
+export default function PositionForm() {
   const actions = useActions()
-  const methods = useForm<IPositionForm>({
-    defaultValues: defaultValues || {},
+
+  const positionForm = useSelector(state => state.checkDialog.positionForm)
+
+  const methods = useForm<IForm>({
+    defaultValues: positionForm.defaultValues,
   })
   const type = methods.watch('type')
   const service = methods.watch('service')
@@ -48,14 +41,14 @@ export default function PositionForm({ defaultValues, submit }: IProps) {
       const p: any = products.find(p => p.id === 'pass')?.options.find(o => o.id === service)!
 
       if (!p || p.type === 'open') {
-        actions.checkDialog.openPassForm()
+        actions.checkDialog.openCreatePassForm()
         return
       }
 
       const passType = passTypes.find(t => t.value === p.type)!
       const passSize = getSizes(p.type)!.find(s => s.value === p.size)!
 
-      actions.checkDialog.openPassForm({
+      actions.checkDialog.openCreatePassForm({
         type: p.type,
         size: p.size,
         duration: passType.duration,
@@ -163,7 +156,7 @@ export default function PositionForm({ defaultValues, submit }: IProps) {
           <Button onClick={cancel} color='primary'>
             Отменить
           </Button>
-          <SubmitButton submit={submit} />
+          <SubmitButton />
         </Grid>
       </Box>
     </FormProvider>

@@ -2,18 +2,13 @@ import { createReducer, ActionType } from 'typesafe-actions'
 
 import actions from 'store/actions/schedule/training-dialog'
 
+import IForm from 'interfaces/form-state'
+
 import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
 import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
 import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 
 type IAction = ActionType<typeof actions>
-
-interface IForm<T> {
-  isActive: boolean
-  mode?: 'create' | 'update'
-  _id?: string
-  defaultValues?: Partial<T>
-}
 
 export interface IState {
   opened: boolean

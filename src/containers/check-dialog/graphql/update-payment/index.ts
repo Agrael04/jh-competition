@@ -1,25 +1,21 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
-import { IPaymentForm } from 'interfaces/payment'
+import IPaymentForm from '../../payments-block/payment-form/form'
 
 const UPDATE_PAYMENT = loader('./mutation.gql')
 
 const useUpdatePayment = () => {
-  const [updatePayment] = useMutation(UPDATE_PAYMENT)
+  const [mutation] = useMutation(UPDATE_PAYMENT)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (_id: string, data: Partial<IPaymentForm>) => {
-      if (!data) {
-        return
-      }
-
-      return updatePayment({
+      return mutation({
         variables: { _id, data },
       })
     },
-    [updatePayment]
+    [mutation]
   )
 
   return mutate
