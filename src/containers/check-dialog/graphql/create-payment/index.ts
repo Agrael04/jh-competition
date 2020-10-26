@@ -28,6 +28,7 @@ const useCreatePayment = () => {
         contact: { link: variables._id },
         date: moment(variables.date).toDate(),
         gym: { link: variables.gym },
+        status: 'PENDING',
       })
 
       return mutation({

@@ -15,6 +15,7 @@ interface IMappedRecord {
   type: string
   name: string
   count: number
+  status: string
   isMulti: boolean
 }
 
@@ -41,6 +42,7 @@ export default function TrainingDialog() {
               _id: item.training._id,
               type: item.training.type,
               name: item.training.name,
+              status: item.status,
               count: isMulti ? rs.length : (item.resource.endTime - item.resource.startTime) / 2,
               isMulti,
             },
@@ -80,7 +82,8 @@ export default function TrainingDialog() {
                   variant='outlined'
                   color={r.isMulti ? 'secondary' : 'primary'}
                   avatar={<Avatar>{r.count}</Avatar>}
-                  onClick={openPositionForm(r.type)}
+                  onClick={r.status !== 'CLOSED' ? openPositionForm(r.type) : undefined}
+                  disabled={r.status === 'CLOSED'}
                 />
               </Grid>
             ))

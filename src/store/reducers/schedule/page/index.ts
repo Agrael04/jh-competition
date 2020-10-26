@@ -20,7 +20,7 @@ export interface IState {
 
 const initialState: IState = {
   activeTime: 0,
-  openedTrainers: false,
+  openedTrainers: true,
 
   openedFiltersDialog: false,
   filters: {

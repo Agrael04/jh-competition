@@ -34,8 +34,10 @@ export const CREATE_TRAINING_RESOURCE = gql`
 
 const useCreateTrainingResource = () => {
   const [createTrainingResource] = useMutation(CREATE_TRAINING_RESOURCE)
-  const { date, _id } = useSelector(state => ({
+  const { date, gym, resources, _id } = useSelector(state => ({
     date: state.schedule.page.filters.date,
+    gym: state.schedule.page.filters.gym,
+    resources: state.schedule.page.filters.resources,
     _id: state.schedule.trainingDialog._id,
   }))
 
@@ -56,7 +58,11 @@ const useCreateTrainingResource = () => {
 
           boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
             query: GET_TRAINING_RESOURCES,
-            variables: { date: date.toDate() },
+            variables: {
+              date: date.toDate(),
+              gym,
+              resources,
+            },
             updater,
           })
 
@@ -68,7 +74,7 @@ const useCreateTrainingResource = () => {
         },
       })
     },
-    [createTrainingResource, _id, date]
+    [createTrainingResource, _id, date, gym, resources]
   )
 
   return mutate

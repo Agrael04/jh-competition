@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
@@ -14,30 +14,31 @@ export default function TrainingDialog() {
   const actions = useActions()
   const { data } = useGetContactDetailsQuery()
   const closeTrainingRecords = useCloseTrainingRecords()
-  const [initAmount, setInitAmount] = React.useState<number | null>(null)
 
-  const positionsPassAmount = data?.checkPositions.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
-  const positionsMoneyAmount = data?.checkPositions.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
+  const pendingCheckPositions = useMemo(
+    () => data?.checkPositions.filter(p => p.status === 'PENDING'),
+    [data]
+  )
 
-  const paymentPassAmount = data?.payments.filter(p => p.type === 'units').reduce((res, p) => res + p.amount, 0) || 0
-  const paymentMoneyAmount = data?.payments.filter(p => p.type === 'money').reduce((res, p) => res + p.amount, 0) || 0
+  const pendingPayments = useMemo(
+    () => data?.payments.filter(p => p.status === 'PENDING'),
+    [data]
+  )
+
+  const positionsPassAmount = pendingCheckPositions?.filter(p => p.priceType === 'units').reduce((res, p) => res + p.priceAmount, 0) || 0
+  const positionsMoneyAmount = pendingCheckPositions?.filter(p => p.priceType === 'money').reduce((res, p) => res + p.priceAmount, 0) || 0
+
+  const paymentPassAmount = pendingPayments?.filter(p => p.type === 'units').reduce((res, p) => res + p.amount, 0) || 0
+  const paymentMoneyAmount = pendingPayments?.filter(p => p.type === 'money').reduce((res, p) => res + p.amount, 0) || 0
 
   const passAmount = paymentPassAmount - positionsPassAmount
   const moneyAmount = paymentMoneyAmount - positionsMoneyAmount
 
-  const close = React.useCallback(
+  const close = useCallback(
     async () => {
-      await closeTrainingRecords(moneyAmount - (initAmount || 0))
+      await closeTrainingRecords(moneyAmount)
       actions.checkDialog.closeDialog()
-    }, [closeTrainingRecords, moneyAmount, initAmount, actions]
-  )
-
-  React.useEffect(
-    () => {
-      if ((moneyAmount || moneyAmount === 0) && initAmount === null) {
-        setInitAmount(moneyAmount)
-      }
-    }, [moneyAmount, initAmount, setInitAmount]
+    }, [closeTrainingRecords, moneyAmount, actions]
   )
 
   return (

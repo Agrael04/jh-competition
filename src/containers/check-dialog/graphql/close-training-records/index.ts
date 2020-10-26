@@ -29,9 +29,7 @@ const useCloseTrainingRecords = () => {
       return updateTrainingRecord({
         variables: {
           ...variables,
-          data: {
-            status: balance < 0 ? 'CLOSED_DEBT' : 'CLOSED',
-          },
+          status: balance < 0 ? 'DEBT' : 'CLOSED',
           balance,
         },
         update: (client, { data }) => {
@@ -41,7 +39,7 @@ const useCloseTrainingRecords = () => {
               ...data,
               trainingRecords: data.trainingRecords.map(tr => ({
                 ...tr,
-                status: balance < 0 ? 'CLOSED_DEBT' : 'CLOSED',
+                status: balance < 0 ? 'DEBT' : 'CLOSED',
               })),
               client: {
                 ...data.client,

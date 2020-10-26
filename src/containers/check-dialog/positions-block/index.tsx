@@ -34,7 +34,6 @@ export default function TrainingDialog() {
     [actions]
   )
 
-
   if (isFormActive) {
     return (
       <PositionForm />

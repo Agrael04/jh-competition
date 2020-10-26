@@ -37,6 +37,7 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     service
     priceType
     priceAmount
+    status
   }
   payments(query: {
     contact: {
@@ -56,6 +57,7 @@ query getContactDetails($date: DateTime, $gym: ObjectId, $_id: ObjectId){
     amount
     destination
     transaction
+    status
   }
   client(query: { _id: $_id }) {
     _id

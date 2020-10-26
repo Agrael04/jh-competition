@@ -5,9 +5,9 @@ import { useActions, useSelector } from 'store'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Zoom from '@material-ui/core/Zoom'
 
-import useUpdateTrainingResource from '../mutations/update-training-resource'
-import useGetSchedulesQuery, { isTrainerAvailable } from '../queries/get-schedules'
-import useGetTrainingResourcesQuery from '../queries/get-training-resources'
+import useUpdateTrainingResource from '../../mutations/update-training-resource'
+import useGetSchedulesQuery, { isTrainerAvailable } from '../../queries/get-schedules'
+import useGetTrainingResourcesQuery from '../../queries/get-training-resources'
 
 import useStyles from './styles'
 

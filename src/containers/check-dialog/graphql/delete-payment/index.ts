@@ -11,7 +11,7 @@ const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 
 const useCreateTrainingPass = () => {
-  const [createPayment] = useMutation(DELETE_PAYMENT)
+  const [mutation] = useMutation(DELETE_PAYMENT)
   const variables = useSelector(state => ({
     date: state.checkDialog.params.activeDate,
     gym: state.checkDialog.params.activeGym,
@@ -24,7 +24,7 @@ const useCreateTrainingPass = () => {
         return
       }
 
-      return createPayment({
+      return mutation({
         variables: { _id },
         update: (client, { data }) => {
           const boundUpdateCachedQuery = updateQuery(client)
@@ -44,7 +44,7 @@ const useCreateTrainingPass = () => {
         },
       })
     },
-    [createPayment, variables]
+    [mutation, variables]
   )
 
   return mutate

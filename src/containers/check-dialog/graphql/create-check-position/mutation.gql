@@ -9,6 +9,7 @@ mutation createCheckPosition ($data: CheckPositionInsertInput!) {
     priceType
     priceAmount
     date
+    status
     gym {
       _id
     }

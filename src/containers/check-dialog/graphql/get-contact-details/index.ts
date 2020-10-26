@@ -5,43 +5,52 @@ import { useSelector } from 'store'
 
 const GET_CONTACT_DETAILS = loader('./query.gql')
 
-export interface IGetContactDetails {
-  trainingRecords: Array<{
+interface ITrainingRecord {
+  _id: string
+  status: string
+  training: {
     _id: string
-    training: {
-      _id: string
-      type: string
-      name: string
-      __typename: string
-    }
-    resource: {
-      _id: string
-      startTime: number
-      endTime: number
-      __typename: string
-    }
-    __typename: string
-  }>
-  checkPositions: Array<{
-    _id: string
-    priceType: 'units' | 'money'
-    priceAmount: number
     type: string
-    service: string
+    name: string
     __typename: string
-  }>
-  payments: Array<{
+  }
+  resource: {
     _id: string
-    type: 'units' | 'money'
-    pass?: {
-      _id: string
-    }
-    createdAt: Date
-    amount: number
-    destination?: string
-    transaction?: string
+    startTime: number
+    endTime: number
     __typename: string
-  }>
+  }
+  __typename: string
+}
+
+interface ICheckPosition {
+  _id: string
+  priceType: 'units' | 'money'
+  priceAmount: number
+  type: string
+  service: string
+  status: 'PENDING' | 'RESOLVED'
+  __typename: string
+}
+
+interface IPayment {
+  _id: string
+  type: 'units' | 'money'
+  pass?: {
+    _id: string
+  }
+  createdAt: Date
+  amount: number
+  destination?: string
+  transaction?: string
+  status: 'PENDING' | 'RESOLVED'
+  __typename: string
+}
+
+export interface IGetContactDetails {
+  trainingRecords: ITrainingRecord[]
+  checkPositions: ICheckPosition[]
+  payments: IPayment[]
   client: {
     _id: string
     __typename: string
@@ -62,6 +71,7 @@ export const useGetContactDetailsQuery = () => {
     variables,
     skip: !variables.gym || !variables._id,
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-only',
   })
 
   return result

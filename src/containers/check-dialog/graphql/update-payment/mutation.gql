@@ -1,20 +1,20 @@
-  mutation updatePayment ($_id: ObjectId!, $data: PaymentUpdateInput!) {
-    updateOnePayment(query: { _id: $_id }, set: $data) {
+mutation updatePayment($_id: ObjectId!, $data: PaymentUpdateInput!) {
+  updateOnePayment(query: { _id: $_id }, set: $data) {
+    _id
+    contact {
       _id
-      contact {
-        _id
-      }
-      gym {
-        _id
-      }
-      date
-      createdAt
-      type
-      pass {
-        _id
-      }
-      amount
-      destination
-      transaction
     }
+    gym {
+      _id
+    }
+    date
+    createdAt
+    type
+    pass {
+      _id
+    }
+    amount
+    destination
+    transaction
   }
+}

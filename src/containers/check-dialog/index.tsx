@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
-import { useSelector } from 'store'
+import { useActions, useSelector } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 
@@ -19,12 +19,19 @@ import TotalBlock from './total-block'
 import useGetContactDetails from './graphql/get-contact-details'
 
 export default function CheckDialog() {
+  const actions = useActions()
   const { loading } = useGetContactDetails()
 
   const opened = useSelector(state => state.checkDialog.opened)
 
+  const close = useCallback(
+    async () => {
+      actions.checkDialog.closeDialog()
+    }, [actions]
+  )
+
   return (
-    <Dialog open={opened} maxWidth='lg' fullWidth={true}>
+    <Dialog open={opened} maxWidth='lg' fullWidth={true} onClose={close}>
       <Header />
       <Box padding={3}>
         <Grid container={true} spacing={3}>

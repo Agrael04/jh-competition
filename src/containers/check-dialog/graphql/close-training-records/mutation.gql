@@ -1,4 +1,4 @@
-  mutation closeTrainingRecords ($date: DateTime, $gym: ObjectId, $_id: ObjectId, $data: TrainingRecordUpdateInput!, $balance: Int!) {
+  mutation closeTrainingRecords ($date: DateTime, $gym: ObjectId, $_id: ObjectId, $status: String!, $balance: Int!) {
     updateManyTrainingRecords(query: {
       contact: {
         _id: $_id
@@ -9,9 +9,37 @@
           _id: $gym
         }
       }
-    }, set: $data) {
+    }, set: {
+      status: $status
+    }) {
       modifiedCount
     }
+  updateManyCheckPositions(query: {
+    contact: {
+      _id: $_id
+    },
+    date: $date,
+    gym: {
+      _id: $gym
+    }
+  }, set: {
+    status: "RESOLVED"
+  }) {
+    modifiedCount
+  }
+  updateManyPayments(query: {
+    contact: {
+      _id: $_id
+    },
+    date: $date,
+    gym: {
+      _id: $gym
+    }
+  }, set: {
+    status: "RESOLVED"
+  }) {
+    modifiedCount
+  }
     updateOneClient(query: {
       _id: $_id
     }, set: {

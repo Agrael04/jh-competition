@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form'
 
 import Select, { ISelectProps } from 'components/select'
 
-import useGetGymsQuery from '../queries/get-gyms'
+import useGetGymsQuery from '../../queries/get-gyms'
 
 type IProps = ISelectProps & {
   onChange?: any

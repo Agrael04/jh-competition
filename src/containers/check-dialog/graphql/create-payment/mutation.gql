@@ -16,5 +16,6 @@ mutation createPayment ($data: PaymentInsertInput!) {
     amount
     destination
     transaction
+    status
   }
 }

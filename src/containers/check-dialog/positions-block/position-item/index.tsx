@@ -32,15 +32,24 @@ export default function PositionItem({ index, id }: IProps) {
     }, [data, id]
   )
 
+  const pending = useMemo(
+    () => position.status === 'PENDING',
+    [position]
+  )
+
   const openUpdateForm = useCallback(
     () => {
+      if (!pending) {
+        return
+      }
+
       actions.checkDialog.openUpdatePositionForm(position._id, position)
     },
-    [actions, position]
+    [actions, position, pending]
   )
 
   const product = products.find(p => p.id === position.type)
-  const service: any = product?.options.find(o => o.id === position.service)
+  const service = product?.options.find(o => o.id === position.service)
 
   const removeCheckPosition = useCallback(
     () => deleteCheckPosition(position._id),
@@ -48,7 +57,7 @@ export default function PositionItem({ index, id }: IProps) {
   )
 
   return (
-    <ListItem button={true} key={position._id} onClick={openUpdateForm}>
+    <ListItem button={true} key={position._id} onClick={openUpdateForm} disabled={!pending}>
       <ListItemAvatar>
         <Avatar>
           {index + 1}
@@ -58,11 +67,15 @@ export default function PositionItem({ index, id }: IProps) {
         primary={`${service?.name}`}
         secondary={position.priceAmount ? `${position.priceAmount} ${position.priceType === 'units' ? 'АБ' : 'грн'}` : null}
       />
-      <ListItemSecondaryAction>
-        <IconButton onClick={removeCheckPosition}>
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+      {
+        pending && (
+          <ListItemSecondaryAction>
+            <IconButton onClick={removeCheckPosition}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        )
+      }
     </ListItem>
   )
 }

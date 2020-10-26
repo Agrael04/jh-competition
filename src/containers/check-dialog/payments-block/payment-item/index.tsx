@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import moment from 'moment'
 
 import { useActions } from 'store'
@@ -33,10 +33,19 @@ export default function PaymentItem({ index, id }: IProps) {
     }, [data, id]
   )
 
+  const pending = useMemo(
+    () => payment.status === 'PENDING',
+    [payment]
+  )
+
   const deletePayment = useDeletePayment()
 
-  const openUpdateForm = React.useCallback(
+  const openUpdateForm = useCallback(
     () => {
+      if (!pending) {
+        return
+      }
+
       actions.checkDialog.openUpdatePaymentForm(payment._id, {
         ...payment,
         createdAt: moment(payment.createdAt),
@@ -45,16 +54,16 @@ export default function PaymentItem({ index, id }: IProps) {
         } : undefined,
       })
     },
-    [actions, payment]
+    [actions, payment, pending]
   )
 
-  const removePayment = React.useCallback(
+  const removePayment = useCallback(
     () => deletePayment(payment._id),
     [deletePayment, payment]
   )
 
   return (
-    <ListItem button={true} key={payment._id} onClick={openUpdateForm}>
+    <ListItem button={true} key={payment._id} onClick={openUpdateForm} disabled={!pending}>
       <ListItemAvatar>
         <Avatar className={classes.avatar}>
           {index + 1}
@@ -64,11 +73,15 @@ export default function PaymentItem({ index, id }: IProps) {
         primary={`${payment.amount} ${payment.type === 'units' ? `АБ` : `грн`}, ${new Date(payment.createdAt).toDateString()}`}
         secondary={payment._id}
       />
-      <ListItemSecondaryAction>
-        <IconButton onClick={removePayment}>
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+      {
+        pending && (
+          <ListItemSecondaryAction>
+            <IconButton onClick={removePayment}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        )
+      }
     </ListItem>
   )
 }
