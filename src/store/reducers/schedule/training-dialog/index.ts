@@ -12,7 +12,7 @@ type IAction = ActionType<typeof actions>
 
 export interface IState {
   opened: boolean
-  _id: string | null
+  _id?: string
   step: number
 
   trainingForm: IForm<ITrainingForm>
@@ -22,7 +22,6 @@ export interface IState {
 
 const initialState: IState = {
   opened: false,
-  _id: null,
 
   trainingForm: {
     isActive: false,
@@ -122,6 +121,10 @@ const reducer = createReducer<IState, IAction>(initialState)
   .handleAction(actions.setStep, (state, { payload: { step } }) => ({
     ...state,
     step,
+  }))
+  .handleAction(actions.setTrainingId, (state, { payload: { _id } }) => ({
+    ...state,
+    _id,
   }))
 
 export default reducer

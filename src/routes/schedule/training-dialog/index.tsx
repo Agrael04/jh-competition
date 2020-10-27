@@ -31,7 +31,7 @@ export default function TrainingDialog() {
 
   const steps = ['Тренировка', 'Ресурсы', 'Записи']
 
-  const trainingQuery = useGetTrainingQuery(_id!)
+  const trainingQuery = useGetTrainingQuery(_id)
 
   const actions = useActions()
 

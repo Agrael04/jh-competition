@@ -29,13 +29,14 @@ export default function TrainingDialog() {
     async (trainingForm: ITrainingForm) => {
       if (trainingQuery.data?.training) {
         await updateTraining(trainingForm)
-
-        actions.schedule.trainingDialog.close()
       } else {
-        await createTraining(trainingForm)
+        const res = await createTraining(trainingForm)
 
-        actions.schedule.trainingDialog.closeTraining()
-        actions.schedule.trainingDialog.setStep(step + 1)
+        if (res.data) {
+          actions.schedule.trainingDialog.closeTraining()
+          actions.schedule.trainingDialog.setTrainingId(res.data.insertOneTraining._id)
+          actions.schedule.trainingDialog.setStep(step + 1)
+        }
       }
     },
     [actions, updateTraining, createTraining, trainingQuery, step]

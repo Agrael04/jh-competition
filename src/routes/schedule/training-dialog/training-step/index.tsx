@@ -17,12 +17,12 @@ export default function TrainingDialog() {
     isActive: state.schedule.trainingDialog.trainingForm.isActive,
   }))
 
-  const { data, loading } = useGetTrainingQuery(_id!)
+  const { data, loading } = useGetTrainingQuery(_id)
 
   useEffect(
     () => {
-      if (_id && !loading && gym) {
-        if (data?.training) {
+      if (!loading && gym) {
+        if (data?.training && _id) {
           actions.schedule.trainingDialog.openUpdateTrainingForm(
             _id,
             {

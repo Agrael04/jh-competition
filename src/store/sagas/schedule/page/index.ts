@@ -1,5 +1,6 @@
 import { all, put, takeLatest, select, delay } from 'redux-saga/effects'
-import { BSON } from 'mongodb-stitch-browser-sdk'
+
+// import { BSON } from 'mongodb-stitch-browser-sdk'
 
 import { actions } from 'store/actions/schedule'
 
@@ -8,9 +9,9 @@ import times from 'data/times'
 
 export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page.openCreateTrainingDialog>) {
   try {
-    const _id = new BSON.ObjectID().toString()
+    // const _id = new BSON.ObjectID().toString()
 
-    yield put(actions.trainingDialog.open(_id))
+    yield put(actions.trainingDialog.open())
 
     const resource = {
       startTime: action.payload.time,

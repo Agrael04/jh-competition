@@ -6,7 +6,7 @@ import IRecordForm from 'routes/schedule/training-dialog/records-step/record-for
 
 export const open = createAction(
   'schedule/trainingDialog/OPEN',
-  (_id: string) => ({ _id })
+  (_id?: string) => ({ _id })
 )()
 
 export const close = createAction(
@@ -60,6 +60,11 @@ export const setStep = createAction(
   (step: number) => ({ step })
 )()
 
+export const setTrainingId = createAction(
+  'schedule/trainingDialog/SET_TRAINING_ID',
+  (_id: string) => ({ _id })
+)()
+
 export const openCheckDialog = createAction(
   'schedule/trainingDialog/OPEN_CHECK_DIALOG'
 )()
@@ -81,6 +86,7 @@ export const actions = {
   closeRecord,
 
   setStep,
+  setTrainingId,
   openCheckDialog,
 }
 
