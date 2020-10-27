@@ -2,21 +2,23 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'store'
 
-export interface IGetTrainingResourcesResponse {
-  trainingResources: Array<{
+interface ITrainingResource {
+  _id: string
+  startTime: number
+  endTime: number
+  __typename: string
+  resource: {
     _id: string
-    startTime: number
-    endTime: number
     __typename: string
-    resource: {
-      _id: string
-      __typename: string
-    }
-    trainer: {
-      _id: string
-      __typename: string
-    }
-  }>
+  }
+  trainer: {
+    _id: string
+    __typename: string
+  }
+}
+
+export interface IGetTrainingResourcesResponse {
+  trainingResources: ITrainingResource[]
 }
 
 export const GET_TRAINING_RESOURCES = gql`

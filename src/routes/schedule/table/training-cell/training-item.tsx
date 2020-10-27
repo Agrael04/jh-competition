@@ -1,6 +1,5 @@
 import React from 'react'
 import { useActions } from 'store'
-import { useDrag } from 'react-dnd'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
@@ -23,16 +22,15 @@ import red from '@material-ui/core/colors/red'
 
 import getClientLabel from 'utils/get-client-label'
 
-import EmptyItem from './empty-item'
+import { useTrainingDrag } from './dnd'
+
 import useStyles from './styles'
 
 interface IProps {
-  time: number
-  resource: string
-  id: string | undefined
+  id: string
 }
 
-const TrainingCell = ({ time, resource, id }: IProps) => {
+const TrainingItem = ({ id }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
@@ -107,19 +105,11 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
     type === GROUP_TRAININGS.SECTION
   )
 
-  const [, drag] = useDrag({
-    item: {
-      type: 'TRAINING_RESOURCE_ITEM',
-      color,
-      _id: tResource?._id,
-      trainerId: trainer?._id,
-      duration: tResource ? (tResource.endTime - tResource.startTime) : 0,
-    },
-  })
+  const [, drag] = useTrainingDrag(id)
 
   if (!tResource) {
     return (
-      <EmptyItem resource={resource} time={time} />
+      null
     )
   }
 
@@ -154,7 +144,7 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
                 </Box>
               </Grid>
             </Grid>
-            <Box marginY={0.5}>
+            <Box marginY={1}>
               <Divider className={classes.divider} />
             </Box>
             {
@@ -171,4 +161,4 @@ const TrainingCell = ({ time, resource, id }: IProps) => {
   )
 }
 
-export default TrainingCell
+export default TrainingItem

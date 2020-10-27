@@ -5,6 +5,7 @@ import TableCell from '../table-cell'
 import useGetTrainingResourcesQuery from '../../queries/get-training-resources'
 
 import TrainingItem from './training-item'
+import EmptyItem from './empty-item'
 
 import { useSelector } from 'store'
 
@@ -60,7 +61,13 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
       activeRow={((time + duration) === activeTime)}
     >
       <div className={classes.cellWrap}>
-        <TrainingItem time={time} resource={resource} id={trainingResource?._id} />
+        {
+          !trainingResource?._id ? (
+            <EmptyItem time={time} resource={resource} />
+          ) : (
+            <TrainingItem id={trainingResource?._id} />
+          )
+        }
       </div>
     </TableCell>
   )
