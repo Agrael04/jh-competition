@@ -17,10 +17,6 @@ const EmptyItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
-  if (time === 1) {
-    console.log('rerender')
-  }
-
   const handleCreateClick = useCallback(
     e => {
       e.stopPropagation()
