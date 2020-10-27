@@ -4,14 +4,14 @@ import { ApolloProvider } from '@apollo/react-hooks'
 
 import { ApolloClient, InMemoryCache, HttpLink, from, ApolloLink } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import * as authAPI from 'api/auth'
+import * as authApi from 'api/auth'
 
 import Layout from '../layout'
 
 const GRAPHQL_URL = `https://realm.mongodb.com/api/client/v2.0/app/${process.env.REACT_APP_MONGODB_APP_ID}/graphql`
 
 export default function PrivateRoute({ path, exact, children }: any) {
-  const [loggedIn, setLoggedIn] = React.useState(authAPI.isLoggedIn())
+  const [loggedIn, setLoggedIn] = React.useState(authApi.isLoggedIn())
 
   if (!loggedIn) {
     return (
@@ -19,7 +19,7 @@ export default function PrivateRoute({ path, exact, children }: any) {
     )
   }
 
-  const accessToken = authAPI.getAccessToken()
+  const accessToken = authApi.getAccessToken()
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     operation.setContext({
@@ -35,8 +35,8 @@ export default function PrivateRoute({ path, exact, children }: any) {
 
   const errorLink = onError(({ networkError }) => {
     if ((networkError as any)?.statusCode === 401) {
-      authAPI.logout().then(
-        () => setLoggedIn(authAPI.isLoggedIn())
+      authApi.logout().then(
+        () => setLoggedIn(authApi.isLoggedIn())
       )
     }
   })

@@ -9,11 +9,11 @@ import Button from '@material-ui/core/Button'
 
 import useStyles from './styles'
 
-import * as authAPI from 'api/auth'
+import * as authApi from 'api/auth'
 
 const LoginPage = () => {
   const classes = useStyles()
-  const [loggenIn, setLoggedIn] = React.useState(authAPI.isLoggedIn())
+  const [loggenIn, setLoggedIn] = React.useState(authApi.isLoggedIn())
 
   const [credentials, setCredentials] = React.useState({ email: '', password: '' })
 
@@ -21,9 +21,9 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    authAPI.loginWithPassword(credentials.email, credentials.password)
+    authApi.loginWithPassword(credentials.email, credentials.password)
       .then(
-        () => setLoggedIn(authAPI.isLoggedIn())
+        () => setLoggedIn(authApi.isLoggedIn())
       )
       .catch(console.error)
   }
