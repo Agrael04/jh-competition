@@ -12,7 +12,7 @@ export interface ISelectProps extends SelectProps {
 
 const heightStyle = { height: '56px' }
 
-export default ({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error, renderValue }: ISelectProps) => {
+export default function SelectWrap({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error, renderValue }: ISelectProps) {
   const inputLabel = React.useRef<HTMLLabelElement>(null)
   const [labelWidth, setLabelWidth] = React.useState(0)
 

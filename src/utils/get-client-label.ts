@@ -1,4 +1,4 @@
-export default (client?: { lastName: string, firstName: string }) => {
+export default function getClientLable(client?: { lastName: string, firstName: string }) {
   if (!client) {
     return ''
   }
