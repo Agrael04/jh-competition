@@ -7,7 +7,7 @@ interface ISortingProps {
   orderKey: string
   onOrderChange: (key: string) => () => void
   activeOrder: {
-    orderKey: string,
+    orderKey: string
     direction: 'asc' | 'desc'
   }
 }
@@ -15,23 +15,16 @@ interface ISortingProps {
 type SortableProps = TableCellProps & ISortingProps
 
 const SortableCell = (props: SortableProps) => {
+  const { orderKey, onOrderChange, activeOrder, ...innerProps } = { ...props }
+
   const active = useMemo(
-    () => props.activeOrder.orderKey === props.orderKey,
-    [props]
+    () => activeOrder.orderKey === orderKey,
+    [activeOrder, orderKey]
   )
 
   const handleOrderChange = useMemo(
-    () => props.onOrderChange(props.orderKey),
-    [props]
-  )
-
-  const innerProps = useMemo(
-    () => {
-      const { orderKey, onOrderChange, activeOrder, ...innerProps } = { ...props }
-
-      return innerProps
-    },
-    [props]
+    () => onOrderChange(props.orderKey),
+    [onOrderChange]
   )
 
   return (
