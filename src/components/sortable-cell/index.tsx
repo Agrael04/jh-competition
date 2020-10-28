@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import TableCell, { TableCellProps } from '@material-ui/core/TableCell'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
@@ -14,27 +14,25 @@ interface ISortingProps {
 
 type SortableProps = TableCellProps & ISortingProps
 
-const SortableCell = (props: SortableProps) => {
-  const { orderKey, onOrderChange, activeOrder, ...innerProps } = { ...props }
-
+const SortableCell = ({ orderKey, onOrderChange, activeOrder, children, ...innerProps }: SortableProps) => {
   const active = useMemo(
     () => activeOrder.orderKey === orderKey,
     [activeOrder, orderKey]
   )
 
-  const handleOrderChange = useMemo(
-    () => onOrderChange(props.orderKey),
-    [onOrderChange]
+  const handleOrderChange = useCallback(
+    () => onOrderChange(orderKey),
+    [onOrderChange, orderKey]
   )
 
   return (
     <TableCell {...innerProps}>
       <TableSortLabel
         active={active}
-        direction={active ? props.activeOrder.direction : 'asc'}
+        direction={active ? activeOrder.direction : 'asc'}
         onClick={handleOrderChange}
       >
-        {props.children}
+        {children}
       </TableSortLabel>
     </TableCell>
   )
