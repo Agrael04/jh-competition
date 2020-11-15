@@ -2,9 +2,10 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
+import range from 'lodash/range'
 
-import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
-import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
+import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
+import { IGetTrainingResponse, GET_TRAINING } from '../queries/get-training'
 
 import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
 
@@ -34,18 +35,13 @@ export const CREATE_TRAINING_RESOURCE = gql`
 
 const useCreateTrainingResource = () => {
   const [createTrainingResource] = useMutation(CREATE_TRAINING_RESOURCE)
-  const { date, gym, resources, _id } = useSelector(state => ({
-    date: state.schedule.page.filters.date,
-    gym: state.schedule.page.filters.gym,
-    resources: state.schedule.page.filters.resources,
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const filters = useSelector(state => state.schedule.page.filters)
 
   const mutate = React.useCallback(
-    (r: IResourceForm) => {
+    (trainingId: string, r: IResourceForm) => {
       const resource = ({
         ...r,
-        training: { link: _id },
+        training: { link: trainingId },
       })
 
       return createTrainingResource({
@@ -56,25 +52,32 @@ const useCreateTrainingResource = () => {
           const boundUpdateCachedQuery = updateQuery(client)
           const updater = createUpdater('trainingResources', data.insertOneTrainingResource)
 
-          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
-            query: GET_TRAINING_RESOURCES,
-            variables: {
-              date: date.toDate(),
-              gym,
-              resources,
-            },
+          boundUpdateCachedQuery<IGetTrainingResponse>({
+            query: GET_TRAINING,
+            variables: { id: trainingId },
             updater,
           })
 
-          boundUpdateCachedQuery<IGetTrainingResponse>({
-            query: GET_TRAINING,
-            variables: { id: _id },
-            updater,
-          })
+          range(resource.startTime, resource.endTime).forEach(
+            time => {
+              boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+                query: GET_TRAINING_RESOURCE,
+                variables: {
+                  time,
+                  resource: resource.resource.link,
+                  date: filters.date.toDate(),
+                },
+                updater: () => ({
+                  trainingResource: data?.insertOneTrainingResource,
+                  trainingRecords: [],
+                }),
+              })
+            }
+          )
         },
       })
     },
-    [createTrainingResource, _id, date, gym, resources]
+    [createTrainingResource, filters]
   )
 
   return mutate

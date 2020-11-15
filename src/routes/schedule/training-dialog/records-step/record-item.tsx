@@ -64,7 +64,11 @@ export default function RecordItem({ id }: IProps) {
 
   const remove = React.useCallback(
     async () => {
-      await deleteTrainingRecord(record)
+      if (!record) {
+        return
+      }
+
+      await deleteTrainingRecord(record?._id, record?.resource._id)
     },
     [record, deleteTrainingRecord]
   )

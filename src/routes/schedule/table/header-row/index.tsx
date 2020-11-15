@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 
 import Tooltip from 'components/multiline-tooltip'
 
-import { TrainerHeaderCell } from '../trainer-cell'
 import TableCell from '../table-cell'
 
 import useGetGymsQuery from '../../queries/get-gyms'
@@ -41,7 +40,7 @@ export default function HeaderRow() {
           {'Время'}
         </Typography>
       </TableCell>
-      <TrainerHeaderCell />
+      {/* <TrainerHeaderCell /> */}
       {
         resources
           .map((r, resourseIndex) => (

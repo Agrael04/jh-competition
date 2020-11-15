@@ -50,6 +50,7 @@ export default function ResourceSelect(props: IProps) {
       variant='outlined'
       error={!!error}
       helperText={error?.message || props.helperText}
+      disabled={true}
     >
       {
         resources.map(r => (

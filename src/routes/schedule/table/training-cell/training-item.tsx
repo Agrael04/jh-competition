@@ -7,12 +7,9 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Zoom from '@material-ui/core/Zoom'
-import Divider from '@material-ui/core/Divider'
 
 import PersonIcon from '@material-ui/icons/Person'
 import PeopleIcon from '@material-ui/icons/People'
-
-import useGetTrainingResourceQuery from '../../queries/get-training-resource'
 
 import { getTimeLabel } from 'data/times'
 import { GROUP_TRAININGS } from 'data/training-types'
@@ -23,21 +20,23 @@ import red from '@material-ui/core/colors/red'
 import getClientLabel from 'utils/get-client-label'
 
 import { useTrainingDrag } from './dnd'
+import useGetTrainingResourceQuery from '../../queries/get-training-resource'
 
 import useStyles from './styles'
 
 interface IProps {
-  id: string
+  time: number
+  resource: string
 }
 
-const TrainingItem = ({ id }: IProps) => {
+const TrainingItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
   const actions = useActions()
 
-  const trainingResourceRes = useGetTrainingResourceQuery(id)
+  const { data } = useGetTrainingResourceQuery(time, resource)
 
-  const tResource = trainingResourceRes.data?.trainingResource
-  const records = trainingResourceRes.data?.trainingRecords
+  const tResource = data?.trainingResource
+  const records = data?.trainingRecords
 
   const type = React.useMemo(
     () => tResource?.training.type,
@@ -92,7 +91,7 @@ const TrainingItem = ({ id }: IProps) => {
     () => {
       const tColor = trainer ? getColorPallete(trainer?.color) : color
 
-      return ({ background: `linear-gradient(-45deg, ${color[500]} 85%, ${tColor[500]} 50%)` })
+      return ({ background: `linear-gradient(-45deg, ${color[500]} 82%, ${tColor[500]} 50%)` })
     },
     [color, trainer]
   )
@@ -105,7 +104,7 @@ const TrainingItem = ({ id }: IProps) => {
     type === GROUP_TRAININGS.SECTION
   )
 
-  const [, drag] = useTrainingDrag(id)
+  const [, drag] = useTrainingDrag(time, resource)
 
   if (!tResource) {
     return (
@@ -118,41 +117,52 @@ const TrainingItem = ({ id }: IProps) => {
       <Zoom in={true}>
         <ButtonBase onDoubleClick={handleUpdateClick} className={classes.button} style={isOccupied ? backgroundStyle : undefined}>
           <Box height='100%' color='white'>
-            <Grid container={true} justify='space-between'>
-              <Grid item={true}>
-                <Avatar className={classes.mainAvatar}>
-                  {
-                    isMulti
-                    ? (
-                      <PeopleIcon />
-                    ) : (
-                      <PersonIcon />
-                    )
-                  }
-                </Avatar>
-              </Grid>
+            <Box padding={1}>
+              <Grid container={true} justify='space-between'>
+                <Grid item={true}>
+                  <Avatar className={classes.mainAvatar}>
+                    {
+                      isMulti
+                        ? (
+                          <PeopleIcon />
+                        ) : (
+                          <PersonIcon />
+                        )
+                    }
+                  </Avatar>
+                </Grid>
 
-              <Grid item={true} lg={8} container={true}>
-                <Box margin='auto'>
-                  <Typography color='inherit' variant='caption'>
-                    {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
-                  </Typography>
-                  {/* <br />
-                  <Typography color='inherit' variant='caption'>
-                    {trainingTypes.find(t => t.id === type)?.text}
-                  </Typography> */}
-                </Box>
+                <Grid item={true} lg={8} container={true}>
+                  <Box margin='auto'>
+                    {
+                      trainer && (
+                        <>
+                          <Typography color='inherit' variant='caption'>
+                            {trainer.lastName} {trainer.firstName}
+                          </Typography>
+                          <br />
+                        </>
+                      )
+                    }
+                    <Typography color='inherit' variant='caption'>
+                      {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            <Box marginY={1}>
-              <Divider className={classes.divider} />
             </Box>
             {
-              records?.map(r => (
-                <div key={r._id}>
-                  {getClientLabel(r.contact)}
-                </div>
-              ))
+              tResource.endTime - tResource.startTime > 1 && (
+                <Box padding={1}>
+                  {
+                    records?.map((r, index) => (
+                      <Typography variant='caption' key={r._id} align='left' component='p'>
+                        {index + 1}. {getClientLabel(r.contact)}
+                      </Typography>
+                    ))
+                  }
+                </Box>
+              )
             }
           </Box>
         </ButtonBase>

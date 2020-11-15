@@ -1,0 +1,51 @@
+query getTrainingResource($date: DateTime, $time: Int!, $resource: ObjectId!){
+    trainingResource(query: {
+      training: {
+        date: $date
+      }
+      startTime_lte: $time,
+      endTime_gt: $time,
+      resource: {
+        _id: $resource
+      }
+    }) {
+      _id
+      startTime
+      endTime
+      resource {
+        _id
+      }
+      trainer {
+        _id
+        color
+        avatarSrc
+        firstName
+        lastName
+      }
+      training {
+        _id
+        type
+        date
+      }
+    }
+    trainingRecords(query: {
+      resource: {
+        training: {
+          date: $date
+        }
+        startTime_lte: $time,
+        endTime_gt: $time,
+        resource: {
+          _id: $resource
+        }
+      }
+    }) {
+      _id
+      contact {
+        _id
+        firstName
+        lastName
+      }
+      status
+    }
+  }

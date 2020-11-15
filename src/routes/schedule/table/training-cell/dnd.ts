@@ -1,100 +1,162 @@
-import { useMemo, useCallback } from 'react'
-import { useDrop, useDrag } from 'react-dnd'
+import { useMemo } from 'react'
+import { useDrop, useDrag, DragSourceMonitor } from 'react-dnd'
 import { useSelector } from 'store'
 
-import blueGrey from '@material-ui/core/colors/blueGrey'
-import red from '@material-ui/core/colors/red'
-
-import getColorPallete from 'utils/get-color-pallete'
-
 import useUpdateTrainingResource from '../../mutations/update-training-resource'
+import useCreateTrainingResource from '../../mutations/create-training-resource'
 import useGetSchedulesQuery, { isTrainerAvailable } from '../../queries/get-schedules'
-import useGetTrainingResourcesQuery from '../../queries/get-training-resources'
-import useGetTrainingResourceQuery from '../../queries/get-training-resource'
+
+import { useGetTrainingResourceQuery, useReadNextTrainingResource, IGetTrainingResourceResponse } from '../../queries/get-training-resource'
 
 const ACCEPT_TYPE = 'TRAINING_RESOURCE_ITEM'
 
 interface IDraggableItem {
   type: typeof ACCEPT_TYPE
-  color: string,
-  _id: string
-  trainerId: string
+  trainer?: string | undefined
   duration: number
+
+  resource: IGetTrainingResourceResponse['trainingResource']
+}
+
+interface DropResult {
+  dropEffect: string
+  time: number
+  resource: string
+}
+
+export function useGetEndTime() {
+  const readNextTrainingResource = useReadNextTrainingResource()
+
+  return (time: number, resource: string, tResourceId: string | null, maxDuration: number) => {
+    let nextResource = readNextTrainingResource(time, resource)
+    if (tResourceId && nextResource?.trainingResource?._id === tResourceId) {
+      nextResource = readNextTrainingResource(nextResource.trainingResource.endTime, resource)
+    }
+
+    return Math.min(nextResource?.trainingResource?.startTime || Infinity, time + maxDuration)
+  }
 }
 
 export function useTrainingDrop(time: number, resource: string) {
   const gym = useSelector(state => state.schedule.page.filters.gym)
-
   const { data } = useGetSchedulesQuery()
-
-  const trainingResources = useGetTrainingResourcesQuery()
-  const updateTrainingResource = useUpdateTrainingResource()
-
-  const drop = useCallback(
-    (item: IDraggableItem) => {
-      const nextResouce = trainingResources.data?.trainingResources.find((tr: any) => tr.resource._id === resource && tr.startTime > time)
-      const endTime = Math.min(time + item.duration, (nextResouce?.startTime || Infinity))
-
-      const isAvailable = item.trainerId && isTrainerAvailable(data?.trainerSchedules || [], item.trainerId, gym, time, endTime)
-
-      updateTrainingResource(
-        item._id,
-        {
-          startTime: time,
-          endTime,
-          resource: { link: resource },
-          trainer: isAvailable ? { link: item.trainerId } : undefined,
-        }
-      )
-    },
-    [data, gym, resource, time, trainingResources, updateTrainingResource]
-  )
+  const getEndTime = useGetEndTime()
 
   return useDrop({
     accept: ACCEPT_TYPE,
-    drop,
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-      color: !!monitor.isOver() && monitor.getItem()?.color,
-      _id: !!monitor.isOver() && monitor.getItem()?._id,
-      trainerId: !!monitor.isOver() && monitor.getItem()?.trainerId,
+    drop: () => ({
+      time,
+      resource,
     }),
+    collect: monitor => {
+      if (!monitor.isOver()) {
+        return {
+          isOver: false,
+          color: undefined,
+          duration: 0,
+        }
+      }
+
+      const item = monitor.getItem()
+
+      const endTime = getEndTime(time, resource, item.resource._id, item.duration)
+
+      const duration = Math.min(item.duration, endTime - time)
+
+      const trainerId = item.resource.trainer?._id
+
+      const isAvailable = trainerId && isTrainerAvailable(data?.trainerSchedules || [], trainerId, gym, time, endTime)
+
+      return ({
+        isOver: true,
+        duration,
+        color: isAvailable ? item?.resource.trainer?.color : undefined,
+      })
+    },
   })
 }
 
-export function useTrainingDrag(id: string) {
-  const trainingResourceRes = useGetTrainingResourceQuery(id)
+export function useTrainingDrag(time: number, resource: string) {
+  const gym = useSelector(state => state.schedule.page.filters.gym)
+  const trainingResourceRes = useGetTrainingResourceQuery(time, resource)
+  const { data } = useGetSchedulesQuery()
+  const getEndTime = useGetEndTime()
 
-  const tResource = trainingResourceRes.data?.trainingResource
-  const records = trainingResourceRes.data?.trainingRecords
+  const updateTrainingResource = useUpdateTrainingResource()
+  const createTrainingResource = useCreateTrainingResource()
+
+  const tResource = trainingResourceRes?.data?.trainingResource
+  const records = trainingResourceRes?.data?.trainingRecords
 
   const trainer = useMemo(
     () => tResource?.trainer,
     [tResource]
   )
 
-  const color = useMemo(
+  const canDrag = useMemo(
     () => {
       if (records?.filter(r => r.status === 'DEBT').length! > 0) {
-        return red
+        return false
       }
 
       if (records?.filter(r => r.status === 'CLOSED').length === records?.length && records?.length! > 0) {
-        return blueGrey
+        return false
       }
 
-      return getColorPallete(trainer?.color)
+      return true
     },
-    [trainer, records]
+    [records]
+  )
+
+  const duration = useMemo(
+    () => tResource ? tResource.endTime - tResource.startTime : 1,
+    [tResource]
   )
 
   return useDrag({
     item: {
       type: ACCEPT_TYPE,
-      color,
-      _id: tResource?._id,
-      trainerId: trainer?._id,
-      duration: tResource ? (tResource.endTime - tResource.startTime) : 0,
+      trainer: trainer?._id,
+      duration,
+      resource: tResource!,
+    },
+    canDrag,
+    end: (item: IDraggableItem | undefined, monitor: DragSourceMonitor) => {
+      const dropResult: DropResult = monitor.getDropResult()
+
+      if (!dropResult || !item?.resource || !tResource) {
+        return
+      }
+
+      const duration = item.duration
+
+      const endTime = getEndTime(dropResult.time, dropResult.resource, dropResult.dropEffect === 'move' ? item.resource._id : null, duration)
+
+      const trainerId = item.resource.trainer?._id
+
+      const isAvailable = trainerId && isTrainerAvailable(data?.trainerSchedules || [], trainerId, gym, dropResult.time, endTime)
+
+      if (dropResult.dropEffect === 'move') {
+        updateTrainingResource(
+          item.resource._id,
+          {
+            startTime: dropResult.time,
+            endTime,
+            resource: { link: dropResult.resource },
+            trainer: isAvailable ? { link: trainerId } : undefined,
+          }
+        )
+      } else if (dropResult.dropEffect === 'copy') {
+        createTrainingResource(
+          tResource.training._id,
+          {
+            startTime: dropResult.time,
+            endTime,
+            resource: { link: dropResult.resource },
+            trainer: isAvailable ? { link: trainerId } : undefined,
+          }
+        )
+      }
     },
   })
 }

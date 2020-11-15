@@ -1,26 +1,34 @@
 import React from 'react'
+import { useSelector } from 'store'
 
 import times from 'data/times'
 
-import useGetSchedulesQuery from '../../../queries/get-schedules'
+import TrainingCell from '../../training-cell'
+
 import useGetGymsQuery from '../../../queries/get-gyms'
 
-import InnerCells from './inner-cells'
-
 interface IProps {
-  index: number
   time: typeof times[number]
 }
 
-export default function TrainingCells(props: IProps) {
-  const schedules = useGetSchedulesQuery()
+export default function TimeRow({ time }: IProps) {
   const gyms = useGetGymsQuery()
-
-  if (schedules.loading || gyms.loading) {
-    return null
-  }
+  const activeResources = useSelector(state => state.schedule.page.filters.resources)
 
   return (
-    <InnerCells {...props}/>
+    <>
+      {
+        gyms.data?.resources
+          .filter(tr => activeResources.find(r => r === tr._id))
+          .map((r, index) => (
+            <TrainingCell
+              resource={r._id}
+              time={time.id}
+              key={r._id}
+              secondaryRow={index === 0}
+            />
+          ))
+      }
+    </>
   )
 }

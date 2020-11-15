@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+
+import Skeleton from '@material-ui/lab/Skeleton'
 
 import TableCell from '../table-cell'
 
-import useGetTrainingResourcesQuery from '../../queries/get-training-resources'
+import useGetTrainingResourceQuery from '../../queries/get-training-resource'
 
 import TrainingItem from './training-item'
 import EmptyItem from './empty-item'
@@ -20,55 +22,66 @@ interface IProps {
 const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
   const classes = useStyles()
   const activeTime = useSelector(state => state.schedule.page.activeTime)
+  const { data, loading } = useGetTrainingResourceQuery(time, resource)
 
-  const { data } = useGetTrainingResourcesQuery()
-
-  const trainingResource = React.useMemo(
+  const duration = useMemo(
     () => {
-      return data?.trainingResources.find(tr => (time >= tr?.startTime && time < tr?.endTime) && tr?.resource?._id === resource)
-    },
-    [data, time, resource]
-  )
-
-  const duration = React.useMemo(
-    () => {
-      const startTime = trainingResource?.startTime || 0
-      const endTime = trainingResource?.endTime || 0
+      const startTime = data?.trainingResource?.startTime || 0
+      const endTime = data?.trainingResource?.endTime || 0
 
       return (endTime - startTime) || 1
     },
-    [trainingResource]
+    [data]
   )
 
-  const isOccupied = React.useMemo(
-    () => trainingResource && trainingResource.startTime !== time,
-    [trainingResource, time]
-  )
+  const isOccupied = useMemo(
+    () => {
+      if (!data || !data?.trainingResource) {
+        return false
+      }
 
-  if (isOccupied) {
-    return null
-  }
+      return data?.trainingResource?.startTime !== time
+    },
+    [data, time]
+  )
 
   return (
     <TableCell
       align='center'
       padding='none'
       className={classes.resourceTd}
-      rowSpan={duration}
       primaryCol={!secondaryRow}
       secondaryCol={secondaryRow}
-      primaryRow={!!((time + duration) % 2)}
-      activeRow={((time + duration) === activeTime)}
+      primaryRow={time % 2 === 0}
+      activeRow={time + 1 === activeTime}
     >
-      <div className={classes.cellWrap}>
-        {
-          !trainingResource?._id ? (
+      {
+        (isOccupied || loading) && (
+          <div className={classes.cellWrap}>
+            <Skeleton variant='rect' height='100%' />
+          </div>
+        )
+      }
+      {
+        !isOccupied && !loading && data?.trainingResource?._id && (
+          <div
+            className={classes.cellWrap}
+            style={{
+              height: `calc(${duration * 100}% + ${(duration - 1) * 2}px)`,
+              zIndex: 1,
+            }}
+          >
+            <TrainingItem time={time} resource={resource} />
+          </div>
+        )
+      }
+      {
+        !isOccupied && !loading && !data?.trainingResource?._id && (
+          <div className={classes.cellWrap}>
             <EmptyItem time={time} resource={resource} />
-          ) : (
-            <TrainingItem id={trainingResource?._id} />
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </TableCell>
   )
 }

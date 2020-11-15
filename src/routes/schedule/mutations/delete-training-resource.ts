@@ -2,9 +2,10 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
+import range from 'lodash/range'
 
-import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
-import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
+import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse, useReadTrainingResourceById } from '../queries/get-training-resource'
+import { IGetTrainingResponse, GET_TRAINING } from '../queries/get-training'
 
 import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
 
@@ -18,34 +19,56 @@ export const DELETE_TRAINING_RESOURCE = gql`
 
 const useDeleteTrainingResource = () => {
   const [deleteOneTrainingResource] = useMutation(DELETE_TRAINING_RESOURCE)
-  const { date, _id } = useSelector(state => ({
-    date: state.schedule.page.filters.date,
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const readTrainingResourceById = useReadTrainingResourceById()
+  const trainingId = useSelector(state => state.schedule.trainingDialog._id)
+  const filters = useSelector(state => state.schedule.page.filters)
 
   const mutate = React.useCallback(
-    (resourceId: string) => {
-      return deleteOneTrainingResource({
-        variables: { _id: resourceId },
-        update: (client, { data }) => {
-          const boundUpdateCachedQuery = updateQuery(client)
-          const updater = removeUpdater('trainingResources', data.deleteOneTrainingResource)
+    (_id: string) => {
+      const prev = readTrainingResourceById(_id)
 
-          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
-            query: GET_TRAINING_RESOURCES,
-            variables: { date: date.toDate() },
-            updater,
-          })
+      return deleteOneTrainingResource({
+        variables: { _id },
+        update: (cache, { data }) => {
+          const boundUpdateCachedQuery = updateQuery(cache)
+          const updater = removeUpdater('trainingResources', data.deleteOneTrainingResource)
 
           boundUpdateCachedQuery<IGetTrainingResponse>({
             query: GET_TRAINING,
-            variables: { id: _id },
+            variables: { id: trainingId },
             updater,
           })
+
+          if (prev === null || !prev.trainingResource || !data) {
+            return
+          }
+
+          range(prev.trainingResource.startTime, prev.trainingResource.endTime).forEach(
+            time => {
+              if (!prev?.trainingResource) {
+                return
+              }
+
+              const resource = prev.trainingResource.resource._id
+
+              boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+                query: GET_TRAINING_RESOURCE,
+                variables: {
+                  time,
+                  resource,
+                  date: filters.date.toDate(),
+                },
+                updater: () => ({
+                  trainingResource: null,
+                  trainingRecords: [],
+                }),
+              })
+            }
+          )
         },
       })
     },
-    [deleteOneTrainingResource, _id, date]
+    [deleteOneTrainingResource, trainingId, readTrainingResourceById, filters]
   )
 
   return mutate

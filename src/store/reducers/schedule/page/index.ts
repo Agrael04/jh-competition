@@ -7,7 +7,6 @@ type IAction = ActionType<typeof actions>
 
 export interface IState {
   activeTime: number
-  openedTrainers: boolean
 
   filters: {
     date: Moment
@@ -20,7 +19,6 @@ export interface IState {
 
 const initialState: IState = {
   activeTime: 0,
-  openedTrainers: true,
 
   openedFiltersDialog: false,
   filters: {
@@ -34,10 +32,6 @@ const reducer = createReducer<IState, IAction>(initialState)
   .handleAction(actions.setActiveTime, (state, { payload: { time } }) => ({
     ...state,
     activeTime: time,
-  }))
-  .handleAction(actions.toggleOpenedTrainers, state => ({
-    ...state,
-    openedTrainers: !state.openedTrainers,
   }))
   .handleAction(actions.startFiltersUpdate, state => ({
     ...state,

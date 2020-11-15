@@ -30,9 +30,6 @@ export const setActiveTime = createAction(
   (time: number) => ({ time })
 )()
 
-export const toggleOpenedTrainers = createAction(
-  'schedule/page/TOGGLE_OPENED_TRAINERS'
-)()
 
 export const openCheckDialog = createAction(
   'schedule/page/OPEN_CHECK_DIALOG'
@@ -66,7 +63,6 @@ export const actions = {
 
   setActiveTime,
 
-  toggleOpenedTrainers,
   openCheckDialog,
 
   startFiltersUpdate,

@@ -34,7 +34,12 @@ export default function RecordsBlock() {
 
       if (form.mode === 'update' && form._id) {
         const r = trainingQuery.data?.trainingRecords.find(record => record._id === record?._id)
-        await updateTrainingRecord(form._id, record, r?.resource._id)
+
+        if (!r) {
+          return
+        }
+
+        await updateTrainingRecord(form._id, record, r.resource._id)
       }
 
       if (form.mode === 'create') {

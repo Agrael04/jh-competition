@@ -3,7 +3,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 export default makeStyles((theme: Theme) => ({
   resourceTd: {
     position: 'relative',
-    height: theme.spacing(4.5),
+    height: theme.spacing(7),
+    borderBottomWidth: 2,
   },
   mainAvatar: {
     // zIndex: 10,
@@ -32,9 +33,9 @@ export default makeStyles((theme: Theme) => ({
     height: '100%',
     width: '100%',
     display: 'block',
-    padding: theme.spacing(0.5, 1),
   },
   divider: {
-    background: 'white',
+    background: 'rgba(255, 255, 255, 0.5)',
+    height: 2,
   },
 }))

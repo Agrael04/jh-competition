@@ -25,7 +25,7 @@ export default function TimeCell({ time, index }: IProps) {
   }
 
   return (
-    <TableCell className={classes.timeTd} rowSpan={2} primaryRow={true} activeRow={time.id === activeTime - 2}>
+    <TableCell className={classes.timeRowTd} rowSpan={2} primaryRow={true} activeRow={time.id === activeTime - 2}>
       <Typography>
         {time.label}
       </Typography>

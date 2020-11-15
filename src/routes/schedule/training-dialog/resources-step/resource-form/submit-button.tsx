@@ -13,6 +13,7 @@ import IResourceForm from './form'
 export default function ResourcesBlock() {
   const actions = useActions()
   const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
+  const trainingId = useSelector(state => state.schedule.trainingDialog._id)
 
   const updateTrainingResource = useUpdateTrainingResource()
   const createTrainingResource = useCreateTrainingResource()
@@ -30,13 +31,13 @@ export default function ResourcesBlock() {
         await updateTrainingResource(form._id, resource)
       }
 
-      if (form.mode === 'create') {
-        await createTrainingResource(resource)
+      if (form.mode === 'create' && trainingId) {
+        await createTrainingResource(trainingId, resource)
       }
 
       actions.schedule.trainingDialog.closeResource()
     },
-    [actions, createTrainingResource, updateTrainingResource, form]
+    [actions, createTrainingResource, updateTrainingResource, form, trainingId]
   )
 
   return (

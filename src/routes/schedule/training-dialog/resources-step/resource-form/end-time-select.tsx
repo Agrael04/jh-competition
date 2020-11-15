@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
-
-import { useFormContext } from 'react-hook-form'
+import React, { useMemo, useCallback } from 'react'
 import { useSelector } from 'store'
 
-import MenuItem from '@material-ui/core/MenuItem'
-import Select, { ISelectProps } from 'components/select'
+import { useFormContext } from 'react-hook-form'
 
-import useGetTrainingResourcesQuery from '../../../queries/get-training-resources'
+import Box from '@material-ui/core/Box'
+import IconButton from '@material-ui/core/IconButton'
+import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 
-import times, { MIN_TIME_ID, MAX_TIME_ID } from 'data/times'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
 
-type IProps = ISelectProps & {
+import useGetTrainingResourceQuery from '../../../queries/get-training-resource'
+
+import times, { MAX_TIME_ID } from 'data/times'
+
+type IProps = TextFieldProps & {
   onChange?: any
   value?: any
   error?: {
@@ -19,62 +23,69 @@ type IProps = ISelectProps & {
 }
 
 export default function EndTimeSelect(props: IProps) {
-  const { value, onChange, error } = props
+  const { value, onChange } = props
   const { watch } = useFormContext()
+  const resourceId = useSelector(state => state.schedule.trainingDialog.resourceForm._id)
 
   const startTime = watch('startTime')
   const resource = watch('resource')?.link
 
-  const { _id } = useSelector(state => ({
-    _id: state.schedule.trainingDialog.resourceForm._id,
-  }))
-  const trainingResources = useGetTrainingResourcesQuery()
+  const { data, loading } = useGetTrainingResourceQuery(value, resource)
 
-  const filteredTimes = React.useMemo(
-    () => {
-      const nextResource = trainingResources.data?.trainingResources
-        .find(tr => tr._id !== _id && tr.resource._id === resource && tr.startTime > startTime!)
-
-      return times
-        .filter(t => !startTime || t.id > startTime)
-        .filter(t => !nextResource || t.id <= nextResource?.startTime)
-        .filter(t => t.id > MIN_TIME_ID)
-    },
-    [startTime, _id, resource, trainingResources]
+  const disabledDecrement = useMemo(
+    () => value <= startTime + 1,
+    [value, startTime]
   )
 
-  const handleChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(+e.target.value)
+  const handleDecrement = useCallback(
+    () => {
+      onChange(value - 1)
     },
-    [onChange]
+    [value, onChange]
   )
 
-  useEffect(
+  const disabledIncrement = useMemo(
     () => {
-      if (startTime && !value) {
-        onChange(Math.min(startTime + 2, MAX_TIME_ID))
-      }
-    }, [startTime, value, onChange]
+      return (
+        loading ||
+        (!!data?.trainingResource && data?.trainingResource._id !== resourceId) ||
+        value === MAX_TIME_ID
+      )
+    },
+    [loading, data, resourceId, value]
+  )
+
+  const handleIncrement = useCallback(
+    () => {
+      onChange(value + 1)
+    },
+    [value, onChange]
   )
 
   return (
-    <Select
-      value={value}
-      onChange={handleChange}
+    <TextField
+      {...props}
+      value={times.find(t => t.id === value)?.label || ''}
       label={'Время конца'}
-      fullWidth={true}
       variant='outlined'
-      error={!!error}
-      helperText={error && 'Обязательное поле'}
-    >
-      {
-        filteredTimes.map(time => (
-          <MenuItem value={time.id} key={time.id}>
-            {time.label}
-          </MenuItem>
-        ))
-      }
-    </Select>
+      disabled={true}
+      fullWidth={true}
+      InputProps={{
+        endAdornment: (
+          <>
+            <Box marginY='auto'>
+              <IconButton disabled={disabledDecrement} onClick={handleDecrement}>
+                <RemoveCircleIcon color={!disabledDecrement ? 'primary' : undefined} />
+              </IconButton>
+            </Box>
+            <Box marginY='auto'>
+              <IconButton disabled={disabledIncrement} onClick={handleIncrement}>
+                <AddCircleIcon color={!disabledIncrement ? 'primary' : undefined} />
+              </IconButton>
+            </Box>
+          </>
+        ),
+      }}
+    />
   )
 }

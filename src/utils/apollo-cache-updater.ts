@@ -43,16 +43,21 @@ export const removeUpdater = (key: string, ...items: IDeletedItem[]) => (queryDa
 }
 
 export const updateQuery = (client: ApolloCache<any>) => <TData, TVariables = any>(options: IUpdateQuery<TData, TVariables>) => {
-  const queryData = client.readQuery<TData>(options)
+  try {
 
-  if (!queryData) {
-    return
+    const queryData = client.readQuery<TData>(options)
+
+    if (!queryData) {
+      return
+    }
+
+    const data = options.updater(queryData)
+
+    client.writeQuery({
+      ...options,
+      data,
+    })
+  } catch (error) {
+    console.warn(error)
   }
-
-  const data = options.updater(queryData)
-
-  client.writeQuery({
-    ...options,
-    data,
-  })
 }

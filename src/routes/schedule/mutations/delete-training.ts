@@ -2,11 +2,12 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
+import range from 'lodash/range'
 
 import { GET_TRAINING, IGetTrainingResponse } from '../queries/get-training'
-import { GET_TRAINING_RESOURCES, IGetTrainingResourcesResponse } from '../queries/get-training-resources'
+import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 
-import { updateQuery, removeUpdater } from 'utils/apollo-cache-updater'
+import { updateQuery } from 'utils/apollo-cache-updater'
 
 export const DELETE_TRAINING = gql`
   mutation deleteTraining ($_id: ObjectId!) {
@@ -24,8 +25,8 @@ export const DELETE_TRAINING = gql`
 
 const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
-  const { date, _id } = useSelector(state => ({
-    date: state.schedule.page.filters.date,
+  const { filters, _id } = useSelector(state => ({
+    filters: state.schedule.page.filters,
     _id: state.schedule.trainingDialog._id,
   }))
 
@@ -35,22 +36,32 @@ const useDeleteTraining = () => {
         variables: {
           _id,
         },
-        update: (client, { data }) => {
+        update: (cache, { data }) => {
           const trainingQuery = { query: GET_TRAINING, variables: { id: data.deleteOneTraining._id } }
-          const trainingData = client.readQuery<IGetTrainingResponse>(trainingQuery)
+          const trainingData = cache.readQuery<IGetTrainingResponse>(trainingQuery)
 
-          const boundUpdateCachedQuery = updateQuery(client)
-          const updater = removeUpdater('trainingResources', ...trainingData?.trainingResources!)
+          const boundUpdateCachedQuery = updateQuery(cache)
 
-          boundUpdateCachedQuery<IGetTrainingResourcesResponse>({
-            query: GET_TRAINING_RESOURCES,
-            variables: { date: date.toDate() },
-            updater,
+          trainingData?.trainingResources.forEach(tr => {
+            range(tr.startTime, tr.endTime).forEach(time => {
+              boundUpdateCachedQuery<IGetTrainingResourceResponse>({
+                query: GET_TRAINING_RESOURCE,
+                variables: {
+                  time,
+                  resource: tr._id,
+                  date: filters.date.toDate(),
+                },
+                updater: () => ({
+                  trainingResource: null,
+                  trainingRecords: [],
+                }),
+              })
+            })
           })
         },
       })
     },
-    [deleteTraining, _id, date]
+    [deleteTraining, _id, filters]
   )
 
   return mutate

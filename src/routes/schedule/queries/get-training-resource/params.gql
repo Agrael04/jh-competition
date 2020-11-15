@@ -1,0 +1,10 @@
+  fragment TrainingResourceParams on TrainingResource {
+    _id
+    startTime
+    resource {
+      _id
+    }
+    training {
+      date
+    }
+  }

@@ -1,8 +1,14 @@
-query getRecords ($minDate: DateTime!, $maxDate: DateTime!, $trainer: TrainerQueryInput, $gym: ObjectId, $types: [String]) {
+query getRecords (
+  $minDate: DateTime!,
+  $maxDate: DateTime!,
+  $trainer: TrainerQueryInput,
+  $gym: ObjectId,
+  $types: [String]
+) {
   trainingRecords(query: {
     training: {
-      date_gte: $minDate,
-      date_lt: $maxDate,
+      date_gte: $minDate
+      date_lt: $maxDate
       gym: {
         _id: $gym
       }

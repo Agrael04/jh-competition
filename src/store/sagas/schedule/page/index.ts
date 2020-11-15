@@ -15,7 +15,7 @@ export function* openCreateTrainingDialog(action: ReturnType<typeof actions.page
 
     const resource = {
       startTime: action.payload.time,
-      endTime: action.payload.time + 2,
+      endTime: action.payload.time + 1,
       resource: { link: action.payload.resource },
     }
 
