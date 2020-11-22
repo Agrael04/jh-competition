@@ -4,8 +4,10 @@ import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
 
+import IClientForm from './form'
+
 interface IProps {
-  submit: (form: any) => void
+  submit: (form: IClientForm) => void
 }
 
 export default function SubmitButton({ submit }: IProps) {

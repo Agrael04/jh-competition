@@ -7,6 +7,8 @@ import useCreateTrainingPass from './graphql/create-training-pass'
 import useUpdateTrainingPass from './graphql/update-training-pass'
 import { IUpdateCacheFn } from 'utils/apollo-cache-updater'
 
+import { ITrainingPassForm } from 'interfaces/training-pass'
+
 interface IProps {
   mode: 'create' | 'update' | null
   updateCacheOnCreate?: IUpdateCacheFn
@@ -20,13 +22,13 @@ export default function SaveButton({ updateCacheOnCreate, mode, close }: IProps)
   const updateTrainingPass = useUpdateTrainingPass()
 
   const submit = React.useCallback(
-    async (form: any) => {
+    async (form: ITrainingPassForm) => {
       if (mode === 'create') {
-        await createTrainingPass(form!)
+        await createTrainingPass(form)
       }
 
       if (mode === 'update') {
-        await updateTrainingPass(form!)
+        await updateTrainingPass(form)
       }
 
       close()

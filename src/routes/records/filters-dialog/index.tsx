@@ -38,7 +38,7 @@ export default function FiltersDialog() {
   const { handleSubmit } = methods
 
   const submit = React.useCallback(
-    (form: any) => {
+    (form: IFiltersForm) => {
       actions.records.page.completeFilterUpdate(form)
     },
     [actions]

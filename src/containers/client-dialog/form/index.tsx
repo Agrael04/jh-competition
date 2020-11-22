@@ -1,5 +1,4 @@
 import React from 'react'
-import { Moment } from 'moment'
 
 import { useForm, FormProvider } from 'react-hook-form'
 
@@ -17,21 +16,9 @@ import SubmitButton from './submit-button'
 import { communications, rights, sources } from './data'
 import { requiredValidation, optionalPhoneValidation, requiredPhoneValidation } from 'utils/validations'
 
-export interface IClientForm {
-  firstName?: string
-  lastName?: string
-  birthday?: Moment | null
-  phone?: string
-  altPhone?: string
-  communicationType: string[]
-  questionaryNumber?: string
-  source?: string
-  rights?: Array<'ATTEND' | 'RECORD'>
-  group?: string
-  groupRole?: string
-  level?: string
-  specialConditions?: string
-}
+import IForm from './form'
+
+export type IClientForm = IForm
 
 interface IClientFormProps {
   defaultValues?: Partial<IClientForm>

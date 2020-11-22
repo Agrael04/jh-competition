@@ -14,9 +14,7 @@ import getClientLabel from 'utils/get-client-label'
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
 interface IProps {
-  [x: string]: any
   label: string
-  initialFilter?: string
   disabled?: boolean
 }
 

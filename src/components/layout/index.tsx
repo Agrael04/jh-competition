@@ -1,4 +1,5 @@
 import React from 'react'
+import { RouteProps } from 'react-router-dom'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Box from '@material-ui/core/Box'
@@ -9,7 +10,7 @@ import Drawer from './drawer'
 import useStyles from './styles'
 
 interface IProps {
-  children: any
+  children: RouteProps['children']
 }
 
 function Layout({ children }: IProps) {

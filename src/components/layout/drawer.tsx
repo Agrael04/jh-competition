@@ -16,7 +16,12 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks'
 
 import useStyles from './styles'
 
-function LayoutDrawer({ open, handleDrawerClose }: any) {
+interface IProps {
+  open: boolean
+  handleDrawerClose: () => void
+}
+
+function LayoutDrawer({ open, handleDrawerClose }: IProps) {
   const classes = useStyles()
 
   return (

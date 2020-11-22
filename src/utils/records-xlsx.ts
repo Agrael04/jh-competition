@@ -51,7 +51,9 @@ export interface ITraining {
   contacts: IContact[]
 }
 
-const generateXLSX = (records: any[][], trainers: any[][], dates: any[][]) => {
+type ICellValue = string | number | undefined
+
+const generateXLSX = (records: ICellValue[][], trainers: ICellValue[][], dates: ICellValue[][]) => {
   const wb = XLSX.utils.book_new()
   const recordsSheet = XLSX.utils.aoa_to_sheet(records)
   const trainersSheet = XLSX.utils.aoa_to_sheet(trainers)

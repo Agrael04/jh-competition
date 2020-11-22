@@ -121,12 +121,12 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+        <TableCell className={classes.cell} colSpan={9}>
           <Collapse in={open} timeout='auto' unmountOnExit={true}>
             <Box marginX='auto' marginY={2} width={320}>
               <List>
                 {
-                  payments.map((payment: any) => (
+                  payments.map(payment => (
                     <ListItem key={payment._id} button={true} onClick={handleToggle(payment._id)}>
                       <ListItemAvatar>
                         <Avatar>

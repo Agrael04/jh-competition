@@ -11,7 +11,12 @@ import MenuIcon from '@material-ui/icons/Menu'
 
 import useStyles from './styles'
 
-function LayoutAppBar({ handleDrawerOpen, open }: any) {
+interface IProps {
+  open: boolean
+  handleDrawerOpen: () => void
+}
+
+function LayoutAppBar({ handleDrawerOpen, open }: IProps) {
   const classes = useStyles()
 
   return (

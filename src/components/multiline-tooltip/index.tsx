@@ -2,6 +2,11 @@ import React from 'react'
 
 import Tooltip from '@material-ui/core/Tooltip'
 
+interface IProps {
+  children: React.ReactElement
+  rows: string[]
+}
+
 const TooltipComponent = ({ rows }: { rows: string[] }) => {
   return (
     <>
@@ -17,7 +22,7 @@ const TooltipComponent = ({ rows }: { rows: string[] }) => {
   )
 }
 
-const TooltipWrap = ({ rows, children }: any) => (
+const TooltipWrap = ({ rows, children }: IProps) => (
   <Tooltip title={<TooltipComponent rows={rows} />}>
     {children}
   </Tooltip>

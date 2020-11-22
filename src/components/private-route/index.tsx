@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 
 import { ApolloClient, InMemoryCache, HttpLink, from, ApolloLink } from '@apollo/client'
@@ -10,7 +10,7 @@ import Layout from '../layout'
 
 const GRAPHQL_URL = `https://realm.mongodb.com/api/client/v2.0/app/${process.env.REACT_APP_MONGODB_APP_ID}/graphql`
 
-export default function PrivateRoute({ path, exact, children }: any) {
+export default function PrivateRoute({ path, exact, children }: RouteProps) {
   const [loggedIn, setLoggedIn] = React.useState(authApi.isLoggedIn())
 
   if (!loggedIn) {
