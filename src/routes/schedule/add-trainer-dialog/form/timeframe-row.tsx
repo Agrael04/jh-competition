@@ -34,7 +34,7 @@ export default function TimeframeRow({ index, remove }: IProps) {
       <Grid item={true} lg={3}>
         <FormController name={`timeFrames[${index}].from`} rules={requiredValidation}>
           <Select
-            label={'Начало'}
+            label='Начало'
             fullWidth={true}
             variant='outlined'
           >
@@ -51,7 +51,7 @@ export default function TimeframeRow({ index, remove }: IProps) {
       <Grid item={true} lg={3}>
         <FormController name={`timeFrames[${index}].to`} rules={requiredValidation}>
           <Select
-            label={'Конец'}
+            label='Конец'
             fullWidth={true}
             variant='outlined'
           >
@@ -68,7 +68,7 @@ export default function TimeframeRow({ index, remove }: IProps) {
       <Grid item={true} lg={5}>
         <FormController name={`timeFrames[${index}].gym`} rules={requiredValidation}>
           <Select
-            label={'Зал'}
+            label='Зал'
             fullWidth={true}
             variant='outlined'
           >

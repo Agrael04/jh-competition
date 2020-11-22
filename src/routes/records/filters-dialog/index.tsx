@@ -69,7 +69,7 @@ export default function FiltersDialog() {
           <Grid item={true} lg={12}>
             <FormController name='gym'>
               <Select
-                label={'Зал'}
+                label='Зал'
                 fullWidth={true}
                 variant='outlined'
               >
@@ -86,14 +86,16 @@ export default function FiltersDialog() {
           <Grid item={true} lg={12}>
             <FormController name='trainer'>
               <Select
-                label={'Тренер'}
+                label='Тренер'
                 fullWidth={true}
                 variant='outlined'
               >
                 {
                   trainers.data?.trainers.map(trainer => (
                     <MenuItem value={trainer._id} key={trainer._id}>
-                      {trainer.lastName} {trainer.firstName}
+                      {trainer.lastName}
+                      {' '}
+                      {trainer.firstName}
                     </MenuItem>
                   ))
                 }

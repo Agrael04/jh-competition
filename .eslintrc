@@ -1,0 +1,71 @@
+{
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "react",
+    "jsx-a11y"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts?(x)"
+      ],
+      "rules": {
+        "react/jsx-wrap-multilines": 1,
+        "react/jsx-fragments": 1,
+        "react/jsx-closing-tag-location": 1,
+        "react/jsx-pascal-case": 1,
+        "react/jsx-props-no-multi-spaces": 1,
+        "react/jsx-one-expression-per-line": 1,
+        "react/jsx-no-bind": 1,
+        "react/jsx-curly-spacing": [
+          1,
+          "never"
+        ],
+        "react/jsx-curly-newline": [
+          1,
+          "consistent"
+        ],
+        "react/jsx-curly-brace-presence": [
+          1,
+          "never"
+        ],
+        "react/jsx-equals-spacing": [
+          1,
+          "never"
+        ],
+        "react/jsx-indent-props": [
+          1,
+          2
+        ],
+        "react/jsx-tag-spacing": [
+          1,
+          {
+            "closingSlash": "never",
+            "beforeSelfClosing": "always",
+            "afterOpening": "never",
+            "beforeClosing": "never"
+          }
+        ],
+        "react-hooks/exhaustive-deps": "off",
+        "jsx-quotes": [
+          1,
+          "prefer-single"
+        ],
+        "no-unused-vars": 1,
+        "quotes": [
+          1,
+          "single"
+        ],
+        "semi": [
+          1,
+          "never"
+        ]
+      }
+    }
+  ]
+}

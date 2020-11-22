@@ -138,14 +138,18 @@ const TrainingItem = ({ time, resource }: IProps) => {
                       trainer && (
                         <>
                           <Typography color='inherit' variant='caption'>
-                            {trainer.lastName} {trainer.firstName}
+                            {trainer.lastName}
+                            {' '}
+                            {trainer.firstName}
                           </Typography>
                           <br />
                         </>
                       )
                     }
                     <Typography color='inherit' variant='caption'>
-                      {getTimeLabel(tResource?.startTime)} - {getTimeLabel(tResource?.endTime)}
+                      {getTimeLabel(tResource?.startTime)}
+                      {' - '}
+                      {getTimeLabel(tResource?.endTime)}
                     </Typography>
                   </Box>
                 </Grid>
@@ -157,7 +161,9 @@ const TrainingItem = ({ time, resource }: IProps) => {
                   {
                     records?.map((r, index) => (
                       <Typography variant='caption' key={r._id} align='left' component='p'>
-                        {index + 1}. {getClientLabel(r.contact)}
+                        {index + 1}
+                        {'. '}
+                        {getClientLabel(r.contact)}
                       </Typography>
                     ))
                   }

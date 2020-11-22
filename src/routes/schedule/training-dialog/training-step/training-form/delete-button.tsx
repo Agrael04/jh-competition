@@ -37,6 +37,8 @@ export default function TrainingDialog() {
   }
 
   return (
-    <Button variant='text' color='primary' onClick={remove} disabled={disabled}> Удалить </Button>
+    <Button variant='text' color='primary' onClick={remove} disabled={disabled}>
+      Удалить
+    </Button>
   )
 }

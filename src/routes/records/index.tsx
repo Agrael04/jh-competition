@@ -124,7 +124,9 @@ const RecordsPage = () => {
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тип тренировки
             </TableCell>
-            <TableCell>Время</TableCell>
+            <TableCell>
+              Время
+            </TableCell>
             <TableCell onClick={startFilterEditing} className={classes.clickable}>
               Тренер
             </TableCell>
@@ -161,16 +163,24 @@ const RecordsPage = () => {
               })
               .map(tr => (
                 <TableRow key={tr._id}>
-                  <TableCell>{moment(tr.date).format('DD.MM')}</TableCell>
-                  <TableCell>{tr.gym.shortName}</TableCell>
+                  <TableCell>
+                    {moment(tr.date).format('DD.MM')}
+                  </TableCell>
+                  <TableCell>
+                    {tr.gym.shortName}
+                  </TableCell>
                   <TableCell>
                     {trainingTypes.find(t => t.id === tr.type)?.text}
                   </TableCell>
                   <TableCell>
-                    {getTimeLabel(tr.startTime)} - {getTimeLabel(tr.endTime)}
+                    {getTimeLabel(tr.startTime)}
+                    {' - '}
+                    {getTimeLabel(tr.endTime)}
                   </TableCell>
                   <TableCell>
-                    {tr.trainer?.lastName} {tr.trainer?.firstName}
+                    {tr.trainer?.lastName}
+                    {' '}
+                    {tr.trainer?.firstName}
                   </TableCell>
                   <TableCell>
                     <Typography color={tr.valueType === HOURS_TYPE ? 'primary' : 'secondary'}>
@@ -185,7 +195,9 @@ const RecordsPage = () => {
                     {
                       tr.contacts.map(contact => (
                         <div key={contact._id}>
-                          {contact.lastName} {contact.firstName}
+                          {contact.lastName}
+                          {' '}
+                          {contact.firstName}
                         </div>
                       ))
                     }

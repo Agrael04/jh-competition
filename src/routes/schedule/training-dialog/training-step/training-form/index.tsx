@@ -39,7 +39,7 @@ export default function TrainingForm() {
         <Grid item={true} lg={12}>
           <FormController name='gym' rules={requiredValidation}>
             <Select
-              label={'Зал'}
+              label='Зал'
               fullWidth={true}
               variant='outlined'
               disabled={trainingQuery.data?.trainingResources.length! > 0}
@@ -84,7 +84,7 @@ export default function TrainingForm() {
         <Grid item={true} lg={8}>
           <FormController name='type' rules={requiredValidation}>
             <Select
-              label={'Тип треннировки'}
+              label='Тип треннировки'
               fullWidth={true}
               variant='outlined'
             >
@@ -101,7 +101,7 @@ export default function TrainingForm() {
         <Grid item={true} lg={4}>
           <FormController name='traineesAmount' rules={requiredValidation}>
             <TextInput
-              label={'Кол-во'}
+              label='Кол-во'
               fullWidth={true}
               variant='outlined'
               type='number'

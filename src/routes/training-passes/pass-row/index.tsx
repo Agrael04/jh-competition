@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import moment from 'moment'
 
 import Grid from '@material-ui/core/Grid'
@@ -52,22 +52,31 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
     setChecked(newChecked)
   }
 
-  const toggle = () => setOpen(!open)
+  const toggle = useCallback(
+    () => setOpen(!open),
+    [open]
+  )
 
   const payments = data?.payments.filter(p => p.pass._id === pass._id) || []
 
   const remainingCapacity = pass.capacity - getUsedUnits(payments, pass)
   const expirationDate = getExpirationDate(payments, pass)
 
-  const boundHandleEdit = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    handleEdit(pass._id)
-  }
+  const boundHandleEdit = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      handleEdit(pass._id)
+    },
+    [handleEdit, pass]
+  )
 
-  const handleArchive = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    archiveTrainingPass(pass._id)
-  }
+  const handleArchive = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      archiveTrainingPass(pass._id)
+    },
+    [pass]
+  )
 
   return (
     <>
@@ -75,8 +84,16 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
         <TableCell>
           {getClientLabel(pass.contact)}
         </TableCell>
-        <TableCell>{pass.type} {pass.size && pass.size}</TableCell>
-        <TableCell>{pass.price} грн</TableCell>
+        <TableCell>
+          {pass.type}
+          {' '}
+          {pass.size && pass.size}
+        </TableCell>
+        <TableCell>
+          {pass.price}
+          {' '}
+          грн
+        </TableCell>
         <TableCell className={(!remainingCapacity && pass.capacity > 0) ? classes.errorText : ''}>
           {
             pass.capacity > 0
@@ -91,7 +108,9 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
               : '-'
           }
         </TableCell>
-        <TableCell>{moment(pass.createdAt).format('D MMMM')}</TableCell>
+        <TableCell>
+          {moment(pass.createdAt).format('D MMMM')}
+        </TableCell>
         <TableCell className={expirationDate < new Date() ? classes.errorText : ''}>
           {moment(expirationDate).format('D MMMM')}
         </TableCell>

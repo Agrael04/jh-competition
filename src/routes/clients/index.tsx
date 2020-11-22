@@ -80,7 +80,10 @@ const ClientsPage = () => {
     }, [createClient, updateClient, clientDialog, closeClientDialog]
   )
 
-  const onOrderChange = (key: string) => () => actions.clients.page.changeOrder(key)
+  const onOrderChange = useCallback(
+    (key: string) => () => actions.clients.page.changeOrder(key),
+    [actions]
+  )
 
   return (
     <Paper className={classes.rootPaper}>
@@ -143,12 +146,16 @@ const ClientsPage = () => {
                 <TableCell>
                   <Grid container={true}>
                     <Box marginY='auto'>
-                      {client.lastName} {client.firstName}
+                      {client.lastName}
+                      {' '}
+                      {client.firstName}
                       {
                         client.group && (
                           <>
                             <br />
-                            {client.group}, {client.groupRole}
+                            {client.group}
+                            {', '}
+                            {client.groupRole}
                           </>
                         )
                       }

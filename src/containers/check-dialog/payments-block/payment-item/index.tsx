@@ -70,7 +70,7 @@ export default function PaymentItem({ index, id }: IProps) {
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={`${payment.amount} ${payment.type === 'units' ? `АБ` : `грн`}, ${new Date(payment.createdAt).toDateString()}`}
+        primary={`${payment.amount} ${payment.type === 'units' ? 'АБ' : 'грн'}, ${new Date(payment.createdAt).toDateString()}`}
         secondary={payment._id}
       />
       {

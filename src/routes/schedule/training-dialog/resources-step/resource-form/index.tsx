@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSelector, useActions } from 'store'
@@ -36,7 +36,7 @@ export default function ResourcesBlock() {
   const trainingQuery = useGetTrainingQuery(_id)
   const traineesAmount = trainingQuery.data?.training.traineesAmount
 
-  const activateNew = React.useCallback(
+  const activateNew = useCallback(
     () => {
       if (form.mode === 'update' && form._id) {
         actions.schedule.trainingDialog.openCreateRecordForm({ resource: { link: form._id } })
@@ -45,7 +45,7 @@ export default function ResourcesBlock() {
     [actions, form]
   )
 
-  const activate = React.useCallback(
+  const activate = useCallback(
     (id: string) => () => {
       const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 
@@ -71,9 +71,12 @@ export default function ResourcesBlock() {
     [actions, trainingQuery]
   )
 
-  const resetResource = () => actions.schedule.trainingDialog.closeResource()
+  const resetResource = useCallback(
+    () => actions.schedule.trainingDialog.closeResource(),
+    []
+  )
 
-  const disabled = React.useMemo(
+  const disabled = useMemo(
     () => {
       return (!traineesAmount || trainingQuery?.data?.trainingRecords.length! >= traineesAmount)
     }, [trainingQuery, traineesAmount]

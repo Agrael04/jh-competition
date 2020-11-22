@@ -60,7 +60,7 @@ const generateXLSX = (records: any[][], trainers: any[][], dates: any[][]) => {
   XLSX.utils.book_append_sheet(wb, recordsSheet, 'Записи до конца месяца')
   XLSX.utils.book_append_sheet(wb, datesSheet, 'По дням')
   XLSX.utils.book_append_sheet(wb, trainersSheet, 'Тренера')
-  XLSX.writeFile(wb, `Записи.xlsx`)
+  XLSX.writeFile(wb, 'Записи.xlsx')
 }
 
 const prepareData = (trainings: ITraining[]) => {

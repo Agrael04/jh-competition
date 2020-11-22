@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import Select, { ISelectProps } from 'components/select'
 
@@ -14,9 +14,12 @@ type IProps = ISelectProps & {
 export default function SelectWrap(props: IProps) {
   const { value, error, onChange, linked } = props
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(linked ? { link: e.target.value } : e.target.value)
-  }
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(linked ? { link: e.target.value } : e.target.value)
+    },
+    [onChange, linked]
+  )
 
   const wrapValue = (linked ? value?.link : value) || ''
 

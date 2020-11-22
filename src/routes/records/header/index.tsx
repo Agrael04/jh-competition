@@ -77,7 +77,7 @@ const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
             </IconButton>
             {
               filterChips.map(filter => (
-                <Box marginLeft={1} marginY={'auto'} key={filter}>
+                <Box marginLeft={1} marginY='auto' key={filter}>
                   <Chip
                     color='primary'
                     label={filter}

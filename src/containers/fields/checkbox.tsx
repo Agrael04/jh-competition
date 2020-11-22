@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import FormControlLabel, { FormControlLabelProps } from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -17,9 +17,12 @@ type IProps = Omit<FormControlLabelProps, 'control'> & {
 export default function CheckboxWrap(props: IProps) {
   const { checked, error, onChange } = props
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.checked)
-  }
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.checked)
+    },
+    [onChange]
+  )
 
   return (
     <FormControl component='fieldset'>
@@ -37,7 +40,9 @@ export default function CheckboxWrap(props: IProps) {
       </FormGroup>
       {
         error && (
-          <FormHelperText>{error.message}</FormHelperText>
+          <FormHelperText>
+            {error.message}
+          </FormHelperText>
         )
       }
     </FormControl>

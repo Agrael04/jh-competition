@@ -19,7 +19,7 @@ export default function StartTimeSelect(props: IProps) {
     <TextField
       {...props}
       value={times.find(t => t.id === value)?.label || ''}
-      label={'Время конца'}
+      label='Время конца'
       variant='outlined'
       disabled={true}
       fullWidth={true}

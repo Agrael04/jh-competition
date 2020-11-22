@@ -23,17 +23,17 @@ interface IProps {
   handleClose: () => void
 }
 
+const updateCacheOnCreate = (client: ApolloCache<any>, { data }: any) => {
+  const boundUpdateCachedQuery = updateQuery(client)
+  const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
+
+  boundUpdateCachedQuery({
+    query: GET_TRAINING_PASSES,
+    updater,
+  })
+}
+
 export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
-  const updateCacheOnCreate = (client: ApolloCache<any>, { data }: any) => {
-    const boundUpdateCachedQuery = updateQuery(client)
-    const updater = createUpdater('trainingPasss', data.insertOneTrainingPass)
-
-    boundUpdateCachedQuery({
-      query: GET_TRAINING_PASSES,
-      updater,
-    })
-  }
-
   const { data } = useGetTrainingPassesQuery()
   const pass = data?.trainingPasss.find(pass => pass._id === _id)
 
@@ -70,7 +70,7 @@ export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
 
   return (
     <Dialog open={!!mode} onClose={handleClose} maxWidth='sm' fullWidth={true}>
-      <Header close={handleClose}/>
+      <Header close={handleClose} />
       <Box padding={3}>
         <PassForm
           mode={mode}

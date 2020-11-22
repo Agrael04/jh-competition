@@ -50,7 +50,7 @@ export default function TrainingDialog() {
             </Avatar>
           </ListItemAvatar>
           <ListItemText
-            primary={`Добавить позицию`}
+            primary='Добавить позицию'
           />
         </ListItem>
         {

@@ -1,3 +1,5 @@
+import { Moment } from 'moment'
+
 export default interface IPaymentForm {
   amount?: number | null
   type?: 'money' | 'units' | null

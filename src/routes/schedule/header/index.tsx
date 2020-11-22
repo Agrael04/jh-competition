@@ -24,7 +24,7 @@ const Header = () => {
   const filters = useSelector(state => state.schedule.page.filters)
   const { data } = useGetSchedulesQuery(filters.date.toDate())
 
-  const openTrainerScheduleDialog = () => actions.schedule.page.openAddTrainerDialog()
+  const openTrainerScheduleDialog = actions.schedule.page.openAddTrainerDialog
 
   const startFilterEditing = useCallback(
     () => {
@@ -86,7 +86,7 @@ const Header = () => {
             </IconButton>
             {
               filterChips.map(filter => (
-                <Box marginLeft={1} marginY={'auto'} key={filter}>
+                <Box marginLeft={1} marginY='auto' key={filter}>
                   <Chip
                     color='primary'
                     label={filter}
@@ -97,7 +97,7 @@ const Header = () => {
             }
             {
               trainers.map(trainer => (
-                <Box marginLeft={1} marginY={'auto'} key={trainer._id}>
+                <Box marginLeft={1} marginY='auto' key={trainer._id}>
                   <Chip
                     color='primary'
                     label={`${trainer.lastName} ${trainer.firstName}`}
@@ -106,7 +106,7 @@ const Header = () => {
                 </Box>
               ))
             }
-            <Box marginLeft={1} marginY={'auto'}>
+            <Box marginLeft={1} marginY='auto'>
               <Chip
                 icon={<AddIcon />}
                 color='primary'

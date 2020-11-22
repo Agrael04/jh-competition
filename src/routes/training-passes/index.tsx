@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -25,20 +25,29 @@ const SchedulePage = () => {
   const classes = useStyles()
 
   const { data } = useGetTrainingPassesQuery()
-  const [formProps, setFormProps] = React.useState<{ mode: 'create' | 'update', _id?: string } | null>(null)
+  const [formProps, setFormProps] = useState<{ mode: 'create' | 'update', _id?: string } | null>(null)
 
-  const handleAdd = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setFormProps({ mode: 'create' })
-  }
+  const handleAdd = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      setFormProps({ mode: 'create' })
+    },
+    []
+  )
 
-  const handleEdit = (_id: string) => {
-    setFormProps({ mode: 'update', _id })
-  }
+  const handleEdit = useCallback(
+    (_id: string) => {
+      setFormProps({ mode: 'update', _id })
+    },
+    []
+  )
 
-  const handleClose = () => {
-    setFormProps(null)
-  }
+  const handleClose = useCallback(
+    () => {
+      setFormProps(null)
+    },
+    []
+  )
 
   return (
     <Paper className={classes.rootPaper}>
@@ -52,13 +61,27 @@ const SchedulePage = () => {
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
-            <TableCell>Контактное лицо</TableCell>
-            <TableCell>Тип абонимента</TableCell>
-            <TableCell>Цена</TableCell>
-            <TableCell>Кол-во отметок</TableCell>
-            <TableCell>Цена отметки</TableCell>
-            <TableCell>Дата создания</TableCell>
-            <TableCell>Дата завершения</TableCell>
+            <TableCell>
+              Контактное лицо
+            </TableCell>
+            <TableCell>
+              Тип абонимента
+            </TableCell>
+            <TableCell>
+              Цена
+            </TableCell>
+            <TableCell>
+              Кол-во отметок
+            </TableCell>
+            <TableCell>
+              Цена отметки
+            </TableCell>
+            <TableCell>
+              Дата создания
+            </TableCell>
+            <TableCell>
+              Дата завершения
+            </TableCell>
             <TableCell />
           </TableRow>
         </TableHead>

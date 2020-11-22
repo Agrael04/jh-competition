@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import ToggleButtonGroup, { ToggleButtonGroupProps } from '@material-ui/lab/ToggleButtonGroup'
 
@@ -13,11 +13,14 @@ type IProps = ToggleButtonGroupProps & {
 export default function TextInput(props: IProps) {
   const { value, onChange } = props
 
-  const handleChange = (e: any, type: any) => {
-    if (type) {
-      onChange(type)
-    }
-  }
+  const handleChange = useCallback(
+    (e: any, type: any) => {
+      if (type) {
+        onChange(type)
+      }
+    },
+    [onChange]
+  )
 
   return (
     <ToggleButtonGroup

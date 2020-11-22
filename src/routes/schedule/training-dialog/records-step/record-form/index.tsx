@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback } from 'react'
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSelector, useActions } from 'store'
@@ -40,16 +40,16 @@ export default function RecordsBlock() {
   })
   const contact = methods.watch('contact')
 
-  const resetRecord = () => actions.schedule.trainingDialog.closeRecord()
-  const openCheckDialog = () => actions.schedule.trainingDialog.openCheckDialog()
+  const resetRecord = actions.schedule.trainingDialog.closeRecord
+  const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
 
-  const queryRecord = React.useMemo(
+  const queryRecord = useMemo(
     () => {
       return trainingQuery.data?.trainingRecords.find(tr => tr._id === recordId)
     }, [trainingQuery, recordId]
   )
 
-  const getResourceLabel = React.useCallback(
+  const getResourceLabel = useCallback(
     resource => {
       const name = resource?.resource?.name
       const st = getTimeLabel(resource.startTime)
@@ -116,7 +116,7 @@ export default function RecordsBlock() {
         <Grid item={true} lg={4}>
           <FormController name='note'>
             <TextInput
-              label={'Заметки'}
+              label='Заметки'
               fullWidth={true}
               variant='outlined'
             />

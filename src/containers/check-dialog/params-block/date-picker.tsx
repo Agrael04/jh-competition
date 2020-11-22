@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import moment from 'moment'
 
 import { useSelector, useActions } from 'store'
@@ -19,35 +19,47 @@ export default function ActiveDatePicker() {
 
   const currentDate = moment().startOf('day')
 
-  const isCurrentDate = React.useMemo(
+  const isCurrentDate = useMemo(
     () => {
       return activeDate.isSame(currentDate)
     }, [activeDate, currentDate]
   )
 
-  const handleDateChange = (value: any) => {
-    updateActiveDate(value)
-  }
+  const handleDateChange = useCallback(
+    (value: any) => {
+      updateActiveDate(value)
+    },
+    [updateActiveDate]
+  )
 
-  const handlePrevDateClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    const d = moment(activeDate).subtract(1, 'days')
-    updateActiveDate(d)
-  }
+  const handlePrevDateClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      const d = moment(activeDate).subtract(1, 'days')
+      updateActiveDate(d)
+    },
+    [updateActiveDate]
+  )
 
-  const currentDateClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const currentDateClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
 
-    if (!isCurrentDate) {
-      updateActiveDate(currentDate)
-    }
-  }
+      if (!isCurrentDate) {
+        updateActiveDate(currentDate)
+      }
+    },
+    [isCurrentDate, currentDate, updateActiveDate]
+  )
 
-  const handleNextDateClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    const d = moment(activeDate).add(1, 'days')
-    updateActiveDate(d)
-  }
+  const handleNextDateClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      const d = moment(activeDate).add(1, 'days')
+      updateActiveDate(d)
+    },
+    [activeDate, updateActiveDate]
+  )
 
   return (
     <DatePicker

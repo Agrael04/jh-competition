@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useFieldArray } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
@@ -12,13 +12,18 @@ export default function TraineesBlock() {
     name: 'timeFrames',
   })
 
-  const addTimeFrame = () => append({})
+  const addTimeFrame = useCallback(
+    () => append({}),
+    [append]
+  )
 
-  const handleRemove = (index: number) => {
-    if (fields.length > 1) {
-      remove(index)
-    }
-  }
+  const handleRemove = useCallback(
+    (index: number) => {
+      if (fields.length > 1) {
+        remove(index)
+      }
+    }, [fields, remove]
+  )
 
   return (
     <>
@@ -35,7 +40,9 @@ export default function TraineesBlock() {
       {
         fields.length < 3 && (
           <Grid item={true} container={true} justify='flex-end'>
-            <Button variant='outlined' color='primary' onClick={addTimeFrame}> Добавить время </Button>
+            <Button variant='outlined' color='primary' onClick={addTimeFrame}>
+              Добавить время
+            </Button>
           </Grid>
         )
       }

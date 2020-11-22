@@ -67,6 +67,7 @@ const EmptyItem = ({ time, resource }: IProps) => {
         backgroundColor: getColorPallete(draggedItem.color)[200],
         zIndex: 1,
         height: `calc(${duration}00% + ${(duration - 1) * 2}px)`,
+        pointerEvents: 'none' as const,
       })
     },
     [draggedItem]

@@ -93,7 +93,7 @@ export default function TrainerSelect(props: IProps) {
     <Select
       value={filteredTrainer ? value.link : null}
       onChange={handleChange}
-      label={'Тренер'}
+      label='Тренер'
       fullWidth={true}
       variant='outlined'
       error={!!error}
@@ -102,7 +102,9 @@ export default function TrainerSelect(props: IProps) {
       {
         trainers?.map(trainer => (
           <MenuItem value={trainer._id} key={trainer._id}>
-            {trainer.firstName} {trainer.lastName}
+            {trainer.firstName}
+            {' '}
+            {trainer.lastName}
           </MenuItem>
         ))
       }

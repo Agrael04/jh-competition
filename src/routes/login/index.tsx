@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import Typography from '@material-ui/core/Typography'
@@ -13,20 +13,28 @@ import * as authApi from 'api/auth'
 
 const LoginPage = () => {
   const classes = useStyles()
-  const [loggenIn, setLoggedIn] = React.useState(authApi.isLoggedIn())
+  const [loggenIn, setLoggedIn] = useState(authApi.isLoggedIn())
 
-  const [credentials, setCredentials] = React.useState({ email: '', password: '' })
+  const [credentials, setCredentials] = useState({ email: '', password: '' })
 
-  const handleChange = (e: React.ChangeEvent<{ name: string, value: string }>) => setCredentials({ ...credentials, [e.target.name]: e.target.value })
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<{ name: string, value: string }>) => {
+      setCredentials({ ...credentials, [e.target.name]: e.target.value })
+    },
+    [credentials, setCredentials]
+  )
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    authApi.loginWithPassword(credentials.email, credentials.password)
-      .then(
-        () => setLoggedIn(authApi.isLoggedIn())
-      )
-      .catch(console.error)
-  }
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      authApi.loginWithPassword(credentials.email, credentials.password)
+        .then(
+          () => setLoggedIn(authApi.isLoggedIn())
+        )
+        .catch(console.error)
+    },
+    [setLoggedIn]
+  )
 
   if (loggenIn) {
     return (

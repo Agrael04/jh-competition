@@ -30,10 +30,9 @@ export default function PaymentBlock() {
   if (passForm.isActive) {
     return (
       <PassForm
-        mode={'create'}
+        mode='create'
         initialForm={passForm.defaultValues || null}
         close={closePassForm}
-
         disabledOpenType={true}
         disabledContact={true}
         disabledCreatedAt={true}

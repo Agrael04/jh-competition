@@ -6,10 +6,6 @@ export default makeStyles((theme: Theme) => ({
     height: `calc(100vh - ${theme.spacing(14)}px)`,
     overflow: 'auto',
   },
-  errorText: {
-    color: theme.palette.error.main,
-    fontWeight: 'bold',
-  },
   clickable: {
     cursor: 'pointer',
   },

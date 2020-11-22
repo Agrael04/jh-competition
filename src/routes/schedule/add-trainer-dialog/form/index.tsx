@@ -64,7 +64,7 @@ export default function TrainingDialog() {
             <Grid item={true} lg={6}>
               <FormController name='date'>
                 <DatePicker
-                  label={'Дата'}
+                  label='Дата'
                   fullWidth={true}
                   inputVariant='outlined'
                   disableToolbar={true}
@@ -77,14 +77,16 @@ export default function TrainingDialog() {
               <Box marginY='auto' width='100%'>
                 <FormController name='trainer' rules={requiredValidation}>
                   <Select
-                    label={'Тренер'}
+                    label='Тренер'
                     fullWidth={true}
                     variant='outlined'
                   >
                     {
                       filteredTrainers.map(trainer => (
                         <MenuItem value={trainer._id} key={trainer._id}>
-                          {trainer.firstName} {trainer.lastName}
+                          {trainer.firstName}
+                          {' '}
+                          {trainer.lastName}
                         </MenuItem>
                       ))
                     }

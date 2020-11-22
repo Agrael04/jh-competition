@@ -71,7 +71,7 @@ export default function FiltersDialog() {
           <Grid item={true} lg={12}>
             <FormController name='gym'>
               <GymSelect
-                label={'Зал'}
+                label='Зал'
                 fullWidth={true}
                 variant='outlined'
               >
@@ -88,12 +88,14 @@ export default function FiltersDialog() {
           <Grid item={true} lg={12}>
             <FormController name='resources'>
               <Select
-                label={'Ресурсы'}
+                label='Ресурсы'
                 fullWidth={true}
                 variant='outlined'
                 multiple={true}
               >
-                <ListSubheader>Батуты</ListSubheader>
+                <ListSubheader>
+                  Батуты
+                </ListSubheader>
                 {
                   resources.filter(r => r.type === 'trampoline').map(r => (
                     <MenuItem value={r._id} key={r._id}>
@@ -101,7 +103,9 @@ export default function FiltersDialog() {
                     </MenuItem>
                   ))
                 }
-                <ListSubheader>Другое</ListSubheader>
+                <ListSubheader>
+                  Другое
+                </ListSubheader>
                 {
                   resources.filter(r => r.type === 'other').map(r => (
                     <MenuItem value={r._id} key={r._id}>

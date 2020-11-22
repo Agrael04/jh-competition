@@ -41,6 +41,8 @@ export default function SubmitButton() {
   )
 
   return (
-    <Button variant='contained' color='primary' onClick={handleSubmit(save)} disabled={disabled}> Добавить </Button>
+    <Button variant='contained' color='primary' onClick={handleSubmit(save)} disabled={disabled}>
+      Добавить
+    </Button>
   )
 }

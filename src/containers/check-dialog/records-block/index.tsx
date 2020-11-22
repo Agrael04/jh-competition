@@ -81,7 +81,11 @@ export default function TrainingDialog() {
                   )}
                   variant='outlined'
                   color={r.isMulti ? 'secondary' : 'primary'}
-                  avatar={<Avatar>{r.count}</Avatar>}
+                  avatar={
+                    <Avatar>
+                      {r.count}
+                    </Avatar>
+                  }
                   onClick={r.status !== 'CLOSED' ? openPositionForm(r.type) : undefined}
                   disabled={r.status === 'CLOSED'}
                 />

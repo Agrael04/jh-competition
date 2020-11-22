@@ -147,7 +147,7 @@ export default function PaymentForm() {
               <Grid item={true} lg={12}>
                 <FormController name='transaction' rules={requiredValidation}>
                   <TextInput
-                    label={'Транзакция'}
+                    label='Транзакция'
                     fullWidth={true}
                     variant='outlined'
                   />

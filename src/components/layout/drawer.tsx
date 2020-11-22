@@ -30,37 +30,49 @@ function LayoutDrawer({ open, handleDrawerClose }: any) {
       }}
     >
       <List>
-        <Link to={'/'} className={classes.link} onClick={handleDrawerClose}>
+        <Link to='/' className={classes.link} onClick={handleDrawerClose}>
           <ListItem button={true} onClick={handleDrawerClose}>
-            <ListItemIcon><TodayIcon /></ListItemIcon>
-            <ListItemText primary={'Расписание'} />
+            <ListItemIcon>
+              <TodayIcon />
+            </ListItemIcon>
+            <ListItemText primary='Расписание' />
           </ListItem>
         </Link>
-        <Link to={'/records'} className={classes.link} onClick={handleDrawerClose}>
+        <Link to='/records' className={classes.link} onClick={handleDrawerClose}>
           <ListItem button={true} onClick={handleDrawerClose}>
-            <ListItemIcon><BookmarksIcon /></ListItemIcon>
-            <ListItemText primary={'Записи'} />
+            <ListItemIcon>
+              <BookmarksIcon />
+            </ListItemIcon>
+            <ListItemText primary='Записи' />
           </ListItem>
         </Link>
-        <Link to={'/training-passes'} className={classes.link} onClick={handleDrawerClose}>
+        <Link to='/training-passes' className={classes.link} onClick={handleDrawerClose}>
           <ListItem button={true} onClick={handleDrawerClose}>
-            <ListItemIcon><ShutterSpeedIcon /></ListItemIcon>
-            <ListItemText primary={'Абонименты'} />
+            <ListItemIcon>
+              <ShutterSpeedIcon />
+            </ListItemIcon>
+            <ListItemText primary='Абонименты' />
           </ListItem>
         </Link>
-        <Link to={'/clients'} className={classes.link} onClick={handleDrawerClose}>
+        <Link to='/clients' className={classes.link} onClick={handleDrawerClose}>
           <ListItem button={true}>
-            <ListItemIcon><PeopleIcon /></ListItemIcon>
-            <ListItemText primary={('Клиенты')} />
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary='Клиенты' />
           </ListItem>
         </Link>
         <ListItem button={true} onClick={handleDrawerClose}>
-          <ListItemIcon><DomainIcon /></ListItemIcon>
-          <ListItemText primary={('Залы')} />
+          <ListItemIcon>
+            <DomainIcon />
+          </ListItemIcon>
+          <ListItemText primary='Залы' />
         </ListItem>
         <ListItem button={true} onClick={handleDrawerClose}>
-          <ListItemIcon><SchoolIcon /></ListItemIcon>
-          <ListItemText primary={('Тренера')} />
+          <ListItemIcon>
+            <SchoolIcon />
+          </ListItemIcon>
+          <ListItemText primary='Тренера' />
         </ListItem>
       </List>
     </Drawer>

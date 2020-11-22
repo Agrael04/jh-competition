@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import moment from 'moment'
 
 import { DatePicker as MaterialDatePicker, DatePickerProps } from '@material-ui/pickers'
@@ -16,9 +16,12 @@ type IProps = OmittedProps & {
 export default function DatePicker(props: IProps) {
   const { value, error, onChange } = props
 
-  const handleChange = (date: moment.Moment | null) => {
-    onChange(date)
-  }
+  const handleChange = useCallback(
+    (date: moment.Moment | null) => {
+      onChange(date)
+    },
+    [onChange]
+  )
 
   return (
     <MaterialDatePicker

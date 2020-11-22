@@ -133,7 +133,7 @@ export default function PassForm({
           <Grid item={true} lg={8}>
             <FormController name='type' rules={requiredValidation}>
               <Select
-                label={'Тип абонимента'}
+                label='Тип абонимента'
                 fullWidth={true}
                 variant='outlined'
               >
@@ -150,7 +150,7 @@ export default function PassForm({
           <Grid item={true} lg={4}>
             <FormController name='size' rules={requiredValidation}>
               <Select
-                label={'Размер'}
+                label='Размер'
                 fullWidth={true}
                 variant='outlined'
               >
@@ -167,7 +167,7 @@ export default function PassForm({
           <Grid item={true} lg={6}>
             <FormController name='capacity' rules={requiredValidation}>
               <TextInput
-                label={'Кол-во АБ'}
+                label='Кол-во АБ'
                 fullWidth={true}
                 variant='outlined'
                 type='number'
@@ -178,7 +178,7 @@ export default function PassForm({
           <Grid item={true} lg={6}>
             <FormController name='price' rules={requiredValidation}>
               <TextInput
-                label={'Цена'}
+                label='Цена'
                 fullWidth={true}
                 variant='outlined'
                 type='number'
@@ -189,7 +189,7 @@ export default function PassForm({
           <Grid item={true} lg={6}>
             <FormController name='activation' rules={requiredValidation}>
               <TextInput
-                label={'Срок активации'}
+                label='Срок активации'
                 fullWidth={true}
                 variant='outlined'
                 type='number'
@@ -200,7 +200,7 @@ export default function PassForm({
           <Grid item={true} lg={6}>
             <FormController name='duration' rules={requiredValidation}>
               <TextInput
-                label={'Срок действия'}
+                label='Срок действия'
                 fullWidth={true}
                 variant='outlined'
                 type='number'

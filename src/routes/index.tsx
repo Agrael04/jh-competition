@@ -18,19 +18,19 @@ export default function Routes() {
   return (
     <div className={classes.app}>
       <Switch>
-        <PrivateRoute path={'/schedule'} exact={true}>
+        <PrivateRoute path='/schedule' exact={true}>
           <Schedule />
         </PrivateRoute>
 
-        <PrivateRoute path={'/training-passes'} exact={true}>
+        <PrivateRoute path='/training-passes' exact={true}>
           <TrainingPasses />
         </PrivateRoute>
 
-        <PrivateRoute path={'/records'} exact={true}>
+        <PrivateRoute path='/records' exact={true}>
           <Records />
         </PrivateRoute>
 
-        <PrivateRoute path={'/clients'} exact={true}>
+        <PrivateRoute path='/clients' exact={true}>
           <Clients />
         </PrivateRoute>
 
@@ -38,7 +38,7 @@ export default function Routes() {
           <Schedule />
         </PrivateRoute>
 
-        <Route path={'/login'} exact={true}>
+        <Route path='/login' exact={true}>
           <Login />
         </Route>
       </Switch>

@@ -49,7 +49,7 @@ export default function PaymentBlock() {
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={`Добавить оплату`}
+          primary='Добавить оплату'
         />
       </ListItem>
       {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
@@ -21,13 +21,13 @@ type IProps = ISelectProps & {
 const TypeSelect = (props: IProps) => {
   const { value, onChange } = props
 
-  const findType = React.useCallback(
+  const findType = useCallback(
     (type: string) => {
       return value.find((v: string) => v === type)
     }, [value]
   )
 
-  const selectType = React.useCallback(
+  const selectType = useCallback(
     (type: string) => {
       const item = findType(type)
 
@@ -40,25 +40,28 @@ const TypeSelect = (props: IProps) => {
     [onChange, findType, value]
   )
 
-  const handleCheckboxClick = React.useCallback(
+  const handleCheckboxClick = useCallback(
     (type: string) => () => selectType(type),
     [selectType]
   )
 
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value)
     },
     [onChange]
   )
 
-  const renderValue = () => `Выбрано: ${value.length}`
+  const renderValue = useCallback(
+    () => `Выбрано: ${value.length}`,
+    [value]
+  )
 
   return (
     <Select
       value={value}
       onChange={handleChange}
-      label={'Тип'}
+      label='Тип'
       fullWidth={true}
       variant='outlined'
       multiple={true}

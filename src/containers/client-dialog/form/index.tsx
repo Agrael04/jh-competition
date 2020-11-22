@@ -55,7 +55,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='firstName' rules={requiredValidation}>
               <TextInput
-                label={'Имя'}
+                label='Имя'
                 fullWidth={true}
                 variant='outlined'
               />
@@ -64,7 +64,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='lastName' rules={requiredValidation}>
               <TextInput
-                label={'Фамилия'}
+                label='Фамилия'
                 fullWidth={true}
                 variant='outlined'
               />
@@ -73,7 +73,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='birthday'>
               <DatePicker
-                label={'Дата рождения'}
+                label='Дата рождения'
                 disableToolbar={true}
                 inputVariant='outlined'
                 fullWidth={true}
@@ -89,7 +89,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='phone' rules={requiredPhoneValidation}>
               <TextInput
-                label={'Телефон'}
+                label='Телефон'
                 fullWidth={true}
                 variant='outlined'
               />
@@ -98,7 +98,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='altPhone' rules={optionalPhoneValidation}>
               <TextInput
-                label={'Альтернативный Телефон'}
+                label='Альтернативный Телефон'
                 fullWidth={true}
                 variant='outlined'
               />
@@ -127,7 +127,7 @@ export default function ClientDialog({ defaultValues, submit }: IClientFormProps
           <Grid item={true} lg={12}>
             <FormController name='questionaryNumber'>
               <TextInput
-                label={'Номер анкеты'}
+                label='Номер анкеты'
                 fullWidth={true}
                 variant='outlined'
               />

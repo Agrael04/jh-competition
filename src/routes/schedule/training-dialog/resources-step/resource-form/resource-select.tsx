@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback} from 'react'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
@@ -25,15 +25,18 @@ export default function ResourceSelect(props: IProps) {
 
   const gyms = useGetGymsQuery()
 
-  const resources = React.useMemo(
+  const resources = useMemo(
     () => {
       return gyms.data?.resources.filter(r => r.gym._id === training?.gym._id) || []
     }, [gyms, training]
   )
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ link: e.target.value })
-  }
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange({ link: e.target.value })
+    },
+    [onChange]
+  )
 
   if (resources.length === 0) {
     return (
@@ -45,7 +48,7 @@ export default function ResourceSelect(props: IProps) {
     <Select
       value={value ? value.link : null}
       onChange={handleChange}
-      label={'Ресурс'}
+      label='Ресурс'
       fullWidth={true}
       variant='outlined'
       error={!!error}

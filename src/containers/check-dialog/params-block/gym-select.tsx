@@ -16,7 +16,7 @@ const GymSelect = () => {
     <Select
       name='gym'
       value={activeGym}
-      label={'Зал'}
+      label='Зал'
       fullWidth={true}
       variant='outlined'
       disabled={true}

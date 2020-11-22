@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import ClientSuggester, { ISuggesterProps } from 'containers/client-suggester'
 
@@ -17,9 +17,13 @@ type IProps = OmittedProps & {
 
 export default function ClientSuggesterWrap(props: IProps) {
   const { value, error, onChange } = props
-  const handleChange = (link: string | null) => {
-    onChange(link ? { link } : undefined)
-  }
+
+  const handleChange = useCallback(
+    (link: string | null) => {
+      onChange(link ? { link } : undefined)
+    },
+    [onChange]
+  )
 
   return (
     <ClientSuggester

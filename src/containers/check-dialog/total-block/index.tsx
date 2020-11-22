@@ -52,14 +52,18 @@ export default function TrainingDialog() {
             {
               (positionsMoneyAmount)! > 0 && (
                 <Typography variant='h6' align='center'>
-                  -{positionsMoneyAmount} грн
+                  -
+                  {positionsMoneyAmount}
+                  {' грн'}
                 </Typography>
               )
             }
             {
               positionsPassAmount! > 0 && (
                 <Typography variant='h6' align='center'>
-                  -{positionsPassAmount} АБ
+                  -
+                  {positionsPassAmount}
+                  {' АБ'}
                 </Typography>
               )
             }
@@ -75,14 +79,18 @@ export default function TrainingDialog() {
             {
               paymentMoneyAmount! > 0 && (
                 <Typography variant='h6' align='center'>
-                  +{paymentMoneyAmount} грн
+                  +
+                  {paymentMoneyAmount}
+                  {' грн'}
                 </Typography>
               )
             }
             {
               paymentPassAmount! > 0 && (
                 <Typography variant='h6' align='center'>
-                  +{paymentPassAmount} АБ
+                  +
+                  {paymentPassAmount}
+                  {' АБ'}
                 </Typography>
               )
             }
@@ -96,10 +104,12 @@ export default function TrainingDialog() {
               Баланс
             </Typography>
             <Typography variant='h6' align='center'>
-              {moneyAmount > 0 ? `+${moneyAmount}` : moneyAmount} грн
+              {moneyAmount > 0 ? `+${moneyAmount}` : moneyAmount}
+              {' грн'}
             </Typography>
             <Typography variant='h6' align='center'>
-              {passAmount > 0 ? `+${passAmount}` : passAmount} АБ
+              {passAmount > 0 ? `+${passAmount}` : passAmount}
+              {' АБ'}
             </Typography>
           </Box>
         </Grid>

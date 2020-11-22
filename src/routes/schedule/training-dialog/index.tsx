@@ -92,7 +92,7 @@ export default function TrainingDialog() {
               )
             }
             {
-              step === 1 && (
+            step === 1 && (
                 <ResourcesStep />
               )
             }

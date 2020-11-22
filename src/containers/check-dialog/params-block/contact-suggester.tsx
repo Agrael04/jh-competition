@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { useSelector, useActions } from 'store'
 
@@ -17,13 +17,15 @@ interface IProps {
   [x: string]: any
   label: string
   initialFilter?: string
+  disabled?: boolean
 }
 
 const Abornment = ({ balance }: { balance: number }) => {
   return (
     <InputAdornment position='start'>
       <Typography color={balance > 0 ? 'primary' : balance < 0 ? 'error' : 'textSecondary'}>
-        {balance > 0 ? `+${balance}` : balance} грн
+        {balance > 0 ? `+${balance}` : balance}
+        {' грн'}
       </Typography>
     </InputAdornment>
   )
@@ -36,9 +38,12 @@ export default function ContactSuggester({ label, disabled }: IProps) {
 
   const { data } = useGetContactDetailsQuery()
 
-  const handleChange = (link: string | null) => {
-    updateContact(link ? { link } : null)
-  }
+  const handleChange = useCallback(
+    (link: string | null) => {
+      updateContact(link ? { link } : null)
+    },
+    [updateContact]
+  )
 
   const initialFilter = getClientLabel(data?.client)
   const initialBalance = data?.client.balance || 0

@@ -36,7 +36,9 @@ export default function SelectWrap({ value, onChange, label, helperText, name, v
 
   return (
     <FormControl variant={variant} fullWidth={fullWidth} style={heightStyle} error={error}>
-      <InputLabel error={error} ref={inputLabel}>{label}</InputLabel>
+      <InputLabel error={error} ref={inputLabel}>
+        {label}
+      </InputLabel>
       <Select
         value={v}
         disabled={disabled}
@@ -49,7 +51,9 @@ export default function SelectWrap({ value, onChange, label, helperText, name, v
       >
         {children}
       </Select>
-      <FormHelperText error={error}>{helperText}</FormHelperText>
+      <FormHelperText error={error}>
+        {helperText}
+      </FormHelperText>
     </FormControl>
   )
 }

@@ -37,7 +37,7 @@ export default function HeaderRow() {
     <TableRow>
       <TableCell className={classes.timeTd} secondaryRow={true}>
         <Typography>
-          {'Время'}
+          Время
         </Typography>
       </TableCell>
       {/* <TrainerHeaderCell /> */}

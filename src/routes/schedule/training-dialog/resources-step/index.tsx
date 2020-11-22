@@ -50,7 +50,7 @@ export default function ResourcesBlock() {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={`Добавить ресурс`}
+              primary='Добавить ресурс'
             />
           </ListItem>
           {

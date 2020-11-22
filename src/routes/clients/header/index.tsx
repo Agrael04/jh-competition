@@ -39,7 +39,7 @@ const Header = ({ openClientForm }: IProps) => {
       }
 
       if (filters.withDebt) {
-        chips.push(`С долгом`)
+        chips.push('С долгом')
       }
 
       if (filters.age) {
@@ -62,7 +62,7 @@ const Header = ({ openClientForm }: IProps) => {
             </Grid>
             {
               filterChips.map(filter => (
-                <Box marginLeft={1} marginY={'auto'} key={filter}>
+                <Box marginLeft={1} marginY='auto' key={filter}>
                   <Chip
                     color='primary'
                     label={filter}
