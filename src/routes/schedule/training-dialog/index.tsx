@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
@@ -35,7 +35,7 @@ export default function TrainingDialog() {
 
   const actions = useActions()
 
-  const close = React.useCallback(
+  const close = useCallback(
     () => actions.schedule.trainingDialog.close(),
     [actions]
   )
@@ -44,12 +44,12 @@ export default function TrainingDialog() {
     actions.schedule.trainingDialog.setStep(index)
   }
 
-  const isResourceStepAvailable = React.useMemo(
+  const isResourceStepAvailable = useMemo(
     () => !!trainingQuery.data?.training,
     [trainingQuery]
   )
 
-  const isRecordStepAvailable = React.useMemo(
+  const isRecordStepAvailable = useMemo(
     () => (trainingQuery.data?.trainingResources || []).length > 0,
     [trainingQuery]
   )

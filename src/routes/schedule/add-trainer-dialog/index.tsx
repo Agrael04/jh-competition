@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { Moment } from 'moment'
 import { useSelector, useActions } from 'store'
 
@@ -26,7 +26,7 @@ export default function TrainingDialog() {
   const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
   const actions = useActions()
 
-  const close = React.useCallback(
+  const close = useCallback(
     () => actions.schedule.addTrainerDialog.close(),
     [actions]
   )

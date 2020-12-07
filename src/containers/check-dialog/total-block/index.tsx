@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useActions } from 'store'
 
 import Button from '@material-ui/core/Button'

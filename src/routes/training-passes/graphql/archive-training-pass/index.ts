@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
@@ -10,7 +10,7 @@ const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 const useArchiveTrainingPass = () => {
   const [archiveTrainingPass] = useMutation(ARCHIVE_TRAINING_PASS)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (_id: string) => {
       if (!_id) {
         return

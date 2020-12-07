@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState, MouseEvent } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -28,7 +28,7 @@ const SchedulePage = () => {
   const [formProps, setFormProps] = useState<{ mode: 'create' | 'update', _id?: string } | null>(null)
 
   const handleAdd = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       setFormProps({ mode: 'create' })
     },

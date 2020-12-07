@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import Skeleton from '@material-ui/lab/Skeleton'
 

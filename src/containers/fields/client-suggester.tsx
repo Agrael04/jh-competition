@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import ClientSuggester, { ISuggesterProps } from 'containers/client-suggester'
 

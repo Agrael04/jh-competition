@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
@@ -35,7 +35,7 @@ export default function ResourceItem({ id }: IProps) {
 
   const deleteTrainingResource = useDeleteTrainingResource()
 
-  const activate = React.useCallback(
+  const activate = useCallback(
     () => {
       if (!resource) {
         return
@@ -56,14 +56,14 @@ export default function ResourceItem({ id }: IProps) {
     [actions, resource]
   )
 
-  const remove = React.useCallback(
+  const remove = useCallback(
     async () => {
       await deleteTrainingResource(id)
     },
     [deleteTrainingResource, id]
   )
 
-  const primaryLabel = React.useMemo(
+  const primaryLabel = useMemo(
     () => {
       const st = getTimeLabel(resource?.startTime)
       const et = getTimeLabel(resource?.endTime)
@@ -73,7 +73,7 @@ export default function ResourceItem({ id }: IProps) {
     [resource]
   )
 
-  const secondaryLabel = React.useMemo(
+  const secondaryLabel = useMemo(
     () => {
       const trainer = resource?.trainer
       const trainerLabel = trainer ? `${trainer.firstName} ${trainer.lastName}` : ''

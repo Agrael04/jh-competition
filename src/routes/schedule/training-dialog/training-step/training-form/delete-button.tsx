@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
@@ -17,7 +17,7 @@ export default function TrainingDialog() {
   const actions = useActions()
   const deleteTraining = useDeleteTraining()
 
-  const remove = React.useCallback(
+  const remove = useCallback(
     async () => {
       await deleteTraining()
 
@@ -26,7 +26,7 @@ export default function TrainingDialog() {
     [actions, deleteTraining]
   )
 
-  const disabled = React.useMemo(
+  const disabled = useMemo(
     () => {
       return trainingQuery.data?.trainingRecords.length! > 0
     }, [trainingQuery]

@@ -1,9 +1,9 @@
-import React from 'react'
+import { ReactElement, Fragment } from 'react'
 
 import Tooltip from '@material-ui/core/Tooltip'
 
 interface IProps {
-  children: React.ReactElement
+  children: ReactElement
   rows: string[]
 }
 
@@ -12,10 +12,10 @@ const TooltipComponent = ({ rows }: { rows: string[] }) => {
     <>
       {
         rows.map((row, key) => (
-          <React.Fragment key={`tooltip-${key}`}>
+          <Fragment key={`tooltip-${key}`}>
             {row}
             <br />
-          </React.Fragment>
+          </Fragment>
         ))
       }
     </>

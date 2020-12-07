@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
@@ -21,7 +21,7 @@ interface IMutationResponse {
 const useCreateTraining = () => {
   const [createTraining] = useMutation<IMutationResponse>(CREATE_TRAINING)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (training: ITrainingForm) => {
       return createTraining({
         variables: {

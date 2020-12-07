@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
@@ -39,7 +39,7 @@ const useUpdateTrainingRecord = () => {
   const readTrainingResourceById = useReadTrainingResourceById()
   const filters = useSelector(state => state.schedule.page.filters)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (_id: string, record: Partial<IRecordForm>, resourceId: string) => {
       return updateTrainingRecord({
         variables: {
@@ -62,7 +62,7 @@ const useUpdateTrainingRecord = () => {
             query: GET_TRAINING_RESOURCE,
             variables: {
               time: prev?.trainingResource?.startTime,
-              resource:  prev?.trainingResource?.resource._id,
+              resource: prev?.trainingResource?.resource._id,
               date: filters.date.toDate(),
             },
             updater: boundRemoveUpdater,

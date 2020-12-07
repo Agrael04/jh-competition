@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { RouteProps } from 'react-router-dom'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -15,7 +15,7 @@ interface IProps {
 
 function Layout({ children }: IProps) {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   function handleDrawerOpen() {
     setOpen(true)

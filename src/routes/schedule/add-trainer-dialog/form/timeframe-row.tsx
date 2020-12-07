@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 
 import IconButton from '@material-ui/core/IconButton'
 
@@ -24,7 +24,7 @@ interface IProps {
 export default function TimeframeRow({ index, remove }: IProps) {
   const gyms = useGetGymsQuery()
 
-  const handleRemove = React.useCallback(
+  const handleRemove = useCallback(
     () => remove(index),
     [remove, index]
   )

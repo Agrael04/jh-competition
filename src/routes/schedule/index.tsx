@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'

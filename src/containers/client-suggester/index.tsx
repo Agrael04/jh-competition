@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, ComponentType } from 'react'
 import { useDebounce } from 'use-debounce'
 
 import TextField from '@material-ui/core/TextField'
@@ -14,7 +14,7 @@ export interface ISuggesterProps {
   value: string | null
   initialFilter?: string
   initialBalance?: number
-  StartAdornment?: React.ComponentType<{ balance: number }>
+  StartAdornment?: ComponentType<{ balance: number }>
   error?: boolean
   helperText?: string
   rights?: string[]
@@ -27,8 +27,8 @@ interface IInputProps {
 }
 
 interface IStartAbornment {
-  Component?: React.ComponentType<{ balance: number }>
-  prors?: any
+  Component?: ComponentType<{ balance: number }>
+  props?: any
 }
 
 const renderInput = (loading: boolean, inputProps: IInputProps, abornment?: IStartAbornment) => {
@@ -43,7 +43,7 @@ const renderInput = (loading: boolean, inputProps: IInputProps, abornment?: ISta
           ...params.InputProps,
           startAdornment: (
             params.inputProps.value &&
-            abornment?.Component && <abornment.Component {...abornment.prors} />
+            abornment?.Component && <abornment.Component {...abornment.props} />
           ),
           endAdornment: (
             <>
@@ -149,7 +149,7 @@ export default function ClientSuggester({ value, handleChange, label, initialFil
           },
           {
             Component: StartAdornment,
-            prors: { balance },
+            props: { balance },
           }
         )
       }

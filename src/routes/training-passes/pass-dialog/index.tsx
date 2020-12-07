@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import moment from 'moment'
 
 import Dialog from '@material-ui/core/Dialog'
@@ -37,7 +37,7 @@ export default function PassFormWrap({ _id, mode, handleClose }: IProps) {
   const { data } = useGetTrainingPassesQuery()
   const pass = data?.trainingPasss.find(pass => pass._id === _id)
 
-  const initialForm = React.useMemo(
+  const initialForm = useMemo(
     () => {
       if (mode === 'update' && pass) {
         return {

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback} from 'react'
+import { useMemo, useCallback, ChangeEvent } from 'react'
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'
@@ -32,7 +32,7 @@ export default function ResourceSelect(props: IProps) {
   )
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       onChange({ link: e.target.value })
     },
     [onChange]

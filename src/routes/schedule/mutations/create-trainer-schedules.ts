@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
@@ -17,7 +17,7 @@ export const CREATE_TRAINER_SCHEDULES = gql`
 const useCreateTrainerSchedules = () => {
   const [createTrainingRecords] = useMutation(CREATE_TRAINER_SCHEDULES)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (schedules: ITrainerScheduleForm[]) => {
       const schedulesQuery = { query: GET_SCHEDULES, variables: { date: new Date(schedules[0].date) } }
       const trainersQuery = { query: GET_TRAINERS }

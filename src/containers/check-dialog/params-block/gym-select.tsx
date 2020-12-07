@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useSelector } from 'store'
 
 import MenuItem from '@material-ui/core/MenuItem'

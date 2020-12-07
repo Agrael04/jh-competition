@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef, useState, useMemo, useEffect } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import Select, { SelectProps } from '@material-ui/core/Select'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -13,14 +13,14 @@ export interface ISelectProps extends SelectProps {
 const heightStyle = { height: '56px' }
 
 export default function SelectWrap({ value, onChange, label, helperText, name, variant, disabled, multiple, fullWidth, children, error, renderValue }: ISelectProps) {
-  const inputLabel = React.useRef<HTMLLabelElement>(null)
-  const [labelWidth, setLabelWidth] = React.useState(0)
+  const inputLabel = useRef<HTMLLabelElement>(null)
+  const [labelWidth, setLabelWidth] = useState(0)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLabelWidth(inputLabel.current!.offsetWidth)
   }, [])
 
-  const v = React.useMemo(
+  const v = useMemo(
     () => {
       if (Array.isArray(value)) {
         return value

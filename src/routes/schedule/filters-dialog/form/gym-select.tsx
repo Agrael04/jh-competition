@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, ChangeEvent } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
@@ -21,7 +21,7 @@ export default function GymSelect(props: IProps) {
   const gyms = useGetGymsQuery()
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const resources = gyms.data?.resources.filter(r => r.gym._id === e.target.value) || []
 
       onChange(e.target.value)

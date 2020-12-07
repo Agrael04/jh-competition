@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
@@ -23,7 +23,7 @@ export default function TrainingDialog() {
   const actions = useActions()
   const { data } = useGetContactDetailsQuery()
 
-  const mappedRecords = React.useMemo(
+  const mappedRecords = useMemo(
     () => data?.trainingRecords.reduce(
       (res, item) => {
         const isMulti = (

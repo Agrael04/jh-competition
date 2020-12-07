@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 import { useSelector, useActions } from 'store'
@@ -21,7 +21,7 @@ export default function ResourcesBlock() {
   const { handleSubmit, errors } = useFormContext()
   const disabled = Object.keys(errors).length > 0
 
-  const submit = React.useCallback(
+  const submit = useCallback(
     async (resource: IResourceForm) => {
       if (!form.mode) {
         return

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import moment from 'moment'
 import { useSelector, useActions } from 'store'
 
@@ -38,7 +38,7 @@ export default function RecordItem({ id }: IProps) {
 
   const deleteTrainingRecord = useDeleteTrainingRecord()
 
-  const activate = React.useCallback(
+  const activate = useCallback(
     () => {
       if (!record) {
         return
@@ -62,7 +62,7 @@ export default function RecordItem({ id }: IProps) {
     [actions, record]
   )
 
-  const remove = React.useCallback(
+  const remove = useCallback(
     async () => {
       if (!record) {
         return

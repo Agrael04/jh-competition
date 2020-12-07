@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
@@ -67,7 +67,7 @@ const useUpdateTrainingResource = () => {
   const readTrainingResourceById = useReadTrainingResourceById()
   const filters = useSelector(state => state.schedule.page.filters)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (_id: string, resource: IResourceForm) => {
       const prev = readTrainingResourceById(_id)
 

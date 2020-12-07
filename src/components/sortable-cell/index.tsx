@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import TableCell, { TableCellProps } from '@material-ui/core/TableCell'
 import TableSortLabel from '@material-ui/core/TableSortLabel'

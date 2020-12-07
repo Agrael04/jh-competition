@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, ChangeEvent } from 'react'
 
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 
@@ -14,7 +14,7 @@ export default function TextInput(props: IProps) {
   const { value, error, onChange } = props
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       if (props.type === 'number') {
         onChange(+e.target.value || '')
       } else {

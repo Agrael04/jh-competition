@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useSelector, useActions } from 'store'
 
@@ -25,7 +25,7 @@ export default function TrainingDialog() {
 
   const trainingQuery = useGetTrainingQuery(_id!)
 
-  const submit = React.useCallback(
+  const submit = useCallback(
     async (trainingForm: ITrainingForm) => {
       if (trainingQuery.data?.training) {
         await updateTraining(trainingForm)

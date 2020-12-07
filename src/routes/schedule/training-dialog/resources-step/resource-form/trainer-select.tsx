@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo, useCallback, useEffect, ChangeEvent } from 'react'
 import uniqBy from 'lodash/uniqBy'
 
 import { useFormContext } from 'react-hook-form'
@@ -71,8 +71,8 @@ export default function TrainerSelect(props: IProps) {
     [trainers, value]
   )
 
-  const handleChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value) {
         onChange({ link: e.target.value })
       }
@@ -80,7 +80,7 @@ export default function TrainerSelect(props: IProps) {
     [onChange]
   )
 
-  React.useEffect(
+  useEffect(
     () => {
       if (!loading && value && !filteredTrainer) {
         onChange(undefined)

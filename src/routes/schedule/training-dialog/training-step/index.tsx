@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useActions, useSelector } from 'store'
 import moment from 'moment'
 

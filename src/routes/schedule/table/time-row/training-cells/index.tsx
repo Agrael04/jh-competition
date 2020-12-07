@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'store'
 
 import times from 'data/times'

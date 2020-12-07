@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Moment } from 'moment'
@@ -51,7 +51,7 @@ export default function TrainingDialog() {
     },
   })
 
-  const filteredTrainers = React.useMemo(
+  const filteredTrainers = useMemo(
     () => trainersQuery?.data?.trainers?.filter(trainer => !schedulesQuery.data?.trainerSchedules.find(s => s.trainer._id === trainer._id)) || [],
     [trainersQuery, schedulesQuery]
   )

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import uniq from 'lodash/uniq'
 
 import { useSelector } from 'store'

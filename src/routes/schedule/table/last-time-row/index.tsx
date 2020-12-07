@@ -1,5 +1,3 @@
-import React from 'react'
-
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
 

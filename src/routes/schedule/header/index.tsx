@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect } from 'react'
+import { useMemo, useCallback, useEffect } from 'react'
 import uniqBy from 'lodash/uniqBy'
 
 import { useActions, useSelector } from 'store'

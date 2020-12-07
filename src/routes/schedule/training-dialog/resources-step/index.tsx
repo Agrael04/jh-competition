@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useSelector, useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
@@ -28,7 +28,7 @@ export default function ResourcesBlock() {
   const trainingQuery = useGetTrainingQuery(_id)
   const isFormActive = useSelector(state => state.schedule.trainingDialog.resourceForm.isActive)
 
-  const activate = React.useCallback(
+  const activate = useCallback(
     async () => {
       actions.schedule.trainingDialog.openCreateResourceForm()
     },

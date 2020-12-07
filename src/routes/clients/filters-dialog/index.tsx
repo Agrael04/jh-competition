@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Moment } from 'moment'
 import { useSelector, useActions } from 'store'
@@ -31,7 +31,7 @@ export default function FiltersDialog() {
   })
   const { handleSubmit } = methods
 
-  const submit = React.useCallback(
+  const submit = useCallback(
     (form: IFiltersForm) => {
       actions.clients.page.completeFilterUpdate(form)
     },

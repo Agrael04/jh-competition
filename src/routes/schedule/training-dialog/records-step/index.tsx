@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 
 import Grid from '@material-ui/core/Grid'
@@ -26,14 +26,14 @@ export default function ResourcesBlock() {
   const traineesAmount = trainingQuery.data?.training.traineesAmount
   const isFormActive = useSelector(state => state.schedule.trainingDialog.recordForm.isActive)
 
-  const activate = React.useCallback(
+  const activate = useCallback(
     async () => {
       actions.schedule.trainingDialog.openCreateRecordForm()
     },
     [actions]
   )
 
-  const disabled = React.useMemo(
+  const disabled = useMemo(
     () => {
       return (!traineesAmount || trainingQuery?.data?.trainingRecords.length! >= traineesAmount)
     }, [trainingQuery, traineesAmount]

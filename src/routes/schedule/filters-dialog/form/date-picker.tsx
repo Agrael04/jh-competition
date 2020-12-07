@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, MouseEvent } from 'react'
 import moment, { Moment } from 'moment'
 
 import IconButton from '@material-ui/core/IconButton'
@@ -37,7 +37,7 @@ const ActiveDatePicker = (props: IProps) => {
   )
 
   const handlePrevDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       const d = moment(value).subtract(1, 'days')
       handleChange(d)
@@ -45,7 +45,7 @@ const ActiveDatePicker = (props: IProps) => {
   )
 
   const currentDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
 
       if (!isCurrentDate) {
@@ -55,7 +55,7 @@ const ActiveDatePicker = (props: IProps) => {
   )
 
   const handleNextDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       const d = moment(value).add(1, 'days')
       handleChange(d)

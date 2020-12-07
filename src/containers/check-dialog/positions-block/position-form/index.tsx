@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { useActions, useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'

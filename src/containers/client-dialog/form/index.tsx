@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useForm, FormProvider } from 'react-hook-form'
 
 import Grid from '@material-ui/core/Grid'

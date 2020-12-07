@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo, useCallback } from 'react'
 import { useActions } from 'store'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
@@ -38,17 +38,17 @@ const TrainingItem = ({ time, resource }: IProps) => {
   const tResource = data?.trainingResource
   const records = data?.trainingRecords
 
-  const type = React.useMemo(
+  const type = useMemo(
     () => tResource?.training.type,
     [tResource]
   )
 
-  const trainer = React.useMemo(
+  const trainer = useMemo(
     () => tResource?.trainer,
     [tResource]
   )
 
-  const handleUpdateClick = React.useCallback(
+  const handleUpdateClick = useCallback(
     e => {
       if (!tResource) {
         return
@@ -72,7 +72,7 @@ const TrainingItem = ({ time, resource }: IProps) => {
     [actions, tResource]
   )
 
-  const color = React.useMemo(
+  const color = useMemo(
     () => {
       if (records?.filter(r => r.status === 'DEBT').length! > 0) {
         return red
@@ -87,7 +87,7 @@ const TrainingItem = ({ time, resource }: IProps) => {
     [trainer, records]
   )
 
-  const backgroundStyle = React.useMemo(
+  const backgroundStyle = useMemo(
     () => {
       const tColor = trainer ? getColorPallete(trainer?.color) : color
 

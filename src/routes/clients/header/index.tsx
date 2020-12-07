@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useActions } from 'store'
 import moment from 'moment'
 

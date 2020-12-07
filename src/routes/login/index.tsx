@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback, ChangeEvent, FormEvent } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import Typography from '@material-ui/core/Typography'
@@ -18,14 +18,14 @@ const LoginPage = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' })
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<{ name: string, value: string }>) => {
+    (e: ChangeEvent<{ name: string, value: string }>) => {
       setCredentials({ ...credentials, [e.target.name]: e.target.value })
     },
     [credentials, setCredentials]
   )
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    (e: FormEvent) => {
       e.preventDefault()
       authApi.loginWithPassword(credentials.email, credentials.password)
         .then(
@@ -33,7 +33,7 @@ const LoginPage = () => {
         )
         .catch(console.error)
     },
-    [setLoggedIn]
+    [setLoggedIn, credentials]
   )
 
   if (loggenIn) {

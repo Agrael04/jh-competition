@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import TableRow from '@material-ui/core/TableRow'
 import Avatar from '@material-ui/core/Avatar'

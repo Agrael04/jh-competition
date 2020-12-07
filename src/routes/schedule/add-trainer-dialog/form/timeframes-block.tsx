@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { useFieldArray } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'

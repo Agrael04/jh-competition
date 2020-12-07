@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
@@ -21,7 +21,7 @@ export default function SaveButton({ updateCacheOnCreate, mode, close }: IProps)
   const createTrainingPass = useCreateTrainingPass(updateCacheOnCreate)
   const updateTrainingPass = useUpdateTrainingPass()
 
-  const submit = React.useCallback(
+  const submit = useCallback(
     async (form: ITrainingPassForm) => {
       if (mode === 'create') {
         await createTrainingPass(form)

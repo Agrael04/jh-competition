@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, ChangeEvent } from 'react'
 
 import FormControlLabel, { FormControlLabelProps } from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -18,7 +18,7 @@ export default function CheckboxWrap(props: IProps) {
   const { checked, error, onChange } = props
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.checked)
     },
     [onChange]

@@ -8,7 +8,11 @@ interface IUpdateQuery<TData, TVariables> extends QueryBaseOptions<TVariables> {
   updater: IUpdaterFunction<TData>
 }
 
-export const createUpdater = (key: string, ...items: any[]) => (queryData: any) => {
+interface IItem {
+  _id: string
+}
+
+export const createUpdater = (key: string, ...items: IItem[]) => (queryData: any) => {
   if (!queryData || !queryData[key]) {
     return null
   }
@@ -24,11 +28,7 @@ export const createUpdater = (key: string, ...items: any[]) => (queryData: any) 
   }
 }
 
-interface IDeletedItem {
-  _id: string
-}
-
-export const removeUpdater = (key: string, ...items: IDeletedItem[]) => (queryData: any) => {
+export const removeUpdater = (key: string, ...items: IItem[]) => (queryData: any) => {
   if (!queryData || !queryData[key]) {
     return null
   }

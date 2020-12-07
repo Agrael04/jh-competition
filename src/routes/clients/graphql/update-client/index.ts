@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { loader } from 'graphql.macro'
 
@@ -13,7 +13,7 @@ type IClient = IClientForm & {
 const useUpdateClient = () => {
   const [updateClient] = useMutation(UPDATE_PAYMENT)
 
-  const mutate = React.useCallback(
+  const mutate = useCallback(
     (_id: string, data: Partial<IClient>) => {
       if (!data) {
         return

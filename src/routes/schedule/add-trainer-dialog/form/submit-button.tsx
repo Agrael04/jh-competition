@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useActions } from 'store'
 import { useFormContext } from 'react-hook-form'
 
@@ -15,7 +15,7 @@ export default function SubmitButton() {
   const disabled = Object.keys(errors).length > 0
   const actions = useActions()
 
-  const save = React.useCallback(
+  const save = useCallback(
     async (data: IScheduleForm) => {
       const frames = data?.timeFrames?.map(tf =>
         Array

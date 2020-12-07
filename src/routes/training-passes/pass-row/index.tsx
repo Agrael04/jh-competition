@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, useState, MouseEvent } from 'react'
 import moment from 'moment'
 
 import Grid from '@material-ui/core/Grid'
@@ -33,8 +33,8 @@ interface IProps {
 
 const PassRow = ({ pass, handleEdit }: IProps) => {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
-  const [checked, setChecked] = React.useState<string[]>([])
+  const [open, setOpen] = useState(false)
+  const [checked, setChecked] = useState<string[]>([])
 
   const { data } = useGetTrainingPassesQuery()
   const archiveTrainingPass = useArchiveTrainingPass()
@@ -63,7 +63,7 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
   const expirationDate = getExpirationDate(payments, pass)
 
   const boundHandleEdit = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       handleEdit(pass._id)
     },
@@ -71,7 +71,7 @@ const PassRow = ({ pass, handleEdit }: IProps) => {
   )
 
   const handleArchive = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       archiveTrainingPass(pass._id)
     },

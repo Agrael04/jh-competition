@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from 'react'
-import moment from 'moment'
+import { useCallback, useMemo, MouseEvent } from 'react'
+import moment, { Moment } from 'moment'
 
 import { useSelector, useActions } from 'store'
 
@@ -26,14 +26,18 @@ export default function ActiveDatePicker() {
   )
 
   const handleDateChange = useCallback(
-    (value: any) => {
+    (value: Moment | null) => {
+      if (!value) {
+        return
+      }
+
       updateActiveDate(value)
     },
     [updateActiveDate]
   )
 
   const handlePrevDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       const d = moment(activeDate).subtract(1, 'days')
       updateActiveDate(d)
@@ -42,7 +46,7 @@ export default function ActiveDatePicker() {
   )
 
   const currentDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
 
       if (!isCurrentDate) {
@@ -53,7 +57,7 @@ export default function ActiveDatePicker() {
   )
 
   const handleNextDateClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       e.stopPropagation()
       const d = moment(activeDate).add(1, 'days')
       updateActiveDate(d)

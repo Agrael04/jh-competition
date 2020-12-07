@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, ChangeEvent } from 'react'
 
 import Select, { ISelectProps } from 'components/select'
 
@@ -15,7 +15,7 @@ export default function SelectWrap(props: IProps) {
   const { value, error, onChange, linked } = props
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       onChange(linked ? { link: e.target.value } : e.target.value)
     },
     [onChange, linked]
