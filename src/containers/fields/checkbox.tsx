@@ -9,13 +9,14 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 type IProps = Omit<FormControlLabelProps, 'control'> & {
   onChange?: any
   checked?: any
+  value?: boolean
   error?: {
     message: string
   }
 }
 
 export default function CheckboxWrap(props: IProps) {
-  const { checked, error, onChange } = props
+  const { value, error, onChange } = props
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +31,7 @@ export default function CheckboxWrap(props: IProps) {
         <FormControlLabel
           control={(
             <Checkbox
-              checked={checked}
+              checked={value}
               onChange={handleChange}
               color='primary'
             />

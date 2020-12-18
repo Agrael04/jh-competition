@@ -17,13 +17,13 @@
       "rules": {
         "react/jsx-uses-react": 0,
         "react/react-in-jsx-scope": 0,
+        "react/jsx-no-bind": 0,
         "react/jsx-wrap-multilines": 1,
         "react/jsx-fragments": 1,
         "react/jsx-closing-tag-location": 1,
         "react/jsx-pascal-case": 1,
         "react/jsx-props-no-multi-spaces": 1,
         "react/jsx-one-expression-per-line": 1,
-        "react/jsx-no-bind": 1,
         "react/jsx-curly-spacing": [
           1,
           "never"

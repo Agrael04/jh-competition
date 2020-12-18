@@ -1,4 +1,4 @@
-import { all, put, takeLatest, select, delay } from 'redux-saga/effects'
+import { all, put, takeLatest, select, delay } from 'typed-redux-saga'
 
 // import { BSON } from 'mongodb-stitch-browser-sdk'
 
@@ -35,7 +35,7 @@ export function* openAddTrainerDialog() {
 
 export function* checkActiveTime() {
   try {
-    const activeTime: number = yield select((state: IStoreState) => state.schedule.page.activeTime)
+    const activeTime = yield* select((state: IStoreState) => state.schedule.page.activeTime)
 
     const date = new Date()
     const hours = date.getHours()
