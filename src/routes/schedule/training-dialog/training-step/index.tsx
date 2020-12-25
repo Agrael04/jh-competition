@@ -1,21 +1,33 @@
 import { useEffect } from 'react'
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
+import { createSelector } from 'reselect'
 import moment from 'moment'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
+
+import { openUpdateTrainingForm, openCreateTrainingForm } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectState as selectTrainingDialogState } from 'store/ui/pages/schedule/training-dialog/selectors'
+import { selectPageFilters } from 'store/ui/pages/schedule/page/selectors'
 
 import TrainingForm from './training-form'
 
 import useGetTrainingQuery from '../../queries/get-training'
 
+const selectProps = createSelector(
+  selectTrainingDialogState,
+  selectPageFilters,
+  (trainingDialogState, filters) => ({
+    isActive: trainingDialogState.trainingForm.isActive,
+    _id: trainingDialogState._id,
+    date: filters.date,
+    gym: filters.gym,
+  })
+)
+
 export default function TrainingDialog() {
-  const actions = useActions()
-  const { date, gym, _id, isActive } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-    date: state.schedule.page.filters.date,
-    gym: state.schedule.page.filters.gym,
-    isActive: state.schedule.trainingDialog.trainingForm.isActive,
-  }))
+  const dispatch = useDispatch()
+  const { _id, isActive, date, gym } = useSelector(selectProps)
 
   const { data, loading } = useGetTrainingQuery(_id)
 
@@ -23,7 +35,7 @@ export default function TrainingDialog() {
     () => {
       if (!loading && gym) {
         if (data?.training && _id) {
-          actions.schedule.trainingDialog.openUpdateTrainingForm(
+          dispatch(openUpdateTrainingForm(
             _id,
             {
               gym: { link: data.training.gym._id },
@@ -33,16 +45,16 @@ export default function TrainingDialog() {
               traineesAmount: data.training.traineesAmount,
               note: data.training.note,
             }
-          )
+          ))
         } else {
-          actions.schedule.trainingDialog.openCreateTrainingForm({
+          dispatch(openCreateTrainingForm({
             gym: { link: gym },
             date,
             traineesAmount: 1,
-          })
+          }))
         }
       }
-    }, [actions, _id, data, gym, date, loading]
+    }, [_id, data, gym, date, loading]
   )
 
   if (loading || !isActive) {

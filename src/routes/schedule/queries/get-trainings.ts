@@ -47,7 +47,7 @@ export const GET_TRAININGS = gql`
 `
 
 export const useGetTrainingsQuery = () => {
-  const date = useSelector(state => state.schedule.page.filters.date)
+  const date = useSelector(state => state.ui.pages.schedule.page.filters.date)
 
   const result = useQuery<IGetTrainingsResponse>(GET_TRAININGS, {
     variables: { date: date.toDate() },

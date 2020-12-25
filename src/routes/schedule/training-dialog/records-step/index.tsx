@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react'
-import { useSelector, useActions } from 'store'
+import { useMemo } from 'react'
+import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -11,6 +11,9 @@ import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
 
+import { openCreateRecordForm } from 'store/ui/pages/schedule/training-dialog/actions'
+import { selectTrainingId, selectIsRecordFormActive } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import RecordItem from './record-item'
 import RecordForm from './record-form'
 
@@ -20,18 +23,13 @@ import useStyles from './styles'
 
 export default function ResourcesBlock() {
   const classes = useStyles()
-  const actions = useActions()
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const dispatch = useDispatch()
+  const _id = useSelector(selectTrainingId)
   const trainingQuery = useGetTrainingQuery(_id)
   const traineesAmount = trainingQuery.data?.training.traineesAmount
-  const isFormActive = useSelector(state => state.schedule.trainingDialog.recordForm.isActive)
+  const isFormActive = useSelector(selectIsRecordFormActive)
 
-  const activate = useCallback(
-    async () => {
-      actions.schedule.trainingDialog.openCreateRecordForm()
-    },
-    [actions]
-  )
+  const activate = () => dispatch(openCreateRecordForm())
 
   const disabled = useMemo(
     () => {

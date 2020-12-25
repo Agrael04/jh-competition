@@ -65,7 +65,7 @@ export const UPDATE_TRAINING_RESOURCE = gql`
 const useUpdateTrainingResource = () => {
   const [updateTrainingResource] = useMutation<IUpdateTrainingResourceResponse>(UPDATE_TRAINING_RESOURCE)
   const readTrainingResourceById = useReadTrainingResourceById()
-  const filters = useSelector(state => state.schedule.page.filters)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
     (_id: string, resource: IResourceForm) => {

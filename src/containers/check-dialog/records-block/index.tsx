@@ -1,10 +1,12 @@
-import { useCallback, useMemo } from 'react'
-import { useActions } from 'store'
+import { useMemo } from 'react'
+import { useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
+
+import { openCreatePositionForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
@@ -20,7 +22,7 @@ interface IMappedRecord {
 }
 
 export default function TrainingDialog() {
-  const actions = useActions()
+  const dispatch = useDispatch()
   const { data } = useGetContactDetailsQuery()
 
   const mappedRecords = useMemo(
@@ -54,43 +56,40 @@ export default function TrainingDialog() {
     ), [data]
   )!
 
-  const openPositionForm = useCallback(
-    (service: string) => () => {
-      actions.checkDialog.openCreatePositionForm({
-        type: 'training',
-        service,
-        priceType: 'money',
-      })
-    },
-    [actions]
-  )
+  const openPositionForm = (service: string) => () => {
+    dispatch(openCreatePositionForm({
+      type: 'training',
+      service,
+      priceType: 'money',
+    }))
+  }
 
   return (
     <>
       <Grid item={true} lg={12} container={true} spacing={1}>
         {
           mappedRecords?.map(r => (
-              <Grid item={true} key={r._id}>
-                <Chip
-                  key={r._id}
-                  label={(
-                    <Typography color='textPrimary' variant='body2'>
-                      {`${trainingTypes.find(t => t.id === r.type)?.text}`}
-                      {r.name ? `(${r.name})` : ''}
-                    </Typography>
-                  )}
-                  variant='outlined'
-                  color={r.isMulti ? 'secondary' : 'primary'}
-                  avatar={
-                    <Avatar>
-                      {r.count}
-                    </Avatar>
-                  }
-                  onClick={r.status !== 'CLOSED' ? openPositionForm(r.type) : undefined}
-                  disabled={r.status === 'CLOSED'}
-                />
-              </Grid>
-            ))
+            <Grid item={true} key={r._id}>
+              <Chip
+                key={r._id}
+                label={(
+                  <Typography color='textPrimary' variant='body2'>
+                    {`${trainingTypes.find(t => t.id === r.type)?.text}`}
+                    {r.name ? `(${r.name})` : ''}
+                  </Typography>
+                )}
+                variant='outlined'
+                color={r.isMulti ? 'secondary' : 'primary'}
+                avatar={
+                  <Avatar>
+                    {r.count}
+                  </Avatar>
+                }
+                onClick={r.status !== 'CLOSED' ? openPositionForm(r.type) : undefined}
+                disabled={r.status === 'CLOSED'}
+              />
+            </Grid>
+          ))
         }
       </Grid>
     </>

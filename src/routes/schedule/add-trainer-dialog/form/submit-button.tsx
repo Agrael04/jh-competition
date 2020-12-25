@@ -1,8 +1,10 @@
 import { useCallback } from 'react'
-import { useActions } from 'store'
+import { useDispatch } from 'store'
 import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
+
+import { close } from 'store/ui/pages/schedule/add-trainer-dialog/actions'
 
 import useCreateTrainerSchedules from '../../mutations/create-trainer-schedules'
 
@@ -13,7 +15,7 @@ export default function SubmitButton() {
 
   const { handleSubmit, errors } = useFormContext()
   const disabled = Object.keys(errors).length > 0
-  const actions = useActions()
+  const dispatch = useDispatch()
 
   const save = useCallback(
     async (data: IScheduleForm) => {
@@ -35,9 +37,9 @@ export default function SubmitButton() {
         await createTrainerSchedules(schedules!)
       }
 
-      actions.schedule.addTrainerDialog.close()
+      dispatch(close())
     },
-    [actions, createTrainerSchedules]
+    [createTrainerSchedules]
   )
 
   return (

@@ -26,8 +26,8 @@ export const DELETE_TRAINING = gql`
 const useDeleteTraining = () => {
   const [deleteTraining] = useMutation(DELETE_TRAINING)
   const { filters, _id } = useSelector(state => ({
-    filters: state.schedule.page.filters,
-    _id: state.schedule.trainingDialog._id,
+    filters: state.ui.pages.schedule.page.filters,
+    _id: state.ui.pages.schedule.trainingDialog._id,
   }))
 
   const mutate = useCallback(

@@ -34,9 +34,9 @@ export interface IScheduleForm {
 
 export default function TrainingDialog() {
   const classes = useStyles()
-  const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
-  const date = useSelector(state => state.schedule.page.filters.date)
-  const gym = useSelector(state => state.schedule.page.filters.gym)
+  const opened = useSelector(state => state.ui.pages.schedule.addTrainerDialog.opened)
+  const date = useSelector(state => state.ui.pages.schedule.page.filters.date)
+  const gym = useSelector(state => state.ui.pages.schedule.page.filters.gym)
   const schedulesQuery = useGetSchedulesQuery()
   const trainersQuery = useGetTrainersQuery(!opened)
 

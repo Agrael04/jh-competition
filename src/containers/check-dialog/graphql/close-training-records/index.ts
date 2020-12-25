@@ -15,9 +15,9 @@ const useCloseTrainingRecords = () => {
   const [updateTrainingRecord] = useMutation(MUTATION)
 
   const variables = useSelector(state => ({
-    date: state.checkDialog.params.activeDate,
-    gym: state.checkDialog.params.activeGym,
-    _id: state.checkDialog.params.contact?.link,
+    date: state.ui.dialogs.checkDialog.params.activeDate,
+    gym: state.ui.dialogs.checkDialog.params.activeGym,
+    _id: state.ui.dialogs.checkDialog.params.contact?.link,
   }))
 
   const query = useGetContactDetailsQuery()

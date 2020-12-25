@@ -38,7 +38,7 @@ export function useGetEndTime() {
 }
 
 export function useTrainingDrop(time: number, resource: string) {
-  const gym = useSelector(state => state.schedule.page.filters.gym)
+  const gym = useSelector(state => state.ui.pages.schedule.page.filters.gym)
   const { data } = useGetSchedulesQuery()
   const getEndTime = useGetEndTime()
 
@@ -77,7 +77,7 @@ export function useTrainingDrop(time: number, resource: string) {
 }
 
 export function useTrainingDrag(time: number, resource: string) {
-  const gym = useSelector(state => state.schedule.page.filters.gym)
+  const gym = useSelector(state => state.ui.pages.schedule.page.filters.gym)
   const trainingResourceRes = useGetTrainingResourceQuery(time, resource)
   const { data } = useGetSchedulesQuery()
   const getEndTime = useGetEndTime()

@@ -1,9 +1,11 @@
 import { useCallback } from 'react'
 
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
+
+import { closePaymentForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import IForm from './form'
 
@@ -11,9 +13,9 @@ import useCreatePayment from '../../graphql/create-payment'
 import useUpdatePayment from '../../graphql/update-payment'
 
 export default function PaymentForm() {
-  const actions = useActions()
+  const dispatch = useDispatch()
 
-  const paymentForm = useSelector(state => state.checkDialog.paymentForm)
+  const paymentForm = useSelector(state => state.ui.dialogs.checkDialog.paymentForm)
 
   const { handleSubmit, errors } = useFormContext()
 
@@ -28,9 +30,9 @@ export default function PaymentForm() {
         await createPayment(values)
       }
 
-      actions.checkDialog.closePaymentForm()
+      dispatch(closePaymentForm())
     },
-    [createPayment, updatePayment, actions, paymentForm]
+    [createPayment, updatePayment, paymentForm]
   )
 
   const disabled = Object.keys(errors).length > 0

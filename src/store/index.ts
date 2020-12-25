@@ -1,13 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import { TypedUseSelectorHook, useSelector as useReduxSelector } from 'react-redux'
+import { TypedUseSelectorHook, useSelector as useReduxSelector, useDispatch } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 
 // import { routerMiddleware } from 'connected-react-router'
 // import { createBrowserHistory } from 'history'
 
-import reducer from './reducers'
+import reducer from './reducer'
 import saga from './sagas'
-import { useActions } from './actions'
 
 // const history = createBrowserHistory()
 
@@ -41,7 +40,7 @@ export type IStoreState = ReturnType<ReturnType<typeof reducer>>
 
 export const useSelector: TypedUseSelectorHook<IStoreState> = useReduxSelector
 
-export { useActions }
+export { useDispatch }
 
 // export { history }
 

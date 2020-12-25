@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { useActions } from 'store'
+import { useDispatch } from 'store'
 
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -7,11 +7,13 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
+import { closeDialog } from 'store/ui/dialogs/check-dialog/actions'
+
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 import useCloseTrainingRecords from '../graphql/close-training-records'
 
 export default function TrainingDialog() {
-  const actions = useActions()
+  const dispatch = useDispatch()
   const { data } = useGetContactDetailsQuery()
   const closeTrainingRecords = useCloseTrainingRecords()
 
@@ -37,8 +39,8 @@ export default function TrainingDialog() {
   const close = useCallback(
     async () => {
       await closeTrainingRecords(moneyAmount)
-      actions.checkDialog.closeDialog()
-    }, [closeTrainingRecords, moneyAmount, actions]
+      dispatch(closeDialog())
+    }, [closeTrainingRecords, moneyAmount]
   )
 
   return (

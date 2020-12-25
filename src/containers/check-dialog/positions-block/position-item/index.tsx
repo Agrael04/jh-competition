@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
-import { useActions } from 'store'
+import { useDispatch } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -10,6 +10,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton'
 
 import DeleteIcon from '@material-ui/icons/Delete'
+
+import { openUpdatePositionForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import useGetContactDetailsQuery from '../../graphql/get-contact-details'
 import useDeleteCheckPosition from '../../graphql/delete-check-position'
@@ -22,7 +24,7 @@ interface IProps {
 }
 
 export default function PositionItem({ index, id }: IProps) {
-  const actions = useActions()
+  const dispatch = useDispatch()
   const { data } = useGetContactDetailsQuery()
   const deleteCheckPosition = useDeleteCheckPosition()
 
@@ -43,9 +45,9 @@ export default function PositionItem({ index, id }: IProps) {
         return
       }
 
-      actions.checkDialog.openUpdatePositionForm(position._id, position)
+      dispatch(openUpdatePositionForm(position._id, position))
     },
-    [actions, position, pending]
+    [position, pending]
   )
 
   const product = products.find(p => p.id === position.type)

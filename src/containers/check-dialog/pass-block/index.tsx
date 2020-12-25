@@ -1,29 +1,25 @@
-import { useCallback } from 'react'
+import { useDispatch, useSelector } from 'store'
 
-import { useActions, useSelector } from 'store'
-
-import useGetContactDetailsQuery from '../graphql/get-contact-details'
+import { closePassForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import PassForm from 'containers/pass-form'
-import { updateCacheOnCreate } from '../graphql/create-training-pass'
 
 import getClientLabel from 'utils/get-client-label'
 
+import { updateCacheOnCreate } from '../graphql/create-training-pass'
+import useGetContactDetailsQuery from '../graphql/get-contact-details'
+
 export default function PaymentBlock() {
-  const actions = useActions()
-  const passForm = useSelector(state => state.checkDialog.passForm)
+  const dispatch = useDispatch()
+  const passForm = useSelector(state => state.ui.dialogs.checkDialog.passForm)
 
   const { data } = useGetContactDetailsQuery()
 
   const variables = useSelector(state => ({
-    _id: state.checkDialog.params.contact?.link,
+    _id: state.ui.dialogs.checkDialog.params.contact?.link,
   }))
 
-  const closePassForm = useCallback(
-    () => {
-      actions.checkDialog.closePassForm()
-    }, [actions]
-  )
+  const close = () => dispatch(closePassForm())
 
   const boundUpdateCacheOnCreate = updateCacheOnCreate(variables)
 
@@ -32,7 +28,7 @@ export default function PaymentBlock() {
       <PassForm
         mode='create'
         initialForm={passForm.defaultValues || null}
-        close={closePassForm}
+        close={close}
         disabledOpenType={true}
         disabledContact={true}
         disabledCreatedAt={true}

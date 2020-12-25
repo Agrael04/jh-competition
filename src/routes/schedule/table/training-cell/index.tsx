@@ -21,7 +21,7 @@ interface IProps {
 
 const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
   const classes = useStyles()
-  const activeTime = useSelector(state => state.schedule.page.activeTime)
+  const activeTime = useSelector(state => state.ui.pages.schedule.page.activeTime)
   const { data, loading } = useGetTrainingResourceQuery(time, resource)
 
   const duration = useMemo(

@@ -1,5 +1,4 @@
-import { useCallback } from 'react'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -11,6 +10,9 @@ import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
 
+import { openCreateResourceForm } from 'store/ui/pages/schedule/training-dialog/actions'
+import { selectTrainingId, selectIsResourceFormActive } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import ResourceItem from './resource-item'
 import ResourceForm from './resource-form'
 
@@ -21,19 +23,14 @@ import useStyles from './styles'
 
 export default function ResourcesBlock() {
   const classes = useStyles()
-  const actions = useActions()
-  const { _id } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const dispatch = useDispatch()
+  const _id = useSelector(selectTrainingId)
   const trainingQuery = useGetTrainingQuery(_id)
-  const isFormActive = useSelector(state => state.schedule.trainingDialog.resourceForm.isActive)
+  const isFormActive = useSelector(selectIsResourceFormActive)
 
-  const activate = useCallback(
-    async () => {
-      actions.schedule.trainingDialog.openCreateResourceForm()
-    },
-    [actions]
-  )
+  const activate = () => {
+    dispatch(openCreateResourceForm())
+  }
 
   // const type = trainingQuery.data?.training.type
   // const hasResourceLimit = trainingTypes.find(t => t.id === type)?.hasResourceLimit

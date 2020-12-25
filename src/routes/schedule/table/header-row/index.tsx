@@ -19,7 +19,7 @@ export default function HeaderRow() {
   const classes = useStyles()
 
   const gyms = useGetGymsQuery()
-  const activeResources = useSelector(state => state.schedule.page.filters.resources)
+  const activeResources = useSelector(state => state.ui.pages.schedule.page.filters.resources)
 
   const resources = useMemo(
     () => {

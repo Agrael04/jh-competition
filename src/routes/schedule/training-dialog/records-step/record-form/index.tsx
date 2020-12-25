@@ -1,14 +1,15 @@
 import { useMemo, useCallback } from 'react'
 
 import { useForm, FormProvider } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import ContactAbornment from './contact-abornment'
+import { closeRecord, openCheckDialog } from 'store/ui/pages/schedule/training-dialog/actions'
+import { selectTrainingId, selectRecordForm } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import FormController from 'containers/fields/form-controller'
 import TextInput from 'containers/fields/text-input'
@@ -22,17 +23,19 @@ import { requiredValidation } from 'utils/validations'
 import useGetTrainingQuery from '../../../queries/get-training'
 
 import SubmitButton from './submit-button'
+import ContactAbornment from './contact-abornment'
 
 import { statuses } from './data'
 import IRecordForm from './form'
 
 export default function RecordsBlock() {
-  const actions = useActions()
-  const defaultValues = useSelector(state => state.schedule.trainingDialog.recordForm.defaultValues)
-  const { _id, recordId } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-    recordId: state.schedule.trainingDialog.recordForm._id,
-  }))
+  const dispatch = useDispatch()
+
+  const form = useSelector(selectRecordForm)
+  const _id = useSelector(selectTrainingId)
+
+  const defaultValues = form.defaultValues
+  const recordId = form._id
   const trainingQuery = useGetTrainingQuery(_id)
 
   const methods = useForm<IRecordForm>({
@@ -40,8 +43,8 @@ export default function RecordsBlock() {
   })
   const contact = methods.watch('contact')
 
-  const resetRecord = actions.schedule.trainingDialog.closeRecord
-  const openCheckDialog = actions.schedule.trainingDialog.openCheckDialog
+  const resetRecord = () => dispatch(closeRecord())
+  const openCheck = () => dispatch(openCheckDialog())
 
   const queryRecord = useMemo(
     () => {
@@ -82,7 +85,7 @@ export default function RecordsBlock() {
         <Grid item={true} lg={4} />
         <Grid item={true} lg={3} container={true}>
           <Box margin='auto' marginRight={0}>
-            <Button color='primary' variant='contained' onClick={openCheckDialog} disabled={!contact}>
+            <Button color='primary' variant='contained' onClick={openCheck} disabled={!contact}>
               Расчитать
             </Button>
           </Box>

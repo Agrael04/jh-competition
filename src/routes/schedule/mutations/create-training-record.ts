@@ -40,8 +40,8 @@ export const CREATE_TRAINING_RECORD = gql`
 const useCreateTrainingRecord = () => {
   const [createTrainingRecord] = useMutation(CREATE_TRAINING_RECORD)
   const readTrainingResourceById = useReadTrainingResourceById()
-  const filters = useSelector(state => state.schedule.page.filters)
-  const trainingId = useSelector(state => state.schedule.trainingDialog._id)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
+  const trainingId = useSelector(state => state.ui.pages.schedule.trainingDialog._id)
 
   const mutate = useCallback(
     (r: Partial<IRecordForm>) => {

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import moment from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -17,6 +17,8 @@ import Dialog from '@material-ui/core/Dialog'
 
 import InfoIcon from '@material-ui/icons/Info'
 
+import { cancelFilterUpdate, openClientDialog, closeClientDialog, changeOrder } from 'store/ui/pages/clients/page/actions'
+
 import SortableCell from 'components/sortable-cell'
 import ClientDialog, { IClientForm } from 'containers/client-dialog'
 
@@ -30,37 +32,19 @@ import useUpdateClient from './graphql/update-client'
 import useStyles from './styles'
 
 const ClientsPage = () => {
-  const actions = useActions()
-  const { activeOrder, clientDialog, openedFiltersDialog } = useSelector(state => state.clients.page)
+  const dispatch = useDispatch()
+  const { activeOrder, clientDialog, openedFiltersDialog } = useSelector(state => state.ui.pages.clients.page)
   const classes = useStyles()
 
   const { data, loading } = useGetClients()
   const createClient = useCreateClient()
   const updateClient = useUpdateClient()
 
-  const close = useCallback(
-    () => {
-      actions.clients.page.cancelFilterUpdate()
-    }, [actions]
-  )
+  const close = () => dispatch(cancelFilterUpdate())
 
-  const openNewClientDialog = useCallback(
-    () => {
-      actions.clients.page.openClientDialog()
-    }, [actions]
-  )
-
-  const openOldClientDialog = useCallback(
-    (id: string) => () => {
-      actions.clients.page.openClientDialog(id)
-    }, [actions]
-  )
-
-  const closeClientDialog = useCallback(
-    () => {
-      actions.clients.page.closeClientDialog()
-    }, [actions]
-  )
+  const openNewClientDialog = () => dispatch(openClientDialog())
+  const openOldClientDialog = (id: string) => () => dispatch(openClientDialog(id))
+  const closeDialog = () => dispatch(closeClientDialog())
 
   const submit = useCallback(
     async (values: IClientForm) => {
@@ -76,14 +60,11 @@ const ClientsPage = () => {
         })
       }
 
-      closeClientDialog()
-    }, [createClient, updateClient, clientDialog, closeClientDialog]
+      closeDialog()
+    }, [createClient, updateClient, clientDialog, closeDialog]
   )
 
-  const onOrderChange = useCallback(
-    (key: string) => () => actions.clients.page.changeOrder(key),
-    [actions]
-  )
+  const onOrderChange = (key: string) => () => dispatch(changeOrder(key))
 
   return (
     <Paper className={classes.rootPaper}>
@@ -205,7 +186,7 @@ const ClientsPage = () => {
       </Table>
       <ClientDialog
         opened={clientDialog.opened}
-        close={closeClientDialog}
+        close={closeDialog}
         submit={submit}
         id={clientDialog.id}
       />

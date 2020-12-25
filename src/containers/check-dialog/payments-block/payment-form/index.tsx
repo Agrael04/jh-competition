@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import moment from 'moment'
 
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import Grid from '@material-ui/core/Grid'
@@ -10,17 +10,18 @@ import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 
-
 import FormController from 'containers/fields/form-controller'
 import TextInput from 'containers/fields/text-input'
 import Select from 'containers/fields/select'
 import ToggleGroup from 'containers/fields/toggle-group'
 
-import useGetTrainingPassesQuery from '../../graphql/get-training-passes'
-
 import { passTypes, getSizes } from 'data/training-passes'
 import { getUsedUnits, getExpirationDate } from 'utils/pass'
 import { requiredValidation } from 'utils/validations'
+
+import { openCreatePassForm, closePaymentForm } from 'store/ui/dialogs/check-dialog/actions'
+
+import useGetTrainingPassesQuery from '../../graphql/get-training-passes'
 
 import { paymentDestinations } from '../../data'
 import SubmitButton from './submit-button'
@@ -28,9 +29,9 @@ import SubmitButton from './submit-button'
 import IForm from './form'
 
 export default function PaymentForm() {
-  const actions = useActions()
+  const dispatch = useDispatch()
 
-  const paymentForm = useSelector(state => state.checkDialog.paymentForm)
+  const paymentForm = useSelector(state => state.ui.dialogs.checkDialog.paymentForm)
 
   const { data } = useGetTrainingPassesQuery()
   const methods = useForm<IForm>({
@@ -38,17 +39,13 @@ export default function PaymentForm() {
   })
   const type = methods.watch('type')
 
-  const triggerOpenPassForm = useCallback(
-    () => {
-      actions.checkDialog.openCreatePassForm()
-    }, [actions]
-  )
+  const triggerOpenPassForm = () => {
+    dispatch(openCreatePassForm())
+  }
 
-  const cancel = useCallback(
-    () => {
-      actions.checkDialog.closePaymentForm()
-    }, [actions]
-  )
+  const cancel = () => {
+    dispatch(closePaymentForm())
+  }
 
   const passes = useMemo(
     () => data?.trainingPasss.map(pass => {

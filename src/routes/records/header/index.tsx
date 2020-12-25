@@ -26,7 +26,7 @@ interface IProps {
 }
 
 const Header = ({ startFilterEditing, handleXLSXClick, trainings }: IProps) => {
-  const filters = useSelector(state => state.records.page.filters)
+  const filters = useSelector(state => state.ui.pages.records.page.filters)
 
   const gyms = useGetGymsQuery()
   const trainers = useGetTrainersQuery()

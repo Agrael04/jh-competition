@@ -35,7 +35,7 @@ export const CREATE_TRAINING_RESOURCE = gql`
 
 const useCreateTrainingResource = () => {
   const [createTrainingResource] = useMutation(CREATE_TRAINING_RESOURCE)
-  const filters = useSelector(state => state.schedule.page.filters)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
     (trainingId: string, r: IResourceForm) => {

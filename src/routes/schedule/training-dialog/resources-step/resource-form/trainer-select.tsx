@@ -7,6 +7,8 @@ import { useSelector } from 'store'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select, { ISelectProps } from 'components/select'
 
+import { selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import useGetSchedulesQuery from '../../../queries/get-schedules'
 import useGetTrainingQuery from '../../../queries/get-training'
 
@@ -21,7 +23,7 @@ type IProps = ISelectProps & {
 export default function TrainerSelect(props: IProps) {
   const { value, error, onChange } = props
   const { watch } = useFormContext()
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const _id = useSelector(selectTrainingId)
 
   const trainingQuery = useGetTrainingQuery(_id!)
   const training = trainingQuery.data?.training

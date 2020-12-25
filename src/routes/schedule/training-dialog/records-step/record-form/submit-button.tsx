@@ -1,9 +1,12 @@
 import { useCallback } from 'react'
 
 import { useFormContext } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Button from '@material-ui/core/Button'
+
+import { closeRecord } from 'store/ui/pages/schedule/training-dialog/actions'
+import { selectTrainingId, selectRecordForm } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import useUpdateTrainingRecord from '../../../mutations/update-training-record'
 import useCreateTrainingRecord from '../../../mutations/create-training-record'
@@ -13,11 +16,9 @@ import useGetTrainingQuery from '../../../queries/get-training'
 import IRecordForm from './form'
 
 export default function RecordsBlock() {
-  const actions = useActions()
-  const form = useSelector(state => state.schedule.trainingDialog.recordForm)
-  const { _id } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const dispatch = useDispatch()
+  const form = useSelector(selectRecordForm)
+  const _id = useSelector(selectTrainingId)
 
   const trainingQuery = useGetTrainingQuery(_id)
   const updateTrainingRecord = useUpdateTrainingRecord()
@@ -46,9 +47,9 @@ export default function RecordsBlock() {
         await createTrainingRecord(record)
       }
 
-      actions.schedule.trainingDialog.closeRecord()
+      dispatch(closeRecord())
     },
-    [form, trainingQuery, updateTrainingRecord, createTrainingRecord, actions]
+    [form, trainingQuery, updateTrainingRecord, createTrainingRecord]
   )
 
   return (

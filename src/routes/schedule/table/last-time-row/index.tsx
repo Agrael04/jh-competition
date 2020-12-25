@@ -14,7 +14,7 @@ const time = times[times.length - 1]
 const LastTimeRow = () => {
   const classes = useStyles()
 
-  const activeResources = useSelector(state => state.schedule.page.filters.resources)
+  const activeResources = useSelector(state => state.ui.pages.schedule.page.filters.resources)
 
   return (
     <TableRow>

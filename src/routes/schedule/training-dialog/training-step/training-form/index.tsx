@@ -1,4 +1,5 @@
 import { useSelector } from 'store'
+import { createSelector } from 'reselect'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import Grid from '@material-ui/core/Grid'
@@ -13,6 +14,8 @@ import Select from 'containers/fields/select'
 import { trainingTypes } from 'data/training-types'
 import { requiredValidation } from 'utils/validations'
 
+import { selectState, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import SubmitButton from './submit-button'
 import DeleteButton from './delete-button'
 
@@ -21,9 +24,17 @@ import useGetTrainingQuery from '../../../queries/get-training'
 
 import ITrainingForm from './form'
 
+const selectProps = createSelector(
+  selectState,
+  selectTrainingId,
+  (state, _id) => ({
+    defaultValues: state.trainingForm.defaultValues,
+    _id,
+  })
+)
+
 export default function TrainingForm() {
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
-  const defaultValues = useSelector(state => state.schedule.trainingDialog.trainingForm.defaultValues)
+  const { defaultValues, _id } = useSelector(selectProps)
 
   const methods = useForm<ITrainingForm>({
     defaultValues,

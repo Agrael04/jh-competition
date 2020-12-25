@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
 import { Moment } from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Dialog from '@material-ui/core/Dialog'
 import AppBar from '@material-ui/core/AppBar'
@@ -9,6 +8,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 
 import CloseIcon from '@material-ui/icons/Close'
+
+import { close } from 'store/ui/pages/schedule/add-trainer-dialog/actions'
 
 import Form from './form'
 
@@ -23,19 +24,16 @@ export interface IScheduleForm {
 }
 
 export default function TrainingDialog() {
-  const opened = useSelector(state => state.schedule.addTrainerDialog.opened)
-  const actions = useActions()
+  const opened = useSelector(state => state.ui.pages.schedule.addTrainerDialog.opened)
+  const dispatch = useDispatch()
 
-  const close = useCallback(
-    () => actions.schedule.addTrainerDialog.close(),
-    [actions]
-  )
+  const handleClose = () => dispatch(close())
 
   return (
-    <Dialog open={opened} onClose={close} maxWidth='sm' fullWidth={true}>
+    <Dialog open={opened} onClose={handleClose} maxWidth='sm' fullWidth={true}>
       <AppBar position='relative'>
         <Toolbar>
-          <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
+          <IconButton edge='start' color='inherit' onClick={handleClose} aria-label='close'>
             <CloseIcon />
           </IconButton>
           <Typography variant='h6'>

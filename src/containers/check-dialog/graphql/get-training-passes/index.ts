@@ -29,7 +29,7 @@ export interface IGetContactRecords {
 
 export const useGetTrainingPassesQuery = () => {
   const variables = useSelector(state => ({
-    _id: state.checkDialog.params.contact?.link,
+    _id: state.ui.dialogs.checkDialog.params.contact?.link,
   }))
 
   const result = useQuery<IGetContactRecords>(GET_TRAINING_PASSES, {

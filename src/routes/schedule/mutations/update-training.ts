@@ -55,7 +55,7 @@ export const UPDATE_TRAINING = gql`
 
 const useUpdateTraining = () => {
   const [updateTraining] = useMutation(UPDATE_TRAINING)
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const _id = useSelector(state => state.ui.pages.schedule.trainingDialog._id)
 
   const mutate = useCallback(
     (training: ITrainingForm) => {

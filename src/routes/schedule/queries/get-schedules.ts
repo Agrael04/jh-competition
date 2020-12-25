@@ -59,7 +59,7 @@ export const GET_SCHEDULES = gql`
 `
 
 export const useGetSchedulesQuery = (date?: Date, filters?: IQueryFilters) => {
-  const activeDate = useSelector(state => state.schedule.page.filters.date)
+  const activeDate = useSelector(state => state.ui.pages.schedule.page.filters.date)
 
   const result = useQuery<IGetSchedulesResponse>(GET_SCHEDULES, {
     variables: {

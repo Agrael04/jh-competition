@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import moment from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Paper from '@material-ui/core/Paper'
 
@@ -15,6 +15,8 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
 import Dialog from '@material-ui/core/Dialog'
 import Typography from '@material-ui/core/Typography'
+
+import { startFilterUpdate, cancelFilterUpdate } from 'store/ui/pages/records/page/actions'
 
 import { getTimeLabel } from 'data/times'
 import { trainingTypes, GROUP_TRAININGS } from 'data/training-types'
@@ -75,8 +77,8 @@ const convertRecordsToTrainings = (trainingRecords?: IRecord[]) => {
 }
 
 const RecordsPage = () => {
-  const actions = useActions()
-  const { openedFiltersDialog } = useSelector(state => state.records.page)
+  const dispatch = useDispatch()
+  const { openedFiltersDialog } = useSelector(state => state.ui.pages.records.page)
   const classes = useStyles()
 
   const { data, loading } = useGetRecords()
@@ -93,44 +95,35 @@ const RecordsPage = () => {
     }, [trainings]
   )
 
-  const startFilterEditing = useCallback(
-    () => {
-      actions.records.page.startFilterUpdate()
-    }, [actions]
-  )
-
-  const close = useCallback(
-    () => {
-      actions.records.page.cancelFilterUpdate()
-    }, [actions]
-  )
+  const editFilters = () => dispatch(startFilterUpdate())
+  const close = () => dispatch(cancelFilterUpdate())
 
   return (
     <Paper className={classes.rootPaper}>
       <Header
         handleXLSXClick={handleXLSXClick}
-        startFilterEditing={startFilterEditing}
+        startFilterEditing={editFilters}
         trainings={trainings}
       />
       <Table stickyHeader={true}>
         <TableHead>
           <TableRow>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell onClick={editFilters} className={classes.clickable}>
               Дата
             </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell onClick={editFilters} className={classes.clickable}>
               Зал
             </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell onClick={editFilters} className={classes.clickable}>
               Тип тренировки
             </TableCell>
             <TableCell>
               Время
             </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell onClick={editFilters} className={classes.clickable}>
               Тренер
             </TableCell>
-            <TableCell onClick={startFilterEditing} className={classes.clickable}>
+            <TableCell onClick={editFilters} className={classes.clickable}>
               Значение
             </TableCell>
             <TableCell>

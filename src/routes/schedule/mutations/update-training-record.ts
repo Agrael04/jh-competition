@@ -37,7 +37,7 @@ export const UPDATE_TRAINING_RECORD = gql`
 const useUpdateTrainingRecord = () => {
   const [updateTrainingRecord] = useMutation(UPDATE_TRAINING_RECORD)
   const readTrainingResourceById = useReadTrainingResourceById()
-  const filters = useSelector(state => state.schedule.page.filters)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
     (_id: string, record: Partial<IRecordForm>, resourceId: string) => {

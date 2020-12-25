@@ -1,13 +1,14 @@
-import { useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Moment } from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
+
+import { completeFilterUpdate } from 'store/ui/pages/clients/page/actions'
 
 import FormController from 'containers/fields/form-controller'
 import DatePicker from 'containers/fields/date-picker'
@@ -23,20 +24,17 @@ export interface IFiltersForm {
 }
 
 export default function FiltersDialog() {
-  const actions = useActions()
-  const filters = useSelector(state => state.clients.page.filters)
+  const dispatch = useDispatch()
+  const filters = useSelector(state => state.ui.pages.clients.page.filters)
 
   const methods = useForm<IFiltersForm>({
     defaultValues: filters,
   })
   const { handleSubmit } = methods
 
-  const submit = useCallback(
-    (form: IFiltersForm) => {
-      actions.clients.page.completeFilterUpdate(form)
-    },
-    [actions]
-  )
+  const submit = (form: IFiltersForm) => {
+    dispatch(completeFilterUpdate(form))
+  }
 
   return (
     <FormProvider {...methods}>

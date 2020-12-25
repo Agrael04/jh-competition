@@ -1,7 +1,7 @@
-import { useCallback, useMemo, MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 import moment, { Moment } from 'moment'
 
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
@@ -12,58 +12,44 @@ import Today from '@material-ui/icons/Today'
 
 import { DatePicker } from '@material-ui/pickers'
 
+import { updateActiveDate } from 'store/ui/dialogs/check-dialog/actions'
+
 export default function ActiveDatePicker() {
-  const actions = useActions()
-  const activeDate = useSelector(state => state.checkDialog.params.activeDate)
-  const updateActiveDate = actions.checkDialog.updateActiveDate
+  const dispatch = useDispatch()
+  const activeDate = useSelector(state => state.ui.dialogs.checkDialog.params.activeDate)
+  const updateDate = (value: Moment) => dispatch(updateActiveDate(value))
 
   const currentDate = moment().startOf('day')
 
-  const isCurrentDate = useMemo(
-    () => {
-      return activeDate.isSame(currentDate)
-    }, [activeDate, currentDate]
-  )
+  const isCurrentDate = activeDate.isSame(currentDate)
 
-  const handleDateChange = useCallback(
-    (value: Moment | null) => {
-      if (!value) {
-        return
-      }
+  const handleDateChange = (value: Moment | null) => {
+    if (!value) {
+      return
+    }
 
-      updateActiveDate(value)
-    },
-    [updateActiveDate]
-  )
+    updateDate(value)
+  }
 
-  const handlePrevDateClick = useCallback(
-    (e: MouseEvent) => {
-      e.stopPropagation()
-      const d = moment(activeDate).subtract(1, 'days')
-      updateActiveDate(d)
-    },
-    [updateActiveDate]
-  )
+  const handlePrevDateClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    const d = moment(activeDate).subtract(1, 'days')
+    updateDate(d)
+  }
 
-  const currentDateClick = useCallback(
-    (e: MouseEvent) => {
-      e.stopPropagation()
+  const currentDateClick = (e: MouseEvent) => {
+    e.stopPropagation()
 
-      if (!isCurrentDate) {
-        updateActiveDate(currentDate)
-      }
-    },
-    [isCurrentDate, currentDate, updateActiveDate]
-  )
+    if (!isCurrentDate) {
+      updateDate(currentDate)
+    }
+  }
 
-  const handleNextDateClick = useCallback(
-    (e: MouseEvent) => {
-      e.stopPropagation()
-      const d = moment(activeDate).add(1, 'days')
-      updateActiveDate(d)
-    },
-    [activeDate, updateActiveDate]
-  )
+  const handleNextDateClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    const d = moment(activeDate).add(1, 'days')
+    updateDate(d)
+  }
 
   return (
     <DatePicker

@@ -1,7 +1,7 @@
-import { useMemo, useCallback, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import uniqBy from 'lodash/uniqBy'
 
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 
 import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
@@ -12,25 +12,23 @@ import Box from '@material-ui/core/Box'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import AddIcon from '@material-ui/icons/AddCircle'
 
+import { setFilters, startFiltersUpdate, openAddTrainerDialog } from 'store/ui/pages/schedule/page/actions'
+
 import getColorPallete from 'utils/get-color-pallete'
 
 import useGetGymsQuery from '../queries/get-gyms'
 import useGetSchedulesQuery from '../queries/get-schedules'
 
 const Header = () => {
-  const actions = useActions()
+  const dispatch = useDispatch()
 
   const gyms = useGetGymsQuery()
-  const filters = useSelector(state => state.schedule.page.filters)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
   const { data } = useGetSchedulesQuery(filters.date.toDate())
 
-  const openTrainerScheduleDialog = actions.schedule.page.openAddTrainerDialog
+  const openTrainerScheduleDialog = () => dispatch(openAddTrainerDialog())
 
-  const startFilterEditing = useCallback(
-    () => {
-      actions.schedule.page.startFiltersUpdate()
-    }, [actions]
-  )
+  const startFilterEditing = () => dispatch(startFiltersUpdate())
 
   const trainers = useMemo(
     () => {
@@ -68,12 +66,12 @@ const Header = () => {
     () => {
       if (!gyms.loading) {
         const _id = gyms.data?.gyms[0]._id!
-        actions.schedule.page.setFilters({
+        dispatch(setFilters({
           gym: _id,
           resources: gyms.data?.resources.filter(r => r.gym._id === _id).map(r => r._id) || [],
-        })
+        }))
       }
-    }, [gyms, actions]
+    }, [gyms]
   )
 
   return (

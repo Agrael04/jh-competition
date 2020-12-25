@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react'
-import { useSelector, useActions } from 'store'
+import { useDispatch, useSelector } from 'store'
+import { createSelector } from 'reselect'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -18,47 +18,47 @@ import CloseIcon from '@material-ui/icons/Close'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
+import { close, setStep } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectState, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import TrainingStep from './training-step'
 import ResourcesStep from './resources-step'
 import RecordsStep from './records-step'
 
 import useGetTrainingQuery from '../queries/get-training'
 
-export default function TrainingDialog() {
-  const opened = useSelector(state => state.schedule.trainingDialog.opened)
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
-  const step = useSelector(state => state.schedule.trainingDialog.step)
+const steps = ['Тренировка', 'Ресурсы', 'Записи']
 
-  const steps = ['Тренировка', 'Ресурсы', 'Записи']
+const selectProps = createSelector(
+  selectState,
+  selectTrainingId,
+  (state, _id) => ({
+    opened: state.opened,
+    step: state.step,
+    _id,
+  })
+)
+
+export default function TrainingDialog() {
+  const dispatch = useDispatch()
+  const { opened, _id, step } = useSelector(selectProps)
 
   const trainingQuery = useGetTrainingQuery(_id)
 
-  const actions = useActions()
+  const handleClose = () => dispatch(close())
 
-  const close = useCallback(
-    () => actions.schedule.trainingDialog.close(),
-    [actions]
-  )
+  const activateStep = (index: number) => () => dispatch(setStep(index))
 
-  const activateStep = (index: number) => () => {
-    actions.schedule.trainingDialog.setStep(index)
-  }
+  const isResourceStepAvailable = !!trainingQuery.data?.training
 
-  const isResourceStepAvailable = useMemo(
-    () => !!trainingQuery.data?.training,
-    [trainingQuery]
-  )
-
-  const isRecordStepAvailable = useMemo(
-    () => (trainingQuery.data?.trainingResources || []).length > 0,
-    [trainingQuery]
-  )
+  const isRecordStepAvailable = (trainingQuery.data?.trainingResources || []).length > 0
 
   return (
-    <Dialog open={opened} onClose={close} maxWidth='lg' fullWidth={true}>
+    <Dialog open={opened} onClose={handleClose} maxWidth='lg' fullWidth={true}>
       <AppBar position='relative'>
         <Toolbar>
-          <IconButton edge='start' color='inherit' onClick={close} aria-label='close'>
+          <IconButton edge='start' color='inherit' onClick={handleClose} aria-label='close'>
             <CloseIcon />
           </IconButton>
           <Typography variant='h6'>
@@ -92,7 +92,7 @@ export default function TrainingDialog() {
               )
             }
             {
-            step === 1 && (
+              step === 1 && (
                 <ResourcesStep />
               )
             }

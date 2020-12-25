@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useSelector, useActions } from 'store'
+import { useDispatch, useSelector } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,6 +11,11 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import { getTimeLabel } from 'data/times'
+
+import { openUpdateResourceForm } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectResourceFormId, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
+
 import useGetTrainingQuery from '../../queries/get-training'
 
 import useDeleteTrainingResource from '../../mutations/delete-training-resource'
@@ -24,16 +29,15 @@ interface IProps {
 export default function ResourceItem({ id }: IProps) {
   const classes = useStyles()
 
-  const actions = useActions()
-  const { isActive, _id } = useSelector(state => ({
-    _id: state.schedule.trainingDialog._id,
-    isActive: state.schedule.trainingDialog.resourceForm._id === id,
-  }))
+  const dispatch = useDispatch()
+  const resourceId = useSelector(selectResourceFormId)
+  const _id = useSelector(selectTrainingId)
   const trainingQuery = useGetTrainingQuery(_id)
 
   const resource = trainingQuery?.data?.trainingResources.find(r => r._id === id)
 
   const deleteTrainingResource = useDeleteTrainingResource()
+  const isActive = resourceId === id
 
   const activate = useCallback(
     () => {
@@ -48,12 +52,12 @@ export default function ResourceItem({ id }: IProps) {
         endTime: resource.endTime,
       }
 
-      actions.schedule.trainingDialog.openUpdateResourceForm(
+      dispatch(openUpdateResourceForm(
         resource._id,
         initialForm
-      )
+      ))
     },
-    [actions, resource]
+    [resource]
   )
 
   const remove = useCallback(

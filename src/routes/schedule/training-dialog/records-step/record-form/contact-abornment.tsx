@@ -6,9 +6,11 @@ import SentimentVeryDissatisfied from '@material-ui/icons/SentimentVeryDissatisf
 import SentimentSatisfied from '@material-ui/icons/SentimentSatisfied'
 import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied'
 
-export default function ContactAbornment({ balance }: { balance: number }) {
-  const isFormActive = useSelector(state => !!state.schedule.trainingDialog.recordForm.isActive)
+import { selectIsRecordFormActive } from 'store/ui/pages/schedule/training-dialog/selectors'
 
+export default function ContactAbornment({ balance }: { balance: number }) {
+  const isFormActive = useSelector(selectIsRecordFormActive)
+  
   if (!isFormActive) {
     return null
   }

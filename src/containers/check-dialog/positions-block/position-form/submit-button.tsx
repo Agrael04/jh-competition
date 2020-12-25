@@ -1,9 +1,11 @@
 import { useCallback } from 'react'
 
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 import { useFormContext } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button'
+
+import { closePositionForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import IForm from './form'
 
@@ -11,9 +13,9 @@ import useCreatePosition from '../../graphql/create-check-position'
 import useUpdatePosition from '../../graphql/update-check-position'
 
 export default function SubmitButton() {
-  const actions = useActions()
+  const dispatch = useDispatch()
 
-  const positionForm = useSelector(state => state.checkDialog.positionForm)
+  const positionForm = useSelector(state => state.ui.dialogs.checkDialog.positionForm)
 
   const { handleSubmit, errors } = useFormContext()
 
@@ -28,9 +30,9 @@ export default function SubmitButton() {
         await createPosition(values)
       }
 
-      actions.checkDialog.closePositionForm()
+      dispatch(closePositionForm())
     },
-    [createPosition, updatePosition, actions, positionForm]
+    [createPosition, updatePosition, positionForm]
   )
 
   const disabled = Object.keys(errors).length > 0

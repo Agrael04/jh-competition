@@ -1,13 +1,17 @@
 import { useCallback, useMemo } from 'react'
 
 import { useForm, FormProvider } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 
 import AddIcon from '@material-ui/icons/AddCircle'
+
+import { closeResource, openCreateRecordForm, openUpdateRecordForm } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectTrainingId, selectResourceForm } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import getClientLabel from 'utils/get-client-label'
 
@@ -25,9 +29,9 @@ import useGetTrainingQuery from '../../../queries/get-training'
 import IResourceForm from './form'
 
 export default function ResourcesBlock() {
-  const actions = useActions()
-  const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
-  const _id = useSelector(state => state.schedule.trainingDialog._id)
+  const dispatch = useDispatch()
+  const form = useSelector(selectResourceForm)
+  const _id = useSelector(selectTrainingId)
 
   const methods = useForm<IResourceForm>({
     defaultValues: form.defaultValues,
@@ -39,10 +43,10 @@ export default function ResourcesBlock() {
   const activateNew = useCallback(
     () => {
       if (form.mode === 'update' && form._id) {
-        actions.schedule.trainingDialog.openCreateRecordForm({ resource: { link: form._id } })
+        dispatch(openCreateRecordForm({ resource: { link: form._id } }))
       }
     },
-    [actions, form]
+    [form]
   )
 
   const activate = useCallback(
@@ -63,18 +67,14 @@ export default function ResourcesBlock() {
         } : undefined,
       }
 
-      actions.schedule.trainingDialog.openUpdateRecordForm(
-        id,
-        initialForm
-      )
+      dispatch(openUpdateRecordForm(id, initialForm))
     },
-    [actions, trainingQuery]
+    [trainingQuery]
   )
 
-  const resetResource = useCallback(
-    () => actions.schedule.trainingDialog.closeResource(),
-    []
-  )
+  const resetResource = () => {
+    dispatch(closeResource())
+  }
 
   const disabled = useMemo(
     () => {

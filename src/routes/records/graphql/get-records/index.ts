@@ -37,7 +37,7 @@ export interface IGetRecords {
 }
 
 export const useGetRecordsQuery = () => {
-  const filters = useSelector(state => state.records.page.filters)
+  const filters = useSelector(state => state.ui.pages.records.page.filters)
 
   const minDate = moment(filters.date).startOf('month').utc().format()
   const maxDate = moment(filters.date).startOf('month').add(1, 'month').utc().format()

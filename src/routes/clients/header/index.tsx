@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react'
-import { useSelector, useActions } from 'store'
+import { useMemo } from 'react'
+import { useSelector, useDispatch } from 'store'
 import moment from 'moment'
 
 import Toolbar from '@material-ui/core/Toolbar'
@@ -11,24 +11,17 @@ import Box from '@material-ui/core/Box'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 
+import { startFilterUpdate } from 'store/ui/pages/clients/page/actions'
+
 interface IProps {
   openClientForm: () => void
 }
 
 const Header = ({ openClientForm }: IProps) => {
-  const filters = useSelector(state => state.clients.page.filters)
-  const actions = useActions()
-  const startFilterEditing = useCallback(
-    () => {
-      actions.clients.page.startFilterUpdate()
-    }, [actions]
-  )
-
-  const openNewClientDialog = useCallback(
-    () => {
-      openClientForm()
-    }, [openClientForm]
-  )
+  const filters = useSelector(state => state.ui.pages.clients.page.filters)
+  const dispatch = useDispatch()
+  const editFilters = () => dispatch(startFilterUpdate())
+  const openNewClientDialog = () => openClientForm()
 
   const filterChips = useMemo(
     () => {
@@ -56,7 +49,7 @@ const Header = ({ openClientForm }: IProps) => {
         <div>
           <Grid container={true} spacing={2}>
             <Grid item={true}>
-              <IconButton color='primary' onClick={startFilterEditing}>
+              <IconButton color='primary' onClick={editFilters}>
                 <FilterListIcon />
               </IconButton>
             </Grid>
@@ -66,7 +59,7 @@ const Header = ({ openClientForm }: IProps) => {
                   <Chip
                     color='primary'
                     label={filter}
-                    onClick={startFilterEditing}
+                    onClick={editFilters}
                   />
                 </Box>
               ))

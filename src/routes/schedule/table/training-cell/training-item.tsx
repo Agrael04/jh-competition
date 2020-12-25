@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { useActions } from 'store'
+import { useDispatch } from 'store'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
@@ -17,6 +17,8 @@ import getColorPallete from 'utils/get-color-pallete'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import red from '@material-ui/core/colors/red'
 
+import { open, setStep, openUpdateResourceForm } from 'store/ui/pages/schedule/training-dialog/actions'
+
 import getClientLabel from 'utils/get-client-label'
 
 import { useTrainingDrag } from './dnd'
@@ -31,7 +33,7 @@ interface IProps {
 
 const TrainingItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
-  const actions = useActions()
+  const dispatch = useDispatch()
 
   const { data } = useGetTrainingResourceQuery(time, resource)
 
@@ -62,14 +64,14 @@ const TrainingItem = ({ time, resource }: IProps) => {
       }
 
       e.stopPropagation()
-      actions.schedule.trainingDialog.open(tResource.training._id)
-      actions.schedule.trainingDialog.setStep(1)
-      actions.schedule.trainingDialog.openUpdateResourceForm(
+      dispatch(open(tResource.training._id))
+      dispatch(setStep(1))
+      dispatch(openUpdateResourceForm(
         tResource._id,
         initialForm
-      )
+      ))
     },
-    [actions, tResource]
+    [tResource]
   )
 
   const color = useMemo(

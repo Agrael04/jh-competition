@@ -1,8 +1,13 @@
 import { useCallback } from 'react'
+import { useSelector, useDispatch } from 'store'
+import { createSelector } from 'reselect'
 import { useFormContext } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
 
 import Button from '@material-ui/core/Button'
+
+import { closeTraining, setTrainingId, setStep } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectState, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import useUpdateTraining from '../../../mutations/update-training'
 import useCreateTraining from '../../../mutations/create-training'
@@ -10,18 +15,23 @@ import useGetTrainingQuery from '../../../queries/get-training'
 
 import ITrainingForm from './form'
 
+const selectProps = createSelector(
+  selectState,
+  selectTrainingId,
+  (state, _id) => ({
+    step: state.step,
+    _id,
+  })
+)
+
 export default function TrainingDialog() {
-  const { step, _id } = useSelector(state => ({
-    step: state.schedule.trainingDialog.step,
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const dispatch = useDispatch()
+  const { step, _id } = useSelector(selectProps)
   const createTraining = useCreateTraining()
   const updateTraining = useUpdateTraining()
 
   const { handleSubmit, errors } = useFormContext()
   const disabled = Object.keys(errors).length > 0
-
-  const actions = useActions()
 
   const trainingQuery = useGetTrainingQuery(_id!)
 
@@ -33,13 +43,13 @@ export default function TrainingDialog() {
         const res = await createTraining(trainingForm)
 
         if (res.data) {
-          actions.schedule.trainingDialog.closeTraining()
-          actions.schedule.trainingDialog.setTrainingId(res.data.insertOneTraining._id)
-          actions.schedule.trainingDialog.setStep(step + 1)
+          dispatch(closeTraining())
+          dispatch(setTrainingId(res.data.insertOneTraining._id))
+          dispatch(setStep(step + 1))
         }
       }
     },
-    [actions, updateTraining, createTraining, trainingQuery, step]
+    [updateTraining, createTraining, trainingQuery, step]
   )
 
   return (

@@ -25,7 +25,7 @@ type IProps = TextFieldProps & {
 export default function EndTimeSelect(props: IProps) {
   const { value, onChange } = props
   const { watch } = useFormContext()
-  const resourceId = useSelector(state => state.schedule.trainingDialog.resourceForm._id)
+  const resourceId = useSelector(state => state.ui.pages.schedule.trainingDialog.resourceForm._id)
 
   const startTime = watch('startTime')
   const resource = watch('resource')?.link

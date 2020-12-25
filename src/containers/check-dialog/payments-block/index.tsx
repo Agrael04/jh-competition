@@ -1,6 +1,4 @@
-import { useCallback } from 'react'
-
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -9,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
+
+import { openCreatePaymentForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
@@ -20,19 +20,16 @@ import useStyles from './styles'
 export default function PaymentBlock() {
   const classes = useStyles()
 
-  const actions = useActions()
-  const paymentForm = useSelector(state => state.checkDialog.paymentForm)
+  const dispatch = useDispatch()
+  const paymentForm = useSelector(state => state.ui.dialogs.checkDialog.paymentForm)
 
   const { data } = useGetContactDetailsQuery()
 
-  const openCreateForm = useCallback(
-    () => {
-      actions.checkDialog.openCreatePaymentForm({
-        type: 'units' as const,
-      })
-    },
-    [actions]
-  )
+  const openCreateForm = () => {
+    dispatch(openCreatePaymentForm({
+      type: 'units' as const,
+    }))
+  }
 
   if (paymentForm.isActive) {
     return (

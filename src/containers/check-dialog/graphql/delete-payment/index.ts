@@ -13,9 +13,9 @@ const GET_TRAINING_PASSES = loader('../get-training-passes/query.gql')
 const useCreateTrainingPass = () => {
   const [mutation] = useMutation(DELETE_PAYMENT)
   const variables = useSelector(state => ({
-    date: state.checkDialog.params.activeDate,
-    gym: state.checkDialog.params.activeGym,
-    _id: state.checkDialog.params.contact?.link,
+    date: state.ui.dialogs.checkDialog.params.activeDate,
+    gym: state.ui.dialogs.checkDialog.params.activeGym,
+    _id: state.ui.dialogs.checkDialog.params.contact?.link,
   }))
 
   const mutate = useCallback(

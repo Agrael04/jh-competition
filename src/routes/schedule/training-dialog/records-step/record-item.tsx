@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import moment from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,6 +11,9 @@ import IconButton from '@material-ui/core/IconButton'
 
 import PersonIcon from '@material-ui/icons/Person'
 import DeleteIcon from '@material-ui/icons/Delete'
+
+import { openUpdateRecordForm } from 'store/ui/pages/schedule/training-dialog/actions'
+import { selectRecordFormId, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import useGetTrainingQuery from '../../queries/get-training'
 
@@ -27,16 +30,15 @@ interface IProps {
 export default function RecordItem({ id }: IProps) {
   const classes = useStyles()
 
-  const actions = useActions()
-  const { isActive, _id } = useSelector(state => ({
-    isActive: state.schedule.trainingDialog.recordForm._id === id,
-    _id: state.schedule.trainingDialog._id,
-  }))
+  const dispatch = useDispatch()
+  const recordId = useSelector(selectRecordFormId)
+  const _id = useSelector(selectTrainingId)
   const trainingQuery = useGetTrainingQuery(_id)
   const date = trainingQuery.data?.training.date!
   const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
 
   const deleteTrainingRecord = useDeleteTrainingRecord()
+  const isActive = recordId === id
 
   const activate = useCallback(
     () => {
@@ -54,12 +56,12 @@ export default function RecordItem({ id }: IProps) {
         } : undefined,
       }
 
-      actions.schedule.trainingDialog.openUpdateRecordForm(
+      dispatch(openUpdateRecordForm(
         record._id,
         initialForm
-      )
+      ))
     },
-    [actions, record]
+    [record]
   )
 
   const remove = useCallback(

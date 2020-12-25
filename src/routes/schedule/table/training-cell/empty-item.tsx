@@ -1,10 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Zoom from '@material-ui/core/Zoom'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+
+import { openCreateTrainingDialog } from 'store/ui/pages/schedule/page/actions'
 
 import getColorPallete from 'utils/get-color-pallete'
 
@@ -20,8 +22,8 @@ interface IProps {
 
 const EmptyItem = ({ time, resource }: IProps) => {
   const classes = useStyles()
-  const actions = useActions()
-  const filters = useSelector(state => state.schedule.page.filters)
+  const dispatch = useDispatch()
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const { data } = useGetSchedulesQuery(filters.date.toDate())
 
@@ -48,9 +50,9 @@ const EmptyItem = ({ time, resource }: IProps) => {
   const handleCreateClick = useCallback(
     e => {
       e.stopPropagation()
-      actions.schedule.page.openCreateTrainingDialog(resource, time)
+      dispatch(openCreateTrainingDialog(resource, time))
     },
-    [actions, resource, time]
+    [resource, time]
   )
 
   const [draggedItem, drop] = useTrainingDrop(time, resource)

@@ -16,7 +16,7 @@ interface IProps {
 export default function TimeCell({ time, index }: IProps) {
   const classes = useStyles()
 
-  const activeTime = useSelector(state => state.schedule.page.activeTime)
+  const activeTime = useSelector(state => state.ui.pages.schedule.page.activeTime)
 
   if (index % 2 !== 0) {
     return null

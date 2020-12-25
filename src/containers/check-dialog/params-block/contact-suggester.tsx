@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
-
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
+import actions from 'store/ui/dialogs/check-dialog/actions'
 
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Typography from '@material-ui/core/Typography'
@@ -30,18 +29,14 @@ const Abornment = ({ balance }: { balance: number }) => {
 }
 
 export default function ContactSuggester({ label, disabled }: IProps) {
-  const actions = useActions()
-  const contact = useSelector(state => state.checkDialog.params.contact)
-  const updateContact = actions.checkDialog.updateContact
+  const dispatch = useDispatch()
+  const contact = useSelector(state => state.ui.dialogs.checkDialog.params.contact)
 
   const { data } = useGetContactDetailsQuery()
 
-  const handleChange = useCallback(
-    (link: string | null) => {
-      updateContact(link ? { link } : null)
-    },
-    [updateContact]
-  )
+  const handleChange = (link: string | null) => {
+    dispatch(actions.updateContact(link ? { link } : null))
+  }
 
   const initialFilter = getClientLabel(data?.client)
   const initialBalance = data?.client.balance || 0

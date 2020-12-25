@@ -8,7 +8,7 @@ import useGetGymsQuery from '../graphql/get-gyms'
 
 const GymSelect = () => {
   const gyms = useGetGymsQuery()
-  const activeGym = useSelector(state => state.checkDialog.params.activeGym)
+  const activeGym = useSelector(state => state.ui.dialogs.checkDialog.params.activeGym)
 
   return (
     <Select

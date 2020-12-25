@@ -1,9 +1,13 @@
 import { useCallback } from 'react'
 
 import { useFormContext } from 'react-hook-form'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Button from '@material-ui/core/Button'
+
+import { closeResource } from 'store/ui/pages/schedule/training-dialog/actions'
+
+import { selectTrainingId, selectResourceForm } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import useUpdateTrainingResource from '../../../mutations/update-training-resource'
 import useCreateTrainingResource from '../../../mutations/create-training-resource'
@@ -11,9 +15,9 @@ import useCreateTrainingResource from '../../../mutations/create-training-resour
 import IResourceForm from './form'
 
 export default function ResourcesBlock() {
-  const actions = useActions()
-  const form = useSelector(state => state.schedule.trainingDialog.resourceForm)
-  const trainingId = useSelector(state => state.schedule.trainingDialog._id)
+  const dispatch = useDispatch()
+  const form = useSelector(selectResourceForm)
+  const trainingId = useSelector(selectTrainingId)
 
   const updateTrainingResource = useUpdateTrainingResource()
   const createTrainingResource = useCreateTrainingResource()
@@ -35,9 +39,9 @@ export default function ResourcesBlock() {
         await createTrainingResource(trainingId, resource)
       }
 
-      actions.schedule.trainingDialog.closeResource()
+      dispatch(closeResource())
     },
-    [actions, createTrainingResource, updateTrainingResource, form, trainingId]
+    [createTrainingResource, updateTrainingResource, form, trainingId]
   )
 
   return (

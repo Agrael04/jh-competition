@@ -25,8 +25,8 @@ export interface IGetClients {
 }
 
 export const useGetClientsQuery = () => {
-  const activeOrder = useSelector(state => state.clients.page.activeOrder)
-  const filters = useSelector(state => state.clients.page.filters)
+  const activeOrder = useSelector(state => state.ui.pages.clients.page.activeOrder)
+  const filters = useSelector(state => state.ui.pages.clients.page.filters)
 
   const minVisitedAt = filters.visitedAt ? moment(filters.visitedAt).startOf('month').utc().format() : null
   const maxVisitedAt = filters.visitedAt ? moment(filters.visitedAt).startOf('month').add(1, 'month').utc().format() : null

@@ -15,9 +15,9 @@ const GET_CONTACT_DETAILS = loader('../get-contact-details/query.gql')
 const useCreateCheckPosition = () => {
   const [mutation] = useMutation(CREATE_POSITION)
   const variables = useSelector(state => ({
-    date: state.checkDialog.params.activeDate,
-    gym: state.checkDialog.params.activeGym,
-    _id: state.checkDialog.params.contact?.link,
+    date: state.ui.dialogs.checkDialog.params.activeDate,
+    gym: state.ui.dialogs.checkDialog.params.activeGym,
+    _id: state.ui.dialogs.checkDialog.params.contact?.link,
   }))
 
   const mutate = useCallback(

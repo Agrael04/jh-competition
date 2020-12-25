@@ -15,7 +15,8 @@ import Header from './header'
 import Table from './table'
 import FiltersDialog from './filters-dialog'
 
-import { useActions } from 'store'
+import { useDispatch } from 'store'
+import { checkActiveTime } from 'store/ui/pages/schedule/page/actions'
 
 import useGetGymsQuery from './queries/get-gyms'
 
@@ -23,15 +24,15 @@ import useStyles from './styles'
 
 const SchedulePage = () => {
   const classes = useStyles()
-  const actions = useActions()
+  const dispatch = useDispatch()
 
   const { loading } = useGetGymsQuery()
 
   useEffect(
     () => {
-      actions.schedule.page.checkActiveTime()
+      dispatch(checkActiveTime())
     },
-    [actions]
+    []
   )
 
   return (

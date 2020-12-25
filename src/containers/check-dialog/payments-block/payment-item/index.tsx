@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import moment from 'moment'
 
-import { useActions } from 'store'
+import { useDispatch } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,6 +11,8 @@ import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 
 import DeleteIcon from '@material-ui/icons/Delete'
+
+import { openUpdatePaymentForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import useGetContactDetailsQuery from '../../graphql/get-contact-details'
 import useDeletePayment from '../../graphql/delete-payment'
@@ -24,7 +26,7 @@ interface IProps {
 
 export default function PaymentItem({ index, id }: IProps) {
   const classes = useStyles()
-  const actions = useActions()
+  const dispatch = useDispatch()
   const { data } = useGetContactDetailsQuery()
 
   const payment = useMemo(
@@ -46,15 +48,15 @@ export default function PaymentItem({ index, id }: IProps) {
         return
       }
 
-      actions.checkDialog.openUpdatePaymentForm(payment._id, {
+      dispatch(openUpdatePaymentForm(payment._id, {
         ...payment,
         createdAt: moment(payment.createdAt),
         pass: payment.pass ? {
           link: payment.pass._id,
         } : undefined,
-      })
+      }))
     },
-    [actions, payment, pending]
+    [payment, pending]
   )
 
   const removePayment = useCallback(

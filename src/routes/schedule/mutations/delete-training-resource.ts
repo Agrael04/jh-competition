@@ -20,8 +20,8 @@ export const DELETE_TRAINING_RESOURCE = gql`
 const useDeleteTrainingResource = () => {
   const [deleteOneTrainingResource] = useMutation(DELETE_TRAINING_RESOURCE)
   const readTrainingResourceById = useReadTrainingResourceById()
-  const trainingId = useSelector(state => state.schedule.trainingDialog._id)
-  const filters = useSelector(state => state.schedule.page.filters)
+  const trainingId = useSelector(state => state.ui.pages.schedule.trainingDialog._id)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
     (_id: string) => {

@@ -1,6 +1,4 @@
-import { useCallback } from 'react'
-
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -9,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
 import AddOutlined from '@material-ui/icons/AddOutlined'
+
+import { openCreatePositionForm } from 'store/ui/dialogs/check-dialog/actions'
 
 import useGetContactDetailsQuery from '../graphql/get-contact-details'
 
@@ -20,19 +20,16 @@ import useStyles from './styles'
 export default function TrainingDialog() {
   const classes = useStyles()
 
-  const actions = useActions()
-  const isFormActive = useSelector(state => state.checkDialog.positionForm.isActive)
+  const dispatch = useDispatch()
+  const isFormActive = useSelector(state => state.ui.dialogs.checkDialog.positionForm.isActive)
 
   const { data } = useGetContactDetailsQuery()
 
-  const openCreateForm = useCallback(
-    () => {
-      actions.checkDialog.openCreatePositionForm({
-        priceType: 'money' as const,
-      })
-    },
-    [actions]
-  )
+  const openCreateForm = () => {
+    dispatch(openCreatePositionForm({
+      priceType: 'money' as const,
+    }))
+  }
 
   if (isFormActive) {
     return (

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { useActions, useSelector } from 'store'
+import { useDispatch, useSelector } from 'store'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import Grid from '@material-ui/core/Grid'
@@ -17,15 +17,17 @@ import ToggleGroup from 'containers/fields/toggle-group'
 import { requiredValidation } from 'utils/validations'
 import { passTypes, getSizes } from 'data/training-passes'
 
+import { openCreatePassForm, closePositionForm } from 'store/ui/dialogs/check-dialog/actions'
+
 import { products } from '../../data'
 
 import SubmitButton from './submit-button'
 import IForm from './form'
 
 export default function PositionForm() {
-  const actions = useActions()
+  const dispatch = useDispatch()
 
-  const positionForm = useSelector(state => state.checkDialog.positionForm)
+  const positionForm = useSelector(state => state.ui.dialogs.checkDialog.positionForm)
 
   const methods = useForm<IForm>({
     defaultValues: positionForm.defaultValues,
@@ -41,29 +43,27 @@ export default function PositionForm() {
       const p: any = products.find(p => p.id === 'pass')?.options.find(o => o.id === service)!
 
       if (!p || p.type === 'open') {
-        actions.checkDialog.openCreatePassForm()
+        dispatch(openCreatePassForm())
         return
       }
 
       const passType = passTypes.find(t => t.value === p.type)!
       const passSize = getSizes(p.type)!.find(s => s.value === p.size)!
 
-      actions.checkDialog.openCreatePassForm({
+      dispatch(openCreatePassForm({
         type: p.type,
         size: p.size,
         duration: passType.duration,
         activation: passType.activation,
         capacity: passSize.capacity,
         price: passSize.price,
-      })
-    }, [actions, type, service]
+      }))
+    }, [type, service]
   )
 
-  const cancel = useCallback(
-    () => {
-      actions.checkDialog.closePositionForm()
-    }, [actions]
-  )
+  const cancel = () => {
+    dispatch(closePositionForm())
+  }
 
   const product = products.find(p => p.id === type)
 

@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Moment } from 'moment'
-import { useSelector, useActions } from 'store'
+import { useSelector, useDispatch } from 'store'
 
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
+
+import { completeFiltersUpdate } from 'store/ui/pages/schedule/page/actions'
 
 import FormController from 'containers/fields/form-controller'
 import Select from 'containers/fields/select'
@@ -25,8 +27,8 @@ export interface IFiltersForm {
 }
 
 export default function FiltersDialog() {
-  const actions = useActions()
-  const filters = useSelector(state => state.schedule.page.filters)
+  const dispatch = useDispatch()
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const methods = useForm<IFiltersForm>({
     defaultValues: filters,
@@ -45,9 +47,9 @@ export default function FiltersDialog() {
 
   const submit = useCallback(
     (form: IFiltersForm) => {
-      actions.schedule.page.completeFiltersUpdate(form)
+      dispatch(completeFiltersUpdate(form))
     },
-    [actions]
+    []
   )
 
   return (

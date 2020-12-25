@@ -10,7 +10,7 @@ import IQueryResponse from './query'
 const GET_TRAINING_RESOURCE = loader('./query.gql')
 
 export const useRead = () => {
-  const filters = useSelector(state => state.schedule.page.filters)
+  const filters = useSelector(state => state.ui.pages.schedule.page.filters)
   const client = useApolloClient()
 
   const fn = useCallback(
