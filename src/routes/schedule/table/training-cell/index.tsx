@@ -26,8 +26,8 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
 
   const duration = useMemo(
     () => {
-      const startTime = data?.trainingResource?.startTime || 0
-      const endTime = data?.trainingResource?.endTime || 0
+      const startTime = data?.newTraining?.startTime || 0
+      const endTime = data?.newTraining?.endTime || 0
 
       return (endTime - startTime) || 1
     },
@@ -36,11 +36,11 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
 
   const isOccupied = useMemo(
     () => {
-      if (!data || !data?.trainingResource) {
+      if (!data || !data?.newTraining) {
         return false
       }
 
-      return data?.trainingResource?.startTime !== time
+      return data?.newTraining?.startTime !== time
     },
     [data, time]
   )
@@ -63,7 +63,7 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
         )
       }
       {
-        !isOccupied && !loading && data?.trainingResource?._id && (
+        !isOccupied && !loading && data?.newTraining?._id && (
           <div
             className={classes.cellWrap}
             style={{
@@ -76,7 +76,7 @@ const TrainingCell = ({ time, resource, secondaryRow }: IProps) => {
         )
       }
       {
-        !isOccupied && !loading && !data?.trainingResource?._id && (
+        !isOccupied && !loading && !data?.newTraining?._id && (
           <div className={classes.cellWrap}>
             <EmptyItem time={time} resource={resource} />
           </div>

@@ -1,14 +1,13 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo } from 'react'
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { closeRecord, openCheckDialog } from 'store/ui/pages/schedule/training-dialog/actions'
+import { closeRecord } from 'store/ui/pages/schedule/training-dialog/actions'
 import { selectTrainingId, selectRecordForm } from 'store/ui/pages/schedule/training-dialog/selectors'
 
 import FormController from 'containers/fields/form-controller'
@@ -16,7 +15,6 @@ import TextInput from 'containers/fields/text-input'
 import Select from 'containers/fields/select'
 import ClientSuggester from 'containers/fields/client-suggester'
 
-import { getTimeLabel } from 'data/times'
 import getClientLabel from 'utils/get-client-label'
 import { requiredValidation } from 'utils/validations'
 
@@ -41,27 +39,13 @@ export default function RecordsBlock() {
   const methods = useForm<IRecordForm>({
     defaultValues,
   })
-  const contact = methods.watch('contact')
 
   const resetRecord = () => dispatch(closeRecord())
-  const openCheck = () => dispatch(openCheckDialog())
 
   const queryRecord = useMemo(
     () => {
       return trainingQuery.data?.trainingRecords.find(tr => tr._id === recordId)
     }, [trainingQuery, recordId]
-  )
-
-  const getResourceLabel = useCallback(
-    resource => {
-      const name = resource?.resource?.name
-      const st = getTimeLabel(resource.startTime)
-      const et = getTimeLabel(resource.endTime)
-      const recordsLength = trainingQuery.data?.trainingRecords.filter(r => r.resource?._id === resource._id).length
-
-      return `${name}, ${st} - ${et}, ${recordsLength} записей`
-    },
-    [trainingQuery]
   )
 
   const attendantLabel = getClientLabel(queryRecord?.attendant)
@@ -70,8 +54,8 @@ export default function RecordsBlock() {
 
   return (
     <FormProvider {...methods}>
-      <Grid item={true} lg={8} container={true} spacing={4}>
-        <Grid item={true} lg={5}>
+      <Grid item={true} container={true} direction='column' spacing={3}>
+        <Grid item={true}>
           <FormController name='contact' rules={requiredValidation}>
             <ClientSuggester
               initialFilter={contactLabel}
@@ -82,15 +66,7 @@ export default function RecordsBlock() {
             />
           </FormController>
         </Grid>
-        <Grid item={true} lg={4} />
-        <Grid item={true} lg={3} container={true}>
-          <Box margin='auto' marginRight={0}>
-            <Button color='primary' variant='contained' onClick={openCheck} disabled={!contact}>
-              Расчитать
-            </Button>
-          </Box>
-        </Grid>
-        <Grid item={true} lg={5}>
+        <Grid item={true}>
           <FormController name='attendant'>
             <ClientSuggester
               initialFilter={attendantLabel}
@@ -99,7 +75,7 @@ export default function RecordsBlock() {
             />
           </FormController>
         </Grid>
-        <Grid item={true} lg={3}>
+        <Grid item={true}>
           <FormController name='status'>
             <Select
               label='Статус'
@@ -116,39 +92,24 @@ export default function RecordsBlock() {
             </Select>
           </FormController>
         </Grid>
-        <Grid item={true} lg={4}>
+        <Grid item={true}>
           <FormController name='note'>
             <TextInput
-              label='Заметки'
+              label='Комментарий'
+              rows={5}
               fullWidth={true}
               variant='outlined'
+              multiline={true}
             />
           </FormController>
         </Grid>
-        <Grid item={true} lg={12}>
-          <FormController name='resource' rules={requiredValidation}>
-            <Select
-              label='Ресурс'
-              fullWidth={true}
-              variant='outlined'
-              linked={true}
-            >
-              {
-                trainingQuery.data?.trainingResources.map(r => (
-                  <MenuItem value={r._id} key={r._id}>
-                    {getResourceLabel(r)}
-                  </MenuItem>
-                ))
-              }
-            </Select>
-          </FormController>
-        </Grid>
-        <Grid item={true} lg={12} container={true} justify='space-between'>
-          <Button color='primary' onClick={resetRecord}>
-            Отменить
-          </Button>
-          <SubmitButton />
-        </Grid>
+      </Grid>
+
+      <Grid item={true} container={true} justify='space-between'>
+        <Button color='primary' onClick={resetRecord}>
+          Отменить
+        </Button>
+        <SubmitButton />
       </Grid>
     </FormProvider>
   )

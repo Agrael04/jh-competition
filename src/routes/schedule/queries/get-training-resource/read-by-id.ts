@@ -13,9 +13,13 @@ export const useReadById = () => {
   const read = useRead()
 
   const fn = useCallback(
-    (_id: string) => {
+    (_id?: string) => {
+      if (!_id) {
+        return null
+      }
+
       const res = client.readFragment<IResourceParams>({
-        id: `TrainingResource:${_id}`,
+        id: `NewTraining:${_id}`,
         fragment: TRAINING_RESOURCE_PARAMS,
       })
 
@@ -23,7 +27,9 @@ export const useReadById = () => {
         return null
       }
 
-      return read(res.startTime, res.resource._id, res.training.date)
+      const r = read(res.startTime, res.resource._id, res.date)
+
+      return r
     }, [read, client]
   )
 

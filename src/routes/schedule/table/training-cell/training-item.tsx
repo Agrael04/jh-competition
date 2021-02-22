@@ -1,5 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import { useDispatch } from 'store'
+import moment from 'moment'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Avatar from '@material-ui/core/Avatar'
@@ -17,7 +18,7 @@ import getColorPallete from 'utils/get-color-pallete'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import red from '@material-ui/core/colors/red'
 
-import { open, setStep, openUpdateResourceForm } from 'store/ui/pages/schedule/training-dialog/actions'
+import { open, openUpdateTrainingForm } from 'store/ui/pages/schedule/training-dialog/actions'
 
 import getClientLabel from 'utils/get-client-label'
 
@@ -37,13 +38,10 @@ const TrainingItem = ({ time, resource }: IProps) => {
 
   const { data } = useGetTrainingResourceQuery(time, resource)
 
-  const tResource = data?.trainingResource
+  const tResource = data?.newTraining
   const records = data?.trainingRecords
 
-  const type = useMemo(
-    () => tResource?.training.type,
-    [tResource]
-  )
+  const type = tResource?.type
 
   const trainer = useMemo(
     () => tResource?.trainer,
@@ -58,15 +56,19 @@ const TrainingItem = ({ time, resource }: IProps) => {
 
       const initialForm = {
         resource: { link: tResource.resource._id },
+        gym: { link: tResource.gym._id },
         trainer: tResource.trainer ? { link: tResource.trainer._id } : undefined,
         startTime: tResource.startTime,
         endTime: tResource.endTime,
+        type: tResource.type,
+        name: tResource.name,
+        note: tResource.note,
+        date: moment(tResource.date),
       }
 
       e.stopPropagation()
-      dispatch(open(tResource.training._id))
-      dispatch(setStep(1))
-      dispatch(openUpdateResourceForm(
+      dispatch(open(tResource._id))
+      dispatch(openUpdateTrainingForm(
         tResource._id,
         initialForm
       ))

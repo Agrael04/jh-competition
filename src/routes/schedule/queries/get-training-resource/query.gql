@@ -1,8 +1,10 @@
-query getTrainingResource($date: DateTime, $time: Int!, $resource: ObjectId!){
-    trainingResource(query: {
-      training: {
-        date: $date
-      }
+query getTrainingResource(
+  $date: DateTime,
+  $time: Int!,
+  $resource: ObjectId!
+){
+    newTraining(query: {
+      date: $date
       startTime_lte: $time,
       endTime_gt: $time,
       resource: {
@@ -10,9 +12,16 @@ query getTrainingResource($date: DateTime, $time: Int!, $resource: ObjectId!){
       }
     }) {
       _id
+      type
+      name
+      note
+      date
       startTime
       endTime
       resource {
+        _id
+      }
+      gym {
         _id
       }
       trainer {
@@ -22,30 +31,32 @@ query getTrainingResource($date: DateTime, $time: Int!, $resource: ObjectId!){
         firstName
         lastName
       }
-      training {
-        _id
-        type
-        date
-      }
+      # training {
+      #   _id
+      # }
     }
-    trainingRecords(query: {
+  trainingRecords(query: {
+    training: {
+      date: $date
+      startTime_lte: $time,
+      endTime_gt: $time,
       resource: {
-        training: {
-          date: $date
-        }
-        startTime_lte: $time,
-        endTime_gt: $time,
-        resource: {
-          _id: $resource
-        }
+        _id: $resource
       }
-    }) {
-      _id
-      contact {
-        _id
-        firstName
-        lastName
-      }
-      status
     }
+  }) {
+    _id
+    contact {
+      _id
+      firstName
+      lastName
+    }
+    note
+    attendant {
+      _id
+      firstName
+      lastName
+    }
+    status
   }
+}

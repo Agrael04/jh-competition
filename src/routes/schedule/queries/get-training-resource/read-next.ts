@@ -12,7 +12,7 @@ export const useReadNext = () => {
     (time: number, resource: string, date?: Date) => {
       return range(time, MAX_TIME_ID)
         .map(t => read(t, resource, date))
-        .find(t => !!t?.trainingResource)
+        .find(t => !!t?.newTraining)
     }, [read]
   )
 

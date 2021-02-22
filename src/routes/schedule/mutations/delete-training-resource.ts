@@ -39,17 +39,17 @@ const useDeleteTrainingResource = () => {
             updater,
           })
 
-          if (prev === null || !prev.trainingResource || !data) {
+          if (prev === null || !prev.newTraining || !data) {
             return
           }
 
-          range(prev.trainingResource.startTime, prev.trainingResource.endTime).forEach(
+          range(prev.newTraining.startTime, prev.newTraining.endTime).forEach(
             time => {
-              if (!prev?.trainingResource) {
+              if (!prev?.newTraining) {
                 return
               }
 
-              const resource = prev.trainingResource.resource._id
+              const resource = prev.newTraining.resource._id
 
               boundUpdateCachedQuery<IGetTrainingResourceResponse>({
                 query: GET_TRAINING_RESOURCE,
@@ -59,7 +59,7 @@ const useDeleteTrainingResource = () => {
                   date: filters.date.toDate(),
                 },
                 updater: () => ({
-                  trainingResource: null,
+                  newTraining: null,
                   trainingRecords: [],
                 }),
               })

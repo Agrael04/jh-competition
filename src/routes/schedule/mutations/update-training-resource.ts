@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
 import range from 'lodash/range'
 
-import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
+import ITrainingForm from 'routes/schedule/training-dialog/training-form/form'
 
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse, useReadTrainingResourceById } from '../queries/get-training-resource'
 
@@ -68,7 +68,7 @@ const useUpdateTrainingResource = () => {
   const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
-    (_id: string, resource: IResourceForm) => {
+    (_id: string, resource: ITrainingForm) => {
       const prev = readTrainingResourceById(_id)
 
       return updateTrainingResource({
@@ -80,18 +80,18 @@ const useUpdateTrainingResource = () => {
           },
         },
         update: (cache, { data }) => {
-          if (prev === null || !prev.trainingResource || !data) {
+          if (prev === null || !prev.newTraining || !data) {
             return
           }
 
           const boundUpdateCachedQuery = updateQuery(cache)
-          range(prev.trainingResource.startTime, prev.trainingResource.endTime).forEach(
+          range(prev.newTraining.startTime, prev.newTraining.endTime).forEach(
             time => {
-              if (!prev?.trainingResource) {
+              if (!prev?.newTraining) {
                 return
               }
 
-              const resource = prev.trainingResource.resource._id
+              const resource = prev.newTraining.resource._id
 
               boundUpdateCachedQuery<IGetTrainingResourceResponse>({
                 query: GET_TRAINING_RESOURCE,
@@ -101,7 +101,7 @@ const useUpdateTrainingResource = () => {
                   date: filters.date.toDate(),
                 },
                 updater: () => ({
-                  trainingResource: null,
+                  newTraining: null,
                   trainingRecords: [],
                 }),
               })
@@ -124,7 +124,7 @@ const useUpdateTrainingResource = () => {
                   date: filters.date.toDate(),
                 },
                 updater: () => ({
-                  trainingResource: data?.updateOneTrainingResource,
+                  newTraining: data?.updateOneTrainingResource as any,
                   trainingRecords,
                 }),
               })

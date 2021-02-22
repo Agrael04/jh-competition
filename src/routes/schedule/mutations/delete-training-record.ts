@@ -23,8 +23,8 @@ const useDeleteTrainingRecord = () => {
   const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
-    (recordId: string, resourceId: string) => {
-      const resource = readTrainingResourceById(resourceId)
+    (recordId: string, trainingId: string) => {
+      const training = readTrainingResourceById(trainingId)
 
       return deleteOneTrainingRecord({
         variables: { _id: recordId },
@@ -35,8 +35,8 @@ const useDeleteTrainingRecord = () => {
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,
             variables: {
-              time: resource?.trainingResource?.startTime,
-              resource: resource?.trainingResource?.resource._id,
+              time: training?.newTraining?.startTime,
+              resource: training?.newTraining?.resource._id,
               date: filters.date.toDate(),
             },
             updater,

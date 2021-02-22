@@ -5,17 +5,16 @@ import { actions } from './actions'
 
 import { IStoreState } from 'store'
 
-export function* openCheckDialog() {
+export function* openCheckDialog(
+  action: ReturnType<typeof actions.openCheckDialog>
+) {
   try {
-    const { activeDate, activeGym, contact } = yield* select((state: IStoreState) => ({
+    const { activeDate, activeGym } = yield* select((state: IStoreState) => ({
       activeDate: state.ui.pages.schedule.page.filters.date,
       activeGym: state.ui.pages.schedule.page.filters.gym,
-      contact: state.ui.pages.schedule.trainingDialog.recordForm.defaultValues?.contact?.link,
     }))
 
-    if (contact) {
-      yield put(checkDialogActions.openDialog(activeDate, activeGym, contact))
-    }
+    yield put(checkDialogActions.openDialog(activeDate, activeGym, action.payload.contact))
   } catch (error) {
     console.log(error)
   }

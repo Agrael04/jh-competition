@@ -17,9 +17,10 @@ export function* openCreateTrainingDialog(
       startTime: action.payload.time,
       endTime: action.payload.time + 1,
       resource: { link: action.payload.resource },
+      type: 'RENT'
     }
 
-    yield put(trainingDialogActions.openCreateResourceForm(resource))
+    yield put(trainingDialogActions.openCreateTrainingForm(resource))
   } catch (error) {
     console.log(error)
   }
@@ -27,7 +28,6 @@ export function* openCreateTrainingDialog(
 
 export function* openAddTrainerDialog() {
   try {
-    console.log('?')
     yield put(addTrainerDialogActions.open())
   } catch (error) {
     console.log(error)

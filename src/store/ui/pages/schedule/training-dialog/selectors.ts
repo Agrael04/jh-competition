@@ -10,19 +10,24 @@ export const selectTrainingId = createSelector(
   (state) => state._id
 )
 
-export const selectResourceForm = createSelector(
-  selectState,
-  (state) => state.resourceForm
-)
+// export const selectResourceForm = createSelector(
+//   selectState,
+//   (state) => state.resourceForm
+// )
 
-export const selectResourceFormId = createSelector(
-  selectState,
-  (state) => state.resourceForm._id
-)
+// export const selectResourceFormId = createSelector(
+//   selectState,
+//   (state) => state.resourceForm._id
+// )
 
-export const selectIsResourceFormActive = createSelector(
-  selectResourceForm,
-  (form) => form.isActive
+// export const selectIsResourceFormActive = createSelector(
+//   selectResourceForm,
+//   (form) => form.isActive
+// )
+
+export const selectTrainingForm = createSelector(
+  selectState,
+  (state) => state.trainingForm
 )
 
 export const selectRecordForm = createSelector(

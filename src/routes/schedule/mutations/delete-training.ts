@@ -52,7 +52,7 @@ const useDeleteTraining = () => {
                   date: filters.date.toDate(),
                 },
                 updater: () => ({
-                  trainingResource: null,
+                  newTraining: null,
                   trainingRecords: [],
                 }),
               })

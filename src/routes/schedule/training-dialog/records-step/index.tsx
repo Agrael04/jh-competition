@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'store'
 
 import Grid from '@material-ui/core/Grid'
@@ -17,7 +16,7 @@ import { selectTrainingId, selectIsRecordFormActive } from 'store/ui/pages/sched
 import RecordItem from './record-item'
 import RecordForm from './record-form'
 
-import useGetTrainingQuery from '../../queries/get-training'
+import { useReadTrainingResourceById } from '../../queries/get-training-resource'
 
 import useStyles from './styles'
 
@@ -25,44 +24,47 @@ export default function ResourcesBlock() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const _id = useSelector(selectTrainingId)
-  const trainingQuery = useGetTrainingQuery(_id)
-  const traineesAmount = trainingQuery.data?.training.traineesAmount
+  const readTraining = useReadTrainingResourceById()
+  const training = readTraining(_id)
   const isFormActive = useSelector(selectIsRecordFormActive)
 
   const activate = () => dispatch(openCreateRecordForm())
 
-  const disabled = useMemo(
-    () => {
-      return (!traineesAmount || trainingQuery?.data?.trainingRecords.length! >= traineesAmount)
-    }, [trainingQuery, traineesAmount]
-  )
+  if (isFormActive) {
+    return (
+      <Grid
+        item={true}
+        lg={12}
+        className={classes.divider}
+        container={true}
+        spacing={3}
+        justify='space-between'
+        direction='column'
+      >
+        <RecordForm />
+      </Grid>
+    )
+  }
 
   return (
-    <Grid container={true} spacing={3}>
-      <Grid item={true} lg={4} className={classes.divider}>
-        <List className={classes.list}>
-          <ListItem button={true} onClick={activate} disabled={disabled}>
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                <AddOutlined />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={`Добавить запись (${trainingQuery?.data?.trainingRecords.length}/${traineesAmount})`}
-            />
-          </ListItem>
-          {
-            trainingQuery?.data?.trainingRecords.map((r, index) => (
-              <RecordItem key={r._id} id={r._id!} />
-            ))
-          }
-        </List>
-      </Grid>
-      {
-        isFormActive && (
-          <RecordForm />
-        )
-      }
+    <Grid item={true} lg={12} className={classes.divider}>
+      <List className={classes.list}>
+        <ListItem button={true} onClick={activate}>
+          <ListItemAvatar>
+            <Avatar className={classes.avatar}>
+              <AddOutlined />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary='Добавить запись'
+          />
+        </ListItem>
+        {
+          training?.trainingRecords?.map((r) => (
+            <RecordItem key={r._id} id={r._id!} />
+          ))
+        }
+      </List>
     </Grid>
   )
 }

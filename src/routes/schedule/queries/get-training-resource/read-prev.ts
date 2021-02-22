@@ -12,7 +12,7 @@ export const useReadPrev = () => {
     (time: number, resource: string, date?: Date) => {
       return range(time - 1, MIN_TIME_ID)
         .map(t => read(t, resource, date))
-        .find(t => !!t?.trainingResource)
+        .find(t => !!t?.newTraining)
     }, [read]
   )
 

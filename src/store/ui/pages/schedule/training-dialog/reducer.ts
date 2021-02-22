@@ -2,8 +2,8 @@ import { createReducer, ActionType } from 'typesafe-actions'
 
 import IForm from 'interfaces/form-state'
 
-import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
-import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
+import ITrainingForm from 'routes/schedule/training-dialog/training-form/form'
+// import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
 import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 
 import actions from './actions'
@@ -16,7 +16,6 @@ export interface IState {
   step: number
 
   trainingForm: IForm<ITrainingForm>
-  resourceForm: IForm<IResourceForm>
   recordForm: IForm<IRecordForm>
 }
 
@@ -24,10 +23,6 @@ const initialState: IState = {
   opened: false,
 
   trainingForm: {
-    isActive: false,
-  },
-
-  resourceForm: {
     isActive: false,
   },
 
@@ -70,28 +65,6 @@ const reducer = createReducer<IState, IAction>(initialState)
   .handleAction(actions.closeTraining, state => ({
     ...state,
     trainingForm: initialState.trainingForm,
-  }))
-
-  .handleAction(actions.openCreateResourceForm, (state, { payload: { defaultValues } }) => ({
-    ...state,
-    resourceForm: {
-      defaultValues,
-      mode: 'create',
-      isActive: true,
-    },
-  }))
-  .handleAction(actions.openUpdateResourceForm, (state, { payload: { _id, defaultValues } }) => ({
-    ...state,
-    resourceForm: {
-      _id,
-      defaultValues,
-      mode: 'update',
-      isActive: true,
-    },
-  }))
-  .handleAction(actions.closeResource, state => ({
-    ...state,
-    resourceForm: initialState.resourceForm,
   }))
 
   .handleAction(actions.openCreateRecordForm, (state, { payload: { defaultValues } }) => ({

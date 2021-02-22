@@ -101,30 +101,21 @@ export default function ClientSuggester({ value, handleChange, label, initialFil
     [data]
   )
 
-  const filterOptions = useCallback(
-    (options: any) => options,
-    []
-  )
+  const filterOptions = (options: any) => options
 
-  const handleInputChange = useCallback(
-    (e: any) => {
-      if (e) {
-        setFilter(e.target.value)
-      }
-    },
-    []
-  )
+  const handleInputChange = (e: any) => {
+    if (e) {
+      setFilter(e.target.value)
+    }
+  }
 
-  const boundHandleChange = useCallback(
-    (e: any, link: string | null) => {
-      if (handleChange) {
-        handleChange(link)
-      }
-      setFilter(mapOptionLabel(link))
-      setBalance(mapOptionBalance(link))
-    },
-    [handleChange, setFilter, setBalance]
-  )
+  const boundHandleChange = (e: any, link: string | null) => {
+    if (handleChange) {
+      handleChange(link)
+    }
+    setFilter(mapOptionLabel(link))
+    setBalance(mapOptionBalance(link))
+  }
 
   return (
     <Autocomplete

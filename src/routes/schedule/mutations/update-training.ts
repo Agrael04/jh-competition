@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'store'
 
-import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
+// import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
 
 export const UPDATE_TRAINING = gql`
   mutation updateTraining ($_id: ObjectId!, $training: TrainingUpdateInput!) {
@@ -58,7 +58,7 @@ const useUpdateTraining = () => {
   const _id = useSelector(state => state.ui.pages.schedule.trainingDialog._id)
 
   const mutate = useCallback(
-    (training: ITrainingForm) => {
+    (training: any) => {
       return updateTraining({
         variables: { _id, training },
       })

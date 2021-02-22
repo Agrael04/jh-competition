@@ -3,7 +3,5 @@ export default interface ITrainingResourceParams {
   resource: {
     _id: string
   }
-  training: {
-    date: Date
-  }
+  date: Date
 }

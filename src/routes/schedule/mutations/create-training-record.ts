@@ -45,11 +45,11 @@ const useCreateTrainingRecord = () => {
 
   const mutate = useCallback(
     (r: Partial<IRecordForm>) => {
-      if (!r.resource?.link) {
+      if (!trainingId) {
         return
       }
 
-      const resource = readTrainingResourceById(r.resource?.link)
+      const training = readTrainingResourceById(trainingId)
       const record = ({
         ...r,
         training: { link: trainingId },
@@ -64,8 +64,8 @@ const useCreateTrainingRecord = () => {
           boundUpdateCachedQuery<IGetTrainingResourceResponse>({
             query: GET_TRAINING_RESOURCE,
             variables: {
-              time: resource?.trainingResource?.startTime,
-              resource: resource?.trainingResource?.resource._id,
+              time: training?.newTraining?.startTime,
+              resource: training?.newTraining?.resource._id,
               date: filters.date.toDate(),
             },
             updater,

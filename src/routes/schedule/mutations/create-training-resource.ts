@@ -7,7 +7,7 @@ import range from 'lodash/range'
 import { GET_TRAINING_RESOURCE, IGetTrainingResourceResponse } from '../queries/get-training-resource'
 import { IGetTrainingResponse, GET_TRAINING } from '../queries/get-training'
 
-import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
+import ITrainingForm from 'routes/schedule/training-dialog/training-form/form'
 
 import { updateQuery, createUpdater } from 'utils/apollo-cache-updater'
 
@@ -38,7 +38,7 @@ const useCreateTrainingResource = () => {
   const filters = useSelector(state => state.ui.pages.schedule.page.filters)
 
   const mutate = useCallback(
-    (trainingId: string, r: IResourceForm) => {
+    (trainingId: string, r: ITrainingForm) => {
       const resource = ({
         ...r,
         training: { link: trainingId },
@@ -68,7 +68,7 @@ const useCreateTrainingResource = () => {
                   date: filters.date.toDate(),
                 },
                 updater: () => ({
-                  trainingResource: data?.insertOneTrainingResource,
+                  newTraining: data?.insertOneTrainingResource,
                   trainingRecords: [],
                 }),
               })

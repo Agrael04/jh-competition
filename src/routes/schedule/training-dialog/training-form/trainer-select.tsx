@@ -9,8 +9,8 @@ import Select, { ISelectProps } from 'components/select'
 
 import { selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
 
-import useGetSchedulesQuery from '../../../queries/get-schedules'
-import useGetTrainingQuery from '../../../queries/get-training'
+import useGetSchedulesQuery from '../../queries/get-schedules'
+import useGetTrainingQuery from '../../queries/get-training'
 
 type IProps = ISelectProps & {
   onChange?: any

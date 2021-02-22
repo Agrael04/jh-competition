@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import moment from 'moment'
 import { useSelector, useDispatch } from 'store'
 
 import ListItem from '@material-ui/core/ListItem'
@@ -10,14 +9,13 @@ import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 
 import PersonIcon from '@material-ui/icons/Person'
-import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
+import { openCheckDialog } from 'store/ui/pages/schedule/training-dialog/actions'
 import { openUpdateRecordForm } from 'store/ui/pages/schedule/training-dialog/actions'
 import { selectRecordFormId, selectTrainingId } from 'store/ui/pages/schedule/training-dialog/selectors'
 
-import useGetTrainingQuery from '../../queries/get-training'
-
-import useDeleteTrainingRecord from '../../mutations/delete-training-record'
+import { useReadTrainingResourceById } from '../../queries/get-training-resource'
 
 import getClientLabel from 'utils/get-client-label'
 
@@ -33,13 +31,19 @@ export default function RecordItem({ id }: IProps) {
   const dispatch = useDispatch()
   const recordId = useSelector(selectRecordFormId)
   const _id = useSelector(selectTrainingId)
-  const trainingQuery = useGetTrainingQuery(_id)
-  const date = trainingQuery.data?.training.date!
-  const record = trainingQuery?.data?.trainingRecords.find(r => r._id === id)
+  const readTraining = useReadTrainingResourceById()
+  const training = readTraining(_id)
 
-  const deleteTrainingRecord = useDeleteTrainingRecord()
+  const record = training?.trainingRecords?.find(r => r._id === id)
+
   const isActive = recordId === id
 
+  const openCheck = () => {
+    if (record) {
+      dispatch(openCheckDialog(record?.contact._id))
+    }
+  }
+  
   const activate = useCallback(
     () => {
       if (!record) {
@@ -47,7 +51,6 @@ export default function RecordItem({ id }: IProps) {
       }
 
       const initialForm = {
-        resource: { link: record.resource._id },
         status: record.status,
         note: record.note,
         contact: { link: record.contact._id },
@@ -64,19 +67,8 @@ export default function RecordItem({ id }: IProps) {
     [record]
   )
 
-  const remove = useCallback(
-    async () => {
-      if (!record) {
-        return
-      }
-
-      await deleteTrainingRecord(record?._id, record?.resource._id)
-    },
-    [record, deleteTrainingRecord]
-  )
-
   return (
-    <ListItem button={true} onClick={activate} selected={isActive}>
+    <ListItem button={true} onClick={openCheck} selected={isActive}>
       <ListItemAvatar>
         <Avatar className={classes.avatar}>
           <PersonIcon />
@@ -86,15 +78,11 @@ export default function RecordItem({ id }: IProps) {
         primary={getClientLabel(record?.contact)}
         secondary={getClientLabel(record?.attendant)}
       />
-      {
-        moment(date).diff(moment()) > 0 && (
-          <ListItemSecondaryAction>
-            <IconButton onClick={remove}>
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        )
-      }
+      <ListItemSecondaryAction>
+        <IconButton onClick={activate}>
+          <EditIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
     </ListItem>
   )
 }

@@ -10,7 +10,7 @@ import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
 
-import useGetTrainingResourceQuery from '../../../queries/get-training-resource'
+import useGetTrainingResourceQuery from '../../queries/get-training-resource'
 
 import times, { MAX_TIME_ID } from 'data/times'
 
@@ -25,7 +25,7 @@ type IProps = TextFieldProps & {
 export default function EndTimeSelect(props: IProps) {
   const { value, onChange } = props
   const { watch } = useFormContext()
-  const resourceId = useSelector(state => state.ui.pages.schedule.trainingDialog.resourceForm._id)
+  const trainingId = useSelector(state => state.ui.pages.schedule.trainingDialog.trainingForm._id)
 
   const startTime = watch('startTime')
   const resource = watch('resource')?.link
@@ -48,11 +48,11 @@ export default function EndTimeSelect(props: IProps) {
     () => {
       return (
         loading ||
-        (!!data?.trainingResource && data?.trainingResource._id !== resourceId) ||
+        (!!data?.newTraining && data?.newTraining._id !== trainingId) ||
         value === MAX_TIME_ID
       )
     },
-    [loading, data, resourceId, value]
+    [loading, data, trainingId, value]
   )
 
   const handleIncrement = useCallback(
@@ -74,12 +74,12 @@ export default function EndTimeSelect(props: IProps) {
         endAdornment: (
           <>
             <Box marginY='auto'>
-              <IconButton disabled={disabledDecrement} onClick={handleDecrement}>
+              <IconButton disabled={disabledDecrement} onClick={handleDecrement} size='small'>
                 <RemoveCircleIcon color={!disabledDecrement ? 'primary' : undefined} />
               </IconButton>
             </Box>
             <Box marginY='auto'>
-              <IconButton disabled={disabledIncrement} onClick={handleIncrement}>
+              <IconButton disabled={disabledIncrement} onClick={handleIncrement} size='small'>
                 <AddCircleIcon color={!disabledIncrement ? 'primary' : undefined} />
               </IconButton>
             </Box>

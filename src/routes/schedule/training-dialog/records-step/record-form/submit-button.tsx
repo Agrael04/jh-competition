@@ -40,7 +40,7 @@ export default function RecordsBlock() {
           return
         }
 
-        await updateTrainingRecord(form._id, record, r.resource._id)
+        await updateTrainingRecord(form._id, record)
       }
 
       if (form.mode === 'create') {

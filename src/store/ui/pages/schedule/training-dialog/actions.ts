@@ -1,7 +1,6 @@
 import { createAction } from 'typesafe-actions'
 
-import ITrainingForm from 'routes/schedule/training-dialog/training-step/training-form/form'
-import IResourceForm from 'routes/schedule/training-dialog/resources-step/resource-form/form'
+import ITrainingForm from 'routes/schedule/training-dialog/training-form/form'
 import IRecordForm from 'routes/schedule/training-dialog/records-step/record-form/form'
 
 export const open = createAction(
@@ -27,19 +26,19 @@ export const closeTraining = createAction(
   '@ui/pages/schedule/trainingDialog/CLOSE_TRAINING'
 )()
 
-export const openCreateResourceForm = createAction(
-  '@ui/pages/schedule/trainingDialog/OPEN_CREATE_RESOURCE_FORM',
-  (defaultValues?: Partial<IResourceForm>) => ({ defaultValues })
-)()
+// export const openCreateResourceForm = createAction(
+//   '@ui/pages/schedule/trainingDialog/OPEN_CREATE_RESOURCE_FORM',
+//   (defaultValues?: Partial<ITrainingForm>) => ({ defaultValues })
+// )()
 
-export const openUpdateResourceForm = createAction(
-  '@ui/pages/schedule/trainingDialog/OPEN_UPDATE_RESOURCE_FORM',
-  (_id: string, defaultValues: Partial<IResourceForm>) => ({ _id, defaultValues })
-)()
+// export const openUpdateResourceForm = createAction(
+//   '@ui/pages/schedule/trainingDialog/OPEN_UPDATE_RESOURCE_FORM',
+//   (_id: string, defaultValues: Partial<ITrainingForm>) => ({ _id, defaultValues })
+// )()
 
-export const closeResource = createAction(
-  '@ui/pages/schedule/trainingDialog/CLOSE_RESOURCE'
-)()
+// export const closeResource = createAction(
+//   '@ui/pages/schedule/trainingDialog/CLOSE_RESOURCE'
+// )()
 
 export const openCreateRecordForm = createAction(
   '@ui/pages/schedule/trainingDialog/OPEN_CREATE_RECORD_FORM',
@@ -66,7 +65,8 @@ export const setTrainingId = createAction(
 )()
 
 export const openCheckDialog = createAction(
-  '@ui/pages/schedule/trainingDialog/OPEN_CHECK_DIALOG'
+  '@ui/pages/schedule/trainingDialog/OPEN_CHECK_DIALOG',
+  (contact: string) => ({ contact })
 )()
 
 export const actions = {
@@ -77,9 +77,9 @@ export const actions = {
   openUpdateTrainingForm,
   closeTraining,
 
-  openCreateResourceForm,
-  openUpdateResourceForm,
-  closeResource,
+  // openCreateResourceForm,
+  // openUpdateResourceForm,
+  // closeResource,
 
   openCreateRecordForm,
   openUpdateRecordForm,

@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import { useDrop, useDrag, DragSourceMonitor } from 'react-dnd'
+import moment from 'moment'
 import { useSelector } from 'store'
 
-import useUpdateTrainingResource from '../../mutations/update-training-resource'
-import useCreateTrainingResource from '../../mutations/create-training-resource'
+import useCreateNewTraining from '../../mutations/new-training/create'
+import useUpdateNewTraining from '../../mutations/new-training/update'
 import useGetSchedulesQuery, { isTrainerAvailable } from '../../queries/get-schedules'
 
 import { useGetTrainingResourceQuery, useReadNextTrainingResource, IGetTrainingResourceResponse } from '../../queries/get-training-resource'
@@ -15,7 +16,7 @@ interface IDraggableItem {
   trainer?: string | undefined
   duration: number
 
-  resource: IGetTrainingResourceResponse['trainingResource']
+  resource: IGetTrainingResourceResponse['newTraining']
 }
 
 interface DropResult {
@@ -29,11 +30,11 @@ export function useGetEndTime() {
 
   return (time: number, resource: string, tResourceId: string | null, maxDuration: number) => {
     let nextResource = readNextTrainingResource(time, resource)
-    if (tResourceId && nextResource?.trainingResource?._id === tResourceId) {
-      nextResource = readNextTrainingResource(nextResource.trainingResource.endTime, resource)
+    if (tResourceId && nextResource?.newTraining?._id === tResourceId) {
+      nextResource = readNextTrainingResource(nextResource.newTraining.endTime, resource)
     }
 
-    return Math.min(nextResource?.trainingResource?.startTime || Infinity, time + maxDuration)
+    return Math.min(nextResource?.newTraining?.startTime || Infinity, time + maxDuration)
   }
 }
 
@@ -82,10 +83,10 @@ export function useTrainingDrag(time: number, resource: string) {
   const { data } = useGetSchedulesQuery()
   const getEndTime = useGetEndTime()
 
-  const updateTrainingResource = useUpdateTrainingResource()
-  const createTrainingResource = useCreateTrainingResource()
+  const updateNewTraining = useUpdateNewTraining()
+  const createNewTraining = useCreateNewTraining()
 
-  const tResource = trainingResourceRes?.data?.trainingResource
+  const tResource = trainingResourceRes?.data?.newTraining
   const records = trainingResourceRes?.data?.trainingRecords
 
   const trainer = useMemo(
@@ -137,7 +138,7 @@ export function useTrainingDrag(time: number, resource: string) {
       const isAvailable = trainerId && isTrainerAvailable(data?.trainerSchedules || [], trainerId, gym, dropResult.time, endTime)
 
       if (dropResult.dropEffect === 'move') {
-        updateTrainingResource(
+        updateNewTraining(
           item.resource._id,
           {
             startTime: dropResult.time,
@@ -147,9 +148,13 @@ export function useTrainingDrag(time: number, resource: string) {
           }
         )
       } else if (dropResult.dropEffect === 'copy') {
-        createTrainingResource(
-          tResource.training._id,
+        createNewTraining(
           {
+            date: moment(item.resource.date),
+            type: item.resource.type,
+            gym: { link: item.resource.gym._id },
+            note: item.resource.note,
+            name: item.resource.name,
             startTime: dropResult.time,
             endTime,
             resource: { link: dropResult.resource },
